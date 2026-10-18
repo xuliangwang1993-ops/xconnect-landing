@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" data-lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X-connect · 我搭台，你唱戏 — Your idea. We make it happen.</title>
+  <meta name="description" content="零负担创业，让好创意先落地。你带来想法，我们提供工具、算力和生产环境，从第一件样品到批量交付，陪你把产品做出来。">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- 顶部导航栏：品牌、状态指示、分区锚点、中英切换 -->
+  <header class="topbar" role="banner">
+    <div class="topbar-inner">
+      <a href="#top" class="brand-lockup" aria-label="X-connect Home">
+        <img src="icon.svg" alt="" class="brand-mark" width="28" height="28">
+        <div class="brand-text">
+          <span class="brand-name">X-connect</span>
+          <span class="brand-tag" data-zh="委托生产与交付服务" data-en="Commissioned Production & Delivery">委托生产与交付服务</span>
+        </div>
+      </a>
+
+      <nav class="topnav" aria-label="Primary Navigation">
+        <a href="#commission" class="nav-link" data-zh="立即委托" data-en="Start Now">立即委托</a>
+        <a href="#stage-map" class="nav-link" data-zh="生产关系图" data-en="Production Topology">生产关系图</a>
+        <a href="#catalog" class="nav-link" data-zh="样品与服务" data-en="Samples & Services">样品与服务</a>
+        <a href="#help" class="nav-link" data-zh="委托指南" data-en="Commission Guide">委托指南</a>
+        <a href="#about" class="nav-link" data-zh="关于与连通账" data-en="About & Live Ledger">关于与连通账</a>
+      </nav>
+
+      <div class="topbar-actions">
+        <a href="#track-drawer" class="status-pill" id="gatewayStatusBtn" title="api.x-connect.ai">
+          <span class="status-dot" id="gatewayDot"></span>
+          <span class="status-label" id="gatewayLabel" data-zh="订单网关：检测中" data-en="Order Gateway: Checking">订单网关：检测中</span>
+        </a>
+        <button type="button" class="lang-switch" id="langSwitch" aria-label="Switch Language / 切换语言">
+          <span class="lang-chip active" data-lang-btn="zh">中文</span>
+          <span class="lang-sep">/</span>
+          <span class="lang-chip" data-lang-btn="en">EN</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" class="main-stage">
+    <!-- 首屏：我搭台，你唱戏 + 直接下单工作台（两次确认） -->
+    <section class="hero-stage" id="commission">
+      <div class="hero-grid">
+        <!-- 左侧：价值主张与快捷填入 -->
+        <div class="hero-copy">
+          <div class="eyebrow-badge">
+            <span class="eyebrow-dot"></span>
+            <span data-zh="零负担创业，让好创意先落地" data-en="Start creating, without the setup.">零负担创业，让好创意先落地</span>
+          </div>
+
+          <h1 class="hero-title">
+            <span class="title-primary" data-zh="我搭台，你唱戏。" data-en="Your idea. We make it happen.">我搭台，你唱戏。</span>
+          </h1>
+
+          <p class="hero-lead" data-zh="你带来想法，我们提供工具、算力和生产环境，从第一件样品到批量交付，陪你把产品做出来。无需自建设备、环境与复杂工具学习负担。" data-en="You bring the idea and direction; we provide the tools, compute, and production environment—from your first sample to batch delivery, without upfront hardware or tool-learning overhead.">
+            你带来想法，我们提供工具、算力和生产环境，从第一件样品到批量交付，陪你把产品做出来。无需自建设备、环境与复杂工具学习负担。
+          </p>
+
+          <!-- 快速试样胶囊：点击直接填入右侧工作台 -->
+          <div class="quick-prompts">
+            <div class="quick-header">
+              <span class="quick-title" data-zh="现在就试一试（点击填入样品委托）：" data-en="Try right now (click to prefill a sample commission):">现在就试一试（点击填入样品委托）：</span>
+            </div>
+            <div class="quick-chips">
+              <button type="button" class="prompt-chip" data-preset="menu">
+                <span class="chip-tag v-tag" data-zh="V·已验证样品" data-en="V·Verified Sample">V·已验证样品</span>
+                <span data-zh="餐厅 A4 印刷菜单 + 屏幕版 PDF" data-en="Bilingual A4 Print & Screen Menu PDF">餐厅 A4 印刷菜单 + 屏幕版 PDF</span>
+              </button>
+              <button type="button" class="prompt-chip" data-preset="brand">
+                <span class="chip-tag v-tag" data-zh="V·已验证样品" data-en="V·Verified Sample">V·已验证样品</span>
+                <span data-zh="新店标志矢量多规格套件（SVG/PDF/PNG）" data-en="Brand Mark Vector Suite (SVG/PDF/PNG)">新店标志矢量多规格套件（SVG/PDF/PNG）</span>
+              </button>
+              <button type="button" class="prompt-chip" data-preset="site">
+                <span class="chip-tag v-tag" data-zh="V·已验证样品" data-en="V·Verified Sample">V·已验证样品</span>
+                <span data-zh="新产品一页式互动展示与接单站" data-en="Single-Page Interactive Product & Order Site">新产品一页式互动展示与接单站</span>
+              </button>
+              <button type="button" class="prompt-chip" data-preset="custom">
+                <span class="chip-tag f-tag" data-zh="F·定制工单" data-en="F·Custom Brief">F·定制工单</span>
+                <span data-zh="200 张门店菜品图统一调色与多尺寸导出" data-en="Batch Color-Grade & Resize 200 Dish Photos">200 张门店菜品图统一调色与多尺寸导出</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 诚实边界说明条：零负担 ≠ 免费 -->
+          <div class="honesty-strip">
+            <div class="honesty-item">
+              <strong data-zh="先样品，后批量" data-en="Sample First, Batch Later">先样品，后批量</strong>
+              <span data-zh="先做第一件可检验样品与小订单，验收通过再按配方批量放大。" data-en="Start with a verifiable single sample; scale to batches once accepted.">先做第一件可检验样品与小订单，验收通过再按配方批量放大。</span>
+            </div>
+            <div class="honesty-item">
+              <strong data-zh="零负担 ≠ 免费或包成功" data-en="Zero-Setup ≠ Free or Guaranteed">零负担 ≠ 免费或包成功</strong>
+              <span data-zh="免去前期设备与软件折腾；开工前透明确认费用与交付条件。" data-en="No upfront equipment or software hassle; fees and terms confirmed before work begins.">免去前期设备与软件折腾；开工前透明确认费用与交付条件。</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧：核心下单台（严格实现「两次确认」与「普通/高级模式」） -->
+        <div class="commission-desk" aria-label="Commission Workbench">
+          <div class="desk-header">
+            <div class="desk-title-row">
+              <h2 class="desk-title" data-zh="你想做什么？" data-en="What would you like to build?">你想做什么？</h2>
+              <span class="step-indicator" id="stepBadge" data-zh="第 1 步 / 共 2 步：提交内容" data-en="Step 1 of 2: Submit Brief">第 1 步 / 共 2 步：提交内容</span>
+            </div>
+            <p class="desk-sub" data-zh="直接用日常语言描述想法，无需学习复杂工具或提示词工程。" data-en="Describe your idea in plain words—no tool setup or prompt engineering required.">
+              直接用日常语言描述想法，无需学习复杂工具或提示词工程。
+            </p>
+          </div>
+
+          <!-- 客户模式切换：普通客户 vs 高级客户 -->
+          <div class="mode-tabs" role="tablist">
+            <button type="button" class="mode-tab active" id="modeStandardBtn" role="tab" aria-selected="true">
+              <span class="mode-name" data-zh="普通委托（我们安排生产）" data-en="Standard (We Arrange Production)">普通委托（我们安排生产）</span>
+            </button>
+            <button type="button" class="mode-tab" id="modeAdvancedBtn" role="tab" aria-selected="false">
+              <span class="mode-name" data-zh="高级客户（附带 Skill / 工具连接）" data-en="Advanced (Attach Skill / Tool Config)">高级客户（附带 Skill / 工具连接）</span>
+            </button>
+          </div>
+
+          <!-- 第一步表单：提交内容确认 -->
+          <form id="commissionForm" class="desk-form" novalidate>
+            <div class="step-pane active" id="step1Pane">
+              <div class="field-group">
+                <label for="ideaInput" class="field-label">
+                  <span data-zh="1. 你的想法与成品用途" data-en="1. Your Idea & Intended Use">1. 你的想法与成品用途</span>
+                  <span class="req-mark" data-zh="必填" data-en="Required">必填</span>
+                </label>
+                <textarea id="ideaInput" class="field-textarea" rows="4"
+                  placeholder="例如：我在悉尼开一家手工水饺店，需要一份中英双语 A4 印刷菜单 PDF 和手机扫码看的屏幕版，共 18 道菜，要标明过敏原..."
+                  data-placeholder-zh="例如：我在悉尼开一家手工水饺店，需要一份中英双语 A4 印刷菜单 PDF 和手机扫码看的屏幕版，共 18 道菜，要标明过敏原..."
+                  data-placeholder-en="e.g., I'm opening a handmade dumpling shop in Sydney and need a bilingual A4 print menu PDF plus a mobile screen version for 18 dishes with allergen tags..."></textarea>
+              </div>
+
+              <div class="field-row">
+                <div class="field-group">
+                  <label for="categorySelect" class="field-label" data-zh="2. 交付类型" data-en="2. Deliverable Type">2. 交付类型</label>
+                  <select id="categorySelect" class="field-select">
+                    <option value="S03" data-zh="S03 · 菜单 / 价目表 / 业务文档 (V·已验证样品)" data-en="S03 · Menu / Price List / Business Doc (V·Verified)">S03 · 菜单 / 价目表 / 业务文档 (V·已验证样品)</option>
+                    <option value="S02" data-zh="S02 · 标志与品牌基础素材包 (V·已验证样品)" data-en="S02 · Brand Mark & Vector Asset Pack (V·Verified)">S02 · 标志与品牌基础素材包 (V·已验证样品)</option>
+                    <option value="S14" data-zh="S14 · 一页式互动营销与接单站 (V·已验证样品)" data-en="S14 · Single-Page Interactive Site (V·Verified)">S14 · 一页式互动营销与接单站 (V·已验证样品)</option>
+                    <option value="S01" data-zh="S01 · 商品/菜品图批量精修 (F·流程就绪/站长排产)" data-en="S01 · Batch Product Photo Grading (F·Pipeline Ready)">S01 · 商品/菜品图批量精修 (F·流程就绪/站长排产)</option>
+                    <option value="S04" data-zh="S04 · 经营数据报告与图表 (F·流程就绪/站长排产)" data-en="S04 · Business Data Report & Charts (F·Pipeline Ready)">S04 · 经营数据报告与图表 (F·流程就绪/站长排产)</option>
+                    <option value="S05" data-zh="S05 · 路演 / 提案演示文稿 (F·流程就绪/站长排产)" data-en="S05 · Pitch / Proposal Deck (F·Pipeline Ready)">S05 · 路演 / 提案演示文稿 (F·流程就绪/站长排产)</option>
+                    <option value="CUSTOM" data-zh="其他创意委托（人工评估与样品试制）" data-en="Other Creative Commission (Manual Evaluation)">其他创意委托（人工评估与样品试制）</option>
+                  </select>
+                </div>
+
+                <div class="field-group">
+                  <label for="scaleSelect" class="field-label" data-zh="3. 订单阶段" data-en="3. Order Stage">3. 订单阶段</label>
+                  <select id="scaleSelect" class="field-select">
+                    <option value="sample" data-zh="首件样品试制（推荐先做样品）" data-en="First Sample Run (Recommended)">首件样品试制（推荐先做样品）</option>
+                    <option value="small" data-zh="小批量订单（2–10 件同规格）" data-en="Small Batch (2–10 items)">小批量订单（2–10 件同规格）</option>
+                    <option value="batch" data-zh="按已验证配方批量交付" data-en="Batch Production via Verified Recipe">按已验证配方批量交付</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label for="acceptanceInput" class="field-label">
+                  <span data-zh="4. 你的验收标准（怎样算做好了？）" data-en="4. Your Acceptance Criteria (What counts as done?)">4. 你的验收标准（怎样算做好了？）</span>
+                  <a href="#help" class="label-help" data-zh="不知道怎么写？看 30 秒指南 ↓" data-en="Not sure? See 30s guide ↓">不知道怎么写？看 30 秒指南 ↓</a>
+                </label>
+                <input type="text" id="acceptanceInput" class="field-input"
+                  placeholder="例如：18 道菜价格与原表 100% 一致，A4 打印无压字，含中英文与花生/麸质标注"
+                  data-placeholder-zh="例如：18 道菜价格与原表 100% 一致，A4 打印无压字，含中英文与花生/麸质标注"
+                  data-placeholder-en="e.g., All 18 dish prices match source 100%, A4 print has no clipping, includes EN/ZH & allergen notes">
+              </div>
+
+              <!-- 高级客户附加区（默认折叠，切到高级客户展开） -->
+              <div class="advanced-box" id="advancedBox" hidden>
+                <div class="advanced-head">
+                  <span class="adv-badge" data-zh="高级客户连接项" data-en="Advanced Client Spec">高级客户连接项</span>
+                  <span class="adv-note" data-zh="可指定已验证 Skill、交付通道或传入 API 凭据直连网关" data-en="Specify verified Skill, delivery channel, or API key for gateway">可指定已验证 Skill、交付通道或传入 API 凭据直连网关</span>
+                </div>
+                <div class="field-row">
+                  <div class="field-group">
+                    <label for="skillSelect" class="field-label" data-zh="指定生产 Skill / 配方" data-en="Bind Skill / Recipe">指定生产 Skill / 配方</label>
+                    <select id="skillSelect" class="field-select">
+                      <option value="auto" data-zh="由系统与站长自动匹配最佳组合" data-en="Auto-match optimal pipeline">由系统与站长自动匹配最佳组合</option>
+                      <option value="craft-service-architect/S03">craft-service-architect · Recipe A (WordCraft + PdfCraft)</option>
+                      <option value="craft-service-architect/S02">craft-service-architect · Recipe B (VectorCraft + PdfCraft)</option>
+                      <option value="craftsuite/photo-pipeline">craftsuite · photo-pipeline (LightCraft + PhotoCraft)</option>
+                      <option value="craftsuite/data-report">craftsuite · data-report (GridCraft + WordCraft + DesignCraft)</option>
+                    </select>
+                  </div>
+                  <div class="field-group">
+                    <label for="deliveryChannel" class="field-label" data-zh="成果交付通道" data-en="Delivery Channel">成果交付通道</label>
+                    <select id="deliveryChannel" class="field-select">
+                      <option value="artifact" data-zh="自提凭单 (/a/ord_... 7天有效)" data-en="Artifact Pickup (/a/ord_... 7-day TTL)">自提凭单 (/a/ord_... 7天有效)</option>
+                      <option value="webhook" data-zh="Webhook 推送回调" data-en="Webhook Callback">Webhook 推送回调</option>
+                      <option value="both" data-zh="双路交付（自提 + Webhook）" data-en="Both (Artifact + Webhook)">双路交付（自提 + Webhook）</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field-row">
+                  <div class="field-group">
+                    <label for="apiKeyInput" class="field-label" data-zh="X-connect 客户凭据 (选填 sk-xc-...)" data-en="X-connect API Key (Optional sk-xc-...)">X-connect 客户凭据 (选填 sk-xc-...)</label>
+                    <input type="password" id="apiKeyInput" class="field-input" placeholder="sk-xc-... (留空则生成本地委托单供站长核收)" autocomplete="off">
+                  </div>
+                  <div class="field-group" id="webhookGroup" hidden>
+                    <label for="webhookInput" class="field-label" data-zh="Webhook 接收地址" data-en="Webhook URL">Webhook 接收地址</label>
+                    <input type="url" id="webhookInput" class="field-input" placeholder="https://your-server.com/webhook">
+                  </div>
+                </div>
+              </div>
+
+              <div class="desk-footer">
+                <button type="button" class="btn-primary btn-full" id="toStep2Btn">
+                  <span data-zh="第一次确认：核对提交内容 →" data-en="1st Confirmation: Review Brief →">第一次确认：核对提交内容 →</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 第二步面板：开工条件、费用机制与交付物第二次确认 -->
+            <div class="step-pane" id="step2Pane" hidden>
+              <div class="confirm-card">
+                <div class="confirm-section">
+                  <span class="confirm-label" data-zh="【确认一】委托内容摘要" data-en="[Confirm 1] Commission Brief Summary">【确认一】委托内容摘要</span>
+                  <p class="confirm-Idea" id="summaryIdeaText">—</p>
+                  <div class="confirm-meta-grid">
+                    <div>
+                      <small data-zh="服务与级别" data-en="Service & Tier">服务与级别</small>
+                      <strong id="summaryServiceText">—</strong>
+                    </div>
+                    <div>
+                      <small data-zh="验收标准" data-en="Acceptance Criteria">验收标准</small>
+                      <strong id="summaryAcceptText">—</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="confirm-divider"></div>
+
+                <div class="confirm-section">
+                  <span class="confirm-label" data-zh="【确认二】开工条件、费用规则与交付约束" data-en="[Confirm 2] Start Conditions, Fee Policy & Delivery">【确认二】开工条件、费用规则与交付约束</span>
+                  <ul class="condition-list">
+                    <li>
+                      <span class="cond-key" data-zh="预计交付物：" data-en="Deliverables:">预计交付物：</span>
+                      <span class="cond-val" id="summaryDeliverables">—</span>
+                    </li>
+                    <li>
+                      <span class="cond-key" data-zh="生产与排期：" data-en="Production Mode:">生产与排期：</span>
+                      <span class="cond-val" id="summarySchedule" data-zh="前期由站长结合已验证工作流人工核验生产；样品单确认后进入排产。" data-en="Produced via verified toolchains with station-master QA; enters queue upon confirmation.">前期由站长结合已验证工作流人工核验生产；样品单确认后进入排产。</span>
+                    </li>
+                    <li>
+                      <span class="cond-key" data-zh="费用说明：" data-en="Fee & Billing:">费用说明：</span>
+                      <span class="cond-val" id="summaryFeePolicy" data-zh="按样品/批次复杂度在开工前核定报价（内部算力成本与实测耗时尚未走完 5 批基准测量前，不展示虚假自动标价，确认报价前不扣费）。" data-en="Quoted transparently per sample/batch before execution (no auto-charge prior to quote approval; we never display fabricated unit prices).">按样品/批次复杂度在开工前核定报价（内部算力成本与实测耗时尚未走完 5 批基准测量前，不展示虚假自动标价，确认报价前不扣费）。</span>
+                    </li>
+                    <li>
+                      <span class="cond-key" data-zh="不覆盖边界：" data-en="Out of Scope:">不覆盖边界：</span>
+                      <span class="cond-val" id="summaryExclusions">—</span>
+                    </li>
+                  </ul>
+
+                  <label class="checkbox-row">
+                    <input type="checkbox" id="agreeConditionsCheck" checked>
+                    <span data-zh="我已核对提交内容，并理解开工条件：先出样品或核定工单，按约定的验收标准交付。" data-en="I confirm the brief and start conditions: begin with sample/quote verification and deliver against agreed acceptance criteria.">
+                      我已核对提交内容，并理解开工条件：先出样品或核定工单，按约定的验收标准交付。
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="desk-footer split-footer">
+                <button type="button" class="btn-secondary" id="backToStep1Btn">
+                  <span data-zh="← 返回修改内容" data-en="← Edit Brief">← 返回修改内容</span>
+                </button>
+                <button type="submit" class="btn-primary" id="submitOrderBtn">
+                  <span data-zh="第二次确认：正式提交委托并开工" data-en="2nd Confirmation: Submit & Start Production">第二次确认：正式提交委托并开工</span>
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <!-- 订单回执与实时查询抽屉区 -->
+          <div class="order-receipt" id="orderReceipt" hidden>
+            <div class="receipt-head">
+              <span class="receipt-badge" id="receiptModeBadge" data-zh="委托单已登记" data-en="Commission Logged">委托单已登记</span>
+              <code class="receipt-id" id="receiptOrderId">ord_...</code>
+            </div>
+            <p class="receipt-msg" id="receiptMessage"></p>
+            <div class="receipt-detail-box">
+              <div class="receipt-kv">
+                <span data-zh="状态" data-en="Status">状态</span>
+                <strong id="receiptStatus">accepted</strong>
+              </div>
+              <div class="receipt-kv">
+                <span data-zh="自提/追踪入口" data-en="Pickup / Tracking">自提/追踪入口</span>
+                <code id="receiptArtifactUrl">/a/ord_...</code>
+              </div>
+            </div>
+            <div class="receipt-actions">
+              <button type="button" class="btn-secondary btn-sm" id="checkOrderNowBtn" data-zh="查询最新进展" data-en="Check Progress">查询最新进展</button>
+              <button type="button" class="btn-secondary btn-sm" id="loadDemoSampleBtn" data-zh="查看真实样品交付包示例" data-en="Inspect Real Sample Artifact">查看真实样品交付包示例</button>
+              <button type="button" class="btn-ghost btn-sm" id="newCommissionBtn" data-zh="发起新委托" data-en="New Commission">发起新委托</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 进度与成果自提快速检索条 -->
+    <section class="tracker-bar" id="track-drawer" aria-label="Order Progress & Artifact Pickup">
+      <div class="tracker-inner">
+        <div class="tracker-info">
+          <span class="tracker-title" data-zh="已有订单号？直接查进展或自提成果" data-en="Have an Order ID? Check Progress or Pick Up Artifacts">已有订单号？直接查进展或自提成果</span>
+          <span class="tracker-sub" data-zh="对应网关 GET /a/<order_id> 与 /orders/<id>" data-en="Connects to Gateway GET /a/<order_id> & /orders/<id>">对应网关 GET /a/&lt;order_id&gt; 与 /orders/&lt;id&gt;</span>
+        </div>
+        <div class="tracker-controls">
+          <input type="text" id="trackOrderIdInput" class="field-input tracker-input"
+            placeholder="输入 ord_... 或点击右侧体验已验证样品单"
+            data-placeholder-zh="输入 ord_... 或点击右侧体验已验证样品单"
+            data-placeholder-en="Enter ord_... or click right to inspect a verified sample">
+          <button type="button" class="btn-secondary" id="trackQueryBtn" data-zh="查询 / 自提" data-en="Lookup / Pickup">查询 / 自提</button>
+          <button type="button" class="btn-ghost" id="fillSampleOrderIdBtn" data-zh="填入三鲜手作样品单" data-en="Load Dumpling Sample">填入三鲜手作样品单</button>
+        </div>
+      </div>
+      <div class="tracker-result" id="trackerResultBox" hidden></div>
+    </section>
+
+    <!-- 第二幕：形式源于原理 — 交互式「委托→配方→生产→验收交付」关系拓扑图（借鉴 AoI M08） -->
+    <section class="section-block" id="stage-map">
+      <div class="section-header">
+        <div class="section-eyebrow" data-zh="形式源于原理 · 生产拓扑" data-en="Form Follows Principle · Production Topology">形式源于原理 · 生产拓扑</div>
+        <h2 class="section-title" data-zh="你的一个想法，如何穿过真实的生产管线变成作品" data-en="How a Single Idea Flows Through Real Production Pipelines into a Deliverable">你的一个想法，如何穿过真实的生产管线变成作品</h2>
+        <p class="section-desc" data-zh="你不接触复杂的命令行、参数或上游供应商。点击下方任意创造场景或节点，查看我们如何在后台调度已安装工具并完成独立验收。实亮连线代表已有真实产物（V级），虚线代表流程就绪待客户首单验收（F/C级）。" data-en="You never touch complex CLI flags or upstream vendors. Click any scenario or node below to inspect how we orchestrate installed tools and run verification checks behind the scenes. Solid lit paths indicate verified artifacts (Tier V); dashed paths indicate ready pipelines awaiting client sample acceptance (Tier F/C).">
+          你不接触复杂的命令行、参数或上游供应商。点击下方任意创造场景或节点，查看我们如何在后台调度已安装工具并完成独立验收。实亮连线代表已有真实产物（V级），虚线代表已有流程待样板验收（F/C级）。
+        </p>
+      </div>
+
+      <!-- 场景切换胶囊 -->
+      <div class="topology-toolbar" role="tablist" aria-label="Pipeline Scenarios">
+        <button type="button" class="topo-filter active" data-topo="all">
+          <span data-zh="全景能力网（12 项已装工具 → 3 档服务）" data-en="Full Topology (12 Installed Tools → 3 Service Tiers)">全景能力网（12 项已装工具 → 3 档服务）</span>
+        </button>
+        <button type="button" class="topo-filter" data-topo="S03">
+          <span class="dot-v"></span>
+          <span data-zh="配方 A：S03 餐厅菜单与业务文档 (V·已验证)" data-en="Recipe A: S03 Menu & Business Docs (V·Verified)">配方 A：S03 餐厅菜单与业务文档 (V·已验证)</span>
+        </button>
+        <button type="button" class="topo-filter" data-topo="S02">
+          <span class="dot-v"></span>
+          <span data-zh="配方 B：S02 品牌矢量标志套件 (V·已验证)" data-en="Recipe B: S02 Brand Vector Suite (V·Verified)">配方 B：S02 品牌矢量标志套件 (V·已验证)</span>
+        </button>
+        <button type="button" class="topo-filter" data-topo="S14">
+          <span class="dot-v"></span>
+          <span data-zh="配方 C：S14 一页式互动营销站 (V·已验证)" data-en="Recipe C: S14 Single-Page Site (V·Verified)">配方 C：S14 一页式互动营销站 (V·Verified)</span>
+        </button>
+        <button type="button" class="topo-filter" data-topo="F_PIPE">
+          <span class="dot-f"></span>
+          <span data-zh="批二流程：S01 批量修图 / S04 数据报告 / S05 演示稿 (F级)" data-en="Batch 2 Pipelines: S01 Photo / S04 Report / S05 Deck (Tier F)">批二流程：S01 批量修图 / S04 数据报告 / S05 演示稿 (F级)</span>
+        </button>
+      </div>
+
+      <div class="topology-stage">
+        <!-- SVG 交互式四列拓扑图：客户意愿 -> 委托合同 -> 后台引擎 -> 验收与交付物 -->
+        <div class="topology-canvas-wrap">
+          <svg id="topologySvg" class="topology-svg" viewBox="0 0 960 460" role="img" aria-label="Production Pipeline Graph">
+            <!-- 由 app.js 根据真实工具与配方数据确定性渲染，保证窄屏自适应且节点可点击 -->
+          </svg>
+          <div class="topology-legend">
+            <span class="legend-item"><i class="legend-line solid"></i><span data-zh="V 级：已有真实交付产物与交叉校验" data-en="Tier V: Verified with real artifacts & cross-check">V 级：已有真实交付产物与交叉校验</span></span>
+            <span class="legend-item"><i class="legend-line dashed"></i><span data-zh="F/C 级：工具已安装，流程待客户首单验收" data-en="Tier F/C: CLI installed, pipeline awaiting sample QA">F/C 级：工具已安装，流程待客户首单验收</span></span>
+            <span class="legend-item"><i class="legend-dot-uninstalled"></i><span data-zh="未安装/底层：FigCraft（未装）、ArtCraft（无独立CLI）" data-en="Uninstalled/Core: FigCraft (not installed), ArtCraft (engine)">未安装/底层：FigCraft（未装）、ArtCraft（无独立CLI）</span></span>
+          </div>
+        </div>
+
+        <!-- 右侧检查器：点击节点或配方时显示真实参数、验收门槛与边界 -->
+        <aside class="topology-inspector" id="topoInspector" aria-live="polite">
+          <div class="inspector-badge-row">
+            <span class="inspector-tier v-tag" id="inspTier">V · 已验证样品链</span>
+            <span class="inspector-code" id="inspCode">Recipe A · S03</span>
+          </div>
+          <h3 class="inspector-title" id="inspTitle" data-zh="餐厅菜单 / 价目表 / 业务文档排版" data-en="Menu / Price List / Business Document Typesetting">餐厅菜单 / 价目表 / 业务文档排版</h3>
+          <p class="inspector-desc" id="inspDesc" data-zh="客户只需提供菜品清单与价格，后台通过 WordCraft 转排 DOCX/PDF，并由 PdfCraft 提取文字回读价格、渲染首屏预览图完成交叉核对。" data-en="You provide the dish list and prices; we run WordCraft for DOCX/PDF typesetting and PdfCraft to extract text, verify price totals, and render page previews.">
+            客户只需提供菜品清单与价格，后台通过 WordCraft 转排 DOCX/PDF，并由 PdfCraft 提取文字回读价格、渲染首屏预览图完成交叉核对。
+          </p>
+          <div class="inspector-kv-list" id="inspKvList">
+            <div class="insp-kv">
+              <span data-zh="你说的话（输入）" data-en="What You Provide">你说的话（输入）</span>
+              <strong data-zh="菜品/服务表、纸张规格（A4/A3）、不可改项" data-en="Item list, paper size (A4/A3), non-negotiables">菜品/服务表、纸张规格（A4/A3）、不可改项</strong>
+            </div>
+            <div class="insp-kv">
+              <span data-zh="后台调度工具" data-en="Backend Engines">后台调度工具</span>
+              <strong>WordCraft 0.7.0 → PdfCraft 0.8.0</strong>
+            </div>
+            <div class="insp-kv">
+              <span data-zh="独立验收标准" data-en="Verification Gate">独立验收标准</span>
+              <strong data-zh="页数吻合 + 文字100%命中 + 金额求和相等 + 渲染无溢出" data-en="Page count match + 100% text hit + sum check + zero overflow">页数吻合 + 文字100%命中 + 金额求和相等 + 渲染无溢出</strong>
+            </div>
+            <div class="insp-kv">
+              <span data-zh="真实样品证据" data-en="Real Artifact Proof">真实样品证据</span>
+              <strong>menu.pdf (73KB) / spec.pdf (98KB)</strong>
+            </div>
+          </div>
+          <button type="button" class="btn-primary btn-full" id="inspUseBtn" data-preset="menu">
+            <span data-zh="用这条能力链发起委托 ↑" data-en="Commission with This Pipeline ↑">用这条能力链发起委托 ↑</span>
+          </button>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 第三幕：样品与服务目录（诚实分级：V级真实产物例证 + F级流程就绪 + C级定制探索） -->
+    <section class="section-block" id="catalog">
+      <div class="section-header">
+        <div class="section-eyebrow" data-zh="先实现样品与小订单，随后可迭代、批量交付" data-en="Samples & Small Orders First, Iterative & Batch Delivery Next">先实现样品与小订单，随后可迭代、批量交付</div>
+        <h2 class="section-title" data-zh="面向创作者的完整委托目录（按真实证据分级公开）" data-en="Full Creator Commission Catalog (Graded by Real Evidence)">面向创作者的完整委托目录（按真实证据分级公开）</h2>
+        <p class="section-desc" data-zh="三个已验证服务（V级）是我们生产能力的真实样品例证；无论你的创意是视觉、门店物料、报告演示还是音视频，都可以从首件样品开始委托。未验证能力绝不伪标为已验证。" data-en="Our three Tier-V services are concrete proof of our production pipeline. Whether you need brand visuals, store collateral, data reports, decks, or media, start with a single sample. Unverified capabilities are never disguised as verified.">
+          三个已验证服务（V级）是我们生产能力的真实样品例证；无论你的创意是视觉、门店物料、报告演示还是音视频，都可以从首件样品开始委托。未验证能力绝不伪标为已验证。
+        </p>
+      </div>
+
+      <!-- 分类过滤 -->
+      <div class="catalog-tabs" role="tablist">
+        <button type="button" class="cat-tab active" data-tier-filter="all" data-zh="全部服务与能力 (14)" data-en="All Services (14)">全部服务与能力 (14)</button>
+        <button type="button" class="cat-tab" data-tier-filter="V" data-zh="V级 · 已有真实样品例证 (3)" data-en="Tier V · Verified with Real Artifacts (3)">V级 · 已有真实样品例证 (3)</button>
+        <button type="button" class="cat-tab" data-tier-filter="F" data-zh="F级 · 流程就绪·首单样品试制 (3)" data-en="Tier F · Workflow Ready for First Sample (3)">F级 · 流程就绪·首单样品试制 (3)</button>
+        <button type="button" class="cat-tab" data-tier-filter="C" data-zh="C级 · 工具就绪·按需定制试样 (8)" data-en="Tier C · Engine Installed · Custom Sample (8)">C级 · 工具就绪·按需定制试样 (8)</button>
+      </div>
+
+      <!-- 服务卡片网格（由 app.js 渲染自真实 14 张服务卡数据，保留 3 张核心卡片首屏静态直出） -->
+      <div class="service-grid" id="serviceGrid"></div>
+    </section>
+
+    <!-- 第四幕：帮助中心（围绕如何描述需求、明确使用者与价值、设定验收标准 + 原文预留区） -->
+    <section class="section-block" id="help">
+      <div class="section-header">
+        <div class="section-eyebrow" data-zh="帮助中心 · 轻松委托，无需学提示词工程" data-en="Help Center · Delegate Clearly Without Prompt Engineering">帮助中心 · 轻松委托，无需学提示词工程</div>
+        <h2 class="section-title" data-zh="只需说清三件事，剩下的生产交给我们" data-en="Just Tell Us Three Things—We Handle the Production">只需说清三件事，剩下的生产交给我们</h2>
+        <p class="section-desc" data-zh="好的委托不需要背诵复杂术语或调试参数。只要明确「给谁用、解决什么价值、怎样算合格」，我们就能把它转化为可检验的样品。" data-en="A great commission doesn't require technical jargon or parameter tuning. Clarify who uses it, what value it delivers, and how you'll check it—we turn that into a testable sample.">
+          好的委托不需要背诵复杂术语或调试参数。只要明确「给谁用、解决什么价值、怎样算合格」，我们就能把它转化为可检验的样品。
+        </p>
+      </div>
+
+      <div class="help-triad">
+        <article class="help-card">
+          <div class="help-num">01</div>
+          <h3 data-zh="如何描述需求：说出场景与不可改项" data-en="1. Describe the Need: Context & Non-Negotiables">如何描述需求：说出场景与不可改项</h3>
+          <p data-zh="不用写“请用某某软件把字号设为 14pt”。直接告诉我们这件事发生在哪、你手头有什么原始材料、哪些内容绝对不能改动。" data-en="Skip software commands like 'set font to 14pt.' Tell us where this will be used, what raw materials you have, and what must remain unchanged.">
+            不用写“请用某某软件把字号设为 14pt”。直接告诉我们这件事发生在哪、你手头有什么原始材料、哪些内容绝对不能改动。
+          </p>
+          <div class="help-example">
+            <span class="ex-label" data-zh="自然表达示例：" data-en="Plain Language Example:">自然表达示例：</span>
+            <p data-zh="“下周六门店试营业，我有 18 道菜的 Excel 表，需要印 50 份 A4 菜单。菜名和澳元价格一个字都不能错。”" data-en="“Soft opening next Saturday. I have an Excel sheet of 18 dishes and need 50 A4 menus printed. Dish names and AUD prices must be exact.”">
+              “下周六门店试营业，我有 18 道菜的 Excel 表，需要印 50 份 A4 菜单。菜名和澳元价格一个字都不能错。”
+            </p>
+          </div>
+        </article>
+
+        <article class="help-card">
+          <div class="help-num">02</div>
+          <h3 data-zh="明确使用者与价值：谁在什么时刻看它？" data-en="2. Clarify User & Value: Who Sees It and When?">明确使用者与价值：谁在什么时刻看它？</h3>
+          <p data-zh="明确成品的使用者是谁、他们拿到成品后要做出什么决定。这决定了我们的排版重心、尺寸规格与交付格式。" data-en="Identify who will use the final work and what action they need to take. This guides our layout hierarchy, dimensions, and file formats.">
+            明确成品的使用者是谁、他们拿到成品后要做出什么决定。这决定了我们的排版重心、尺寸规格与交付格式。
+          </p>
+          <div class="help-example">
+            <span class="ex-label" data-zh="自然表达示例：" data-en="Plain Language Example:">自然表达示例：</span>
+            <p data-zh="“顾客站在点餐台前 30 秒内要选好午市套餐；同时对花生或麸质过敏的客人要一眼看清提示。”" data-en="“Walk-in customers need to pick a lunch set within 30 seconds at the counter, and guests with peanut/gluten allergies must spot warnings instantly.”">
+              “顾客站在点餐台前 30 秒内要选好午市套餐；同时对花生或麸质过敏的客人要一眼看清提示。”
+            </p>
+          </div>
+        </article>
+
+        <article class="help-card">
+          <div class="help-num">03</div>
+          <h3 data-zh="设定验收标准：约定清晰的签收尺子" data-en="3. Set Acceptance Criteria: Agree on the Yardstick">设定验收标准：约定清晰的签收尺子</h3>
+          <p data-zh="“好看、大气”很难核对；“手机小屏不横向滚动、18 个价格求和完全相等、透明背景无白边”则是双方都能一眼核实的硬标准。" data-en="Vague words like 'make it pop' are hard to verify. Specific checks—'no horizontal scroll on mobile, all 18 prices sum up exact, transparent PNG with no halo'—protect both sides.">
+            “好看、大气”很难核对；“手机小屏不横向滚动、18 个价格求和完全相等、透明背景无白边”则是双方都能一眼核实的硬标准。
+          </p>
+          <div class="help-example">
+            <span class="ex-label" data-zh="自然表达示例：" data-en="Plain Language Example:">自然表达示例：</span>
+            <p data-zh="“交付 A4 打印 PDF 和可编辑 Word 源件；所有文字可搜索复制，首屏预览图无压字或孤行。”" data-en="“Deliver A4 print PDF plus editable Word source; all text must be searchable, with zero text clipping or widows on page preview.”">
+              “交付 A4 打印 PDF 和可编辑 Word 源件；所有文字可搜索复制，首屏预览图无压字或孤行。”
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <!-- 指令学、委托理论、MAT Grooming 专栏预留（严格遵守“读取用户提供的原始材料，没有原文先预留，不编造”） -->
+      <div class="theory-reserve-box">
+        <div class="reserve-header">
+          <span class="reserve-tag" data-zh="方法论专栏 · 原文接入位（严禁编造）" data-en="Methodology Library · Verbatim Source Slot (No Fabrication)">方法论专栏 · 原文接入位（严禁编造）</span>
+          <h3 data-zh="指令学 · 委托理论 · MAT Grooming" data-en="Instruction Studies · Delegation Theory · MAT Grooming">指令学 · 委托理论 · MAT Grooming</h3>
+        </div>
+        <p class="reserve-desc" data-zh="这些进阶方法论用于把创造者的经验与意图沉淀成可复用的生产配方。为保证学术与工程严谨，以下模块仅展示经核实的原始材料与仓库状态，绝不凭空杜撰理论条文：" data-en="These methodologies turn creator intent into reusable production recipes. To maintain strict integrity, the slots below only display verified source state and never fabricate doctrine:">
+          这些进阶方法论用于把创造者的经验与意图沉淀成可复用的生产配方。为保证学术与工程严谨，以下模块仅展示经核实的原始材料与仓库状态，绝不凭空杜撰理论条文：
+        </p>
+        <div class="reserve-grid">
+          <div class="reserve-slot">
+            <div class="slot-head">
+              <strong>指令学 (Instruction Studies)</strong>
+              <span class="slot-status" data-zh="工程契约已参考 · 原著正文预留" data-en="Contract Referenced · Manuscript Reserved">工程契约已参考 · 原著正文预留</span>
+            </div>
+            <p data-zh="当前页面已应用 AoI M01 指令契约中的核心区分：「人表达意愿 → 系统制造结构化指令 → 独立前置检查」。原著章节正文待导入用户授权原稿后原样呈现。" data-en="Our intake applies the M01 contract distinction: Human expresses intent → System compiles structured instruction → Pre-execution check. Full manuscript chapters are reserved for authorized source text.">
+              当前页面已应用 AoI M01 指令契约中的核心区分：「人表达意愿 → 系统制造结构化指令 → 独立前置检查」。原著章节正文待导入用户授权原稿后原样呈现。
+            </p>
+          </div>
+          <div class="reserve-slot">
+            <div class="slot-head">
+              <strong>委托理论 (Delegation Theory)</strong>
+              <span class="slot-status" data-zh="待导入用户原文" data-en="Reserved for Verbatim Source">待导入用户原文</span>
+            </div>
+            <p data-zh="当前已落地「提交内容 + 开工条件」两次确认及「谁下单谁按验收标准核实签收」的委托闭环。完整理论原文将在提供定稿后直接挂载，此处不做演绎或编造。" data-en="Currently implemented via our two-step confirmation and buyer acceptance verification loop. Full theoretical text is reserved for the author's verbatim manuscript.">
+              当前已落地「提交内容 + 开工条件」两次确认及「谁下单谁按验收标准核实签收」的委托闭环。完整理论原文将在提供定稿后直接挂载，此处不做演绎或编造。
+            </p>
+          </div>
+          <div class="reserve-slot">
+            <div class="slot-head">
+              <strong>MAT Grooming</strong>
+              <span class="slot-status" data-zh="待导入用户原文" data-en="Reserved for Verbatim Source">待导入用户原文</span>
+            </div>
+            <p data-zh="需求梳理与验收颗粒度校准工作流预留位。在未读取到用户提供的 MAT Grooming 原始文档前，保持结构预留，不臆造缩写释义或流程步骤。" data-en="Reserved slot for requirement grooming and acceptance calibration. Until the user's primary MAT Grooming document is supplied, no expansions or steps are invented.">
+              需求梳理与验收颗粒度校准工作流预留位。在未读取到用户提供的 MAT Grooming 原始文档前，保持结构预留，不臆造缩写释义或流程步骤。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第五幕：关于我们（创始人表达） + 真实连通与待连通透明台账 -->
+    <section class="section-block" id="about">
+      <div class="about-split">
+        <!-- 创始人表达 -->
+        <div class="founder-card">
+          <span class="founder-eyebrow" data-zh="关于 X-connect · 为什么做这件事" data-en="About X-connect · Why We Built This">关于 X-connect · 为什么做这件事</span>
+          <blockquote class="founder-quote" data-zh="“我把这些工具和生产能力做出来，是为了让你的想法有机会成为作品，让你的才华有地方施展。”" data-en="“I built these tools and production capabilities so your ideas have the chance to become real works, and your talent has a stage to shine.”">
+            “我把这些工具和生产能力做出来，是为了让你的想法有机会成为作品，让你的才华有地方施展。”
+          </blockquote>
+          <p class="founder-body" data-zh="很多时候，真正卡住创造者的不是缺乏好点子，而是还没开始做第一件样品，就被昂贵的软件设备、繁琐的环境配置和陌生的工具学习门槛消耗殆尽。" data-en="Too often, creators aren't stopped by a lack of good ideas—they're exhausted before making their first sample by expensive equipment, environment setup, and steep tool learning curves.">
+            很多时候，真正卡住创造者的不是缺乏好点子，而是还没开始做第一件样品，就被昂贵的软件设备、繁琐的环境配置和陌生的工具学习门槛消耗殆尽。
+          </p>
+          <p class="founder-body" data-zh="在 X-connect，我们把经过实战打磨的 12 个专业生产工具、算力网络与标准化验收配方留在后台。你只需要说出想法、确认委托条件，从第一件可触摸的样品到稳定的批量交付，我们陪你把作品真正做出来。" data-en="At X-connect, we keep our 12 professional production engines, compute network, and verification recipes running backstage. You bring the direction and confirm the brief—from the very first sample to reliable batch delivery, we help you ship.">
+            在 X-connect，我们把经过实战打磨的 12 个专业生产工具、算力网络与标准化验收配方留在后台。你只需要说出想法、确认委托条件，从第一件可触摸的样品到稳定的批量交付，我们陪你把作品真正做出来。
+          </p>
+          <div class="founder-sign">
+            <img src="icon.svg" alt="" width="22" height="22">
+            <span data-zh="X-connect 创始团队 · 我搭台，你唱戏" data-en="X-connect Founding Team · Your idea. We make it happen.">X-connect 创始团队 · 我搭台，你唱戏</span>
+          </div>
+        </div>
+
+        <!-- 真实连通 vs 尚未连通 工程透明账单 -->
+        <div class="ledger-card">
+          <div class="ledger-head">
+            <span class="ledger-eyebrow" data-zh="工程诚实原则 · 实时边界" data-en="Engineering Honesty · Live Boundary Ledger">工程诚实原则 · 实时边界</span>
+            <h3 data-zh="当前真实连通与待连通清单" data-en="What Is Live Connected vs. What Is Staged">当前真实连通与待连通清单</h3>
+          </div>
+
+          <div class="ledger-group">
+            <h4 class="ledger-sub ok-sub" data-zh="✓ 已真实连通（可现场验证）" data-en="✓ Live & Verifiable Right Now">✓ 已真实连通（可现场验证）</h4>
+            <ul class="ledger-list">
+              <li data-zh="线上订单网关 api.x-connect.ai：POST /orders 与 POST /mcp (place_order / get_order) 已上线，带有效 sk-xc-... 凭据即可真实落库。" data-en="Order Gateway api.x-connect.ai: POST /orders & POST /mcp (place_order / get_order) are live; valid sk-xc-... keys write directly to D1.">
+                线上订单网关 <code>api.x-connect.ai</code>：<code>POST /orders</code> 与 <code>POST /mcp</code> 已上线，带有效 <code>sk-xc-...</code> 凭据即可真实落库。
+              </li>
+              <li data-zh="成果自提与 Webhook 交付：GET /a/<order_id>（7天有效，过期返 410）及执行端 claim/result 回调已实测跑通。" data-en="Artifact Pickup & Webhook Delivery: GET /a/<order_id> (7-day TTL) and executor claim/result callbacks are live and end-to-end tested.">
+                成果自提与 Webhook 交付：<code>GET /a/&lt;order_id&gt;</code>（7天有效）及执行端 claim/result 回调已实测跑通。
+              </li>
+              <li data-zh="3 项 V 级真实样品与 12 个电脑端生产 CLI：S03 菜单文档（menu.pdf 73KB / spec.pdf 98KB）、S02 品牌矢量（logo.pdf 20.7KB / logo.png 84KB）、S14 一页式站点（sanxian-shouzuo.onrender.com）产物真实可查。" data-en="3 Tier-V Verified Samples & 12 PC CLI Engines: S03 Menu PDFs, S02 Brand Vectors, and S14 Live Sample Site have real verifiable artifacts.">
+                3 项 V 级真实样品与 12 个电脑端生产 CLI：S03 菜单文档、S02 品牌矢量、S14 一页式站点产物真实可查。
+              </li>
+            </ul>
+          </div>
+
+          <div class="ledger-group">
+            <h4 class="ledger-sub pending-sub" data-zh="○ 当前由站长人工衔接 / 尚未自动化的环节" data-en="○ Currently Station-Master Assisted / Not Yet Automated">○ 当前由站长人工衔接 / 尚未自动化的环节</h4>
+            <ul class="ledger-list">
+              <li data-zh="匿名访客免 Key 登记：网关 /orders 强制要求 sk-xc-... 客户鉴权；未填 Key 的新访客在本页完成两次确认后，生成标准委托单（含 JSON 工单包）由站长人工核收排产。" data-en="Anonymous Visitor Intake: Gateway /orders requires sk-xc-... auth; visitors without a key receive a structured local commission ticket for station-master dispatch.">
+                匿名访客免 Key 登记：网关 <code>/orders</code> 要求 <code>sk-xc-...</code> 鉴权；未填 Key 时生成标准委托单包由站长人工核收排产。
+              </li>
+              <li data-zh="在线自动收银与固定价目表：各服务的 5 批基准耗时（measure_run.py）与商用授权条款（EULA）尚在测定，当前采用「先确认样品报价、后开工」机制，未接自动扣费。" data-en="Automated Checkout & Fixed Price Table: 5-batch cost benchmarks and commercial EULA audits are in progress; orders use pre-work quote confirmation rather than auto-billing.">
+                在线自动收银与固定价目表：5 批基准耗时与商用 EULA 尚在核定，当前采用「先确认报价、后开工」，未接自动扣费。
+              </li>
+              <li data-zh="F/C 级服务独立验收：S01/S04/S05 等 11 项服务具备完整 CLI 工具与流程草案，待首单样品完成跨人独立复验后升为 V 级。" data-en="Tier F/C Independent QA: 11 services have installed CLIs and workflow drafts, awaiting cross-person sample QA to graduate to Tier V.">
+                F/C 级服务独立验收：其余 11 项服务已装妥 CLI 工具与配方草案，待首单样品独立复验后升为 V 级。
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="icon.svg" alt="" width="20" height="20">
+        <strong>X-connect</strong>
+        <span data-zh="· 我搭台，你唱戏。零负担创业，让好创意先落地。" data-en="· Your idea. We make it happen. Start creating, without the setup.">· 我搭台，你唱戏。零负担创业，让好创意先落地。</span>
+      </div>
+      <div class="footer-links">
+        <a href="#commission" data-zh="发起委托" data-en="Commission">发起委托</a>
+        <a href="#stage-map" data-zh="生产拓扑" data-en="Topology">生产拓扑</a>
+        <a href="#catalog" data-zh="服务目录" data-en="Catalog">服务目录</a>
+        <a href="#help" data-zh="委托指南" data-en="Guide">委托指南</a>
+        <a href="https://sanxian-shouzuo.onrender.com" target="_blank" rel="noopener" data-zh="S14 真实样品站 ↗" data-en="S14 Live Sample ↗">S14 真实样品站 ↗</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js?v=3"></script>
+</body>
+</html>
