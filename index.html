@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-connect — 生产即服务</title>
+    <meta name="description" content="让创造者无需自建生产条件，就能把想法委托生产、验证并交付">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="zh">
+    <!-- 语言切换 -->
+    <button class="lang-toggle" id="langToggle" aria-label="Switch language">
+        <span class="lang-zh">EN</span>
+        <span class="lang-en">中文</span>
+    </button>
+
+    <!-- 能力网络背景 -->
+    <canvas id="capability-grid" class="capability-grid"></canvas>
+
+    <main class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="brand">
+                <svg class="brand-logo" width="56" height="56" viewBox="0 0 56 56" fill="none">
+                    <path d="M12 12L44 44M44 12L12 44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="28" cy="28" r="24" stroke="currentColor" stroke-width="2" fill="none" opacity="0.3"/>
+                    <circle cx="28" cy="28" r="18" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.5"/>
+                </svg>
+                <div class="brand-text">
+                    <span class="brand-name">X-connect</span>
+                    <span class="brand-tagline lang-zh">生产即服务</span>
+                    <span class="brand-tagline lang-en">Production as a Service</span>
+                </div>
+            </div>
+
+            <h1 class="headline">
+                <span class="lang-zh">把想法<br>委托给生产</span>
+                <span class="lang-en">From Intent<br>to Deliverable</span>
+            </h1>
+
+            <p class="subheadline">
+                <span class="lang-zh">无需自建工厂，你的创作在这里成为现实</span>
+                <span class="lang-en">No infrastructure needed. Your ideas, delivered.</span>
+            </p>
+
+            <div class="input-stage">
+                <div class="input-wrapper">
+                    <textarea 
+                        id="intent-input" 
+                        class="intent-input" 
+                        rows="1"
+                        data-placeholder-zh="描述你需要的东西..."
+                        data-placeholder-en="Describe what you need..."
+                    ></textarea>
+                    <button class="submit-btn" aria-label="Submit">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M3 10L17 10M17 10L11 4M17 10L11 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="input-hint">
+                    <span class="lang-zh">试试：我需要一套品牌视觉素材包</span>
+                    <span class="lang-en">Try: I need a brand visual asset package</span>
+                </div>
+            </div>
+
+            <div class="scroll-hint">
+                <span class="lang-zh">浏览已验证的生产能力</span>
+                <span class="lang-en">Explore verified production capabilities</span>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 3V13M8 13L4 9M8 13L12 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- 生产路径可视化 -->
+        <section class="production-path">
+            <div class="path-container">
+                <div class="path-node" data-stage="intent">
+                    <div class="node-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <span class="node-label lang-zh">想法</span>
+                    <span class="node-label lang-en">Idea</span>
+                </div>
+                
+                <div class="path-line"></div>
+                
+                <div class="path-node" data-stage="production">
+                    <div class="node-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+                            <rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+                            <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+                            <rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <span class="node-label lang-zh">生产</span>
+                    <span class="node-label lang-en">Production</span>
+                    <span class="node-sublabel lang-zh">工具网络协作</span>
+                    <span class="node-sublabel lang-en">Tool Network</span>
+                </div>
+                
+                <div class="path-line"></div>
+                
+                <div class="path-node" data-stage="delivery">
+                    <div class="node-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 11L12 14L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M21 12V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span class="node-label lang-zh">交付</span>
+                    <span class="node-label lang-en">Delivery</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 已验证服务 -->
+        <section class="services">
+            <h2 class="section-title">
+                <span class="lang-zh">已验证的生产能力</span>
+                <span class="lang-en">Verified Production Capabilities</span>
+            </h2>
+
+            <div class="service-grid">
+                <!-- 品牌基础素材包 -->
+                <div class="service-card" data-service="brand-assets">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                <rect x="6" y="6" width="20" height="20" rx="2" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 16L16 20L20 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <span class="verified-badge">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                <path d="M10 3L4.5 8.5L2 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="lang-zh">已验证</span>
+                            <span class="lang-en">Verified</span>
+                        </span>
+                    </div>
+                    
+                    <h3 class="card-title">
+                        <span class="lang-zh">品牌基础素材包</span>
+                        <span class="lang-en">Brand Asset Package</span>
+                    </h3>
+                    
+                    <p class="card-description">
+                        <span class="lang-zh">标志、色彩、规范——份能量提供的第一小盒系统</span>
+                        <span class="lang-en">Logo, colors, guidelines — the foundational system</span>
+                    </p>
+                    
+                    <div class="card-deliverables">
+                        <span class="deliverables-label lang-zh">交付物:</span>
+                        <span class="deliverables-label lang-en">Deliverables:</span>
+                        <span class="lang-zh">SVG / PDF / PNG (3 sizes) / colors.md / usage.pdf</span>
+                        <span class="lang-en">SVG / PDF / PNG (3 sizes) / colors.md / usage.pdf</span>
+                    </div>
+                    
+                    <div class="card-tools">
+                        <span class="tool-tag">VectorCraft</span>
+                        <span class="tool-tag">PdfCraft</span>
+                    </div>
+                </div>
+
+                <!-- 菜单与业务文档 -->
+                <div class="service-card" data-service="documents">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                <path d="M9 4H23C24.1046 4 25 4.89543 25 6V26C25 27.1046 24.1046 28 23 28H9C7.89543 28 7 27.1046 7 26V6C7 4.89543 7.89543 4 9 4Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M11 12H21M11 16H21M11 20H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span class="verified-badge">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                <path d="M10 3L4.5 8.5L2 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="lang-zh">已验证</span>
+                            <span class="lang-en">Verified</span>
+                        </span>
+                    </div>
+                    
+                    <h3 class="card-title">
+                        <span class="lang-zh">菜单与业务文档</span>
+                        <span class="lang-en">Menu & Business Documents</span>
+                    </h3>
+                    
+                    <p class="card-description">
+                        <span class="lang-zh">把内容塑成可阅读、可呈递的正式文档</span>
+                        <span class="lang-en">Shape content into readable, presentable documents</span>
+                    </p>
+                    
+                    <div class="card-deliverables">
+                        <span class="deliverables-label lang-zh">交付物:</span>
+                        <span class="deliverables-label lang-en">Deliverables:</span>
+                        <span class="lang-zh">Print PDF (A4/A3) + Screen PDF + source</span>
+                        <span class="lang-en">Print PDF (A4/A3) + Screen PDF + source</span>
+                    </div>
+                    
+                    <div class="card-tools">
+                        <span class="tool-tag">WordCraft</span>
+                        <span class="tool-tag">PdfCraft</span>
+                    </div>
+                </div>
+
+                <!-- 一页式营销站 -->
+                <div class="service-card" data-service="website">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                <rect x="4" y="6" width="24" height="20" rx="2" stroke="currentColor" stroke-width="2"/>
+                                <path d="M4 11H28" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="8" cy="8.5" r="0.5" fill="currentColor"/>
+                                <circle cx="10" cy="8.5" r="0.5" fill="currentColor"/>
+                                <circle cx="12" cy="8.5" r="0.5" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <span class="verified-badge">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                <path d="M10 3L4.5 8.5L2 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="lang-zh">已验证</span>
+                            <span class="lang-en">Verified</span>
+                        </span>
+                    </div>
+                    
+                    <h3 class="card-title">
+                        <span class="lang-zh">一页式营销站</span>
+                        <span class="lang-en">Single-Page Marketing Site</span>
+                    </h3>
+                    
+                    <p class="card-description">
+                        <span class="lang-zh">能看、能下、能落地的单页站点</span>
+                        <span class="lang-en">Viewable, downloadable, deployable single page</span>
+                    </p>
+                    
+                    <div class="card-deliverables">
+                        <span class="deliverables-label lang-zh">交付物:</span>
+                        <span class="deliverables-label lang-en">Deliverables:</span>
+                        <span class="lang-zh">Static site + Live URL + Mobile screenshots</span>
+                        <span class="lang-en">Static site + Live URL + Mobile screenshots</span>
+                    </div>
+                    
+                    <div class="card-tools">
+                        <span class="tool-tag">HTML/CSS/JS</span>
+                        <span class="tool-tag">PhotoCraft</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="more-capabilities">
+                <span class="lang-zh">更多能力正在验证中</span>
+                <span class="lang-en">More capabilities under verification</span>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2 class="cta-title">
+                <span class="lang-zh">开始你的第一个委托</span>
+                <span class="lang-en">Start Your First Commission</span>
+            </h2>
+            <button class="cta-btn" id="ctaBtn">
+                <span class="lang-zh">描述你的需求</span>
+                <span class="lang-en">Describe Your Need</span>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M4 10H16M16 10L10 4M16 10L10 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="lang-zh">X-connect · 让生产能力成为可调用的服务</p>
+            <p class="lang-en">X-connect · Production capabilities as callable services</p>
+        </footer>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
