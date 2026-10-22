@@ -1,0 +1,22 @@
+{
+  "id": "/",
+  "name": "X-connect Workbench",
+  "short_name": "X-connect",
+  "description": "卡片、字幕、语音与执行 —— 同一套账号的折叠 / 完整工作台。",
+  "lang": "zh-Hans",
+  "dir": "ltr",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#06080d",
+  "theme_color": "#070a0f",
+  "categories": ["productivity", "business"],
+  "prefer_related_applications": false,
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
