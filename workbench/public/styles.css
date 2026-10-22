@@ -28,20 +28,20 @@
 }
 
 :root {
-  --bg: #06080d;
-  --bg-2: #0a0e15;
-  --surface: #0f141d;
-  --surface-2: #141b27;
-  --surface-3: #1a2331;
-  --line: rgba(160, 190, 230, .13);
-  --line-strong: rgba(170, 205, 255, .23);
-  --text: #eef4ff;
-  --muted: #93a2b8;
-  --muted-2: #66758b;
-  --accent: #4b8dff;
-  --accent-2: #9cc6ff;
-  --accent-ink: #061020;
-  --good: #34d399;
+  --bg: #0d0f12;
+  --bg-2: #101317;
+  --surface: #13161b;
+  --surface-2: #191d24;
+  --surface-3: #20252d;
+  --line: rgba(255, 255, 255, .1);
+  --line-strong: rgba(245, 158, 11, .35);
+  --text: #f3f0e8;
+  --muted: #9ca3af;
+  --muted-2: #6b7280;
+  --accent: #f59e0b;
+  --accent-2: #fbbf6a;
+  --accent-ink: #1a1003;
+  --good: #10b981;
   --warn: #fbbf24;
   --bad: #fb7185;
   --review: #a78bfa;
@@ -75,7 +75,7 @@ body {
   color: var(--text);
   background:
     radial-gradient(1100px 700px at 12% -10%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 62%),
-    radial-gradient(900px 600px at 100% 0%, rgba(70, 110, 190, .10), transparent 58%),
+    radial-gradient(900px 600px at 100% 0%, rgba(217, 119, 6, .10), transparent 58%),
     linear-gradient(180deg, var(--bg-2), var(--bg) 38%);
   font-family: var(--font-ui);
   -webkit-font-smoothing: antialiased;
@@ -103,14 +103,14 @@ h2 { font-family: var(--font-display); font-size: 22px; line-height: 1.1; letter
 /* Intro ------------------------------------------------------------------ */
 .intro {
   position: fixed; inset: 0; z-index: 200; display: grid; place-items: center;
-  background: radial-gradient(circle at 50% 46%, #0c1b38 0%, #06080d 62%);
+  background: radial-gradient(circle at 50% 46%, #2a1a05 0%, #06080d 62%);
   overflow: hidden; pointer-events: none;
 }
 .intro[hidden] { display: none; }
-.intro-glow { position: absolute; width: 62vmin; height: 62vmin; border-radius: 50%; background: radial-gradient(circle, rgba(70, 140, 255, .55), rgba(20, 60, 140, .12) 46%, transparent 70%); filter: blur(12px); animation: intro-glow 1.25s var(--ease) both; }
-.intro-ring { position: absolute; width: 44vmin; height: 44vmin; border-radius: 50%; border: 1px solid rgba(150, 200, 255, .42); box-shadow: 0 0 60px rgba(70, 140, 255, .25), inset 0 0 40px rgba(70, 140, 255, .14); animation: intro-ring 1.2s var(--ease) both; }
-.intro-x { position: relative; width: min(34vmin, 210px); filter: drop-shadow(0 0 28px rgba(70, 140, 255, .55)); animation: intro-x 1.15s var(--ease) both; }
-.intro-word { position: absolute; bottom: 18%; color: rgba(220, 235, 255, .82); font-size: 11px; font-weight: 600; letter-spacing: .55em; padding-left: .55em; animation: intro-word 1.1s var(--ease) both; }
+.intro-glow { position: absolute; width: 62vmin; height: 62vmin; border-radius: 50%; background: radial-gradient(circle, rgba(245, 158, 11, .55), rgba(120, 60, 5, .12) 46%, transparent 70%); filter: blur(12px); animation: intro-glow 1.25s var(--ease) both; }
+.intro-ring { position: absolute; width: 44vmin; height: 44vmin; border-radius: 50%; border: 1px solid rgba(251, 191, 106, .42); box-shadow: 0 0 60px rgba(245, 158, 11, .25), inset 0 0 40px rgba(245, 158, 11, .14); animation: intro-ring 1.2s var(--ease) both; }
+.intro-x { position: relative; width: min(34vmin, 210px); filter: drop-shadow(0 0 28px rgba(245, 158, 11, .55)); animation: intro-x 1.15s var(--ease) both; }
+.intro-word { position: absolute; bottom: 18%; color: rgba(243, 240, 232, .82); font-size: 11px; font-weight: 600; letter-spacing: .55em; padding-left: .55em; animation: intro-word 1.1s var(--ease) both; }
 @keyframes intro-x { 0% { opacity: 0; transform: scale(.72) rotate(-16deg); } 45% { opacity: 1; transform: scale(1.03) rotate(5deg); } 70% { transform: scale(.99) rotate(0); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
 @keyframes intro-glow { 0% { opacity: 0; transform: scale(.7); } 55% { opacity: 1; } 100% { opacity: .72; transform: scale(1.08); } }
 @keyframes intro-ring { 0% { opacity: 0; transform: scale(.55); } 55% { opacity: 1; } 100% { opacity: .45; transform: scale(1.12); } }
@@ -127,22 +127,22 @@ h2 { font-family: var(--font-display); font-size: 22px; line-height: 1.1; letter
 .login[hidden] { display: none; }
 .login-card { width: min(560px, 100%); padding: clamp(28px, 6vw, 78px); display: flex; flex-direction: column; justify-content: center; gap: 20px; }
 .login-brand { display: flex; align-items: center; gap: 18px; }
-.login-x { width: 74px; height: 74px; object-fit: contain; filter: drop-shadow(0 0 24px rgba(70, 140, 255, .45)); }
+.login-x { width: 74px; height: 74px; object-fit: contain; filter: drop-shadow(0 0 24px rgba(245, 158, 11, .45)); }
 .login h1 { margin-top: 4px; }
 .login-lede { color: var(--muted); font-size: 15px; line-height: 1.65; max-width: 42ch; }
 .login-form { display: grid; gap: 9px; margin-top: 10px; }
 .login-form label { font-size: 12px; color: var(--muted); letter-spacing: .06em; }
 .key-row { display: flex; gap: 8px; }
-.key-row input { flex: 1; min-width: 0; height: 48px; border-radius: 13px; border: 1px solid var(--line-strong); background: rgba(8, 12, 20, .72); padding: 0 15px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; letter-spacing: .04em; }
+.key-row input { flex: 1; min-width: 0; height: 48px; border-radius: 13px; border: 1px solid var(--line-strong); background: rgba(13, 15, 18, .72); padding: 0 15px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; letter-spacing: .04em; }
 .key-row input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent); }
 .hint { color: var(--muted-2); font-size: 11.5px; line-height: 1.65; }
 .login-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 .login-msg { min-height: 20px; font-size: 12.5px; color: var(--muted); }
 .login-msg.bad { color: var(--bad); }
 .login-foot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--muted-2); font-size: 11px; margin-top: 10px; }
-.login-art { position: relative; overflow: hidden; border-left: 1px solid var(--line); background: radial-gradient(circle at 60% 40%, rgba(50, 110, 220, .18), transparent 55%), linear-gradient(160deg, #0a0f18, #070a10); display: grid; place-items: center; }
-.login-art-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(120, 170, 255, .06) 1px, transparent 1px), linear-gradient(90deg, rgba(120, 170, 255, .06) 1px, transparent 1px); background-size: 42px 42px; mask-image: radial-gradient(circle at 50% 50%, #000 10%, transparent 72%); }
-.login-art-card { position: absolute; width: 220px; padding: 18px; border-radius: 16px; border: 1px solid var(--line-strong); background: rgba(15, 21, 32, .78); backdrop-filter: blur(14px); box-shadow: var(--shadow); display: grid; gap: 8px; }
+.login-art { position: relative; overflow: hidden; border-left: 1px solid var(--line); background: radial-gradient(circle at 60% 40%, rgba(217, 119, 6, .18), transparent 55%), linear-gradient(160deg, #0a0f18, #070a10); display: grid; place-items: center; }
+.login-art-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(245, 170, 60, .06) 1px, transparent 1px), linear-gradient(90deg, rgba(245, 170, 60, .06) 1px, transparent 1px); background-size: 42px 42px; mask-image: radial-gradient(circle at 50% 50%, #000 10%, transparent 72%); }
+.login-art-card { position: absolute; width: 220px; padding: 18px; border-radius: 16px; border: 1px solid var(--line-strong); background: rgba(19, 22, 27, .78); backdrop-filter: blur(14px); box-shadow: var(--shadow); display: grid; gap: 8px; }
 .login-art-card span { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
 .login-art-card b { font-size: 15px; font-weight: 500; }
 .login-art-card.c1 { transform: translate(-120px, -130px) rotate(-4deg); }
@@ -229,7 +229,7 @@ h2 { font-family: var(--font-display); font-size: 22px; line-height: 1.1; letter
 .account-meta span { font-size: 10.5px; color: var(--muted-2); }
 .account svg { width: 15px; height: 15px; color: var(--muted-2); }
 .side-links { display: flex; align-items: center; gap: 12px; padding: 0 8px; }
-.scrim { position: fixed; inset: 0; z-index: 19; background: rgba(3, 6, 12, .62); backdrop-filter: blur(3px); }
+.scrim { position: fixed; inset: 0; z-index: 19; background: rgba(8, 9, 11, .62); backdrop-filter: blur(3px); }
 .scrim[hidden] { display: none; }
 
 /* Main ------------------------------------------------------------------- */
@@ -323,7 +323,7 @@ h2 { font-family: var(--font-display); font-size: 22px; line-height: 1.1; letter
 .insp-section { display: grid; gap: 9px; padding: 14px 0; border-bottom: 1px solid var(--line); }
 .insp-section:last-child { border-bottom: 0; }
 .insp-label { display: flex; align-items: center; justify-content: space-between; color: var(--muted-2); font-size: 10px; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; }
-.insp-section textarea, .field textarea, .field input { width: 100%; border: 1px solid var(--line); background: rgba(5, 8, 14, .48); border-radius: 10px; padding: 10px 11px; color: var(--text); font-size: 12.5px; line-height: 1.6; resize: vertical; }
+.insp-section textarea, .field textarea, .field input { width: 100%; border: 1px solid var(--line); background: rgba(10, 11, 13, .48); border-radius: 10px; padding: 10px 11px; color: var(--text); font-size: 12.5px; line-height: 1.6; resize: vertical; }
 .insp-section textarea:focus, .field textarea:focus, .field input:focus { border-color: color-mix(in srgb, var(--accent) 48%, transparent); outline: 0; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent); }
 .insp-section textarea { min-height: 130px; }
 .insp-section p { color: var(--muted); font-size: 12px; line-height: 1.7; }
@@ -394,7 +394,7 @@ h2 { font-family: var(--font-display); font-size: 22px; line-height: 1.1; letter
 .voice-note { color: var(--muted-2); font-size: 10px; line-height: 1.55; }
 
 /* Modals ----------------------------------------------------------------- */
-.modal { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 16px; background: rgba(3, 6, 12, .7); backdrop-filter: blur(7px); }
+.modal { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 16px; background: rgba(8, 9, 11, .7); backdrop-filter: blur(7px); }
 .modal[hidden] { display: none; }
 .modal-card { width: min(560px, 100%); max-height: min(86dvh, 900px); overflow: auto; border-radius: 18px; border: 1px solid var(--line-strong); background: linear-gradient(170deg, var(--surface-2), var(--surface)); box-shadow: 0 30px 100px rgba(0, 0, 0, .6); padding: 18px; display: grid; gap: 12px; }
 .modal-card.model-card { width: min(640px, 100%); }
@@ -528,7 +528,7 @@ body[data-layout="full"] { overflow-x: auto; }
 .msg-head { display: flex; align-items: center; gap: 7px; color: var(--muted-2); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
 .msg-head b { color: var(--muted); font-weight: 500; }
 .msg-body { color: var(--text); font-size: 13px; line-height: 1.72; white-space: pre-wrap; overflow-wrap: anywhere; }
-.msg.user .msg-body { color: #f5f9ff; }
+.msg.user .msg-body { color: #fbf7ee; }
 .msg-actions { display: flex; gap: 6px; opacity: .55; transition: .15s; }
 .msg:hover .msg-actions { opacity: 1; }
 .msg-actions button { color: var(--muted-2); font-size: 10px; padding: 2px 5px; border: 1px solid var(--line); border-radius: 5px; }
@@ -606,6 +606,6 @@ body.sidebar-collapsed .topbar { grid-column: 1 / -1; }
 .tier-tabs button:hover { color: var(--text); border-color: var(--line-strong); }
 .tier-tabs button.active { color: var(--accent-2); border-color: color-mix(in srgb, var(--accent) 48%, transparent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
 .login-tiers { display: grid; gap: 7px; margin-top: 4px; }
-.tier-access { width: 100%; height: 38px; border-radius: 10px; border: 1px solid var(--line); background: rgba(8,12,20,.72); padding: 0 12px; font-size: 12px; }
+.tier-access { width: 100%; height: 38px; border-radius: 10px; border: 1px solid var(--line); background: rgba(13,15,18,.72); padding: 0 12px; font-size: 12px; }
 .tier-access:focus { border-color: color-mix(in srgb, var(--accent) 45%, transparent); outline: 0; }
 .msg-lat { margin-left: auto; color: var(--muted-2); font-size: 9.5px; letter-spacing: .02em; }

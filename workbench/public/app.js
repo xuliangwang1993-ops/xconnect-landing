@@ -1470,7 +1470,7 @@ function renderSettings() {
         <option value="grok" ${theme === 'grok' ? 'selected' : ''}>Grok</option>
         <option value="hunyuan" ${theme === 'hunyuan' ? 'selected' : ''}>混元</option>
       </select></div>
-      <div class="field"><span>自定义强调色（可选）</span><div class="token-box"><input id="accentInput" type="color" value="${esc(state.settings.accent || '#4b8dff')}" style="width:52px;padding:3px"><span class="hint">只在打开自定义时覆盖主题色。</span></div></div>
+      <div class="field"><span>自定义强调色（可选）</span><div class="token-box"><input id="accentInput" type="color" value="${esc(state.settings.accent || '#f59e0b')}" style="width:52px;padding:3px"><span class="hint">只在打开自定义时覆盖主题色。</span></div></div>
       <div class="row-between"><div><div class="field"><span>减少动态效果</span></div><p class="hint">关闭水晶 X 过渡和大部分动画。</p></div><label class="switch ${state.settings.reducedMotion ? 'on' : ''}"><input id="reducedMotionToggle" type="checkbox" ${state.settings.reducedMotion ? 'checked' : ''} hidden></label></div>
       <p class="hint">主题 token 会切换配色、字体和组件视觉；布局和操作不变。完整模型名在顶栏模型选择器里。</p>
     </div>`;
