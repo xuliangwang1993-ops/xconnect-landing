@@ -4,22 +4,26 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { fetchAoiSnapshot } from './aoi/aoi-live.mjs';
+import { answer as guideAnswer, parseGuide } from './guide/guide.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, '..');
 const STAGE_FILES = { 'index.html': 'text/html; charset=utf-8', 'styles.css': 'text/css; charset=utf-8',
   'app.js': 'text/javascript; charset=utf-8', 'icon.svg': 'image/svg+xml', 'brand-x.png': 'image/png' };
+const GUIDE_FILES = { 'guide-widget.js': 'text/javascript; charset=utf-8' };
+export const GUIDE_TAG = '<script src="/guide/guide-widget.js" defer></script>';
 const AOI_FILES = { 'index.html': 'text/html; charset=utf-8', 'aoi-snapshot.js': 'text/javascript; charset=utf-8' };
 
 export const ROUTES = {
-  stage: '/', stageAssets: '/stage/', workbench: '/workbench', aoi: '/aoi', manifest: '/factory.json',
+  stage: '/', stageAssets: '/stage/', workbench: '/workbench', aoi: '/aoi', manifest: '/factory.json', guide: '/guide',
 };
 
 // Stage HTML uses relative asset paths; at "/" those would collide with the
 // Workbench's own /styles.css and /app.js, so rewrite them to /stage/.
 export function stageHtml() {
   const html = fs.readFileSync(path.join(REPO, 'index.html'), 'utf8');
-  return html.replace(/(href|src)="(styles\.css|app\.js(\?[^"]*)?|icon\.svg|brand-x\.png)"/g, '$1="/stage/$2"');
+  return html.replace(/(href|src)="(styles\.css|app\.js(\?[^"]*)?|icon\.svg|brand-x\.png)"/g, '$1="/stage/$2"')
+    .replace('</body>', GUIDE_TAG + '\n</body>');
 }
 
 function send(res, req, type, body) {
@@ -32,6 +36,20 @@ export function createFactory({ env = process.env, fetchImpl = globalThis.fetch 
   function handle(req, res) {
     if (req.method !== 'GET' && req.method !== 'HEAD') return false;
     const p = new URL(req.url, 'http://localhost').pathname;
+    if (p === '/guide' || p === '/guide/') return send(res, req, 'text/html; charset=utf-8', fs.readFileSync(path.join(HERE, 'guide/index.html')));
+    if (p === '/guide/api/sections') return send(res, req, 'application/json; charset=utf-8',
+      JSON.stringify({ sections: parseGuide().map(({ id, title, links }) => ({ id, title, links })) }));
+    if (p === '/guide/api/ask') {
+      const q = new URL(req.url, 'http://localhost').searchParams.get('q') || '';
+      return guideAnswer(q, { env, fetchImpl })
+        .catch(() => ({ source: 'guide', text: '导览暂时出错了。', links: [] }))
+        .then((d) => send(res, req, 'application/json; charset=utf-8', JSON.stringify(d)));
+    }
+    if (p.startsWith('/guide/')) {
+      const name = p.slice('/guide/'.length);
+      if (!Object.hasOwn(GUIDE_FILES, name)) return false;
+      return send(res, req, GUIDE_FILES[name], fs.readFileSync(path.join(HERE, 'guide', name)));
+    }
     if (p === '/aoi/api/snapshot') {
       return fetchAoiSnapshot({ env, fetchImpl })
         .catch((e) => ({ source: 'fixture', reason: String(e && e.message || e) }))
@@ -57,6 +75,7 @@ export function createFactory({ env = process.env, fetchImpl = globalThis.fetch 
         aoi: { path: '/aoi', role: 'AoI 能力看板（只读：真实 AoI M11 API，不可用时回退 fixture）' },
         bridge: { path: '/bridge/*', role: 'PC 执行桥' }, voice: { path: '/voice', role: '实时语音 WebSocket' },
         slack: { path: '/slack/*', role: 'Slack 入口' },
+        guide: { path: '/guide', role: '图书馆管理员导览（只讲解带路，不写入不付款）' },
       } }));
     return false;
   }

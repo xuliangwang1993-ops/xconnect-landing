@@ -12,6 +12,7 @@
 | `/bridge/*` | PC 执行桥 claim/complete | `workbench/server-voice.mjs` |
 | `/slack/*` | Slack 入口 → 卡片 | `workbench/integrations/*`、`workbench/slack-app-manifest.yaml` |
 | `/aoi` | AoI 能力看板（卡片 → CapabilitySnapshot，fixture，只读，不出现 verified） | `factory/aoi/index.html`、`factory/aoi/aoi-snapshot.js` |
+| `/guide` | 图书馆管理员导览：门面和工作台右下角悬浮按钮，首次访问自动导览；只讲解带路，不写入不付款。知识来自 `docs/factory-guide.md` | `factory/guide/*` |
 | `/factory.json` | 功能块清单（机器可读） | `factory/factory.mjs` |
 
 运行：`npm install && cp workbench/.env.example .env`（填值，绝不提交）→ `set -a; . ./.env; set +a; npm start`。
