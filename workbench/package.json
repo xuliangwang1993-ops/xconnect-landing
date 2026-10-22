@@ -1,0 +1,16 @@
+{
+  "name": "bot",
+  "version": "1.1.0",
+  "type": "module",
+  "scripts": {
+    "start": "node server-voice.mjs",
+    "test": "node --test --test-concurrency=1",
+    "test:workbench": "node --test test/workbench.test.mjs"
+  },
+  "dependencies": {
+    "ws": "^8.18.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
