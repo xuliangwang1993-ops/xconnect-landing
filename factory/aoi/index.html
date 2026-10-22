@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>X-connect 工厂 · AoI 能力看板</title>
+<style>
+body{margin:0;font:14px/1.5 system-ui,-apple-system,"PingFang SC",sans-serif;background:#0b0d10;color:#e8eaed}
+header{display:flex;gap:16px;align-items:center;padding:14px 20px;border-bottom:1px solid #222}
+header a{color:#9fe870;text-decoration:none}main{padding:20px;display:grid;gap:16px}
+.goal{border:1px solid #2a2f36;border-radius:12px;padding:12px 16px}.goal h3{margin:0 0 8px}
+.fn{display:flex;justify-content:space-between;padding:6px 0;border-top:1px dashed #222}
+.st{font-size:12px;padding:1px 8px;border-radius:99px;background:#222}.st.unverified{background:#3a3a12;color:#ffe680}
+.muted{color:#8a9099}pre{white-space:pre-wrap;background:#111;padding:12px;border-radius:8px;max-height:300px;overflow:auto}
+</style>
+</head>
+<body>
+<header><strong>AoI 能力看板</strong><a href="/">← 搭台首页</a><a href="/workbench">工作台 →</a>
+<span class="muted" id="meta"></span></header>
+<main id="out"><p class="muted">加载中…（需要先在工作台登录）</p></main>
+<script type="module">
+import { cardsToSnapshot } from '/aoi/aoi-snapshot.js';
+const out = document.getElementById('out');
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+try {
+  const r = await fetch('/api/cards', { credentials: 'same-origin' });
+  if (r.status === 401) { out.innerHTML = '<p>未登录。请先打开 <a href="/workbench">工作台</a> 登录。</p>'; throw 0; }
+  const d = await r.json();
+  const snap = cardsToSnapshot(d.cards || []);
+  document.getElementById('meta').textContent = `mode=${snap.mode} · ${snap.nodes.length} 节点 · ${snap.edges.length} 边 · 不出现 verified`;
+  const goals = snap.nodes.filter((n) => n.kind === 'goal');
+  out.innerHTML = goals.map((g) => {
+    const fns = snap.edges.filter((e) => e.from_id === g.id).map((e) => snap.nodes.find((n) => n.id === e.to_id));
+    return `<section class="goal"><h3>${esc(g.label)} <span class="muted">(${fns.length})</span></h3>` +
+      fns.map((f) => `<div class="fn"><span>${esc(f.label)}</span><span class="st ${f.state}">${f.state} · ${esc(f.wb_status)}</span></div>`).join('') + '</section>';
+  }).join('') + `<details><summary>CapabilitySnapshot JSON</summary><pre>${esc(JSON.stringify(snap, null, 1))}</pre></details>`;
+} catch (e) { if (e !== 0) out.innerHTML = '<p>加载失败：' + esc(e.message || e) + '</p>'; }
+</script>
+</body>
+</html>
