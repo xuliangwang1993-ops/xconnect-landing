@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#000000"><title>X-Connect AI — One gateway to every frontier model</title><meta name="description" content="X-Connect AI: one account for GPT, Claude, Gemini, Grok, DeepSeek and more. Chat on the left, delivery on the right, with transparent per-token pricing."><link rel="icon" type="image/png" href="assets/icons/apple-icon.png"><link rel="apple-touch-icon" href="assets/icons/apple-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="X-Connect AI"><meta property="og:title" content="X-Connect AI — One gateway to every frontier model"><meta property="og:description" content="One account for every frontier model. From intent to deliverable."><meta property="og:url" content="https://www.x-connect.ai/"><meta property="og:image" content="https://www.x-connect.ai/assets/icons/apple-icon.png"><meta name="twitter:card" content="summary"><link rel="stylesheet" href="portal.css"><style>.collection-continuation{position:relative;width:100%;margin:0;padding:0 0 24px}.collection-continuation iframe{display:block;border:0;width:100%;height:750px;background:transparent}@media(max-width:700px){.collection-continuation iframe{height:800px}}</style></head>
+<body data-motion="still" data-meteor-count="0">
+<canvas id="cosmos" aria-hidden="true"></canvas><div id="meteor" aria-hidden="true"></div>
+<div class="utility"><span class="demo-label" aria-hidden="true"></span><button id="session" aria-pressed="false">Sign in</button><button id="sound" aria-pressed="false" title="Enable ambient sound">Sound off</button></div>
+<main id="page">
+<section class="hero" aria-labelledby="headline">
+<a class="brand" href="#home" aria-label="X-connect home"><span class="jewel silver" aria-hidden="true"><img src="assets/crystal-x.jpg" alt=""></span><span>-connect</span></a>
+<div class="centerpiece"><h1 id="headline"><span>From intent</span><span>to deliverable.</span></h1><p class="tagline">The next industrial revolution starts here.</p>
+<section id="auth" class="auth" aria-label="Account access">
+<div class="auth-body" data-auth="out">
+<form id="login-form" class="auth-form" novalidate>
+<div class="field"><input id="login-email" type="email" name="email" placeholder="Email" autocomplete="username" aria-label="Email" required></div>
+<div class="field"><input id="login-password" type="password" name="password" placeholder="Password" autocomplete="current-password" aria-label="Password" required></div>
+<button class="auth-submit" type="submit">Sign in</button>
+</form>
+<div class="auth-links"><button type="button" class="auth-link" id="go-signup">Sign up</button><span class="auth-sep" aria-hidden="true">/</span><button type="button" class="auth-link" id="forgot">Forgot password</button></div>
+<div class="auth-divider" aria-hidden="true"><span>or continue with</span></div>
+<div class="auth-social" role="group" aria-label="Continue with a provider">
+<button type="button" class="social" data-oauth="wechat">WeChat</button>
+<button type="button" class="social" data-oauth="github">GitHub</button>
+<button type="button" class="social" data-oauth="google">Google</button>
+<button type="button" class="social" data-oauth="apple">Apple</button>
+</div>
+<button type="button" class="auth-passkey" id="passkey-signin">Sign in with a passkey</button>
+</div>
+<div class="auth-body" data-auth="in" hidden>
+<p class="auth-signed">Signed in as <strong id="auth-who">—</strong></p><p class="auth-quota" id="auth-quota" data-mode=""></p><p class="auth-hint">Choose a door — the assistant on the left, the production line on the right.</p>
+<div class="auth-links"><a class="auth-link" id="topup" href="https://subrouter.ai/console" target="_blank" rel="noopener">Top up</a><span class="auth-sep" aria-hidden="true">/</span><button type="button" class="auth-link" id="add-passkey">Add a passkey</button><span class="auth-sep" aria-hidden="true">/</span><button type="button" class="auth-link" id="signout">Sign out</button></div>
+</div>
+<p class="auth-msg" id="auth-msg" role="status" aria-live="polite"></p>
+</section></div>
+<button class="entry chat" data-lane="chat" aria-label="Enter Chat. One-third the cost. Three times the usage."><span class="entry-heading"><span class="jewel blue" aria-hidden="true"><img src="assets/crystal-x.jpg" alt=""></span><span>Chat</span></span><span class="entry-description">One-third the cost.<br>Three times the usage.</span></button>
+<button class="entry code" data-lane="code" aria-label="Enter Code, the full delivery factory. No infrastructure needed. Your idea, delivered."><span class="entry-heading"><span class="jewel rose" aria-hidden="true"><img src="assets/crystal-x.jpg" alt=""></span><span>Code</span></span><span class="entry-description">No infrastructure needed.<br>Your idea, delivered.</span></button>
+
+</section>
+<section class="collection-continuation" aria-label="Service collection"><iframe title="Interactive service-card collection" src="carousel-embed.html" loading="eager" scrolling="no"></iframe></section>
+<section id="signup" class="signup" aria-labelledby="signup-title">
+<div class="signup-inner">
+<p class="eyebrow">CREATE AN ACCOUNT</p>
+<h2 id="signup-title">One account. Two doors.</h2>
+<p class="signup-copy">The assistant on the left, the production line on the right — same account, same balance.</p>
+<form id="signup-form" class="signup-form" novalidate>
+<div class="field"><input id="signup-email" type="email" placeholder="Email" autocomplete="email" aria-label="Email" required></div>
+<div class="field"><input id="signup-password" type="password" placeholder="Password (at least 8 characters)" autocomplete="new-password" aria-label="Password" required></div>
+<div class="field"><input id="signup-password2" type="password" placeholder="Confirm password" autocomplete="new-password" aria-label="Confirm password" required></div>
+<label class="signup-terms"><input type="checkbox" id="signup-terms"> <span>I agree to the terms of service and privacy policy.</span></label>
+<button class="auth-submit" type="submit">Create account</button>
+</form>
+<div class="signup-or" aria-hidden="true"><span>or</span></div>
+<div class="auth-social signup-social" role="group" aria-label="Sign up with a provider">
+<button type="button" class="social" data-oauth="wechat">WeChat</button>
+<button type="button" class="social" data-oauth="github">GitHub</button>
+<button type="button" class="social" data-oauth="google">Google</button>
+<button type="button" class="social" data-oauth="apple">Apple</button>
+</div>
+<p class="auth-msg" id="signup-msg" role="status" aria-live="polite"></p>
+</div>
+</section></main>
+<section id="destination" class="destination" hidden aria-labelledby="destination-title"><button class="back" id="back">← Back to the universe</button><div class="destination-inner"><p class="eyebrow" id="route-eyebrow">X-CONNECT</p><div id="route-jewel" class="jewel blue" aria-hidden="true"><img src="assets/crystal-x.jpg" alt=""></div><h2 id="destination-title"></h2><p id="destination-copy"></p><p id="mission-preview" hidden></p><div id="route-actions"></div></div></section>
+<div class="sr-only" id="announcement" role="status" aria-live="polite"></div>
+<script src="portal.js"></script><script>const collectionFrame=document.querySelector('.collection-continuation iframe');collectionFrame.addEventListener('load',()=>{const doc=collectionFrame.contentDocument;const resize=()=>{collectionFrame.style.height=Math.max(600,doc.body.scrollHeight+24)+'px'};new ResizeObserver(resize).observe(doc.body);resize()});</script><script type="module" src="auth.js"></script></body></html>
