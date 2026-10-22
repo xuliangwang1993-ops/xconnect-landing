@@ -21,18 +21,24 @@ header a{color:#9fe870;text-decoration:none}main{padding:20px;display:grid;gap:1
 import { cardsToSnapshot } from '/aoi/aoi-snapshot.js';
 const out = document.getElementById('out');
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-try {
-  const r = await fetch('/api/cards', { credentials: 'same-origin' });
-  if (r.status === 401) { out.innerHTML = '<p>未登录。请先打开 <a href="/workbench">工作台</a> 登录。</p>'; throw 0; }
-  const d = await r.json();
-  const snap = cardsToSnapshot(d.cards || []);
-  document.getElementById('meta').textContent = `mode=${snap.mode} · ${snap.nodes.length} 节点 · ${snap.edges.length} 边 · 不出现 verified`;
+function render(snap, label) {
+  document.getElementById('meta').textContent = `${label} · mode=${snap.mode} · ${snap.nodes.length} 节点 · ${snap.edges.length} 边 · verified 仅凭 AoI 证据`;
   const goals = snap.nodes.filter((n) => n.kind === 'goal');
   out.innerHTML = goals.map((g) => {
-    const fns = snap.edges.filter((e) => e.from_id === g.id).map((e) => snap.nodes.find((n) => n.id === e.to_id));
+    const fns = snap.edges.filter((e) => e.from_id === g.id).map((e) => snap.nodes.find((n) => n.id === e.to_id)).filter(Boolean);
     return `<section class="goal"><h3>${esc(g.label)} <span class="muted">(${fns.length})</span></h3>` +
-      fns.map((f) => `<div class="fn"><span>${esc(f.label)}</span><span class="st ${f.state}">${f.state} · ${esc(f.wb_status)}</span></div>`).join('') + '</section>';
+      fns.map((f) => `<div class="fn"><span>${esc(f.label)}</span><span class="st ${esc(f.state)}">${esc(f.state)} · ${esc(f.wb_status ?? '')}</span></div>`).join('') + '</section>';
   }).join('') + `<details><summary>CapabilitySnapshot JSON</summary><pre>${esc(JSON.stringify(snap, null, 1))}</pre></details>`;
+}
+try {
+  let live = null;
+  try { live = await (await fetch('/aoi/api/snapshot', { credentials: 'same-origin' })).json(); } catch {}
+  if (live && live.source === 'aoi' && live.snapshot) { render(live.snapshot, 'AoI 实时 ' + (live.endpoint || '')); throw 0; }
+  const why = (live && live.reason) ? live.reason : 'AoI 代理不可用';
+  const r = await fetch('/api/cards', { credentials: 'same-origin' });
+  if (r.status === 401) { out.innerHTML = '<p>未登录。请先打开 <a href="/workbench">工作台</a> 登录。</p><p class="muted">fixture：' + esc(why) + '</p>'; throw 0; }
+  const d = await r.json();
+  render(cardsToSnapshot(d.cards || []), 'fixture（' + why + '）');
 } catch (e) { if (e !== 0) out.innerHTML = '<p>加载失败：' + esc(e.message || e) + '</p>'; }
 </script>
 </body>

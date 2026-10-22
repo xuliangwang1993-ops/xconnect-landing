@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { fetchAoiSnapshot } from './aoi/aoi-live.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, '..');
@@ -27,10 +28,15 @@ function send(res, req, type, body) {
   return true;
 }
 
-export function createFactory() {
+export function createFactory({ env = process.env, fetchImpl = globalThis.fetch } = {}) {
   function handle(req, res) {
     if (req.method !== 'GET' && req.method !== 'HEAD') return false;
     const p = new URL(req.url, 'http://localhost').pathname;
+    if (p === '/aoi/api/snapshot') {
+      return fetchAoiSnapshot({ env, fetchImpl })
+        .catch((e) => ({ source: 'fixture', reason: String(e && e.message || e) }))
+        .then((d) => send(res, req, 'application/json; charset=utf-8', JSON.stringify(d)));
+    }
     if (p === '/' || p === '/index.html') return send(res, req, STAGE_FILES['index.html'], stageHtml());
     if (p.startsWith('/stage/')) {
       const name = p.slice('/stage/'.length);
@@ -48,7 +54,7 @@ export function createFactory() {
       name: 'X-connect 工厂', blocks: {
         stage: { path: '/', role: '搭台：对外门面 / 委托入口' },
         workbench: { path: '/workbench', role: '唱戏：卡片工作台、聊天、执行、语音' },
-        aoi: { path: '/aoi', role: 'AoI 能力看板（fixture，只读）' },
+        aoi: { path: '/aoi', role: 'AoI 能力看板（只读：真实 AoI M11 API，不可用时回退 fixture）' },
         bridge: { path: '/bridge/*', role: 'PC 执行桥' }, voice: { path: '/voice', role: '实时语音 WebSocket' },
         slack: { path: '/slack/*', role: 'Slack 入口' },
       } }));
