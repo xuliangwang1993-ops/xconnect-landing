@@ -1,0 +1,13 @@
+{
+  "name": "xconnect-factory",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "X-connect 工厂：搭台你唱戏门面 + Workbench + AoI 看板，一个 Node 服务",
+  "scripts": {
+    "start": "node workbench/server-voice.mjs",
+    "test": "node --test --test-concurrency=1 factory/test/ workbench/test/"
+  },
+  "dependencies": { "ws": "^8.18.3" },
+  "engines": { "node": ">=18" }
+}
