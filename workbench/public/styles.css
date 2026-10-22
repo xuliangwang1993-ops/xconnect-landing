@@ -609,3 +609,38 @@ body.sidebar-collapsed .topbar { grid-column: 1 / -1; }
 .tier-access { width: 100%; height: 38px; border-radius: 10px; border: 1px solid var(--line); background: rgba(8,12,20,.72); padding: 0 12px; font-size: 12px; }
 .tier-access:focus { border-color: color-mix(in srgb, var(--accent) 45%, transparent); outline: 0; }
 .msg-lat { margin-left: auto; color: var(--muted-2); font-size: 9.5px; letter-spacing: .02em; }
+
+/* --- project_delivery card ------------------------------------------------ */
+.src-badge.delivery {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  color: var(--accent);
+  font-weight: 600;
+}
+.delivery-stations,
+.delivery-artifacts { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+.delivery-stations li,
+.delivery-artifacts li {
+  display: grid;
+  grid-template-columns: 12px 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: color-mix(in srgb, currentColor 4%, transparent);
+}
+.delivery-stations .dot { width: 8px; height: 8px; border-radius: 50%; }
+.delivery-stations .dot.good { background: var(--good, #2e9e6b); }
+.delivery-stations .dot.warn { background: var(--warn, #d08b2c); }
+.delivery-stations .dot.bad { background: var(--bad, #d64545); }
+.delivery-stations .dot.accent { background: var(--accent); }
+.delivery-stations .name { font-weight: 500; }
+.delivery-stations .score { font-variant-numeric: tabular-nums; opacity: 0.75; }
+.delivery-artifacts li { grid-template-columns: 56px 1fr auto auto; }
+.delivery-artifacts .kind { text-transform: uppercase; font-size: 10px; letter-spacing: 0.06em; opacity: 0.6; }
+.delivery-artifacts .name { font-family: var(--mono, ui-monospace, monospace); font-size: 12px; }
+.delivery-artifacts .size { opacity: 0.6; font-variant-numeric: tabular-nums; }
+.delivery-fail {
+  border-left: 3px solid var(--bad, #d64545);
+  padding-left: 10px;
+}

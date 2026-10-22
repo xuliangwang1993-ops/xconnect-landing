@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><title>project_delivery 卡片预览</title>
+<style>
+  :root { --bg:#0e1117; --panel:#161b23; --text:#e6e9ef; --muted:#8b95a5; --accent:#6ea8fe;
+          --good:#2e9e6b; --warn:#d08b2c; --bad:#d64545; --mono:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:14px/1.55 -apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif; padding:28px; }
+  h1 { font-size:15px; font-weight:600; color:var(--muted); letter-spacing:.04em; text-transform:uppercase; margin:0 0 18px; }
+  .wrap { max-width:520px; }
+  .card { background:var(--panel); border:1px solid #232a35; border-radius:14px; overflow:hidden; }
+  .card-top { display:flex; gap:8px; align-items:center; padding:14px 16px 0; }
+  .status-dot { width:8px; height:8px; border-radius:50%; background:var(--warn); }
+  .status-text { font-size:12px; color:var(--muted); }
+  .src-badge { margin-left:auto; font-size:11px; padding:2px 8px; border-radius:999px; background:#20283a; color:#9fb2d0; }
+  .src-badge.delivery { background:color-mix(in srgb, var(--accent) 16%, transparent); color:var(--accent); font-weight:600; }
+  .card h3 { margin:10px 16px 6px; font-size:17px; line-height:1.35; }
+  .excerpt { margin:0 16px 12px; color:var(--muted); font-size:13px; }
+  .card-foot { display:flex; gap:8px; padding:0 16px 14px; font-size:11px; color:var(--muted); }
+  .card-foot .right { margin-left:auto; }
+  .tabs { display:flex; gap:2px; padding:0 16px; border-bottom:1px solid #232a35; }
+  .tab { background:none; border:0; color:var(--muted); padding:10px 10px; font-size:13px; cursor:pointer; border-bottom:2px solid transparent; }
+  .tab.active { color:var(--text); border-bottom-color:var(--accent); }
+  .pane { padding:16px; display:grid; gap:14px; }
+  .label { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-bottom:6px; }
+  .chips { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+  .chip { font-size:11px; padding:2px 8px; border-radius:999px; background:#20283a; color:#9fb2d0; }
+  .chip.good { background:rgba(46,158,107,.15); color:#5fd39b; }
+  .chip.warn { background:rgba(208,139,44,.15); color:#e0aa5c; }
+  .chip.bad { background:rgba(214,69,69,.15); color:#f07777; }
+  ul.list { list-style:none; margin:6px 0 0; padding:0; display:grid; gap:6px; }
+  ul.list li { display:grid; grid-template-columns:12px 1fr auto auto; gap:8px; align-items:center;
+               font-size:13px; padding:6px 8px; border-radius:8px; background:rgba(255,255,255,.03); }
+  ul.list li .dot { width:8px; height:8px; border-radius:50%; }
+  .dot.good { background:var(--good); } .dot.warn { background:var(--warn); } .dot.bad { background:var(--bad); }
+  .name { font-weight:500; } .score { font-variant-numeric:tabular-nums; opacity:.75; }
+  ul.files li { grid-template-columns:56px 1fr auto auto; }
+  .kind { text-transform:uppercase; font-size:10px; letter-spacing:.06em; opacity:.6; }
+  .files .name { font-family:var(--mono); font-size:12px; }
+  .size { opacity:.6; font-variant-numeric:tabular-nums; }
+  .text-btn { background:none; border:0; color:var(--accent); font-size:11px; cursor:pointer; }
+  .actions { display:flex; gap:8px; margin-top:10px; }
+  .btn { border-radius:8px; padding:7px 12px; font-size:12px; border:1px solid transparent; cursor:pointer; }
+  .btn.primary { background:var(--accent); color:#0b1220; font-weight:600; }
+  .btn.ghost { background:none; border-color:#2b3444; color:var(--text); }
+  .fail { border-left:3px solid var(--bad); padding-left:10px; }
+</style></head><body>
+<div class="wrap">
+  <h1>project_delivery · 交付卡预览（真实 payload）</h1>
+  <article class="card">
+    <div class="card-top"><span class="status-dot"></span><span class="status-text">需注意</span><span class="src-badge delivery">交付</span></div>
+    <h3>给悉尼小锅米线（Slurp Slurp Noodle）做一支 30 秒宣传短视频… · dev</h3>
+    <p class="excerpt">8/8 站完成 · 8 个交付文件 · 9 项待客户</p>
+    <div class="tabs"><button class="tab active">内容</button><button class="tab">交付</button><button class="tab">助手</button><button class="tab">审核</button><button class="tab">执行</button></div>
+    <div class="pane" id="pane"></div>
+  </article>
+</div>
+<script type="application/json" id="payload">{"sentence": "给悉尼小锅米线（Slurp Slurp Noodle）做一支 30 秒宣传短视频，配中英字幕和三个社媒尺寸", "run_id": "dev", "scorecard": {"00_brief": 4.62, "01_collect": 3.65, "02_script": 4.2, "03_edit": 4.12, "04_subs": 3.67, "05_compose": 4.38, "06_qa": 4.38, "07_customer": 4.05}, "stations": [{"name": "brief", "status": "done", "score": 4.62, "checks_failed": []}, {"name": "collect", "status": "done", "score": 3.65, "checks_failed": []}, {"name": "script", "status": "done", "score": 4.2, "checks_failed": []}, {"name": "edit", "status": "done", "score": 4.12, "checks_failed": []}, {"name": "subs", "status": "attention", "score": 3.67, "checks_failed": ["S4-01"]}, {"name": "compose", "status": "done", "score": 4.38, "checks_failed": []}, {"name": "qa", "status": "attention", "score": 4.38, "checks_failed": ["S6-01", "S6-04"]}, {"name": "customer", "status": "attention", "score": 4.05, "checks_failed": ["S7-03"]}], "artifacts": [{"name": "promo_9x16.mp4", "bytes": 2359344, "path": "runs/dev/05_compose/promo_9x16.mp4"}, {"name": "cover_9x16.jpg", "bytes": 157991, "path": "runs/dev/05_compose/cover_9x16.jpg"}, {"name": "promo_1x1.mp4", "bytes": 5401471, "path": "runs/dev/05_compose/promo_1x1.mp4"}, {"name": "cover_1x1.jpg", "bytes": 135597, "path": "runs/dev/05_compose/cover_1x1.jpg"}, {"name": "promo_16x9.mp4", "bytes": 3731003, "path": "runs/dev/05_compose/promo_16x9.mp4"}, {"name": "cover_16x9.jpg", "bytes": 198429, "path": "runs/dev/05_compose/cover_16x9.jpg"}, {"name": "zh.srt", "bytes": 376, "path": "runs/dev/05_compose/zh.srt"}, {"name": "en.srt", "bytes": 388, "path": "runs/dev/05_compose/en.srt"}], "gaps": ["客户实拍素材未到：画面为占位板 + 官网未授权图，带水印", "无可用 TTS：本片无配音，只有配乐", "无可用 ASR/MT：funasr / whisper / argos-translate 在本机装不上", "英文校对为 AI 自查，未过母语者"], "pending_customer": ["店名（中文）", "地址", "菜系", "招牌菜", "营业时间（来源 A）", "营业时间（来源 B）", "菜单与价格", "社媒账号", "评分", "字体"]}</script>
+<script>
+const d = JSON.parse(document.getElementById('payload').textContent);
+const L = { brief:'需求解析', collect:'素材采集', script:'脚本与分镜', edit:'剪辑与调色', subs:'字幕', compose:'合成导出', qa:'后测', customer:'客服知识包' };
+const T = { done:'good', attention:'warn', failed:'bad', running:'accent' };
+const TXT = { done:'完成', attention:'需注意', failed:'失败', running:'进行中' };
+const fmt = n => !n ? '—' : n > 1e6 ? (n/1e6).toFixed(1)+' MB' : n > 1e3 ? (n/1e3).toFixed(0)+' KB' : n+' B';
+const scores = Object.values(d.scorecard||{});
+const avg = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(2) : '—';
+const failed = d.stations.filter(s => s.status === 'failed');
+document.getElementById('pane').innerHTML = `
+  <div>
+    <div class="label"><span>项目</span><span>${d.run_id}</span></div>
+    <div>${d.sentence}</div>
+    <div class="chips"><span class="chip">综合 ${avg} / 5</span><span class="chip">${d.stations.length} 站</span><span class="chip">${d.artifacts.length} 个文件</span></div>
+  </div>
+  ${failed.map(s => `<div class="fail"><div class="label"><span>${L[s.name]||s.name} 没有通过</span><span class="chip bad">失败</span></div>
+    <div>失败检查：${(s.checks_failed||[]).join('、')||'未记录'}。下游站点已停止，没有产出半成品。</div>
+    <div class="actions"><button class="btn primary">重试这一站</button><button class="btn ghost">联系人工</button></div></div>`).join('')}
+  <div><div class="label"><span>站点</span><span>分数 / 状态</span></div>
+    <ul class="list">${d.stations.map(s => `<li><span class="dot ${T[s.status]||'warn'}"></span><span class="name">${L[s.name]||s.name}</span><span class="score">${s.score==null?'—':s.score}</span><span class="chip ${T[s.status]||'warn'}">${TXT[s.status]||s.status}</span></li>`).join('')}</ul></div>
+  <div><div class="label"><span>交付文件</span><span>${d.artifacts.length}</span></div>
+    <ul class="list files">${d.artifacts.map(a => `<li><span class="kind">${a.name.endsWith('.mp4')?'video':a.name.endsWith('.srt')?'subtitle':'image'}</span><span class="name">${a.name}</span><span class="size">${fmt(a.bytes)}</span><button class="text-btn">复制路径</button></li>`).join('')}</ul></div>
+  <div><div class="label"><span>待客户提供</span><span>${d.pending_customer.length}</span></div>
+    <ul style="margin:6px 0 0;padding-left:18px;color:#c9d2e0">${d.pending_customer.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+  <div><div class="label"><span>缺口</span></div>
+    <ul style="margin:6px 0 0;padding-left:18px;color:#c9d2e0">${d.gaps.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+</script></body></html>

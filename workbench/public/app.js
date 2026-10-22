@@ -556,7 +556,7 @@ function renderCards() {
   grid.innerHTML = list.map((c) => {
     const selected = c.id === state.activeCardId;
     return `<article class="card ${selected ? 'selected' : ''}" data-card="${esc(c.id)}" data-status="${esc(c.status)}" tabindex="0" role="button" aria-label="${esc(c.title)}">
-      <div class="card-top"><span class="status-dot"></span><span class="status-text">${esc(statusLabel(c.status))}</span><span class="src-badge">${esc(sourceLabel(c))}</span></div>
+      <div class="card-top"><span class="status-dot"></span><span class="status-text">${esc(statusLabel(c.status))}</span><span class="src-badge">${esc(sourceLabel(c))}</span>${c.type === 'project_delivery' ? '<span class="src-badge delivery">交付</span>' : ''}</div>
       <h3>${esc(c.title || '未命名卡片')}</h3>
       <div class="card-excerpt">${esc((c.working || c.original || '').slice(0, 240))}</div>
       <div class="card-foot">
@@ -661,12 +661,65 @@ function renderInspector() {
       <div class="insp-meta"><span>${esc(card.project || '默认项目')}</span><span>·</span><span>${esc(card.source?.label || '手动输入')}</span>${card.source?.batch ? `<span>·</span><span>批次 ${esc(card.source.batch)}</span>` : ''}</div>
     </div>
     <div class="insp-tabs">
-      ${[['content', '内容'], ['assistant', '助手'], ['review', '审核'], ['execute', '执行']].map(([k, v]) => `<button class="tab ${state.inspTab === k ? 'active' : ''}" data-insp-tab="${k}" type="button">${v}</button>`).join('')}
+      ${[['content', '内容'], ...(card.type === 'project_delivery' ? [['delivery', '交付']] : []), ['assistant', '助手'], ['review', '审核'], ['execute', '执行']].map(([k, v]) => `<button class="tab ${state.inspTab === k ? 'active' : ''}" data-insp-tab="${k}" type="button">${v}</button>`).join('')}
     </div>
     <div id="inspPane">${inspPane(card)}</div>`;
 }
 
+
+const STATION_LABEL = {
+  brief: '需求解析', collect: '素材采集', script: '脚本与分镜', edit: '剪辑与调色',
+  subs: '字幕', compose: '合成导出', qa: '后测', customer: '客服知识包',
+};
+const DELIVERY_TONE = { done: 'good', attention: 'warn', failed: 'bad', running: 'accent' };
+const DELIVERY_TEXT = { done: '完成', attention: '需注意', failed: '失败', running: '进行中' };
+
+function fmtBytes(n) {
+  if (!n) return '—';
+  if (n > 1e6) return (n / 1e6).toFixed(1) + ' MB';
+  if (n > 1e3) return (n / 1e3).toFixed(0) + ' KB';
+  return n + ' B';
+}
+
+function deliveryPane(card) {
+  const d = card.delivery;
+  if (!d) return `<div class="insp-section"><p>这张卡没有交付数据。</p></div>`;
+  const overall = Object.values(d.scorecard || {});
+  const avg = overall.length ? (overall.reduce((a, b) => a + b, 0) / overall.length).toFixed(2) : '—';
+  const failed = d.stations.filter((s) => s.status === 'failed');
+  return `
+    <div class="insp-section">
+      <div class="insp-label"><span>项目</span><span>${esc(d.run_id || '')}</span></div>
+      <p>${esc(d.sentence || '')}</p>
+      <div class="insp-meta"><span class="chip">综合 ${esc(avg)} / 5</span><span class="chip">${d.stations.length} 站</span><span class="chip">${d.artifacts.length} 个文件</span></div>
+    </div>
+    ${failed.length ? failed.map((s) => `
+      <div class="insp-section delivery-fail">
+        <div class="insp-label"><span>${esc(STATION_LABEL[s.name] || s.name)} 没有通过</span><span class="chip bad">失败</span></div>
+        <p>失败检查：${esc((s.checks_failed || []).join('、') || '未记录')}。下游站点已停止，没有产出半成品。</p>
+        <div class="insp-actions">
+          <button class="btn primary small" data-delivery-retry="${esc(s.name)}" type="button">重试这一站</button>
+          <button class="btn ghost small" data-delivery-human="${esc(s.name)}" type="button">联系人工</button>
+        </div>
+      </div>`).join('') : ''}
+    <div class="insp-section">
+      <div class="insp-label"><span>站点</span><span>分数 / 状态</span></div>
+      <ul class="delivery-stations">
+        ${d.stations.map((s) => `<li><span class="dot ${DELIVERY_TONE[s.status] || 'warn'}"></span><span class="name">${esc(STATION_LABEL[s.name] || s.name)}</span><span class="score">${s.score == null ? '—' : s.score}</span><span class="chip ${DELIVERY_TONE[s.status] || 'warn'}">${DELIVERY_TEXT[s.status] || s.status}</span></li>`).join('')}
+      </ul>
+    </div>
+    <div class="insp-section">
+      <div class="insp-label"><span>交付文件</span><span>${d.artifacts.length}</span></div>
+      <ul class="delivery-artifacts">
+        ${d.artifacts.map((a) => `<li><span class="kind">${esc(a.kind)}</span><span class="name">${esc(a.name)}</span><span class="size">${fmtBytes(a.bytes)}</span><button class="text-btn" data-copy-path="${esc(a.path)}" type="button">复制路径</button></li>`).join('') || '<li>—</li>'}
+      </ul>
+    </div>
+    ${d.pending_customer?.length ? `<div class="insp-section"><div class="insp-label"><span>待客户提供</span></div><ul>${d.pending_customer.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
+    ${d.gaps?.length ? `<div class="insp-section"><div class="insp-label"><span>缺口</span></div><ul>${d.gaps.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}`;
+}
+
 function inspPane(card) {
+  if (state.inspTab === 'delivery') return deliveryPane(card);
   if (state.inspTab === 'content') {
     return `<div class="insp-section">
       <div class="insp-label"><span>当前文本</span><span>${(card.working || '').length} 字</span></div>

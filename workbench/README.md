@@ -157,6 +157,40 @@ test/                  voice auth + workbench contract tests
 desktop/               minimal Electron always-on-top host (seed)
 ```
 
+## `project_delivery` card (trial/promo-video-cards)
+
+A second card type: one card per finished video project, fed by the
+`craft-skills` pipeline (`runs/<run_id>/07_customer/project_delivery.json`).
+
+| Piece | File |
+|---|---|
+| Payload → card model, status derivation, failure copy | `cards/project-delivery.mjs` |
+| Inspector tab + station list + artifact list | `public/app.js` (`deliveryPane`), `public/styles.css` |
+| Server-side whitelist (`normalizeDelivery`) | `workbench.mjs` |
+| `POST /api/cards/:id/retry` (one station) | `workbench.mjs` |
+| Import CLI | `scripts/import-delivery.mjs` |
+| SQL migration (not applied) | `migrations/001_project_delivery.sql` |
+| Static preview with a real payload | `public/preview/project-delivery.html` |
+| Tests (9) | `test/project-delivery.test.mjs` |
+
+What the card does **not** claim:
+
+- It is not an executor. `retry` queues a task for the existing bridge/PC executor and
+  flips the station to `running`; the card never marks a station as passed by itself.
+- Scores come from the pipeline's `scorecard.json`; the UI never computes or rounds a
+  station score on its own.
+- `pending_customer` is displayed verbatim, so an unconfirmed price or opening hours
+  shows up as "待客户确认" instead of being quietly dropped.
+
+Import:
+
+```sh
+node scripts/import-delivery.mjs --payload <project_delivery.json>   # dry-run, prints the card
+node scripts/import-delivery.mjs --payload <...> --key "$WORKBENCH_KEY"   # posts via /api/cards
+```
+
+`WORKBENCH_KEY` is read from the environment; nothing is written to disk.
+
 ## Asset credits
 
 - Crystal X brand asset supplied by the project.

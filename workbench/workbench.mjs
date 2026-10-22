@@ -393,6 +393,47 @@ async function supaRequest(method, pathname, body, prefer = 'return=representati
   return data;
 }
 
+
+// ---------------------------------------------------------------------------
+// project_delivery payload (produced by the craft-skills video pipeline).
+// Whitelisted field by field: the browser may not push arbitrary objects into a
+// card that the UI later renders as trusted structure.
+
+function normalizeDelivery(input) {
+  if (!input || typeof input !== 'object') return null;
+  const stations = Array.isArray(input.stations) ? input.stations.slice(0, 20).map((s) => ({
+    name: clampText(s?.name || '', 40),
+    status: ['done', 'attention', 'failed', 'running'].includes(s?.status) ? s.status : 'attention',
+    score: Number.isFinite(Number(s?.score)) ? Math.max(0, Math.min(5, Number(s.score))) : null,
+    checks_failed: Array.isArray(s?.checks_failed) ? s.checks_failed.slice(0, 12).map((c) => clampText(c, 40)) : [],
+  })) : [];
+  if (!stations.length) return null;
+  const artifacts = Array.isArray(input.artifacts) ? input.artifacts.slice(0, 40).map((a) => ({
+    name: clampText(a?.name || '', 120),
+    path: clampText(a?.path || '', 300),
+    bytes: Math.max(0, Number(a?.bytes) || 0),
+    kind: ['video', 'image', 'subtitle'].includes(a?.kind) ? a.kind : (/[.](mp4|mov)$/i.test(a?.name || '') ? 'video' : 'image'),
+  })).filter((a) => a.name && a.path) : [];
+  const scorecard = {};
+  if (input.scorecard && typeof input.scorecard === 'object') {
+    for (const [k, v] of Object.entries(input.scorecard).slice(0, 20)) {
+      const n = Number(v);
+      if (Number.isFinite(n) && n >= 0 && n <= 5) scorecard[clampText(k, 40)] = Math.round(n * 100) / 100;
+    }
+  }
+  return {
+    run_id: clampText(input.run_id || input.runId || '', 60),
+    sentence: clampText(input.sentence || '', 400),
+    scorecard,
+    stations,
+    artifacts,
+    gaps: Array.isArray(input.gaps) ? input.gaps.slice(0, 20).map((g) => clampText(g, 200)) : [],
+    pending_customer: Array.isArray(input.pending_customer || input.pendingCustomer)
+      ? (input.pending_customer || input.pendingCustomer).slice(0, 40).map((g) => clampText(g, 120)) : [],
+    imported_at: nowIso(),
+  };
+}
+
 function nsFor(userId) {
   return sha256(`xc-workbench-v1|${userId}`).slice(0, 16);
 }
@@ -814,7 +855,7 @@ function readIngestToken(token) {
 // Router
 
 // Shared storage surface for integrations (Slack now, Linear later).
-export const wbStore = { nsFor, saveCard, loadRow, cardFromRow, saveRow, seal, unseal, nowIso, supaConfigured: () => Boolean(SUPA_URL) };
+export const wbStore = { nsFor, saveCard, loadRow, cardFromRow, saveRow, seal, unseal, nowIso, normalizeDelivery, supaConfigured: () => Boolean(SUPA_URL) };
 
 export function createWorkbench({ tasks, broadcast }) {
   const ctx = { tasks, broadcast };
@@ -1212,11 +1253,14 @@ export function createWorkbench({ tasks, broadcast }) {
         externalAssistant: Boolean(body.source?.externalAssistant),
       };
       const id = 'c_' + crypto.randomUUID().replace(/-/g, '').slice(0, 12);
+      const delivery = normalizeDelivery(body.delivery);
       const card = {
         id,
         project: clampText(body.project || '默认项目', 60),
         title: clampText(body.title || firstLine, 120),
         status: 'draft',
+        type: delivery ? 'project_delivery' : 'workbench-card',
+        delivery,
         original: text,
         working: text,
         source,
@@ -1232,7 +1276,7 @@ export function createWorkbench({ tasks, broadcast }) {
       catch { return fail(res, 502, 'storage_unavailable', '卡片保存失败，未提交'); }
     }
 
-    const cardMatch = pathname.match(/^\/api\/cards\/([a-zA-Z0-9_-]+)(?:\/(organize|review|approve|voice))?$/);
+    const cardMatch = pathname.match(/^\/api\/cards\/([a-zA-Z0-9_-]+)(?:\/(organize|review|approve|voice|retry))?$/);
     if (cardMatch) {
       const id = cardMatch[1];
       const action = cardMatch[2] || '';
@@ -1251,6 +1295,10 @@ export function createWorkbench({ tasks, broadcast }) {
         if (body.project !== undefined) card.project = clampText(body.project, 60) || card.project;
         if (Array.isArray(body.messages)) card.messages = body.messages.slice(-50);
         if (body.original !== undefined && !card.original) card.original = clampText(body.original, 20000);
+        if (body.delivery !== undefined) {
+          const next = normalizeDelivery(body.delivery);
+          if (next) { card.delivery = next; card.type = 'project_delivery'; }
+        }
         card.messages = [...(card.messages || []), { role: 'user', text: '卡片内容已修改', at: nowIso() }].slice(-50);
         try { return json(res, 200, { card: await saveCard(session, card) }); }
         catch { return fail(res, 502, 'storage_unavailable', '修改未保存'); }
@@ -1259,6 +1307,32 @@ export function createWorkbench({ tasks, broadcast }) {
       if (!action && req.method === 'DELETE') {
         try { await deleteRow(session, id); return json(res, 200, { ok: true }); }
         catch { return fail(res, 502, 'storage_unavailable', '删除失败'); }
+      }
+
+      if (action === 'retry' && req.method === 'POST') {
+        // A delivery card can ask for one station to run again. The workbench has no
+        // pipeline executor of its own: it queues a task for the bridge/PC executor and
+        // marks the station as running. It never pretends the station already passed.
+        if (card.type !== 'project_delivery' || !card.delivery) {
+          return fail(res, 400, 'not_delivery_card', '这张卡不是交付卡');
+        }
+        const body = await readJson(req, 16_000);
+        const station = clampText(body.station || '', 40);
+        const hit = (card.delivery.stations || []).find((x) => x.name === station);
+        if (!hit) return fail(res, 404, 'unknown_station', '找不到这一站');
+        hit.status = 'running';
+        hit.checks_failed = [];
+        card.status = 'running';
+        card.messages = [...(card.messages || []), {
+          role: 'user', text: `要求重跑「${station}」站`, at: nowIso(),
+        }].slice(-50);
+        try { await saveCard(session, card); } catch { return fail(res, 502, 'storage_unavailable', '重试请求未保存'); }
+        const task = queueTask({
+          ...card,
+          title: `重跑 ${station} · ${card.delivery.run_id}`,
+          working: `run_id=${card.delivery.run_id} station=${station}`,
+        }, session, ctx);
+        return json(res, 200, { card, task: publicTask(task) });
       }
 
       if (action === 'organize' && req.method === 'POST') {
