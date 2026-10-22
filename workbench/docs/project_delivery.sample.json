@@ -1,0 +1,178 @@
+{
+  "kind": "project_delivery",
+  "v": 1,
+  "id": "pd_R20261022-airbnb",
+  "title": "上架包 · R20261022-airbnb",
+  "sentence": "给我家 Airbnb（Home in Rosebery · 独立房间）做全套上架包",
+  "runId": "R20261022-airbnb",
+  "createdAt": "2026-10-22T14:03:41.453Z",
+  "scorecard": {
+    "overall": 4.03,
+    "axes": {
+      "commercial": 3.9,
+      "handoff": 4.5,
+      "craft": 4.5,
+      "benchmark": 2.8
+    }
+  },
+  "stations": [
+    {
+      "name": "00_brief",
+      "label": "需求解析",
+      "status": "ok",
+      "score": 4.5,
+      "note": ""
+    },
+    {
+      "name": "01_collect",
+      "label": "房源采集",
+      "status": "warn",
+      "score": 3.47,
+      "note": "未过：comps_ge_10"
+    },
+    {
+      "name": "02_pricing",
+      "label": "定价",
+      "status": "warn",
+      "score": 3.2,
+      "note": "未过：comps_ge_10, every_price_has_3_comps"
+    },
+    {
+      "name": "03_photos",
+      "label": "照片精修",
+      "status": "warn",
+      "score": 3.57,
+      "note": "未过：vertical_after_le_1deg"
+    },
+    {
+      "name": "04_video",
+      "label": "看房视频",
+      "status": "ok",
+      "score": 4.25,
+      "note": ""
+    },
+    {
+      "name": "05_copy",
+      "label": "多语描述",
+      "status": "ok",
+      "score": 4.1,
+      "note": ""
+    },
+    {
+      "name": "06_guide",
+      "label": "入住指南",
+      "status": "ok",
+      "score": 4.6,
+      "note": ""
+    },
+    {
+      "name": "07_site",
+      "label": "直订站",
+      "status": "ok",
+      "score": 4.35,
+      "note": ""
+    },
+    {
+      "name": "08_qc",
+      "label": "后测",
+      "status": "ok",
+      "score": 3.6,
+      "note": ""
+    },
+    {
+      "name": "09_support",
+      "label": "客服知识包",
+      "status": "ok",
+      "score": 4.7,
+      "note": ""
+    }
+  ],
+  "artifacts": [
+    {
+      "label": "照片排序与图注",
+      "path": "03_photos/photos/order.json",
+      "kind": "gallery",
+      "bytes": 1860
+    },
+    {
+      "label": "看房视频 9:16",
+      "path": "04_video/tour_9x16.mp4",
+      "kind": "video",
+      "bytes": 12109932
+    },
+    {
+      "label": "看房视频 16:9",
+      "path": "04_video/tour_16x9.mp4",
+      "kind": "video",
+      "bytes": 14126036
+    },
+    {
+      "label": "房源描述（中文）",
+      "path": "05_copy/listing_copy/zh.md",
+      "kind": "copy",
+      "bytes": 1480
+    },
+    {
+      "label": "房源描述（English）",
+      "path": "05_copy/listing_copy/en.md",
+      "kind": "copy",
+      "bytes": 1462
+    },
+    {
+      "label": "入住指南（中文）",
+      "path": "06_guide/guide/guide_zh.pdf",
+      "kind": "pdf",
+      "bytes": 75478
+    },
+    {
+      "label": "入住指南（English）",
+      "path": "06_guide/guide/guide_en.pdf",
+      "kind": "pdf",
+      "bytes": 18688
+    },
+    {
+      "label": "直订站",
+      "path": "07_site/site/index.html",
+      "kind": "site",
+      "bytes": 21498
+    },
+    {
+      "label": "客服知识包",
+      "path": "09_support/kb/kb_manifest.json",
+      "kind": "kb",
+      "bytes": 1543
+    },
+    {
+      "label": "评分卡",
+      "path": "reports/scorecard.json",
+      "kind": "report",
+      "bytes": 5745
+    },
+    {
+      "label": "后测",
+      "path": "reports/qc.json",
+      "kind": "report",
+      "bytes": 2929
+    }
+  ],
+  "gaps": [
+    "无动态定价数据源（对标 PriceLabs / Beyond）——comps 为 0 时，定价只能给情景模型。",
+    "无 darktable——照片调色是 PIL/OpenCV 复刻，不是 RAW 级工艺。",
+    "无 real-esrgan——1179px 截图放大到 2048 是 Lanczos，不是超分。",
+    "无已验证 TTS（cosyvoice 在禁用名单）——视频只有垫乐，没有旁白。",
+    "无 Lighthouse / Playwright——性能与可访问性只有静态审计，不能出真实跑分。",
+    "无搜索意图→房源的公共数据入口——robots 一挡，竞品分析就断，这是结构性的。",
+    "规则检索 ≠ RAG——知识包自测 100% 是规则命中，接小助手后建议换向量检索。",
+    "直订站没有预订引擎——不收款、不锁房、不发确认信，只是申请表。"
+  ],
+  "pendingOwner": [
+    "原图 10–14 张（按 `shot_request.md`），横拍 4:3，≥3000px 长边。",
+    "正式标题、完整描述（现在那句是 Airbnb 模板句，还写着「whole family」，与 2 人房不符）。",
+    "入住 / 退房时间、最少/最多晚数、取消政策、清洁费、押金。",
+    "门锁类型、Wi-Fi 名称、安静时间。",
+    "Airbnb 后台导出的 iCal（直订站日历要用）。"
+  ],
+  "retry": {
+    "command": "make run SENTENCE=\"…\""
+  }
+}
