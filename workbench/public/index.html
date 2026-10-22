@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="zh-Hans" data-theme="default">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#070a0f">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="X-connect Workbench — 卡片、字幕、语音与执行，一套账号两种布局。">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="X-connect">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon-192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="/styles.css">
+  <title>X-connect Workbench</title>
+</head>
+<body data-layout="compact">
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-bars" viewBox="0 0 24 24"><path d="M4 7h16M4 12h10" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M12 3.5v2M12 18.5v2M4.9 7.5l1.7 1M17.4 15.5l1.7 1M4.9 16.5l1.7-1M17.4 8.5l1.7-1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m8 10 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="m4 12 16-8-5 8 5 8-16-8Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M9 21h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7V5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3.5c.5 4.6 2.9 7 7.5 7.5-4.6.5-7 2.9-7.5 7.5-.5-4.6-2.9-7-7.5-7.5 4.6-.5 7-2.9 7.5-7.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    <symbol id="i-card" viewBox="0 0 24 24"><rect x="3.5" y="5.5" width="17" height="13" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M7 9h6M7 12h10M7 15h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1.4" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="4" width="6" height="6" rx="1.4" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="14" width="6" height="6" rx="1.4" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="14" width="6" height="6" rx="1.4" stroke="currentColor" stroke-width="1.6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4 21 20H3L12 4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M12 9v5M12 17.2v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.7"/><path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="11" height="12" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h2" stroke="currentColor" stroke-width="1.6"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.5 7h15M9 7V4.5h6V7M7 7l.8 13h8.4L17 7M10 11v5M14 11v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-attach" viewBox="0 0 24 24"><path d="m9 12 6-6a3.5 3.5 0 0 1 5 5l-8 8a5 5 0 0 1-7-7l7-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-ghost" viewBox="0 0 24 24"><path d="M5 20V11a7 7 0 0 1 14 0v9l-2.3-1.6L14.4 20l-2.4-1.6L9.6 20 7.3 18.4 5 20Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 10.5v.1M14.5 10.5v.1" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="18" cy="12" r="1.2" fill="currentColor"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="m4 6 5-2 6 2 5-2v14l-5 2-6-2-5 2V6Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 4v14M15 6v14" stroke="currentColor" stroke-width="1.4"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 6.3M20 5v6h-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </svg>
+
+  <div id="intro" class="intro" hidden aria-hidden="true">
+    <div class="intro-glow"></div>
+    <div class="intro-ring"></div>
+    <img class="intro-x" src="/assets/brand-x.png" alt="">
+    <div class="intro-word">X-CONNECT</div>
+  </div>
+
+  <section id="login" class="login" hidden>
+    <div class="login-card">
+      <div class="login-brand">
+        <img src="/assets/brand-x.png" alt="" class="login-x">
+        <div>
+          <div class="eyebrow">X-CONNECT / WORKBENCH</div>
+          <h1>把对话，落成卡片。</h1>
+        </div>
+      </div>
+      <p class="login-lede">同一套账号、模型和业务接口。手机上是折叠工作台，宽屏是完整工作台。</p>
+      <form id="loginForm" class="login-form" autocomplete="off">
+        <label for="keyInput">账号密钥</label>
+        <div class="key-row">
+          <input id="keyInput" name="key" type="password" inputmode="text" autocomplete="off" spellcheck="false" placeholder="sk-xc-… 或 sk-…">
+          <button type="submit" class="btn primary">进入</button>
+        </div>
+        <p class="hint">支持 X-connect 网关密钥（sk-xc-）与 SubRouter 密钥（sk-）。密钥只发送到本服务，存进 HttpOnly 会话 Cookie；不会写入浏览器存储，也不会出现在页面源码里。</p>
+      </form>
+      <div class="login-actions">
+        <button id="demoLogin" class="btn ghost" type="button">使用演示账号</button>
+        <button id="installHintBtn" class="btn ghost" type="button">如何安装</button>
+      </div>
+      <div class="login-tiers" id="loginTiers" hidden>
+        <span class="mini">或直接进入你的 SubRouter 档位（不用找 key）</span>
+        <input id="tierAccess" class="tier-access" type="password" autocomplete="off" placeholder="档位访问码（若有）">
+        <div class="tier-tabs" id="loginTierTabs"></div>
+      </div>
+      <div id="loginMsg" class="login-msg" role="status"></div>
+      <div class="login-foot">
+        <span>X-connect 身份 · 开源字体 Space Grotesk (OFL)</span>
+        <a href="https://www.x-connect.ai" target="_blank" rel="noreferrer">x-connect.ai</a>
+      </div>
+    </div>
+    <div class="login-art" aria-hidden="true">
+      <div class="login-art-grid"></div>
+      <div class="login-art-card c1"><span>字幕草稿</span><b>已保存 · 待整理</b></div>
+      <div class="login-art-card c2"><span>独立审核</span><b>不是执行授权</b></div>
+      <div class="login-art-card c3"><span>语音浮标</span><b>收起不挂断</b></div>
+    </div>
+  </section>
+
+  <div id="shell" class="shell" hidden>
+    <header class="topbar" id="topbar">
+      <button class="bars" id="sidebarToggle" type="button" aria-label="展开侧边栏" aria-expanded="false">
+        <svg><use href="#i-bars"></use></svg>
+      </button>
+      <a class="brand" href="/workbench" aria-label="X-connect Workbench">
+        <img src="/assets/brand-x.png" alt="" class="brand-x">
+        <span class="brand-word">X-connect</span>
+      </a>
+      <button class="model-chip" id="modelChip" type="button" aria-haspopup="dialog" aria-expanded="false" title="切换模型">
+        <span class="model-brand" id="modelBrand">C</span>
+        <span class="model-ver" id="modelVer">4.5</span>
+        <svg class="chev"><use href="#i-chevron"></use></svg>
+      </button>
+      <div class="top-spacer"></div>
+      <span class="net-dot" id="netDot" title="在线"></span>
+      <button class="temp-bubble" id="tempBtn" type="button" aria-pressed="false" title="临时会话">
+        <svg><use href="#i-ghost"></use></svg>
+        <span class="sr-only">临时会话</span>
+      </button>
+      <button class="avatar" id="avatarBtn" type="button" aria-label="账号与设置"><span id="avatarLetter">X</span></button>
+    </header>
+    <div id="banner" class="banner" hidden role="status"></div>
+
+    <aside class="sidebar" id="sidebar" aria-label="侧边栏">
+      <div class="side-head">
+        <div>
+          <div class="eyebrow">WORKBENCH</div>
+          <div class="side-title">项目与卡片</div>
+        </div>
+        <button class="icon-btn" id="newChatBtn" type="button" title="新建会话"><svg><use href="#i-plus"></use></svg></button>
+      </div>
+      <nav class="side-nav" aria-label="主视图">
+        <button class="nav-item active" data-view="cards" type="button"><svg><use href="#i-card"></use></svg><span>卡片</span><span class="nav-count" id="navCardsCount">0</span></button>
+        <button class="nav-item" data-view="works" type="button"><svg><use href="#i-spark"></use></svg><span>作品</span><span class="nav-count" id="navWorksCount">0</span></button>
+        <button class="nav-item" data-view="tasks" type="button"><svg><use href="#i-clock"></use></svg><span>任务</span><span class="nav-count" id="navTasksCount">0</span></button>
+      </nav>
+      <div class="side-section">
+        <div class="side-label"><span>会话</span><button class="text-btn" id="newChatBtn2" type="button">新建</button></div>
+        <div id="convList" class="conv-list"></div>
+      </div>
+      <div class="side-section">
+        <div class="side-label"><span>项目</span><span class="mini" id="projectCount">0</span></div>
+        <div id="projectList" class="project-list"></div>
+      </div>
+      <div class="side-foot">
+        <button class="account" id="accountBtn" type="button">
+          <span class="avatar small" id="sideAvatar">X</span>
+          <span class="account-meta"><b id="sideEmail">—</b><span id="sideBalance">—</span></span>
+          <svg><use href="#i-settings"></use></svg>
+        </button>
+        <div class="side-links">
+          <button class="text-btn" id="settingsBtn" type="button">设置</button>
+          <button class="text-btn" id="installBtn" type="button" hidden>安装应用</button>
+          <button class="text-btn danger" id="logoutBtn" type="button">退出</button>
+        </div>
+      </div>
+    </aside>
+    <div class="scrim" id="scrim" hidden></div>
+
+    <main class="main" id="main">
+      <div class="main-head">
+        <div>
+          <div class="eyebrow">X-CONNECT / <span id="viewEyebrow">CARDS</span></div>
+          <h1 id="viewTitle">项目工作台</h1>
+          <p class="lede" id="viewLede">项目、卡片、作品和任务状态是主体。控制按需收起，不挡内容。</p>
+        </div>
+        <div class="main-actions">
+          <button class="btn ghost small" id="miniMapBtn" type="button"><svg><use href="#i-map"></use></svg> Minimap</button>
+          <button class="btn primary small" id="newCardBtn" type="button"><svg><use href="#i-plus"></use></svg> 新卡片</button>
+        </div>
+      </div>
+      <div class="stats" id="stats"></div>
+      <div class="toolbar">
+        <div class="tabs" role="tablist" aria-label="视图">
+          <button class="tab" data-view="chat" type="button" role="tab">对话</button>
+          <button class="tab active" data-view="cards" type="button" role="tab">卡片</button>
+          <button class="tab" data-view="works" type="button" role="tab">作品</button>
+          <button class="tab" data-view="tasks" type="button" role="tab">任务</button>
+        </div>
+        <label class="search"><svg><use href="#i-search"></use></svg><input id="searchInput" type="search" placeholder="搜索卡片、来源、项目" autocomplete="off"></label>
+      </div>
+      <div id="chatView" class="view" hidden>
+        <div class="chat-head">
+          <div>
+            <div class="eyebrow">CONVERSATION</div>
+            <h2 id="chatTitle">新会话</h2>
+          </div>
+          <div class="chat-actions">
+            <button class="btn ghost small" id="chatRenameBtn" type="button">重命名</button>
+            <button class="btn ghost small" id="chatSystemBtn" type="button">系统提示</button>
+            <button class="btn ghost small" id="chatCardBtn" type="button"><svg><use href="#i-card"></use></svg> 生成卡片</button>
+          </div>
+        </div>
+        <div id="tempNotice" class="temp-notice" hidden>临时会话 · 只存在本机内存，关闭或刷新即清除；不写入服务端历史。模型请求仍会发送到网关并计费，不是“无痕”。</div>
+        <div id="chatMessages" class="chat-messages" aria-live="polite"></div>
+        <div id="chatEmpty" class="empty" hidden>
+          <h2>没有选中的会话</h2>
+          <p>从侧栏选一个会话，或新建。会话名称在侧栏和会话管理里改，不占顶栏。</p>
+          <button class="btn primary" id="chatEmptyNew" type="button">新建会话</button>
+        </div>
+      </div>
+      <div id="cardsView" class="view">
+        <div id="cardsGrid" class="cards-grid"></div>
+        <div id="cardsEmpty" class="empty" hidden></div>
+      </div>
+      <div id="worksView" class="view" hidden>
+        <div id="worksGrid" class="works-grid"></div>
+        <div id="worksEmpty" class="empty" hidden></div>
+      </div>
+      <div id="tasksView" class="view" hidden>
+        <div id="taskList" class="task-list"></div>
+        <div id="tasksEmpty" class="empty" hidden></div>
+      </div>
+      <div class="main-foot">
+        <span id="storageLabel">—</span>
+        <span class="dot-sep">·</span>
+        <span id="buildLabel">build —</span>
+        <span class="dot-sep">·</span>
+        <span>语音 / 字幕 / 卡片 / 执行</span>
+      </div>
+    </main>
+
+    <aside class="inspector" id="inspector" aria-label="卡片详情">
+      <div class="insp-head">
+        <div class="eyebrow">INSPECTOR</div>
+        <button class="icon-btn" id="inspClose" type="button" aria-label="关闭详情"><svg><use href="#i-close"></use></svg></button>
+      </div>
+      <div id="inspBody" class="insp-body"></div>
+    </aside>
+
+    <div class="composer" id="composer">
+      <button class="composer-pill" id="composerPill" type="button" aria-expanded="false">
+        <svg><use href="#i-plus"></use></svg>
+        <span>输入 / 粘贴 / 附件</span>
+        <kbd>⌘ ↵</kbd>
+      </button>
+      <div class="composer-panel" id="composerPanel" hidden>
+        <div class="composer-head">
+          <span class="composer-target" id="composerTarget">未选择会话</span>
+          <button class="icon-btn" id="composerClose" type="button" aria-label="收起输入区"><svg><use href="#i-close"></use></svg></button>
+        </div>
+        <textarea id="composerInput" rows="3" placeholder="写点什么，或粘贴一段字幕 / 对话…"></textarea>
+        <div class="composer-tools">
+          <label class="icon-btn" title="添加文本附件"><svg><use href="#i-attach"></use></svg><input id="fileInput" type="file" accept=".txt,.md,.markdown,.json,.csv,text/*" hidden></label>
+          <div class="quickbar" id="quickbar"></div>
+        </div>
+        <div class="composer-foot">
+          <span class="composer-hint" id="composerHint">草稿自动保存在本机；收起不丢。</span>
+          <button class="btn primary" id="sendBtn" type="button"><svg><use href="#i-send"></use></svg> 发送</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="voice-orb" id="voiceOrb" role="button" tabindex="0" aria-label="语音浮标" title="语音">
+      <svg><use href="#i-mic"></use></svg>
+      <span class="orb-ring"></span>
+    </div>
+    <div class="voice-panel" id="voicePanel" hidden aria-label="语音控制">
+      <div class="voice-head">
+        <div><div class="eyebrow">VOICE</div><b id="voiceState">未连接</b></div>
+        <button class="icon-btn" id="voiceClose" type="button" aria-label="收起语音面板"><svg><use href="#i-close"></use></svg></button>
+      </div>
+      <div class="voice-target" id="voiceTarget">目标卡：未选择</div>
+      <div class="voice-transcript" id="voiceTranscript" aria-live="polite">点开始，允许麦克风，然后说话。</div>
+      <div class="voice-meter"><span id="voiceMeter"></span></div>
+      <label class="voice-speaker">音色<select id="speakerSelect"></select></label>
+      <div class="voice-actions">
+        <button class="btn primary small" id="voiceStart" type="button"><svg><use href="#i-play"></use></svg> 开始</button>
+        <button class="btn ghost small" id="voicePause" type="button" hidden><svg><use href="#i-pause"></use></svg> 暂停</button>
+        <button class="btn ghost small" id="voiceStop" type="button" hidden><svg><use href="#i-stop"></use></svg> 挂断</button>
+      </div>
+      <p class="voice-note">收起面板不结束语音。网页无法读取其他 App 的音频；外部字幕请用快捷指令提交。</p>
+    </div>
+
+    <div class="modal" id="modelSheet" hidden role="dialog" aria-modal="true" aria-labelledby="modelTitle">
+      <div class="modal-card model-card">
+        <div class="modal-head"><div><div class="eyebrow">MODEL</div><h2 id="modelTitle">选择模型</h2></div><button class="icon-btn" data-close="modelSheet" type="button"><svg><use href="#i-close"></use></svg></button></div>
+        <div id="modelTierTabs" class="tier-tabs" hidden></div>
+        <label class="search wide"><svg><use href="#i-search"></use></svg><input id="modelSearch" type="search" placeholder="搜索完整模型名，例如 claude-opus-5-5" autocomplete="off"></label>
+        <div id="modelList" class="model-list"></div>
+        <div class="modal-foot"><span id="modelFoot">缩写只影响顶栏显示，不改真实 model_id。</span><span class="mini" id="modelCount"></span></div>
+      </div>
+    </div>
+
+    <div class="modal" id="settings" hidden role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="modal-card settings-card">
+        <div class="modal-head"><div><div class="eyebrow">SETTINGS</div><h2 id="settingsTitle">设置</h2></div><button class="icon-btn" data-close="settings" type="button"><svg><use href="#i-close"></use></svg></button></div>
+        <div class="settings-tabs" id="settingsTabs">
+          <button class="tab active" data-stab="look" type="button">外观</button>
+          <button class="tab" data-stab="system" type="button">系统</button>
+          <button class="tab" data-stab="quick" type="button">快捷栏</button>
+          <button class="tab" data-stab="subtitle" type="button">字幕接入</button>
+          <button class="tab" data-stab="about" type="button">关于</button>
+        </div>
+        <div class="settings-body" id="settingsBody"></div>
+      </div>
+    </div>
+
+    <div class="modal" id="cardModal" hidden role="dialog" aria-modal="true" aria-labelledby="cardModalTitle">
+      <div class="modal-card">
+        <div class="modal-head"><div><div class="eyebrow">NEW CARD</div><h2 id="cardModalTitle">生成卡片</h2></div><button class="icon-btn" data-close="cardModal" type="button"><svg><use href="#i-close"></use></svg></button></div>
+        <label class="field"><span>标题</span><input id="cardTitleInput" type="text" placeholder="可留空，自动取第一行"></label>
+        <label class="field"><span>内容</span><textarea id="cardTextInput" rows="8" placeholder="粘贴对话、字幕或笔记…"></textarea></label>
+        <div class="modal-foot"><span class="mini">生成卡片不等于送审，更不等于批准执行。</span><button class="btn primary" id="cardCreateBtn" type="button">保存为草稿卡</button></div>
+      </div>
+    </div>
+
+    <div class="modal" id="confirmModal" hidden role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <div class="modal-card narrow">
+        <div class="modal-head"><div><div class="eyebrow">CONFIRM</div><h2 id="confirmTitle">确认</h2></div><button class="icon-btn" data-close="confirmModal" type="button"><svg><use href="#i-close"></use></svg></button></div>
+        <p id="confirmText" class="confirm-text"></p>
+        <div class="modal-foot"><button class="btn ghost" id="confirmCancel" type="button">取消</button><button class="btn primary" id="confirmOk" type="button">确认</button></div>
+      </div>
+    </div>
+
+    <div class="modal" id="miniMapModal" hidden role="dialog" aria-modal="true" aria-labelledby="miniMapTitle">
+      <div class="modal-card wide">
+        <div class="modal-head"><div><div class="eyebrow">MINIMAP</div><h2 id="miniMapTitle">卡片地图</h2></div><button class="icon-btn" data-close="miniMapModal" type="button"><svg><use href="#i-close"></use></svg></button></div>
+        <div id="miniMapGrid" class="minimap-grid"></div>
+        <div class="modal-foot"><span class="mini">颜色：草稿 / 待审 / 已审 / 执行中 / 完成 / 失败</span></div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
