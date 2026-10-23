@@ -1,0 +1,13 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>project_delivery 卡片预览（静态，非线上数据）</title>
+<link rel="stylesheet" href="../public/styles.css">
+<style>body{overflow:auto;padding:16px;display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}.col{width:420px}.pd-station{margin:6px 0;list-style:none}.pd-stations{padding:0}.pd-explain{margin:6px 0}</style></head>
+<body><div class="col"><div id="g1"></div><div id="ok"></div></div><div class="col"><div id="bad"></div></div>
+<script type="module">
+import { renderDeliveryPanel, deliveryBadge } from '../public/project-delivery-view.js';
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const [a, b] = await Promise.all(['sample-project-delivery-card.json', 'sample-project-delivery-card-failed.json'].map((f) => fetch(f).then((r) => r.json())));
+document.getElementById('g1').innerHTML = `<article class="card"><div class="card-top"><span class="status-text">待审</span></div><h3>${esc(a.title)}</h3><div class="card-excerpt">${esc(a.working)}</div><div class="card-foot">${deliveryBadge(a, esc)}</div></article>`;
+document.getElementById('ok').innerHTML = renderDeliveryPanel(a, esc);
+document.getElementById('bad').innerHTML = `<h3>失败示例：${esc(b.delivery.run_id)}</h3>` + renderDeliveryPanel(b, esc);
+</script></body></html>

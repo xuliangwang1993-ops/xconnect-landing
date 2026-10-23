@@ -163,3 +163,13 @@ desktop/               minimal Electron always-on-top host (seed)
 - Space Grotesk, Copyright 2020 The Space Grotesk Project Authors, SIL Open Font
   License 1.1 (`public/assets/fonts/OFL.txt`).
 - No third-party logo or wordmark is used to imply endorsement.
+
+## project_delivery 卡片（trial/promo-video-cards）
+
+把 craft-skills 流水线的一次 run 变成一张交付卡：`{sentence, run_id, scorecard, stations[{name,status,score}], artifacts[], gaps[], pending_customer[]}`。失败站显示人话解释和「重试 / 联系人工」。
+
+- 构建/校验：`project-delivery.mjs`；视图：`public/project-delivery-view.js`（app.js 内容页顶部渲染）
+- 导入：`node scripts/import-promo-run.mjs <craft-skills> <run_id> [--out card.json] [--push]`（默认 dry-run；`--push` 只读环境变量 `SUPABASE_URL / SUPABASE_ANON_KEY / SUPABASE_ACCESS_TOKEN / WORKBENCH_NS`）
+- 存储：仍用 `work_checkpoints`，SQL 迁移 `migrations/20261023_project_delivery_cards.sql` 只加索引和 security_invoker 视图，**未在线上库执行**
+- 截图：`docs/screenshots/`（静态预览页 `docs/preview-project-delivery.html` + 样例卡 JSON，headless Chrome）
+- 测试：`node --test test/project-delivery.test.mjs`（3/3）。注：本分支既有 `npm test` 在 box 上原本就有 10 项失败，与本改动无关。
