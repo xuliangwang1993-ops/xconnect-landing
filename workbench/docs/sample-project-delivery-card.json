@@ -1,0 +1,143 @@
+{
+  "id": "pd_v320261023130640",
+  "type": "project_delivery",
+  "project": "宣传视频试生产",
+  "title": "交付：给悉尼小锅米线（Slurp Slurp Noodle）做一支 30 秒宣传短视频，配中英字幕和三个社媒尺寸",
+  "status": "review",
+  "original": "给悉尼小锅米线（Slurp Slurp Noodle）做一支 30 秒宣传短视频，配中英字幕和三个社媒尺寸",
+  "working": "run v3-20261023-130640 全链通过，评分 3.89/5；样片 · 未授权，不可交付",
+  "source": {
+    "kind": "manual",
+    "label": "流水线导入",
+    "app": "craft-skills",
+    "batch": "v3-20261023-130640",
+    "index": null,
+    "at": "2026-10-23T02:16:07.265Z",
+    "externalAssistant": false
+  },
+  "assistant": null,
+  "review": null,
+  "approval": null,
+  "result": null,
+  "messages": [],
+  "delivery": {
+    "sentence": "给悉尼小锅米线（Slurp Slurp Noodle）做一支 30 秒宣传短视频，配中英字幕和三个社媒尺寸",
+    "run_id": "v3-20261023-130640",
+    "scorecard": 3.89,
+    "stations": [
+      {
+        "name": "00_brief",
+        "status": "pass",
+        "score": 4.1,
+        "elapsed_s": 0
+      },
+      {
+        "name": "01_ingest",
+        "status": "warn",
+        "score": 3.15,
+        "elapsed_s": 2.36
+      },
+      {
+        "name": "02_script",
+        "status": "pass",
+        "score": 4,
+        "elapsed_s": 0.13
+      },
+      {
+        "name": "03_grade",
+        "status": "pass",
+        "score": 3.55,
+        "elapsed_s": 50.1
+      },
+      {
+        "name": "04_subs",
+        "status": "pass",
+        "score": 4.1,
+        "elapsed_s": 2.34
+      },
+      {
+        "name": "05_export",
+        "status": "pass",
+        "score": 3.55,
+        "elapsed_s": 43.4
+      },
+      {
+        "name": "06_qa",
+        "status": "pass",
+        "score": 4.5,
+        "elapsed_s": 6.91
+      },
+      {
+        "name": "07_kb",
+        "status": "pass",
+        "score": 4.2,
+        "elapsed_s": 0.01
+      }
+    ],
+    "artifacts": [
+      {
+        "kind": "cover",
+        "path": "runs/v3-20261023-130640/05_export/cover_16x9.jpg"
+      },
+      {
+        "kind": "cover",
+        "path": "runs/v3-20261023-130640/05_export/cover_1x1.jpg"
+      },
+      {
+        "kind": "cover",
+        "path": "runs/v3-20261023-130640/05_export/cover_9x16.jpg"
+      },
+      {
+        "kind": "subtitle",
+        "path": "runs/v3-20261023-130640/05_export/en.srt"
+      },
+      {
+        "kind": "video",
+        "path": "runs/v3-20261023-130640/05_export/promo_16x9.mp4"
+      },
+      {
+        "kind": "video",
+        "path": "runs/v3-20261023-130640/05_export/promo_1x1.mp4"
+      },
+      {
+        "kind": "video",
+        "path": "runs/v3-20261023-130640/05_export/promo_9x16.mp4"
+      },
+      {
+        "kind": "subtitle",
+        "path": "runs/v3-20261023-130640/05_export/zh.srt"
+      }
+    ],
+    "gaps": [
+      "1 素材：无客户实拍素材（0 段），只能用官网 2 张图（500×500、680×510）做占位",
+      "3 音频：无已验证自动配乐工具；垫乐为 sox 合成和弦",
+      "3 音频：无口播，demucs 本次 skipped（无人声可分离）",
+      "4 字幕：无已验证 TTS 配音（cosyvoice ⛔，第 2 批未合并）",
+      "4 字幕：CER 无对象可测（无口播）；funasr/whisper 未在本片发挥作用",
+      "4 字幕：argos-translate 中→英质量弱（店名被译成\"面条\"），6 行中仅 1 行直接采纳",
+      "0 需求：需求解析是自写规则，对句式敏感",
+      "5 合成：MLT/effectcraft 模板化动效未接入，仅 ffmpeg/libass",
+      "7 客服：15 问测试用本地检索桩，不是线上小X；无向量检索",
+      "全链：无 Git LFS（box 未装 git-lfs）；仓库只提交三尺寸成片+封面+小文件，中间大文件（wav、clips、_nosub、work_master）未入库，可用 make run 重现",
+      "成本：token / 额度用量在 box 上无法测量",
+      "工具：librosa、playwright、yt-dlp 本链路未用到，未验证",
+      "工具：pyscenedetect SKILL.md 的 `[opencv]` extra 在 0.7.2 已不存在"
+    ],
+    "pending_customer": [
+      "实拍素材（见 shot_request.md）",
+      "官网图片书面授权",
+      "name_zh（unverified）：客户口头说法，书面中文店名待提供",
+      "address（unverified）：官网未写，待客户确认",
+      "cuisine（unverified）",
+      "signature_dishes（unverified）",
+      "hours（conflict）：视频不写时间",
+      "menu_prices（pending）：官网无菜单",
+      "social（pending）",
+      "rating（unverified）：第三方、会变，不入片",
+      "logo_content（conflict）：与店名不符，不入片",
+      "brand_font（pending）：用 Noto Sans CJK（OFL）替代"
+    ]
+  },
+  "createdAt": "2026-10-23T02:16:07.265Z",
+  "updatedAt": "2026-10-23T02:16:07.265Z"
+}

@@ -2,6 +2,7 @@
  * Vanilla ES module, no build step.  All privileged calls go through /api/*;
  * the gateway key never enters this file or localStorage.
  */
+import { renderDeliveryPanel, deliveryBadge, isDelivery } from './project-delivery-view.js';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
@@ -560,6 +561,7 @@ function renderCards() {
       <h3>${esc(c.title || '未命名卡片')}</h3>
       <div class="card-excerpt">${esc((c.working || c.original || '').slice(0, 240))}</div>
       <div class="card-foot">
+        ${deliveryBadge(c, esc)}
         ${c.assistant ? '<span class="tag"><svg><use href="#i-spark"></use></svg>已整理</span>' : ''}
         ${c.review ? `<span class="tag"><svg><use href="#i-check"></use></svg>${c.review.verdict === 'pass' ? '已审' : '需改'}</span>` : ''}
         <span class="right">v${c.version || 1} · ${esc(fmtTime(c.updatedAt))}</span>
@@ -668,7 +670,7 @@ function renderInspector() {
 
 function inspPane(card) {
   if (state.inspTab === 'content') {
-    return `<div class="insp-section">
+    return `${renderDeliveryPanel(card, esc)}<div class="insp-section">
       <div class="insp-label"><span>当前文本</span><span>${(card.working || '').length} 字</span></div>
       <textarea id="cardWorking" spellcheck="false">${esc(card.working || '')}</textarea>
       <div class="insp-actions"><button class="btn primary small" data-card-action="save" type="button">保存修改</button><button class="btn ghost small" data-card-action="copy" type="button">复制</button></div>
@@ -1106,6 +1108,8 @@ async function runCardAction(action) {
   try {
     if (action === 'save') return await saveCardText();
     if (action === 'copy') return await copyText(card.working || '');
+    if (action === 'delivery-retry') return toast(isDelivery(card) ? `请在流水线机器上重跑：RUN_ID=${card.delivery.run_id} make run` : '不是交付卡');
+    if (action === 'delivery-contact') return toast('已记下：这张交付卡需要人工处理，请联系 X-connect 客服。');
     if (action === 'copy-result') return await copyText(card.result || '');
     if (action === 'delete') {
       const ok = await askConfirm({ title: '删除卡片', text: `删除「${card.title}」？`, ok: '删除' });
