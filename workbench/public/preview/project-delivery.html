@@ -49,7 +49,7 @@
   <article class="card">
     <div class="card-top"><span class="status-dot"></span><span class="status-text">需注意</span><span class="src-badge delivery">交付</span></div>
     <h3>给悉尼小锅米线（Slurp Slurp Noodle）做一支 30 秒宣传短视频… · dev</h3>
-    <p class="excerpt">8/8 站完成 · 8 个交付文件 · 9 项待客户</p>
+    <p class="excerpt" id="excerpt">—</p>
     <div class="tabs"><button class="tab active">内容</button><button class="tab">交付</button><button class="tab">助手</button><button class="tab">审核</button><button class="tab">执行</button></div>
     <div class="pane" id="pane"></div>
   </article>
@@ -64,6 +64,9 @@ const fmt = n => !n ? '—' : n > 1e6 ? (n/1e6).toFixed(1)+' MB' : n > 1e3 ? (n/
 const scores = Object.values(d.scorecard||{});
 const avg = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(2) : '—';
 const failed = d.stations.filter(s => s.status === 'failed');
+const doneCount = d.stations.filter(s => s.status === 'done').length;
+document.getElementById('excerpt').textContent =
+  `${doneCount}/${d.stations.length} 站完成 · ${d.artifacts.length} 个交付文件 · ${d.pending_customer.length} 项待客户`;
 document.getElementById('pane').innerHTML = `
   <div>
     <div class="label"><span>项目</span><span>${d.run_id}</span></div>
