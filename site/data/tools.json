@@ -1,0 +1,746 @@
+{
+  "count": 88,
+  "local_count": 11,
+  "tools": [
+    {
+      "name": "blender",
+      "zh": "3D 建模与渲染（Blender 无界面）",
+      "category": "3d",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "animatediff",
+      "zh": "动画化扩散（AnimateDiff）",
+      "category": "ai-video",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "cogvideox",
+      "zh": "AI 视频生成（CogVideoX）",
+      "category": "ai-video",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "framepack",
+      "zh": "长视频图生视频（FramePack）",
+      "category": "ai-video",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "hunyuanvideo",
+      "zh": "AI 视频生成（HunyuanVideo）",
+      "category": "ai-video",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "ltx-video",
+      "zh": "AI 视频生成（LTX-Video）",
+      "category": "ai-video",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "wan2",
+      "zh": "AI 视频生成（Wan2.2）",
+      "category": "ai-video",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "aeneas",
+      "zh": "文本音频强制对齐（aeneas）",
+      "category": "asr",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "stable-ts",
+      "zh": "稳定字幕时间戳（stable-ts）",
+      "category": "asr",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "whisperx",
+      "zh": "逐字时间戳字幕（WhisperX）",
+      "category": "asr",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "audiowaveform",
+      "zh": "波形图生成（audiowaveform）",
+      "category": "audio",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "cc0-music-sources",
+      "zh": "免版权音乐来源（CC0 / 可商用）",
+      "category": "audio",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "cosyvoice",
+      "zh": "中文配音 TTS（CosyVoice）",
+      "category": "audio",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "demucs",
+      "zh": "人声/伴奏分离（Demucs）",
+      "category": "audio",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "ffmpeg-normalize",
+      "zh": "批量响度归一（ffmpeg-normalize）",
+      "category": "audio",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "funasr",
+      "zh": "中文语音识别（FunASR / Paraformer）",
+      "category": "audio",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "librosa",
+      "zh": "音乐节拍分析（librosa）",
+      "category": "audio",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "pyloudnorm",
+      "zh": "响度测量（pyloudnorm）",
+      "category": "audio",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "rubberband",
+      "zh": "变速不变调（Rubber Band）",
+      "category": "audio",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "sox",
+      "zh": "音频处理（SoX）",
+      "category": "audio",
+      "layer": "base",
+      "used": [
+        "03_grade"
+      ],
+      "local": true
+    },
+    {
+      "name": "whisper",
+      "zh": "语音识别与字幕（Whisper）",
+      "category": "audio",
+      "layer": "base",
+      "used": [
+        "04_subs"
+      ],
+      "local": false
+    },
+    {
+      "name": "himalaya",
+      "zh": "命令行邮件（Himalaya）",
+      "category": "comm",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "natron",
+      "zh": "节点式合成（Natron）",
+      "category": "compositing",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "duckdb",
+      "zh": "嵌入式分析（DuckDB）",
+      "category": "data",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "postgresql",
+      "zh": "关系数据库（PostgreSQL / psql）",
+      "category": "data",
+      "layer": "base",
+      "used": [],
+      "local": true
+    },
+    {
+      "name": "qdrant",
+      "zh": "向量检索（Qdrant）",
+      "category": "data",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "inkscape",
+      "zh": "矢量图命令行（Inkscape）",
+      "category": "design",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "jq",
+      "zh": "JSON 处理（jq）",
+      "category": "dev",
+      "layer": "base",
+      "used": [
+        "00_brief",
+        "02_script"
+      ],
+      "local": true
+    },
+    {
+      "name": "ripgrep",
+      "zh": "代码与文本搜索（ripgrep）",
+      "category": "dev",
+      "layer": "base",
+      "used": [],
+      "local": true
+    },
+    {
+      "name": "graphviz",
+      "zh": "图表与流程图（Graphviz）",
+      "category": "diagram",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "tectonic",
+      "zh": "LaTeX 排版（Tectonic）",
+      "category": "doc",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "gdal",
+      "zh": "地图与地理数据（GDAL/OGR）",
+      "category": "gis",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "comfyui",
+      "zh": "本地图像生成（ComfyUI，需 GPU）",
+      "category": "image",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "gimp",
+      "zh": "GIMP 批处理",
+      "category": "image",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "krita",
+      "zh": "Krita 命令行导出",
+      "category": "image",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "paddleocr",
+      "zh": "图片 OCR（PaddleOCR，中文最强）",
+      "category": "image",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "pillow",
+      "zh": "Python 图像处理（Pillow）",
+      "category": "image",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "rembg",
+      "zh": "图片去背景（rembg）",
+      "category": "image",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "resvg",
+      "zh": "SVG 渲染（resvg）",
+      "category": "image",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "sharp",
+      "zh": "Node 高速图像处理（sharp）",
+      "category": "image",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "zbar",
+      "zh": "二维码/条码识别（ZBar）",
+      "category": "image",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "satori",
+      "zh": "HTML/CSS 转 SVG（Satori）",
+      "category": "layout",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "typst",
+      "zh": "现代排版（Typst）",
+      "category": "layout",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "glaxnimate",
+      "zh": "Lottie 动画（Glaxnimate）",
+      "category": "motion",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "manim",
+      "zh": "代码动画（Manim）",
+      "category": "motion",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "motion-canvas",
+      "zh": "TypeScript 动效（Motion Canvas）",
+      "category": "motion",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "remotion",
+      "zh": "React 视频（Remotion）",
+      "category": "motion",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "revideo",
+      "zh": "可无界面渲染的代码动效（Revideo）",
+      "category": "motion",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "synfig",
+      "zh": "2D 矢量动画（Synfig）",
+      "category": "motion",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "ocrmypdf",
+      "zh": "扫描件 OCR（OCRmyPDF）",
+      "category": "office-admin",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "openpyxl",
+      "zh": "Excel 读写（openpyxl）",
+      "category": "office-admin",
+      "layer": "base",
+      "used": [],
+      "local": true
+    },
+    {
+      "name": "pandoc",
+      "zh": "文档格式互转（Pandoc）",
+      "category": "office-admin",
+      "layer": "base",
+      "used": [],
+      "local": true
+    },
+    {
+      "name": "pymupdf",
+      "zh": "PDF 读取/渲染/编辑（PyMuPDF）",
+      "category": "office-admin",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "python-docx",
+      "zh": "Word 读写（python-docx）",
+      "category": "office-admin",
+      "layer": "base",
+      "used": [
+        "02_script"
+      ],
+      "local": true
+    },
+    {
+      "name": "python-pptx",
+      "zh": "PPT 生成（python-pptx）",
+      "category": "office-admin",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "qpdf",
+      "zh": "PDF 结构操作（qpdf）",
+      "category": "office-admin",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "docker",
+      "zh": "容器运行（Docker）",
+      "category": "ops",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "darktable-cli",
+      "zh": "照片批量调色（darktable）",
+      "category": "photo",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "imagemagick",
+      "zh": "通用图片处理（ImageMagick）",
+      "category": "photo",
+      "layer": "base",
+      "used": [
+        "05_export"
+      ],
+      "local": true
+    },
+    {
+      "name": "libvips",
+      "zh": "高速批量图片处理（libvips）",
+      "category": "photo",
+      "layer": "base",
+      "used": [
+        "05_export"
+      ],
+      "local": false
+    },
+    {
+      "name": "curl",
+      "zh": "",
+      "category": "pipeline",
+      "layer": "base",
+      "used": [
+        "01_ingest"
+      ],
+      "local": false
+    },
+    {
+      "name": "ffprobe",
+      "zh": "",
+      "category": "pipeline",
+      "layer": "base",
+      "used": [
+        "01_ingest",
+        "06_qa"
+      ],
+      "local": false
+    },
+    {
+      "name": "python",
+      "zh": "",
+      "category": "pipeline",
+      "layer": "base",
+      "used": [
+        "07_kb"
+      ],
+      "local": false
+    },
+    {
+      "name": "python-re",
+      "zh": "",
+      "category": "pipeline",
+      "layer": "base",
+      "used": [
+        "00_brief"
+      ],
+      "local": false
+    },
+    {
+      "name": "reportlab",
+      "zh": "",
+      "category": "pipeline",
+      "layer": "base",
+      "used": [
+        "02_script"
+      ],
+      "local": false
+    },
+    {
+      "name": "libass",
+      "zh": "ASS 特效字幕渲染（libass）",
+      "category": "subtitle",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "argos-translate",
+      "zh": "离线翻译（Argos Translate）",
+      "category": "text",
+      "layer": "base",
+      "used": [
+        "04_subs"
+      ],
+      "local": false
+    },
+    {
+      "name": "coqui-tts",
+      "zh": "多语种 TTS（Coqui TTS / XTTS）",
+      "category": "tts",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "f5-tts",
+      "zh": "零样本声音克隆（F5-TTS）",
+      "category": "tts",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "fish-speech",
+      "zh": "声音克隆（Fish-Speech）",
+      "category": "tts",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "gpt-sovits",
+      "zh": "中文声音克隆（GPT-SoVITS）",
+      "category": "tts",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "piper",
+      "zh": "轻量离线配音（Piper）",
+      "category": "tts",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "sherpa-onnx",
+      "zh": "离线语音识别与合成（sherpa-onnx）",
+      "category": "tts",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "editly",
+      "zh": "声明式成片（editly）",
+      "category": "video",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "ffmpeg",
+      "zh": "音视频转码与处理（共享底层）",
+      "category": "video",
+      "layer": "base",
+      "used": [
+        "03_grade",
+        "05_export"
+      ],
+      "local": true
+    },
+    {
+      "name": "ges",
+      "zh": "时间线编辑服务（GStreamer Editing Services）",
+      "category": "video",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "kdenlive",
+      "zh": "剪辑工程（Kdenlive + melt 渲染）",
+      "category": "video",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "libopenshot",
+      "zh": "剪辑核心库（libopenshot）",
+      "category": "video",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "mlt",
+      "zh": "多轨时间线剪辑（melt）",
+      "category": "video",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "moviepy",
+      "zh": "Python 视频剪辑（MoviePy）",
+      "category": "video",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "pyscenedetect",
+      "zh": "镜头切分（PySceneDetect）",
+      "category": "video",
+      "layer": "base",
+      "used": [
+        "03_grade"
+      ],
+      "local": true
+    },
+    {
+      "name": "robust-video-matting",
+      "zh": "无绿幕人像抠像（RVM）",
+      "category": "video",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "yt-dlp",
+      "zh": "媒体下载（yt-dlp）",
+      "category": "video",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "opencv",
+      "zh": "计算机视觉（共享底层）",
+      "category": "vision",
+      "layer": "base",
+      "used": [
+        "03_grade",
+        "06_qa"
+      ],
+      "local": true
+    },
+    {
+      "name": "real-esrgan",
+      "zh": "超分辨率放大（Real-ESRGAN）",
+      "category": "vision",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "crawl4ai",
+      "zh": "网页抓取与正文提取（Crawl4AI）",
+      "category": "web",
+      "layer": "base",
+      "used": [
+        "01_ingest"
+      ],
+      "local": false
+    },
+    {
+      "name": "playwright",
+      "zh": "浏览器自动化（Playwright）",
+      "category": "web",
+      "layer": "base",
+      "used": [],
+      "local": false
+    },
+    {
+      "name": "searxng",
+      "zh": "元搜索（SearXNG，自托管）",
+      "category": "web",
+      "layer": "base",
+      "used": [],
+      "local": false
+    }
+  ]
+}

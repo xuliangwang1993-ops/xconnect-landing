@@ -1,0 +1,105 @@
+{
+  "preview": "https://aoi-m11-preview.onrender.com/",
+  "api_base": "https://aoi-m11-preview.onrender.com",
+  "probe": {
+    "checked_at": "2026-10-24T10:30+11:00",
+    "health": 404,
+    "capabilities": 404,
+    "verdict": "预览站用 MSW 在前端模拟 /api/v1，后端未上线；界面用 M11 快照，不假装在线"
+  },
+  "endpoints": [
+    "/api/v1/health",
+    "/api/v1/session",
+    "/api/v1/capabilities",
+    "/api/v1/recipes",
+    "/api/v1/runs/{id}/evidence"
+  ],
+  "modules": [
+    {
+      "code": "M00",
+      "name": "公共底座",
+      "role": "契约 / 事件总线 / 存储",
+      "stations": []
+    },
+    {
+      "code": "M01",
+      "name": "指令与模型网关",
+      "role": "指令解析、模型路由",
+      "stations": [
+        "04_subs"
+      ]
+    },
+    {
+      "code": "M02",
+      "name": "插件注册与三链",
+      "role": "注册表、来源链",
+      "stations": [
+        "01_ingest"
+      ]
+    },
+    {
+      "code": "M03",
+      "name": "调度·授权·预算",
+      "role": "排队、配额、审批",
+      "stations": []
+    },
+    {
+      "code": "M04",
+      "name": "执行与独立取证",
+      "role": "执行器、证据留存",
+      "stations": [
+        "03_grade",
+        "05_export"
+      ]
+    },
+    {
+      "code": "M05",
+      "name": "验证与裁决",
+      "role": "验收、仲裁",
+      "stations": [
+        "06_qa"
+      ]
+    },
+    {
+      "code": "M06",
+      "name": "插件医生",
+      "role": "体检、修复",
+      "stations": []
+    },
+    {
+      "code": "M07",
+      "name": "配方与能力",
+      "role": "Recipe / Capability",
+      "stations": [
+        "00_brief",
+        "02_script"
+      ]
+    },
+    {
+      "code": "M08",
+      "name": "三维能力界面",
+      "role": "能力可视化、助手面",
+      "stations": [
+        "07_kb"
+      ]
+    },
+    {
+      "code": "M09",
+      "name": "受控插件构建",
+      "role": "沙箱构建",
+      "stations": []
+    },
+    {
+      "code": "M10",
+      "name": "旧系统兼容桥",
+      "role": "可选",
+      "stations": []
+    },
+    {
+      "code": "M11",
+      "name": "总装与端到端验收",
+      "role": "Assembly / E2E",
+      "stations": []
+    }
+  ]
+}

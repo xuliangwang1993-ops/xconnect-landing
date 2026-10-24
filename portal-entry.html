@@ -1,0 +1,19 @@
+<!-- 接门户右门：把这段放在 www.x-connect.ai/index.html 的 </body> 之前。
+     不用改 portal.js —— capture 阶段抢在它前面，把路由拦下来。 -->
+<script>
+(function () {
+  var FACTORY = 'https://xconnect-factory.pages.dev/';   // 换成你们实际的部署地址
+  document.addEventListener('click', function (e) {
+    var door = e.target.closest && e.target.closest('.entry.code');
+    if (!door) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    location.href = FACTORY + '?from=code';
+  }, true);
+})();
+</script>
+
+<!-- 如果希望右门保留"先预览再进厂"的过渡，把 location.href 换成：
+     document.getElementById('destination').hidden = false;
+     // 在 #route-actions 里塞一个 <a href="FACTORY?from=code">进厂</a>
+-->

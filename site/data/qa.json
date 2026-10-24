@@ -1,0 +1,100 @@
+{
+  "station": "05_verify",
+  "pass": true,
+  "checks": [
+    {
+      "check": "交接缺口只有已知一处",
+      "pass": true,
+      "value": [
+        [
+          "07_kb",
+          "qa.json"
+        ]
+      ],
+      "threshold": "[('07_kb', 'qa.json')]",
+      "note": "06_qa/qa.json 由 Station 包装器写，未登记进 handoff.outputs —— 这是真缺口，界面照实显示"
+    },
+    {
+      "check": "8 站退出码全 0",
+      "pass": true,
+      "value": [],
+      "threshold": "[]",
+      "note": ""
+    },
+    {
+      "check": "站数 = 8",
+      "pass": true,
+      "value": 8,
+      "threshold": 8,
+      "note": ""
+    },
+    {
+      "check": "皮肤正文对比度 ≥ 4.5",
+      "pass": true,
+      "value": [],
+      "threshold": "[]",
+      "note": ""
+    },
+    {
+      "check": "AUTHENTIC 都能溯源",
+      "pass": true,
+      "value": [],
+      "threshold": "[]",
+      "note": ""
+    },
+    {
+      "check": "站上工具都在 88 个工具表里",
+      "pass": true,
+      "value": [],
+      "threshold": "[]",
+      "note": "python-re / reportlab 这类流水线自写件除外"
+    },
+    {
+      "check": "声明的 schema 都在仓库 schemas/",
+      "pass": true,
+      "value": [],
+      "threshold": "[]",
+      "note": ""
+    },
+    {
+      "check": "页面引用的本地文件都在",
+      "pass": true,
+      "value": [],
+      "threshold": "[]",
+      "note": ""
+    },
+    {
+      "check": "bundle.js 五块齐",
+      "pass": true,
+      "value": [
+        "stations",
+        "tools",
+        "aoi",
+        "recipes",
+        "skins"
+      ],
+      "threshold": 5,
+      "note": ""
+    },
+    {
+      "check": "无外链字体/CDN",
+      "pass": true,
+      "value": true,
+      "threshold": true,
+      "note": ""
+    },
+    {
+      "check": "构建链 01→04 四步都有交接书",
+      "pass": true,
+      "value": 4,
+      "threshold": 4,
+      "note": ""
+    }
+  ],
+  "gaps": [
+    {
+      "station": "07_kb",
+      "artifact": "qa.json"
+    }
+  ]
+}

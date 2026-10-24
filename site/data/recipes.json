@@ -1,0 +1,204 @@
+{
+  "recipes": [
+    {
+      "id": "R01",
+      "name": "30 秒三尺寸宣传片",
+      "en": "30s Promo, 3 aspects",
+      "status": "verified",
+      "keywords": [
+        "宣传片",
+        "短视频",
+        "视频",
+        "30秒",
+        "30 秒",
+        "字幕",
+        "三个尺寸",
+        "三尺寸",
+        "社媒",
+        "reels",
+        "tiktok",
+        "instagram",
+        "门店",
+        "餐厅",
+        "米线",
+        "推广"
+      ],
+      "stations": [
+        "00_brief",
+        "01_ingest",
+        "02_script",
+        "03_grade",
+        "04_subs",
+        "05_export",
+        "06_qa",
+        "07_kb"
+      ],
+      "tools": [
+        "jq",
+        "ffmpeg",
+        "opencv",
+        "sox",
+        "pyscenedetect",
+        "imagemagick",
+        "python-docx"
+      ],
+      "deliverables": [
+        "promo_9x16.mp4",
+        "promo_1x1.mp4",
+        "promo_16x9.mp4",
+        "cover_*.jpg",
+        "zh.srt",
+        "en.srt",
+        "storyboard.pdf"
+      ],
+      "evidence": "runs/v3-20261023-130640 · 8/8 站 · 109.1s · exit 0",
+      "matched_run": "v3-20261023-130640"
+    },
+    {
+      "id": "R02",
+      "name": "门店菜单板 / 价目卡",
+      "en": "Menu board",
+      "status": "skeleton",
+      "keywords": [
+        "菜单",
+        "价目",
+        "价目表",
+        "海报",
+        "门店物料",
+        "打印",
+        "菜单板",
+        "designcraft"
+      ],
+      "stations": [
+        "00_brief",
+        "02_script",
+        "05_export"
+      ],
+      "tools": [
+        "designcraft",
+        "figcraft",
+        "imagemagick",
+        "pdfcraft"
+      ],
+      "deliverables": [
+        "menu.pdf",
+        "menu.png",
+        "price_card.png"
+      ],
+      "evidence": "仓库有 dumpling-home.json / dumpling-logo.json 命令稿，未跑完整 run",
+      "matched_run": null,
+      "plan": [
+        {
+          "tool": "designcraft",
+          "out": "menu.figcraft"
+        },
+        {
+          "tool": "figcraft",
+          "out": "menu.png"
+        },
+        {
+          "tool": "imagemagick",
+          "out": "print_300dpi.pdf"
+        },
+        {
+          "tool": "pdfcraft",
+          "out": "menu_final.pdf"
+        }
+      ]
+    },
+    {
+      "id": "R03",
+      "name": "扫描件 → 可搜索文档",
+      "en": "Scan to doc",
+      "status": "skeleton",
+      "keywords": [
+        "扫描",
+        "ocr",
+        "pdf",
+        "word",
+        "可搜索",
+        "合同",
+        "发票",
+        "归档",
+        "识别"
+      ],
+      "stations": [
+        "01_ingest",
+        "05_export"
+      ],
+      "tools": [
+        "ocrmypdf",
+        "pdftotext",
+        "pandoc",
+        "qpdf"
+      ],
+      "deliverables": [
+        "ocr.pdf",
+        "ocr.docx",
+        "ocr.txt"
+      ],
+      "evidence": "工具在库（ocrmypdf/pandoc），本条线未跑",
+      "matched_run": null,
+      "plan": [
+        {
+          "tool": "ocrmypdf",
+          "out": "ocr.pdf"
+        },
+        {
+          "tool": "pdftotext",
+          "out": "ocr.txt"
+        },
+        {
+          "tool": "pandoc",
+          "out": "ocr.docx"
+        }
+      ]
+    },
+    {
+      "id": "R04",
+      "name": "批量图片规整",
+      "en": "Image batch",
+      "status": "skeleton",
+      "keywords": [
+        "批量",
+        "图片",
+        "缩略图",
+        "webp",
+        "压缩",
+        "水印",
+        "图库",
+        "素材"
+      ],
+      "stations": [
+        "01_ingest",
+        "05_export"
+      ],
+      "tools": [
+        "libvips",
+        "imagemagick",
+        "jq"
+      ],
+      "deliverables": [
+        "thumbs/",
+        "webp/",
+        "manifest.json"
+      ],
+      "evidence": "vipsthumbnail + mogrify 用法在 references，未跑完整 run",
+      "matched_run": null,
+      "plan": [
+        {
+          "tool": "libvips",
+          "out": "thumbs/"
+        },
+        {
+          "tool": "imagemagick",
+          "out": "webp/"
+        },
+        {
+          "tool": "jq",
+          "out": "manifest.json"
+        }
+      ]
+    }
+  ]
+}
