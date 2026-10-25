@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+<title>AoI · 树状能力界面</title>
+<link rel="icon" href="assets/crystal-x.jpg">
+<link rel="stylesheet" href="aoi-tree.css?v=2f34c6df">
+<script>
+window.__ERR = []; addEventListener('error', function (e) {
+  window.__ERR.push((e.message || '?') + ' @' + e.lineno + ':' + e.colno);
+  document.documentElement.setAttribute('data-err', window.__ERR.join(' | '));
+});
+</script>
+</head>
+<body>
+<div class="aoi-root">
+
+  <header class="aoi-topbar" role="banner">
+    <span class="aoi-brand"><span class="jewel" aria-hidden="true"></span>AOI</span>
+    <span class="vr" aria-hidden="true"></span>
+    <span class="aoi-caps" style="font-size:11px;color:var(--aoi-text-muted)">能力树</span>
+    <nav class="aoi-channels" id="aoiChannels" aria-label="能力树频道">
+      <button data-tree="aoi" class="is-active"
+        data-title="AoI 自身架构"
+        data-eyebrow="AoI 的 12 个施工模块（施工 Prompt 包 v1）">AoI 自身架构</button>
+      <button data-tree="github"
+        data-title="GitHub MCP 示例"
+        data-eyebrow="GitHub MCP 服务 v1.12.2 源码导出的能力树">GitHub MCP 示例</button>
+      <button data-tree="factory" id="chanFactory">本厂 · 工位与配方</button>
+    </nav>
+    <span class="spacer"></span>
+    <button class="aoi-search" id="aoiSearchBtn" aria-label="搜索节点（Ctrl/Cmd+K）">⌕ 搜索节点</button>
+    <button class="icon" id="aoiHelp" title="静态预览：节点与标签均为本地数据" aria-label="说明">?</button>
+    <a class="tag" href="index.html?from=code" title="回到 X-Connect Factory 产线">工厂</a>
+  </header>
+
+  <div class="aoi-body">
+    <aside class="aoi-sidebar" aria-label="能力列表">
+      <section class="aoi-side-block">
+        <h2 id="aoiEyebrow" style="letter-spacing:.06em;text-transform:none;font-size:10.5px;color:var(--aoi-text-muted)">AoI 的 12 个施工模块（施工 Prompt 包 v1）</h2>
+        <ul class="aoi-side-list" id="aoiRailList"></ul>
+      </section>
+      <section class="aoi-side-block">
+        <h2 style="font-size:10.5px">图层</h2>
+        <div id="aoiLayerToggles" style="display:grid;gap:6px;font-size:11.5px;color:var(--aoi-text-muted)">
+          <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" data-layer="control" checked> 控制树（模块/能力域）</label>
+          <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" data-layer="function" checked> 功能网（只读能力）</label>
+          <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" data-layer="technical" checked> 技术网（写入/破坏性）</label>
+        </div>
+      </section>
+      <section class="aoi-side-block">
+        <h2 style="font-size:10.5px">状态</h2>
+        <div class="aoi-legend" style="border-top:0;padding-top:0" id="aoiLegendSide"></div>
+      </section>
+    </aside>
+
+    <main class="aoi-main" id="aoiMain">
+      <div class="aoi-stage" id="aoiStage" data-testid="tree-surface">
+        <svg class="aoi-stage-svg" id="aoiTreeSvg" role="presentation"></svg>
+        <div class="aoi-tree__nodes" id="aoiTreeNodes" role="tree" aria-label="能力树"></div>
+        <div class="aoi-zoom" role="group" aria-label="缩放">
+          <button id="aoiZoomIn" aria-label="放大" title="放大">+</button>
+          <button id="aoiZoomReset" aria-label="重置缩放" title="重置缩放">⟲</button>
+          <button id="aoiZoomOut" aria-label="缩小" title="缩小">−</button>
+          <button id="aoiReplay" aria-label="重播树体生长动画" title="重播生长">↻</button>
+        </div>
+        <div class="aoi-legendbar" id="aoiLegendBar" aria-hidden="true"></div>
+      </div>
+      <footer class="aoi-footer">
+        <span id="aoiTitle">AoI 自身架构</span>
+        <span class="aoi-muted" id="aoiFooterStat">静态预览 · 本地数据 · 未调用任何工具</span>
+        <span class="spacer" style="flex:1"></span>
+        <a href="index.html?from=code">← X-Connect Factory</a>
+      </footer>
+    </main>
+
+    <aside class="aoi-detail" id="aoiDetail" aria-label="详情面板"></aside>
+  </div>
+</div>
+
+<div class="aoi-searchpanel" id="aoiSearch" role="dialog" aria-modal="true" aria-label="搜索能力节点">
+  <div class="aoi-searchpanel__inner">
+    <label for="aoiSearchInput">搜索节点（能力/目标）</label>
+    <input id="aoiSearchInput" placeholder="输入名称或 ID 片段，↑↓ 选择，Enter 打开，Esc 关闭" role="combobox">
+    <ul id="aoiSearchList"></ul>
+  </div>
+</div>
+
+<script src="data/trees.js?v=885d4386"></script>
+<script src="aoi-tree.js?v=0c35524f"></script>
+</body>
+</html>

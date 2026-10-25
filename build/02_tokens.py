@@ -7,6 +7,7 @@ import json, hashlib, pathlib, re, time
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT = ROOT / "build/out"
+(ROOT / "site/data").mkdir(parents=True, exist_ok=True)
 
 
 def sha(p):

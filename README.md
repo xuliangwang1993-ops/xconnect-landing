@@ -3,6 +3,17 @@
 www.x-connect.ai 首页有两个门：左边 Chat（小助手），右边 Code（交付工厂）。
 **这个仓库就是右门之后的那一页**：一句话进来，一条产线开工，三尺寸出去。
 
+## 部署（Render static_site）
+
+```bash
+export RUNPOD_KEY=rpa_…        # 只给构建用，不进 git（.gitignore 已排）
+bash build/run.sh                # 一条链跑通，21 项验收全过
+gh repo create xuliangwang1993-ops/xconnect-factory --private --source=. --push
+# Render 上建 static_site，publishPath=site，然后真部署
+```
+
+线上：https://xconnect-factory.onrender.com（右门 `.entry.code` 换成 `?from=code` 即可接上）。
+
 ```
 www.x-connect.ai  ──右门 Code──▶  factory/  ──▶  runs/<id>/  ──▶  可交付
                                    ↑
@@ -36,6 +47,22 @@ www.x-connect.ai  ──右门 Code──▶  factory/  ──▶  runs/<id>/  �
 
 换肤用**整块替换 `<style>`**，不是逐个 `setProperty`——WebKit 对自定义属性改动的失效不彻底，实测换肤后 `var()` 的消费方会留上一套的颜色。
 
+## 能力树（跟产线同一屏，切一下）
+
+```
+AoI（树干）
+├─ A 底座   M00
+├─ B 执行   M01 M02 M03 M04 M05 M08
+├─ C 扩展   M06 M07 M09 M10
+└─ D 总装   M11
+      叶 = 本页接到这根枝的 8 个工位
+      果 = 挂在 M07 下的 4 条配方（R01 实心=已实测，R02–R04 虚线=骨架）
+```
+
+模块的 `summary / wave / risk / 能力叶 / 依据` 不是手写的：从 M11 前端的 bundle 里把注册表抽出来（`build/refs/m11-modules.json`），
+每个模块带 5–7 片真实能力叶（如 M04 的「受控命令执行器 / fixture 明确标记 / 独立回读」）与 `spec/…md:行号` 的证据。
+悬停任一节点会亮出它到树根的那条路径；点模块，下面换成它的能力叶与三条可问的话。
+
 ## 一条产线，八个工位
 
 | # | 工位 | 工具（取自 handoff） | 产物 → 下一站 |
@@ -49,7 +76,8 @@ www.x-connect.ai  ──右门 Code──▶  factory/  ──▶  runs/<id>/  �
 | 06 | 验收 | ffprobe, opencv | `reports/trace.json` 等 |
 | 07 | 知识包 | python stdlib | `店铺事实.md` / `menu.md` / QA 桩 |
 
-这条链的规矩是仓库自带的：每站产出 `handoff.json`（输入输出 sha256 + 工具版本 + 退出码）、`qa.json`（阈值与实测）、`scorecard.json`。**Schema 不合规就非 0 退出**，验收不过不许进下一站。
+这条链的规矩是仓库自带的：每站产出 `handoff.json`（输入输出 sha256 + 工具版本 + 退出码）、`qa.json`（阈值与实测）、`scorecard.json`。
+**Schema 不合规就非 0 退出**，验收不过不许进下一站。
 
 ## 这一页自己也是走链生成的
 

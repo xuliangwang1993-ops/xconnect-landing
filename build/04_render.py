@@ -1,39 +1,65 @@
 #!/usr/bin/env python3
-"""站 04 · 出页：把上游的 CSS / JS / 数据包盖版本号，保证换肤和刷新不吃缓存。
-上游 = site/*.css, site/factory.js, site/data/bundle.js
-下游 = site/index.html（已盖章）+ build/out/04_handoff.json
+"""站 04 · 盖版本号：把 css/js/bundle 的 sha8 写进 index.html 与 aoi-tree.html 的 <link>/<script>。
+上游 = site/{factory.css,factory.js,aoi-tree.css,aoi-tree.js,data/*.js}
+输出 = index.html + aoi-tree.html（带 ?v=<sha8>）+ build/out/04_handoff.json
 """
-import hashlib, json, pathlib, re, time
+import hashlib
+import json
+import pathlib
+import re
+import time
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
 OUT = ROOT / "build/out"
+
+REFS = ["factory.css", "factory.js", "aoi-tree.css", "aoi-tree.js",
+        "data/bundle.js", "data/stations.js", "data/tools.js", "data/recipes.js",
+        "data/pod.js", "data/build-order.js", "data/artifacts.js", "data/trees.js",
+        "data/skins.js", "data/build.js"]
 
 
 def sha(p):
     return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
 
 
-html = (SITE / "index.html").read_text()
-assets = {
-    "factory.css": sha(SITE / "factory.css"),
-    "factory.js": sha(SITE / "factory.js"),
-    "data/bundle.js": sha(SITE / "data/bundle.js"),
-}
-for ref, digest in assets.items():
-    v = digest[:8]
-    html = re.sub(re.escape(ref) + r"\?v=[0-9a-zA-Z]+", f"{ref}?v={v}", html)
+def stamp(html_path):
+    html = html_path.read_text()
+    stamped = {}
+    for ref in REFS:
+        f = SITE / ref
+        if not f.exists():
+            continue
+        v = sha(f)[:8]
+        pat = re.escape(ref) + r"\?v=[0-9a-zA-Z_-]*"
+        if re.search(pat, html):
+            html = re.sub(pat, f"{ref}?v={v}", html)
+            stamped[ref] = v
+        elif f'"{ref}"' in html:
+            html = html.replace(f'"{ref}"', f'"{ref}?v={v}"')
+            stamped[ref] = v
+    html_path.write_text(html)
+    return stamped
 
-# 构建链信息也进页面（05 生成，若还没有就跳过）
-if (SITE / "data/build.js").exists():
-    html = re.sub(r'data/build\.js\?v=[0-9a-zA-Z]+', "data/build.js?v=" + sha(SITE / "data/build.js")[:8], html)
 
-(SITE / "index.html").write_text(html)
+def main():
+    out_inputs, out_outputs, stamped_all = [], [], {}
+    for name in ("index.html", "aoi-tree.html"):
+        p = SITE / name
+        if not p.exists():
+            continue
+        stamped = stamp(p)
+        stamped_all.update(stamped)
+        out_outputs.append({"path": f"site/{name}", "sha256": sha(p)})
+    for ref in stamped_all:
+        f = SITE / ref
+        out_inputs.append({"path": f"site/{ref}", "sha256": sha(f)})
+    h = {"station": "04_render", "tool": "python3-re",
+         "inputs": out_inputs, "outputs": out_outputs, "stamped": stamped_all,
+         "started_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "exit_code": 0}
+    json.dump(h, open(OUT / "04_handoff.json", "w"), indent=2, ensure_ascii=False)
+    print(json.dumps({"stamped": len(stamped_all), "refs": sorted(stamped_all)}))
 
-h = {"station": "04_render", "tool": "python3-re",
-     "inputs": [{"path": f"site/{p}", "sha256": d} for p, d in assets.items()],
-     "outputs": [{"path": "site/index.html", "sha256": sha(SITE / "index.html")}],
-     "stamped": {k: v[:8] for k, v in assets.items()},
-     "started_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "exit_code": 0}
-json.dump(h, open(OUT / "04_handoff.json", "w"), indent=2)
-print(json.dumps(h["stamped"]))
+
+if __name__ == "__main__":
+    main()

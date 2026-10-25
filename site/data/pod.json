@@ -1,0 +1,128 @@
+{
+  "generated_at": "2026-10-25T13:29:14+1100",
+  "probe": {
+    "key": true,
+    "base": "https://rest.runpod.io/v1",
+    "ok": true,
+    "pods": 2
+  },
+  "pods": [
+    {
+      "id": "0pwwc3g8ijvm6g",
+      "name": "xconnect-4090-ro",
+      "desiredStatus": "RUNNING",
+      "publicIp": "213.173.98.84",
+      "ports": [
+        "8888/http",
+        "22/tcp",
+        "19123/http"
+      ],
+      "portMappings": {
+        "22": 34059
+      },
+      "gpuCount": 1,
+      "vcpuCount": 8,
+      "memoryInGb": 46,
+      "containerDiskInGb": 50,
+      "costPerHr": 0.89,
+      "burnSinceCreated": 0.0703,
+      "imageName": "runpod/pytorch:1.4.1-cu1281-torch280-ubuntu2204",
+      "templateId": "",
+      "createdAt": "2026-10-25 02:24:31.605 +0000 UTC",
+      "lastStartedAt": "2026-10-25 02:24:31.6 +0000 UTC",
+      "lastStatusChange": "Rented by User: Sun Oct 25 2026 02:24:31 GMT+0000 (Coordinated Universal Time)",
+      "hasSshKey": true,
+      "volumeMountPath": "/workspace",
+      "volumeInGb": 0,
+      "billing": [],
+      "billedTotal": 0
+    },
+    {
+      "id": "40uk5ivksc2zi3",
+      "name": "xconnect",
+      "desiredStatus": "EXITED",
+      "publicIp": "",
+      "ports": [
+        "8888/http",
+        "22/tcp"
+      ],
+      "portMappings": {},
+      "gpuCount": 1,
+      "vcpuCount": 32,
+      "memoryInGb": 125,
+      "containerDiskInGb": 50,
+      "costPerHr": 0.5,
+      "burnSinceCreated": 1.2268,
+      "imageName": "runpod/pytorch:1.4.1-cu1281-torch280-ubuntu2204",
+      "templateId": "gqny086gqo",
+      "createdAt": "2026-10-25 00:02:02.971 +0000 UTC",
+      "lastStartedAt": "2026-10-25 00:02:02.961 +0000 UTC",
+      "lastStatusChange": "Exited by user: Sun Oct 25 2026 02:10:12 GMT+0000 (Coordinated Universal Time)",
+      "hasSshKey": false,
+      "volumeMountPath": "/workspace",
+      "volumeInGb": 0,
+      "billing": [
+        {
+          "amount": 0.7246629636501893,
+          "timeBilledMs": 5146740,
+          "diskSpaceBilledGB": 850,
+          "podId": "40uk5ivksc2zi3",
+          "time": "2026-10-25 00:00:00"
+        }
+      ],
+      "billedTotal": 0.7247
+    }
+  ],
+  "orders": [
+    {
+      "order_id": "ord-20261025-001",
+      "run_id": "v3-20261023-130640",
+      "recipe": "R01",
+      "sentence": "给悉尼小锅米线（Slurp Slurp Noodle）做一支 30 秒宣传短视频，配中英字幕和三个社媒尺寸",
+      "deliverables": [
+        "promo_9x16.mp4",
+        "promo_1x1.mp4",
+        "promo_16x9.mp4",
+        "cover_9x16.jpg",
+        "cover_1x1.jpg",
+        "cover_16x9.jpg",
+        "subs/zh.srt",
+        "subs/en.srt"
+      ],
+      "owner": {
+        "id": "user_local",
+        "name": "本页发起人",
+        "role": "owner"
+      },
+      "pod_id": "40uk5ivksc2zi3",
+      "pod_name": "xconnect",
+      "desired_status": "RUNNING",
+      "dispatch": {
+        "station_at_dispatch": "03_grade",
+        "reason": "逐帧生成与合成走 GPU，iSH 纯 CPU 只能出样片",
+        "checked_at": "2026-10-25T12:14+11:00"
+      },
+      "close_policy": {
+        "on": "delivered",
+        "who": "owner",
+        "note": "交付后由发起人关 pod；本单没有自动关，因为当前 RunPod key 权限只读 POST 停机被 403 拒"
+      },
+      "status": "dispatched",
+      "opened_at": "2026-10-25T00:02:02Z"
+    }
+  ],
+  "reconcile": [
+    {
+      "order": "ord-20261025-001",
+      "pod": "40uk5ivksc2zi3",
+      "pod_name": "xconnect",
+      "owner": "本页发起人",
+      "status": "matched",
+      "wanted": "RUNNING",
+      "live": "EXITED",
+      "billable": 0.5,
+      "burn": 1.2268
+    }
+  ],
+  "actions": []
+}

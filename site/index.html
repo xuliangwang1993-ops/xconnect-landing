@@ -1,152 +1,160 @@
 <!doctype html>
-<html lang="zh-Hans" data-skin="xconnect">
+<html lang="zh-Hans">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#05070D">
 <meta name="color-scheme" content="dark">
-<title>X-Connect Factory — 右转，进厂</title>
-<meta name="description" content="X-Connect 交付工厂：AOI 能力接线，一句话匹配配方，八个工位交接，上一站的产物就是下一站的输入。">
+<title>X-Connect Factory · 产线与 Pod 派单</title>
 <link rel="icon" href="assets/crystal-x.jpg">
-<link rel="stylesheet" href="factory.css?v=23d721c6">
-<script>window.__ERR=[];addEventListener('error',function(e){window.__ERR.push((e.message||'?')+' @'+e.lineno+':'+e.colno);document.documentElement.setAttribute('data-err',window.__ERR.join(' | '));});</script>
+<link rel="stylesheet" href="factory.css?v=bbac66a6">
+<script>window.__ERR=[];addEventListener('error',function(e){window.__ERR.push((e.message||'?')+' @'+e.lineno);document.documentElement.setAttribute('data-err',window.__ERR.join(' | '));});</script>
 </head>
 <body>
-<a class="skip" href="#floor">跳到产线</a>
-
-<header class="topbar">
-  <a class="brand" href="https://www.x-connect.ai/" title="回到 X-connect 首页">
-    <span class="jewel" aria-hidden="true"></span><span>-connect</span>
+<header class="bar">
+  <a class="brand" href="https://www.x-connect.ai/">
+    <span class="jewel"></span><span>-connect</span><span class="pipe"></span><span class="fac">FACTORY</span>
   </a>
-  <span class="vr" aria-hidden="true"></span>
-  <span class="wordmark">FACTORY</span>
-  <nav class="crumbs" aria-label="面包屑">
-    <a href="https://www.x-connect.ai/">Code</a><span aria-hidden="true">/</span>
-    <span>Factory</span><span aria-hidden="true">/</span><b id="crumbRecipe">R01</b>
+  <nav class="crumbs">
+    <span>Code</span><i>›</i><span>产线</span><i>›</i><b>v3-20261023-130640</b>
   </nav>
-  <div class="top-right">
-    <button class="pill" id="aoiPill" aria-haspopup="dialog" aria-expanded="false">
-      <span class="dot" aria-hidden="true"></span><span class="lbl">AOI · 快照</span>
-    </button>
-    <button class="pill" id="skinBtn" aria-haspopup="dialog" aria-expanded="false">
-      <span class="lbl">SKIN</span><b id="skinName">X-Connect</b>
-    </button>
-    <button class="pill accent" id="assistBtn">小助手</button>
+  <div class="right">
+    <span class="pill live" id="podPill">POD · —</span>
+    <span class="pill" id="runPill">RUN · —</span>
+    <a class="pill ghost" href="https://www.x-connect.ai/">回右门</a>
   </div>
 </header>
 
-<main class="shell">
-  <aside class="rail" aria-label="产线与 AOI 能力">
-    <section class="rail-block">
-      <div class="rail-head"><span>产线 · LINE</span><span class="mono" id="runId">—</span></div>
-      <ol class="station-list" id="stationList"></ol>
+<main class="layout">
+  <!-- 左栏 -->
+  <aside class="rail">
+    <section>
+      <h2>产线 · 8 工位</h2>
+      <ul id="stationList" class="stList"></ul>
+      <p class="foot" id="toolCount"></p>
     </section>
-    <section class="rail-block grow">
-      <div class="rail-head"><span>AOI 能力</span><span class="mono">M00–M11</span></div>
-      <ul class="aoi-list" id="aoiList"></ul>
-      <div class="rail-head" style="padding-top:14px"><span>配方 · RECIPES</span><span class="mono">4</span></div>
-      <ul class="recipe-list" id="recipeList"></ul>
+    <section>
+      <h2>配方</h2>
+      <select id="recipeSelect" class="sel"></select>
+      <p class="note" id="recipeNote"></p>
     </section>
-    <footer class="rail-foot">
-      <span><b>craft-skills</b> · <span id="toolCount">—</span> 个底层工具</span>
-      <span id="repoRev">GitHub · xuliangwang1993-ops</span>
-      <span>数据：run <span id="runShort">—</span></span>
-    </footer>
   </aside>
 
-  <section class="floor" id="floor">
-    <header class="floor-head">
-      <p class="eyebrow">CODE <i>/</i> FACTORY <i>/</i> <span id="recipeId">R01</span> <span id="recipeStatus" class="badge verified">VERIFIED</span></p>
-      <h1>右转，进厂。</h1>
-      <p class="lede">一句话进，三尺寸出。左边是小助手，右边是这条产线。</p>
-      <div class="commission"><span id="orderLabel">订单</span><q id="runSentence">—</q></div>
-      <div class="meta-row" id="metaRow"></div>
-    </header>
+  <!-- 中栏 -->
+  <section class="center">
+    <div class="tabs" role="tablist">
+      <button class="tabBtn on" data-tab="flow" role="tab" aria-selected="true">产线 FLOW</button>
+      <button class="tabBtn" data-tab="pod" role="tab" aria-selected="false">Pod 派单</button>
+      <button class="tabBtn" data-tab="ledger" role="tab" aria-selected="false">交接账本</button>
+    </div>
 
-    <section class="panel" aria-labelledby="flowTitle">
-      <div class="panel-head">
-        <h2 id="flowTitle">产线 · FLOW</h2>
-        <span class="sp">
-          <button class="btn" id="fitBtn" aria-pressed="false">全览</button>
-          <button class="btn" id="replayBtn">回放交接</button>
-        </span>
+    <div class="tab on" data-tab="flow">
+      <div class="runStrip">
+        <span class="mono">RUN</span>
+        <b class="mono" id="runSentence"></b>
+        <span class="mono" id="runStat"></span>
       </div>
-      <div class="flow-wrap"><div class="flow" id="flow" data-mode="full" role="list"></div></div>
-    </section>
-
-    <section class="panel detail" aria-labelledby="detailTitle">
-      <div class="panel-head"><h2 id="detailTitle">选中工位 · STATION</h2><span class="sp mono" id="detailId" style="font-size:9.5px;color:var(--dim)"></span></div>
-      <div id="detail"></div>
-    </section>
-
-    <section class="panel ledger" aria-labelledby="ledgerTitle">
-      <div class="panel-head">
-        <h2 id="ledgerTitle">交接账本 · HANDOFF</h2>
-        <span class="sp mono" id="ledgerSummary" style="font-size:9.5px;color:var(--dim)"></span>
+      <div class="flowScroll"><div class="flow" id="flow"></div></div>
+      <div class="detail">
+        <header><h3 id="detailName"></h3></header>
+        <div id="detailBody"></div>
       </div>
-      <table class="ledger-t">
-        <thead><tr><th>工位</th><th>入</th><th>出</th><th>闭合</th></tr></thead>
-        <tbody id="ledgerBody"></tbody>
-      </table>
-    </section>
+    </div>
+
+    <div class="tab" data-tab="pod">
+      <div class="podGrid">
+        <article class="card">
+          <h3>Pod 实况 <span class="mono muted" id="podMeta"></span></h3>
+          <div class="chips" id="podStatus"></div>
+          <div id="podRows"></div>
+          <div class="act">
+            <button class="btn danger" id="closeBtn" disabled>交付后关 pod</button>
+            <span class="hint" id="closeHint"></span>
+          </div>
+        </article>
+        <article class="card">
+          <h3>订单 · 发起人负责关单</h3>
+          <div id="orderRows"></div>
+          <p class="note">订单是「工厂发起 → 派到 pod → 交付 → 发起人关 pod」这一段的凭证。关单条件写在 <code>close_policy</code>，账单以 RunPod 官方 billing 为准，我们自己只挂一个按 $/hr 估算的参考值。</p>
+        </article>
+      </div>
+      <div class="card chain-card">
+        <h3>这段链怎么走</h3>
+        <ol class="chain">
+          <li><b>建单</b><span>小助手把配方 + 一句话写成 <code>build/orders.json</code></span></li>
+          <li><b>派单</b><span><code>build/06_pod.py</code> 读 <code>RUNPOD_KEY</code>（只读环境变量，不落盘）拉 pod 实况，与订单对账</span></li>
+          <li><b>干活</b><span>03/05 两站的重活走 <code>ffmpeg + GPU</code>；iSH 这边只保留 06 验收</span></li>
+          <li><b>交付</b><span>成片落 <code>runs/&lt;id&gt;/05_export/</code>，QA 全过才写 <code>delivered</code></span></li>
+          <li><b>关单</b><span>按 <code>close_policy</code> 由发起人关 pod；<code>POST /pods/{id}/stop</code> 是只读 key 拒的那一步，界面上标成 pending，不假装已经关了</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tab" data-tab="ledger">
+      <div class="card">
+        <h3>交接账本 <span class="mono muted" id="ledgerSummary"></span></h3>
+        <table class="ledger">
+          <thead><tr><th>#</th><th>站</th><th>产物 → 上游</th><th>闭合</th><th>缺</th></tr></thead>
+          <tbody id="ledgerBody"></tbody>
+        </table>
+        <p class="note">闭合 = 上一站 outputs 里的 sha256 与本站 inputs 记的一致。16/17 里那张缺的是 <code>06_qa/qa.json</code>——它没被登记进 06_qa 的 outputs，却被 07_kb 当输入用了。这一条照实标黄，不补写。</p>
+      </div>
+    </div>
   </section>
 
-  <aside class="inspector" aria-label="小助手、皮肤与运行">
+  <!-- 右栏 -->
+  <aside class="side">
     <div class="tabs" role="tablist">
-      <button role="tab" id="tab-a" aria-selected="true" aria-controls="pane-a">小助手</button>
-      <button role="tab" id="tab-s" aria-selected="false" aria-controls="pane-s">皮肤</button>
-      <button role="tab" id="tab-r" aria-selected="false" aria-controls="pane-r">运行</button>
+      <button class="tabBtn on" data-tab="assist" role="tab" aria-selected="true">小助手</button>
+      <button class="tabBtn" data-tab="skin" role="tab" aria-selected="false">皮肤</button>
+      <button class="tabBtn" data-tab="run" role="tab" aria-selected="false">运行</button>
     </div>
 
-    <div class="tab-body on" id="pane-a" role="tabpanel" aria-labelledby="tab-a">
-      <div class="assist-head">
-        <span class="avatar" aria-hidden="true">✳</span>
-        <div><b>小助手</b><span>本地匹配 · 不调用模型 · 只读配方表</span></div>
+    <div class="tab on" data-tab="assist">
+      <p class="note" style="margin-top:0">一句话 → 配方打分 + 命中词 + 证据。本地规则匹配，不调模型。</p>
+      <textarea id="askInput" rows="3"></textarea>
+      <div class="chips" style="display:flex;flex-wrap:wrap;gap:5px;margin:7px 0">
+        <button class="btn sm" data-q="30 秒宣传短视频，配中英字幕和三个社媒尺寸">三尺寸短视频</button>
+        <button class="btn sm" data-q="门店菜单板 A3 打印，价目要能改">菜单板</button>
+        <button class="btn sm" data-q="把扫描的合同 PDF 做成可搜索文档">扫描合同</button>
       </div>
-      <label class="field"><span>把要求说成一句话</span>
-        <textarea id="ask" rows="3" spellcheck="false">给悉尼小锅米线做一支 30 秒宣传短视频，配中英字幕和三个社媒尺寸</textarea>
-      </label>
-      <div class="chips" id="examples"></div>
-      <button class="btn primary" id="matchBtn" style="width:100%;height:32px;justify-content:center">匹配配方</button>
-      <div id="matches" aria-live="polite"></div>
+      <button class="btn" id="matchBtn">匹配配方</button>
+      <div id="matchResult"></div>
+      <h3 style="margin-top:18px">派单预览</h3>
+      <p class="note">匹配到已实测配方后，小助手把话写成订单，交给 <code>06_pod.py</code> 去对账。</p>
+      <pre class="mini" id="orderPreview"></pre>
     </div>
 
-    <div class="tab-body" id="pane-s" role="tabpanel" aria-labelledby="tab-s">
-      <p class="skin-intro"><b>Authentic skin</b>：皮肤不是调色盘，是可溯源的表皮。每套都记着从哪个真实文件取色（sha256）、对比度实测多少。没有出处的不发 AUTHENTIC。</p>
-      <div id="skins"></div>
-      <label class="drop" for="skinFile">从一张自己的素材里取色 → 生成本地皮肤<input type="file" id="skinFile" accept="image/*" hidden></label>
-      <div class="rowline"><span>材质颗粒（取自 crystal-x.jpg）</span><button class="switch" id="grainSwitch" aria-pressed="false" aria-label="切换材质颗粒"><i></i></button></div>
-      <div class="rowline"><span>当前皮肤令牌</span><button class="btn" id="copyTokens">复制 CSS 变量</button></div>
-      <div class="chain-mini" id="skinProv"></div>
+    <div class="tab" data-tab="skin">
+      <h3>Authentic skin</h3>
+      <p class="note">皮肤不是调色盘，是可溯源的表皮。有 <code>sha256</code> 才发 <strong>AUTHENTIC</strong>，从设计规范抄的只能标 <strong>SPEC</strong>，浏览器现取的是 <strong>LOCAL</strong>。</p>
+      <div id="skinList"></div>
+      <label class="drop" for="skinFile">从一张自己的图取色 → 生成本地皮肤<input type="file" id="skinFile" accept="image/*" hidden></label>
+      <div class="row"><span>材质颗粒</span><button class="sw" id="grainBtn" aria-pressed="false" aria-label="切换材质颗粒"></button></div>
+      <div class="row"><span>当前皮肤令牌</span><button class="btn sm" id="copyTokens">复制 CSS 变量</button></div>
+      <pre class="mini" id="skinProv"></pre>
     </div>
 
-    <div class="tab-body" id="pane-r" role="tabpanel" aria-labelledby="tab-r">
-      <div id="runNote"></div>
-      <dl class="kv" id="runKv"></dl>
-      <div class="deliv" id="deliv"></div>
-      <h4 style="margin:14px 0 6px;font-size:9.5px;letter-spacing:.18em;color:var(--muted);font-weight:500">验收 · QA</h4>
-      <div class="chain-mini" id="qaMini"></div>
-      <h4 style="margin:14px 0 6px;font-size:9.5px;letter-spacing:.18em;color:var(--muted);font-weight:500">构建链 · BUILD</h4>
-      <div class="chain-mini" id="buildChain"></div>
-      <h4 style="margin:14px 0 6px;font-size:9.5px;letter-spacing:.18em;color:var(--muted);font-weight:500">链外</h4>
-      <div class="chain-mini" id="extLinks"></div>
+    <div class="tab" data-tab="run">
+      <h3>运行</h3>
+      <div id="runList"></div>
     </div>
   </aside>
 </main>
 
-<footer class="site-foot">
-  <span><b>X-Connect Factory</b> · 右门（Code）之后的那条线</span>
-  <span>AOI · M00–M11 快照</span>
-  <span>craft-skills · 8 站流水线</span>
-  <span class="sp">样式对齐 app.x-connect.ai · 8px / hairline / 紫金</span>
+<footer class="foot-bar">
+  <span>数据源：craft-skills runs/ · build/refs · RunPod REST</span>
+  <span class="mono" id="genAt"></span>
 </footer>
 
-<div class="pop" id="aoiPop" role="dialog" aria-label="AOI 连接状态"></div>
-<div class="pop" id="skinPop" role="dialog" aria-label="皮肤"></div>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<script src="data/bundle.js?v=1469f8d3"></script>
-<script src="data/build.js?v=d4d42856"></script>
-<script src="factory.js?v=585f1244"></script>
+<script src="data/bundle.js?v=8eefd643"></script>
+<script src="data/stations.js?v=ce71837f"></script>
+<script src="data/tools.js?v=c6ab7292"></script>
+<script src="data/recipes.js?v=ad6ecf5e"></script>
+<script src="data/skins.js?v=7db744e6"></script>
+<script src="data/pod.js?v=850e7f93"></script>
+<script src="data/build-order.js?v=e3159997"></script>
+<script src="data/artifacts.js?v=c7229c1f"></script>
+<script src="data/build.js?v=804611ab"></script>
+<script src="factory.js?v=a483871c"></script>
 </body>
 </html>

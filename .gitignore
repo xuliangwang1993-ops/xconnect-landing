@@ -2,3 +2,4 @@ craft-skills/
 build/out/
 node_modules/
 .DS_Store
+shots/
