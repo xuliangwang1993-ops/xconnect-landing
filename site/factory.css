@@ -26,7 +26,7 @@ body {
   border-bottom: 1px solid var(--line);
 }
 .brand { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 300; letter-spacing: -.02em; color: #F8FAFC; text-decoration: none; }
-.brand .jewel { width: 24px; height: 30px; background: url("assets/crystal-x.jpg") 50% 43% / 300% auto no-repeat; mix-blend-mode: screen; }
+.brand .jewel { width: 24px; height: 30px; background: url("assets/crystal-x.png") 50% 50% / contain no-repeat; }
 .brand .pipe { width: 1px; height: 18px; background: var(--line2); margin: 0 4px; }
 .brand .fac { font-size: 11px; letter-spacing: .22em; color: #94A3B8; }
 .crumbs { display: flex; gap: 8px; align-items: center; font-size: 12px; color: #64748B; }

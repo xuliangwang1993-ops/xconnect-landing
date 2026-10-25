@@ -85,8 +85,7 @@ h1, h2, h3, h4, legend {
 }
 .aoi-brand .jewel {
   width: 22px; height: 26px;
-  background: url("assets/crystal-x.jpg") 50% 43% / 300% auto no-repeat;
-  mix-blend-mode: screen;
+  background: url("assets/crystal-x.png") 50% 50% / contain no-repeat;
 }
 .aoi-topbar .vr { width: 1px; height: 16px; background: var(--aoi-hairline); }
 .aoi-topbar .spacer { flex: 1; }
