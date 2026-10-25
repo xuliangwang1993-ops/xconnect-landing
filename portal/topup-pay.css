@@ -1,0 +1,21 @@
+/* PayPal 充值弹层。沿用 facade-theme.css 的变量；变量缺失时有回退色。 */
+.xcpay-overlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(5,8,12,.72);backdrop-filter:blur(6px)}
+.xcpay-card{width:min(440px,100%);max-height:90vh;overflow:auto;background:var(--fx-bg-2,#0F151E);border:1px solid var(--fx-line-2,#2A3547);border-radius:16px;padding:22px 20px;color:var(--fx-ink,#E7EEF6);text-align:center}
+.xcpay-title{margin:0 0 8px;font-size:20px;font-weight:500;letter-spacing:-.01em;outline:0}
+.xcpay-note{margin:8px 0;font-size:13px;line-height:1.65;color:var(--fx-ink-2,#8B98A8)}
+.xcpay-bad{color:#e3a4a4}
+.xcpay-msg{min-height:18px;margin:10px 0 0;font-size:12.5px;color:var(--fx-ink-2,#8B98A8)}
+.xcpay-amounts{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:14px 0 4px}
+.xcpay-amount{display:flex;flex-direction:column;gap:4px;padding:12px 8px;border:1px solid var(--fx-line-2,#2A3547);border-radius:12px;background:var(--fx-bg-3,#151D28);color:var(--fx-ink,#E7EEF6);font-family:inherit;cursor:pointer;transition:border-color .2s,background .2s}
+.xcpay-amount strong{font-size:17px;font-weight:500}
+.xcpay-amount span{font-size:11.5px;color:var(--fx-ink-2,#8B98A8)}
+.xcpay-amount:hover,.xcpay-amount.is-on{border-color:var(--fx-accent,#34D3EB);background:#1b2533}
+.xcpay-row{display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.xcpay-btn{height:38px;padding:0 20px;border-radius:999px;border:1px solid var(--fx-line-2,#2A3547);font-family:inherit;font-size:13px;letter-spacing:.04em;cursor:pointer}
+.xcpay-go{background:#e9edf0;color:#0b0d10;border-color:#e9edf0}
+.xcpay-go:hover:not(:disabled){background:#fff}
+.xcpay-go:disabled{opacity:.45;cursor:not-allowed}
+.xcpay-ghost{background:none;color:var(--fx-ink-2,#8B98A8);margin-top:12px}
+.xcpay-row .xcpay-ghost{margin-top:0}
+.xcpay-ghost:hover{color:var(--fx-ink,#E7EEF6)}
+.xcpay-code{margin:10px 0 12px;padding:12px;border:1px dashed var(--fx-line-2,#2A3547);border-radius:10px;font-family:var(--fx-mono,monospace);font-size:16px;letter-spacing:.06em;user-select:all;overflow-wrap:anywhere}

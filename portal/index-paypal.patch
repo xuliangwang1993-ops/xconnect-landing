@@ -1,0 +1,20 @@
+--- a/index.html	2026-10-25 16:39:14.879885793 +1100
++++ b/index.html	2026-10-25 16:46:34.427250561 +1100
+@@ -32,7 +32,7 @@
+ <div class="auth-body" data-auth="in" hidden>
+ <p class="auth-signed">Signed in as <strong id="auth-who">—</strong></p><p class="auth-quota" id="auth-quota" data-mode=""></p><p class="auth-hint">Choose a door — the assistant on the left, the production line on the right.</p>
+ <div class="auth-links"><button type="button" class="auth-link" id="topup">Top up</button><span class="auth-sep" aria-hidden="true">/</span><button type="button" class="auth-link" id="add-passkey">Add a passkey</button><span class="auth-sep" aria-hidden="true">/</span><button type="button" class="auth-link" id="signout">Sign out</button></div>
+-<div class="auth-links auth-entries"><button type="button" class="auth-link" data-soon="Swap（兑换）">Swap（兑换）</button><span class="auth-sep" aria-hidden="true">/</span><button type="button" class="auth-link" data-soon="银行卡">银行卡</button><span class="auth-sep" aria-hidden="true">/</span><button type="button" class="auth-link" data-soon="支付宝">支付宝</button></div>
++<div class="auth-links auth-entries"><button type="button" class="auth-link" data-soon="Swap（兑换）">Swap（兑换）</button><span class="auth-sep" aria-hidden="true">/</span><button type="button" class="auth-link" data-soon="银行卡">银行卡</button><span class="auth-sep" aria-hidden="true">/</span><button type="button" class="auth-link" data-soon="支付宝">支付宝</button><span class="auth-sep" aria-hidden="true" data-pay-sep hidden>/</span><button type="button" class="auth-link" data-pay="paypal" hidden>PayPal</button></div>
+ </div>
+ <p class="auth-msg" id="auth-msg" role="status" aria-live="polite"></p>
+ </section></div>
+@@ -97,5 +97,8 @@
+   </div>
+ </div>
+ <link rel="stylesheet" href="topup.css?v=2">
++<link rel="stylesheet" href="topup-pay.css?v=1">
+ <script src="topup.js?v=1"></script>
++<script>window.XC_TOPUP_API = "";</script>
++<script src="topup-pay.js?v=1"></script>
+ </body></html>
