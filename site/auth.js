@@ -84,7 +84,7 @@
   });
 
   $('#signOutBtn') && $('#signOutBtn').addEventListener('click', async () => {
-    await client.auth.signOut();
+    if (window.XCSSO) await window.XCSSO.signOut(client); else await client.auth.signOut();   // x-connect.ai 下同时清域级 cookie
     render(null);
   });
 
@@ -95,5 +95,9 @@
   });
 
   window.XCAuth = { client, session: () => current };
-  client.auth.getSession().then(({ data }) => render(data && data.session)).catch(() => render(null));
+  // 跨子域登录（仅 *.x-connect.ai 生效；onrender.com 上 XCSSO.enabled=false，行为与之前完全一致）
+  const SSO = window.XCSSO;
+  if (SSO && SSO.enabled) SSO.attach(client);
+  const ready = SSO && SSO.enabled ? SSO.boot(client).catch(() => {}) : Promise.resolve();
+  ready.then(() => client.auth.getSession()).then(({ data }) => render(data && data.session)).catch(() => render(null));
 })();
