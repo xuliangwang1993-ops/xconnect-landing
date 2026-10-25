@@ -17,7 +17,7 @@ gh repo create xuliangwang1993-ops/xconnect-factory --private --source=. --push
 ```
 www.x-connect.ai  ──右门 Code──▶  factory/  ──▶  runs/<id>/  ──▶  可交付
                                    ↑
-                          AOI M00–M11 能力表 + 小助手配方匹配
+                          AoI M00–M11 能力表 + 小助手配方匹配
 ```
 
 ## 页面里有什么
@@ -25,7 +25,7 @@ www.x-connect.ai  ──右门 Code──▶  factory/  ──▶  runs/<id>/  �
 | 区域 | 内容 | 数据从哪来 |
 |---|---|---|
 | 左栏 · 产线 | 8 个工位，状态点 = 真实 QA | `runs/v3-20261023-130640/*/handoff.json` |
-| 左栏 · AOI 能力 | M00–M11 模块表，标注接到哪些工位 | `aoi-m11-preview` 的模块表快照 |
+| 左栏 · AoI 能力 | M00–M11 模块表，标注接到哪些工位 | `aoi-m11-preview` 的模块表快照 |
 | 左栏 · 配方 | R01 已实测，R02–R04 是骨架 | 仓库 `pipeline/` 与 `dumpling-*.json` |
 | 中栏 · FLOW | 卡片上的线是**上一站的产物**，鼠标点开看 sha256 | 每站 handoff 的 inputs/outputs |
 | 中栏 · 交接账本 | 16/17 闭合，1 张未入账（照实留着） | 逐条比对上游 outputs 的 sha256 |
@@ -125,7 +125,7 @@ document.addEventListener('click', function (e) {
 
 1. **`06_qa/qa.json` 没登记进 06_qa 的 handoff.outputs**，但被 07_kb 当输入用 → 账本 16/17，界面标黄。这是产线自己的账，不替它抹平。
 2. **01_ingest QA 不过**：客户实拍素材 0 / ≥1，全链用占位样片跑通，成片带「样片 · 占位素材 · 未授权」水印，**不可交付**。
-3. **AOI `/api/v1/*` 现在 404**：M11 预览用 MSW 在前端模拟，后端未上线。界面用模块表快照，并明确写"不假装在线"。
+3. **AoI `/api/v1/*` 现在 404**：M11 预览用 MSW 在前端模拟，后端未上线。界面用模块表快照，并明确写"不假装在线"。
 
 ## 文件
 
