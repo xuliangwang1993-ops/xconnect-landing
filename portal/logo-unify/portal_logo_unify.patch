@@ -1,0 +1,64 @@
+--- a/index.html
++++ b/index.html
+@@ -1,13 +1,13 @@
+ <!doctype html>
+ <html lang="en">
+-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#000000"><title>X-Connect AI — One gateway to every frontier model</title><meta name="description" content="X-Connect AI: one account for GPT, Claude, Gemini, Grok, DeepSeek and more. Chat on the left, delivery on the right, with transparent per-token pricing."><link rel="icon" type="image/png" href="assets/icons/apple-icon.png"><link rel="apple-touch-icon" href="assets/icons/apple-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="X-Connect AI"><meta property="og:title" content="X-Connect AI — One gateway to every frontier model"><meta property="og:description" content="One account for every frontier model. From intent to deliverable."><meta property="og:url" content="https://www.x-connect.ai/"><meta property="og:image" content="https://www.x-connect.ai/assets/icons/apple-icon.png"><meta name="twitter:card" content="summary"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Figtree:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"><link rel="stylesheet" href="portal.css"><link rel="stylesheet" href="facade-theme.css"><style>.collection-continuation{position:relative;width:100%;margin:0;padding:0 0 24px}.collection-continuation iframe{display:block;border:0;width:100%;height:750px;background:transparent}@media(max-width:700px){.collection-continuation iframe{height:800px}}</style><link rel="stylesheet" href="lang.css?v=3">
++<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#000000"><title>X-Connect AI — One gateway to every frontier model</title><meta name="description" content="X-Connect AI: one account for GPT, Claude, Gemini, Grok, DeepSeek and more. Chat on the left, delivery on the right, with transparent per-token pricing."><link rel="icon" href="favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png"><link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png"><link rel="icon" type="image/png" sizes="48x48" href="assets/icons/favicon-48.png"><link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="X-Connect AI"><meta property="og:title" content="X-Connect AI — One gateway to every frontier model"><meta property="og:description" content="One account for every frontier model. From intent to deliverable."><meta property="og:url" content="https://www.x-connect.ai/"><meta property="og:image" content="https://www.x-connect.ai/assets/icons/og-image.png"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://www.x-connect.ai/assets/icons/og-image.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Figtree:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"><link rel="stylesheet" href="portal.css"><link rel="stylesheet" href="facade-theme.css"><style>.collection-continuation{position:relative;width:100%;margin:0;padding:0 0 24px}.collection-continuation iframe{display:block;border:0;width:100%;height:750px;background:transparent}@media(max-width:700px){.collection-continuation iframe{height:800px}}</style><link rel="stylesheet" href="lang.css?v=3">
+ </head>
+ <body data-motion="still" data-meteor-count="0">
+ <canvas id="cosmos" aria-hidden="true"></canvas><div id="meteor" aria-hidden="true"></div>
+ <div class="utility"><span class="demo-label" aria-hidden="true"></span><button id="session" aria-pressed="false">Sign in</button><button id="sound" aria-pressed="false" title="Enable ambient sound">Sound off</button></div>
+ <main id="page">
+ <section class="hero" aria-labelledby="headline">
+-<a class="brand" href="#home" aria-label="X-connect home"><span class="jewel silver" aria-hidden="true"><img src="assets/crystal-x.jpg" alt=""></span><span>-connect</span></a>
++<a class="brand" href="#home" aria-label="X-connect home"><span class="jewel silver" aria-hidden="true"><img src="assets/crystal-x.png" alt=""></span><span>-connect</span></a>
+ <div class="centerpiece"><h1 id="headline"><span>From intent</span><span>to deliverable.</span></h1><p class="tagline">The next industrial revolution starts here.</p>
+ <section id="auth" class="auth" aria-label="Account access">
+ <div class="auth-body" data-auth="out">
+@@ -36,8 +36,8 @@
+ </div>
+ <p class="auth-msg" id="auth-msg" role="status" aria-live="polite"></p>
+ </section></div>
+-<button class="entry chat" data-lane="chat" aria-label="Enter Chat. One-third the cost. Three times the usage."><span class="entry-heading"><span class="jewel blue" aria-hidden="true"><img src="assets/crystal-x.jpg" alt=""></span><span>Chat</span></span><span class="entry-description">One-third the cost.<br>Three times the usage.</span></button>
+-<button class="entry code" data-lane="code" aria-label="Enter Code, the full delivery factory. No infrastructure needed. Your idea, delivered."><span class="entry-heading"><span class="jewel rose" aria-hidden="true"><img src="assets/crystal-x.jpg" alt=""></span><span>Code</span></span><span class="entry-description">No infrastructure needed.<br>Your idea, delivered.</span></button>
++<button class="entry chat" data-lane="chat" aria-label="Enter Chat. One-third the cost. Three times the usage."><span class="entry-heading"><span class="jewel blue" aria-hidden="true"><img src="assets/crystal-x.png" alt=""></span><span>Chat</span></span><span class="entry-description">One-third the cost.<br>Three times the usage.</span></button>
++<button class="entry code" data-lane="code" aria-label="Enter Code, the full delivery factory. No infrastructure needed. Your idea, delivered."><span class="entry-heading"><span class="jewel rose" aria-hidden="true"><img src="assets/crystal-x.png" alt=""></span><span>Code</span></span><span class="entry-description">No infrastructure needed.<br>Your idea, delivered.</span></button>
+ 
+ </section>
+ <section class="collection-continuation" aria-label="Service collection" data-auth-only hidden><iframe title="Interactive service-card collection" src="carousel-embed.html" loading="eager" scrolling="no"></iframe></section>
+@@ -65,7 +65,7 @@
+ </div>
+ </section>
+ <footer class="site-foot"><a href="#signup" class="join-us">Join us</a><button type="button" id="start" class="start-commission">Start your first commission</button></footer></main>
+-<section id="destination" class="destination" hidden aria-labelledby="destination-title"><button class="back" id="back">← Back to the universe</button><div class="destination-inner"><p class="eyebrow" id="route-eyebrow">X-CONNECT</p><div id="route-jewel" class="jewel blue" aria-hidden="true"><img src="assets/crystal-x.jpg" alt=""></div><h2 id="destination-title"></h2><p id="destination-copy"></p><p id="mission-preview" hidden></p><div id="route-actions"></div></div></section>
++<section id="destination" class="destination" hidden aria-labelledby="destination-title"><button class="back" id="back">← Back to the universe</button><div class="destination-inner"><p class="eyebrow" id="route-eyebrow">X-CONNECT</p><div id="route-jewel" class="jewel blue" aria-hidden="true"><img src="assets/crystal-x.png" alt=""></div><h2 id="destination-title"></h2><p id="destination-copy"></p><p id="mission-preview" hidden></p><div id="route-actions"></div></div></section>
+ <section id="topup-page" class="destination topup-page" hidden aria-labelledby="topup-title"><button class="back" id="topup-back" type="button">← 返回首页</button><div class="destination-inner topup-inner"><p class="eyebrow">TOP UP · 充值</p><h2 class="topup-title" id="topup-title">USDT 充值</h2><p class="topup-lede">填写你的账户名，我们会显示收款地址和二维码。充值为人工入账，不是自动到账。</p>
+ <div class="topup-account"><label for="topup-account">账户名 / Account name</label><div class="field fx-field"><input id="topup-account" type="text" maxlength="80" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="填写你自己的账户名"></div><p class="topup-hint" id="topup-hint">先填写账户名，填好后才会显示收款地址。</p></div>
+ <div class="topup-body" id="topup-body" hidden></div>
+--- a/portal.css
++++ b/portal.css
+@@ -35,7 +35,7 @@
+ .entry .jewel{pointer-events:auto}.entry .jewel img{pointer-events:none}
+ #route-actions .topup-amount{flex:0 1 190px;width:190px;padding:12px 16px;border:1px solid #66748455;border-radius:20px;color:#b8c0c8;font-size:14px}
+ /* LOCAL REVIEW ONLY — independent rendered materials; no deployment authorized. */
+-.jewel{mix-blend-mode:normal;filter:none}.jewel img{display:none}.jewel::before{content:'';position:absolute;inset:12.5%;background-image:url('assets/x-materials-review.png');background-size:300% 100%;background-repeat:no-repeat;pointer-events:none}.jewel.silver::before{background-position:0% 50%}.jewel.blue::before{background-position:50% 50%}.jewel.rose::before{background-position:100% 50%}
++.jewel{mix-blend-mode:normal;filter:none}.jewel img{display:none}.jewel::before{content:'';position:absolute;inset:12.5%;background-image:url('assets/crystal-x.png');background-size:contain;background-position:50% 50%;background-repeat:no-repeat;pointer-events:none}
+ @media(min-width:701px){.entry.chat{left:3.8%}.entry.code{right:3.8%}}
+ @media(max-width:700px){.entry.chat{justify-self:start;translate:-7px 0}.entry.code{justify-self:end;translate:7px 0}}
+ /* Touch feedback: actual hit testing uses the graphic box plus 12px, not image target. */
+--- a/facade-theme.css
++++ b/facade-theme.css
+@@ -14,10 +14,8 @@
+ .tagline{color:var(--fx-ink-2)}
+ .entry-description{color:var(--fx-ink-2)}
+ .eyebrow,.auth-divider{font-family:var(--fx-mono)}
+-/* lighter X marks (brand + Chat + Code jewels) */
+-.jewel.silver::before{filter:brightness(1.55) contrast(1.05) saturate(.6) drop-shadow(0 0 7px rgba(225,245,255,.55))}
+-.jewel.blue::before{filter:brightness(1.5) saturate(1.35) drop-shadow(0 0 7px rgba(90,170,255,.55))}
+-.jewel.rose::before{filter:brightness(1.45) saturate(1.15) hue-rotate(-6deg) drop-shadow(0 0 7px rgba(255,190,170,.5))}
++/* X marks (brand + Chat + Code jewels): single crystal X logo, same treatment for all three */
++.jewel::before,.jewel.silver::before,.jewel.blue::before,.jewel.rose::before{filter:drop-shadow(0 0 7px rgba(90,170,255,.55))}
+ 
+ /* 1. top-bar Sign in: understated */
+ #session{color:var(--fx-ink-2);font-family:var(--fx-body);letter-spacing:.04em;padding:6px 12px;border:1px solid var(--fx-line-2);border-radius:999px;background:transparent;transition:color .2s,border-color .2s}

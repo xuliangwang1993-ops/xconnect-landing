@@ -129,7 +129,7 @@ body[data-lang="en"] .lang-zh {
 .brand-logo {
   width: 56px;
   height: 56px;
-  color: var(--accent);
+  object-fit: contain;
   flex-shrink: 0;
 }
 
