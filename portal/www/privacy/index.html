@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#000000">
+<title>Privacy Policy — X-Connect AI</title>
+<meta name="description" content="X-Connect AI — Privacy Policy">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="/assets/icons/apple-icon.png">
+<link rel="stylesheet" href="/legal.css"></head>
+<body>
+<header class="top"><a class="brand" href="/">X-Connect AI</a><nav><a href="/pricing"><span data-l="en">Pricing</span><span data-l="zh">价格</span></a><a href="/download"><span data-l="en">Download</span><span data-l="zh">下载</span></a><a href="/privacy" aria-current="page"><span data-l="en">Privacy</span><span data-l="zh">隐私</span></a><a href="/terms"><span data-l="en">Terms</span><span data-l="zh">条款</span></a><a href="/source"><span data-l="en">Source</span><span data-l="zh">源代码</span></a></nav><button type="button" id="langbtn" class="langbtn" aria-label="Language">中文</button></header>
+<main>
+<h1><span data-l="en">Privacy Policy</span><span data-l="zh">隐私政策</span></h1>
+<div data-l="en"><div class="draft"><b>DRAFT — not legal advice, not yet reviewed.</b> This text was written from how the product is built today and must be reviewed by Martin Zhang (and a lawyer, if desired) before it is relied on. Items in <span class="todo">[square brackets]</span> are facts or decisions that still need to be filled in. Last drafted: 2026-10-26.</div></div><div data-l="zh"><div class="draft"><b>草稿 —— 不构成法律意见，尚未经过审阅。</b>本文按产品目前的实际实现写成，在正式依赖之前必须由 Martin Zhang（以及律师，如有需要）审阅。<span class="todo">[方括号]</span>里的内容是还需要补充的事实或决定。起草日期：2026-10-26。</div></div>
+<article data-l="en">
+<p class="lead">This policy explains what information X-Connect AI collects, why, who it is shared with, and the choices you have. “X-Connect”, “we” and “us” mean A.C.N. 688 027 367 PTY. LTD. (ABN 37 688 027 367), Australia.</p>
+<h2>1. What we handle</h2>
+<ul>
+<li><b>Account information</b> — your email address and the sign-in identifiers created when you use email, Apple, Google or a passkey. Sign-in is provided through Supabase.</li>
+<li><b>Your conversations and files</b> — the messages, attachments and voice audio you send to an AI model. If you use chat sync, conversations are also stored on our servers so they appear on your other devices. <span class="todo">[CONFIRM exactly which data is synced, and whether sync is on by default]</span></li>
+<li><b>Usage and billing records</b> — which model you used, token counts, your balance and top-up history, revival cards and referral records. We keep these to charge correctly and prevent abuse.</li>
+<li><b>Device identifier</b> — an app/device identifier used so the app can work (for example, to apply referral and top-up rules). It is not used to track you across other companies’ apps or websites.</li>
+<li><b>Optional device data</b> — location, camera, microphone, photos, calendar, reminders and Apple Health are only accessed if you grant permission and use a feature that needs them. Anything a feature reads becomes part of the request you send to the AI model you chose. <span class="todo">[CONFIRM per-feature behaviour and what, if anything, is stored on our servers]</span></li>
+<li><b>Your own API keys (“Refuel”)</b> — if you connect your own model key, it is used for your requests only. <span class="todo">[CONFIRM where the key is stored: on device only, or on our servers, and how it is protected]</span></li>
+</ul>
+<h2>2. Why we use it</h2>
+<p>To provide the service (sign you in, route your request to a model, sync your chats, run voice), to bill you and apply top-ups, to keep the service secure and prevent fraud or abuse, to fix problems, and to meet legal obligations. We do not sell your personal information.</p>
+<h2>3. Who receives it</h2>
+<ul>
+<li><b>AI model providers.</b> X-Connect is a gateway: what you type, attach or say is sent to the model provider that serves your request (for example OpenAI, Anthropic, Google, xAI, DeepSeek or others), possibly through a model-routing provider. Those providers process your data under their own terms and privacy policies. Do not send information you are not comfortable sharing with them. <span class="todo">[CONFIRM list of upstream providers and whether any of them may use data for training]</span></li>
+<li><b>Supabase</b> — authentication and database hosting.</li>
+<li><b>Cloudflare</b> — website hosting, content delivery and the gateway that runs our API.</li>
+<li><b>Payment processors.</b> Card payments are handled by Stripe on Stripe’s hosted page; we never see or store your full card number. <span class="todo">[CONFIRM PayPal availability]</span> USDT payments are made on a public blockchain, so the transaction is publicly visible there.</li>
+<li><b>Authorities and advisers</b> where the law requires, or to protect rights and safety.</li>
+</ul>
+<h2>4. Where data goes</h2>
+<p>We are based in Australia, and the providers above operate in other countries (including the United States). By using the service you understand your information may be processed outside Australia. <span class="todo">[CONFIRM data-hosting regions]</span></p>
+<h2>5. How long we keep it</h2>
+<p><span class="todo">[TO DECIDE: retention periods for conversations, voice audio, usage and billing records, logs]</span> Billing records may need to be kept for tax and accounting reasons.</p>
+<h2>6. Your choices and rights</h2>
+<ul>
+<li>You can turn off device permissions in your system settings at any time.</li>
+<li>You can ask us to access, correct or delete your personal information, or delete your account, by contacting us at <span class="todo">[CONTACT EMAIL — TO CONFIRM]</span>. <span class="todo">[CONFIRM: in-app account deletion status]</span></li>
+<li>In Australia you may complain to us first, and then to the Office of the Australian Information Commissioner (oaic.gov.au). <span class="todo">[LEGAL REVIEW: Privacy Act 1988 / Australian Privacy Principles applicability and wording]</span></li>
+</ul>
+<h2>7. Security</h2>
+<p>We use industry-standard measures such as encrypted connections and access controls. No system is perfectly secure, and we cannot guarantee absolute security.</p>
+<h2>8. Children</h2>
+<p><span class="todo">[TO DECIDE: minimum age]</span></p>
+<h2>9. Open-source client</h2>
+<p>The X-Connect apps are built on the open-source Kelivo client under the AGPL-3.0 licence — see <a href="/source">/source</a>. Third-party code carries its own licences.</p>
+<h2>10. Changes and contact</h2>
+<p>We will post changes on this page and update the date. Questions: <span class="todo">[CONTACT EMAIL — TO CONFIRM]</span>.</p>
+</article>
+<article data-l="zh">
+<p class="lead">本政策说明 X-Connect AI 收集哪些信息、为什么收集、会与谁共享，以及你有哪些选择。“X-Connect”“我们”指 A.C.N. 688 027 367 PTY. LTD.（ABN 37 688 027 367），澳大利亚。</p>
+<h2>1. 我们处理哪些信息</h2>
+<ul>
+<li><b>账户信息</b>——你的邮箱，以及用邮箱、Apple、Google 或通行密钥登录时产生的登录标识。登录由 Supabase 提供。</li>
+<li><b>对话与文件</b>——你发给 AI 模型的消息、附件和语音。如果你使用聊天同步，对话也会保存在我们的服务器上，以便在你的其他设备上显示。<span class="todo">[待确认：具体同步哪些数据、是否默认开启]</span></li>
+<li><b>用量与账单记录</b>——使用了哪个模型、token 数量、余额和充值记录、复活卡与推荐记录。我们保留这些是为了正确计费和防止滥用。</li>
+<li><b>设备标识</b>——让应用正常工作所需的应用/设备标识（例如应用推荐与充值规则）。不会用它在其他公司的应用或网站之间跟踪你。</li>
+<li><b>可选的设备数据</b>——位置、相机、麦克风、照片、日历、提醒事项和“健康”只有在你授权并使用需要它们的功能时才会被访问。功能读取到的内容会成为你发给所选 AI 模型的请求的一部分。<span class="todo">[待确认：各功能的具体行为，以及是否有数据保存在我们的服务器]</span></li>
+<li><b>你自己的 API 密钥（“Refuel”）</b>——如果你接入自己的模型密钥，它只用于你自己的请求。<span class="todo">[待确认：密钥保存位置——仅本机，还是在我们服务器，以及保护方式]</span></li>
+</ul>
+<h2>2. 我们为什么使用这些信息</h2>
+<p>为了提供服务（让你登录、把请求路由到模型、同步对话、提供语音）、计费并应用充值、保障安全并防止欺诈和滥用、排查问题，以及履行法律义务。我们不会出售你的个人信息。</p>
+<h2>3. 谁会收到这些信息</h2>
+<ul>
+<li><b>AI 模型提供商。</b>X-Connect 是一个网关：你输入、附加或说出的内容，会发送给处理你这次请求的模型提供商（例如 OpenAI、Anthropic、Google、xAI、DeepSeek 等），可能经过模型路由服务商。这些提供商按各自的条款和隐私政策处理数据。请不要发送你不愿与他们共享的信息。<span class="todo">[待确认：上游提供商清单，以及他们是否可能将数据用于训练]</span></li>
+<li><b>Supabase</b>——身份认证与数据库托管。</li>
+<li><b>Cloudflare</b>——网站托管、内容分发，以及运行我们 API 的网关。</li>
+<li><b>支付服务商。</b>银行卡付款在 Stripe 的托管页面完成，我们不会看到或保存你的完整卡号。<span class="todo">[待确认：是否提供 PayPal]</span>USDT 付款发生在公开区块链上，该笔交易在链上公开可见。</li>
+<li><b>依法需要时的有关机关和顾问</b>，或为保护权利与安全。</li>
+</ul>
+<h2>4. 数据存放在哪里</h2>
+<p>我们位于澳大利亚，上述服务商分布在其他国家（包括美国）。使用本服务即表示你理解你的信息可能在澳大利亚以外处理。<span class="todo">[待确认：数据托管地区]</span></p>
+<h2>5. 保存多久</h2>
+<p><span class="todo">[待决定：对话、语音、用量与账单记录、日志各自的保存期限]</span>出于税务和会计要求，账单记录可能需要保存一段时间。</p>
+<h2>6. 你的选择与权利</h2>
+<ul>
+<li>你可以随时在系统设置里关闭设备权限。</li>
+<li>你可以通过 <span class="todo">[联系邮箱 — 待确认]</span> 联系我们，要求查阅、更正或删除你的个人信息，或删除账户。<span class="todo">[待确认：应用内删除账户的现状]</span></li>
+<li>在澳大利亚，你可以先向我们投诉，之后也可以向澳大利亚信息专员办公室（oaic.gov.au）投诉。<span class="todo">[需法律审阅：《1988 年隐私法》/澳大利亚隐私原则的适用性与措辞]</span></li>
+</ul>
+<h2>7. 安全</h2>
+<p>我们采取加密连接、访问控制等行业通行措施。没有任何系统是绝对安全的，我们不能保证绝对安全。</p>
+<h2>8. 儿童</h2>
+<p><span class="todo">[待决定：最低使用年龄]</span></p>
+<h2>9. 开源客户端</h2>
+<p>X-Connect 应用基于开源的 Kelivo 客户端，按 AGPL-3.0 许可证发布——见 <a href="/source">/source</a>。第三方代码适用其各自的许可证。</p>
+<h2>10. 变更与联系</h2>
+<p>我们会在本页面发布变更并更新日期。问题请联系：<span class="todo">[联系邮箱 — 待确认]</span>。</p>
+</article>
+</main>
+<footer class="foot"><span data-l="en">© A.C.N. 688 027 367 PTY. LTD. (ABN 37 688 027 367), Australia</span><span data-l="zh">© A.C.N. 688 027 367 PTY. LTD.（ABN 37 688 027 367），澳大利亚</span></footer>
+<script src="/legal.js"></script>
+</body></html>
