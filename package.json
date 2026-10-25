@@ -1,0 +1,14 @@
+{
+  "name": "xconnect-factory-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "X-Connect Factory static site (right door of www.x-connect.ai)",
+  "scripts": {
+    "ci": "node -e \"require('fs').accessSync('site/index.html'); console.log('site ready:', require('fs').readdirSync('site').length + ' files')\"",
+    "build": "node -e \"require('fs').accessSync('site/index.html'); console.log('site ready:', require('fs').readdirSync('site').length + ' files')\"",
+    "start": "node render-serve.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
