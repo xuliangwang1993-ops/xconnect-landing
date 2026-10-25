@@ -12,8 +12,13 @@
 <h1><span data-l="en">Pricing</span><span data-l="zh">价格</span></h1>
 
 <article data-l="en">
-<p class="lead">One account, many models. You pay for what you use, from a prepaid balance. <span class="todo">[CONFIRM: subscription plans, if any]</span></p>
-<div class="placeholder"><b>Numbers not final.</b> The rates and top-up options below are placeholders until they are confirmed and published. <span class="todo">[TO FILL: per-model rates, top-up tiers in AUD, any bonus tiers]</span></div>
+<p class="lead">One account, many models. You pay for what you use, from a prepaid balance. v1 is a prepaid top-up product, not an automatic-renewing subscription.</p>
+<div class="placeholder"><b>Release preview.</b> The top-up tiers below are the v1 configuration. Model rates and launch availability are still subject to release review. <span class="todo">[MARTIN: confirm public model-rate wording before production]</span></div>
+<h2>Card top-up tiers (AUD)</h2>
+<table class="grid"><thead><tr><th>Top-up</th><th>Balance credited</th><th>Revival cards</th></tr></thead><tbody>
+<tr><td>A$5</td><td>A$5</td><td>0</td></tr><tr><td>A$10</td><td>A$10</td><td>0</td></tr><tr><td>A$20</td><td>A$20</td><td>1</td></tr><tr><td>A$50</td><td>A$50</td><td>1</td></tr><tr><td>A$100</td><td>A$100</td><td>3</td></tr>
+</tbody></table>
+<p>Custom amounts from A$5 to A$1000, in whole cents, use the same currency. No discount is configured by default.</p>
 <h2>How billing works</h2>
 <ul>
 <li><b>Per-token usage.</b> Text models are charged by the tokens you send and receive; voice and other tools by their own usage units. Your balance and usage are shown in the app. <span class="todo">[CONFIRM wording and units]</span></li>
@@ -22,7 +27,7 @@
 </ul>
 <h2>Ways to top up</h2>
 <ul>
-<li><b>Card</b> — paid on Stripe’s secure page. <span class="todo">[CONFIRM currency (AUD) and tiers]</span></li>
+<li><b>Card</b> — paid in AUD on Stripe’s secure page. PayPal is not part of v1.</li>
 <li><b>USDT</b> — on the networks listed in the top-up screen on the home page.</li>
 <li><b>Codes</b> — see <a href="/redeem">/redeem</a>.</li>
 </ul>
@@ -31,8 +36,13 @@
 <p class="small">See also the <a href="/terms">Terms of Use</a> for refunds and balance rules <span class="todo">[pending]</span>.</p>
 </article>
 <article data-l="zh">
-<p class="lead">一个账户，多种模型。按用量从预付余额中付费。<span class="todo">[待确认：是否有订阅方案]</span></p>
-<div class="placeholder"><b>数字尚未最终确定。</b>下面的费率和充值选项在确认并发布之前只是占位。<span class="todo">[待填写：各模型费率、澳元充值档位、赠送档位]</span></div>
+<p class="lead">一个账户，多种模型。按用量从预付余额中付费。v1 是预付充值产品，不是自动续费订阅。</p>
+<div class="placeholder"><b>发布预览。</b>以下档位是 v1 配置。模型费率与实际上线状态仍须发布审核。<span class="todo">[Martin：生产发布前确认公开费率说明]</span></div>
+<h2>银行卡充值档位（澳元）</h2>
+<table class="grid"><thead><tr><th>充值</th><th>入账余额</th><th>复活卡</th></tr></thead><tbody>
+<tr><td>A$5</td><td>A$5</td><td>0</td></tr><tr><td>A$10</td><td>A$10</td><td>0</td></tr><tr><td>A$20</td><td>A$20</td><td>1</td></tr><tr><td>A$50</td><td>A$50</td><td>1</td></tr><tr><td>A$100</td><td>A$100</td><td>3</td></tr>
+</tbody></table>
+<p>可输入 A$5–A$1000 的自定义金额，精确到整美分。默认没有折扣。</p>
 <h2>如何计费</h2>
 <ul>
 <li><b>按 token 计费。</b>文本模型按你发送和接收的 token 计费；语音和其他工具按各自的用量单位计费。你的余额和用量可在应用中查看。<span class="todo">[待确认：措辞与单位]</span></li>
@@ -41,7 +51,7 @@
 </ul>
 <h2>充值方式</h2>
 <ul>
-<li><b>银行卡</b>——在 Stripe 的安全页面支付。<span class="todo">[待确认：币种（澳元）与档位]</span></li>
+<li><b>银行卡</b>——在 Stripe 的安全页面以澳元支付。PayPal 不在 v1 范围内。</li>
 <li><b>USDT</b>——使用首页充值界面中列出的网络。</li>
 <li><b>兑换码</b>——见 <a href="/redeem">/redeem</a>。</li>
 </ul>
