@@ -1,0 +1,36 @@
+--- a/auth.js
++++ b/auth.js
+@@ -174,7 +174,7 @@
+ });
+ 
+ $('#signout')?.addEventListener('click', async () => {
+-  await supabase.auth.signOut();
++  if (window.XCSSO) await window.XCSSO.signOut(supabase); else await supabase.auth.signOut();   // 同时清 .x-connect.ai 域级 cookie
+   say(authMsg, 'Signed out.', 'ok');
+ });
+ 
+@@ -219,7 +219,12 @@
+ });
+ 
+ /* ---------- 会话 ---------- */
+-supabase.auth.getSession().then(({ data }) => render(data.session));
++// 跨子域登录：sso.js（经典脚本，先于本模块加载）；仅 *.x-connect.ai 生效，其他域 XCSSO.enabled=false
++const SSO = window.XCSSO;
++if (SSO?.enabled) SSO.attach(supabase);
++(SSO?.enabled ? SSO.boot(supabase).catch(() => {}) : Promise.resolve())
++  .then(() => supabase.auth.getSession())
++  .then(({ data }) => render(data.session));
+ supabase.auth.onAuthStateChange((_event, session) => render(session));
+ 
+ window.__xcAuth = supabase;
+--- a/index.html
++++ b/index.html
+@@ -71,7 +71,7 @@
+ <div class="topup-body" id="topup-body" hidden></div>
+ <p class="topup-done"><button type="button" id="topup-close">返回首页</button></p></div></section>
+ <div class="sr-only" id="announcement" role="status" aria-live="polite"></div>
+-<script src="i18n.js?v=5"></script><script src="portal.js?v=5"></script><script>const collectionFrame=document.querySelector('.collection-continuation iframe');collectionFrame.addEventListener('load',()=>{const doc=collectionFrame.contentDocument;const resize=()=>{collectionFrame.style.height=Math.max(600,doc.body.scrollHeight+24)+'px'};new ResizeObserver(resize).observe(doc.body);resize()});</script><script type="module" src="auth.js?v=8"></script><script>document.querySelectorAll("[data-passkey-proxy]").forEach(b=>b.addEventListener("click",()=>document.getElementById("passkey-signin")?.click()));</script>
++<script src="i18n.js?v=5"></script><script src="portal.js?v=5"></script><script>const collectionFrame=document.querySelector('.collection-continuation iframe');collectionFrame.addEventListener('load',()=>{const doc=collectionFrame.contentDocument;const resize=()=>{collectionFrame.style.height=Math.max(600,doc.body.scrollHeight+24)+'px'};new ResizeObserver(resize).observe(doc.body);resize()});</script><script src="sso.js?v=1"></script><script type="module" src="auth.js?v=9"></script><script>document.querySelectorAll("[data-passkey-proxy]").forEach(b=>b.addEventListener("click",()=>document.getElementById("passkey-signin")?.click()));</script>
+ <div class="xcv-modal" id="verify-modal" hidden role="dialog" aria-modal="true" aria-labelledby="verify-title">
+   <div class="xcv-card">
+     <h2 id="verify-title">Verify your email</h2>
