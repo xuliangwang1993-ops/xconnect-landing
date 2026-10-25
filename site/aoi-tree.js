@@ -10,6 +10,8 @@
   /* i18n (site/i18n.js)：zh 是源文本；lang=en 时 tr() 才翻译，zh 下原样返回 */
   const XCI = window.XCI || { lang: () => 'zh', tr: (s) => s };
   const tr = (s) => XCI.tr(s);
+  /* 品牌名固定写作 AoI：CSS 里标题/节点标签有 text-transform: uppercase，用 .aoi-name 单独还原，避免显示成 AOI */
+  const brand = (h) => String(h).replace(/AoI/g, '<span class="aoi-name">AoI</span>');
   // 节点标签：英文下优先用数据里现成的 title_en（GitHub 工具），否则查字典
   const nodeLabel = (e) => (XCI.lang() === 'en' && e.title_en) ? e.title_en : tr(e.label_zh);
 
@@ -383,7 +385,7 @@
       const label = L
         ? `<span class="aoi-node__label" style="${L.side === 'left'
             ? `right:${(st.w - L.x - L.width).toFixed(0)}px`
-            : `left:${L.x.toFixed(0)}px`};bottom:${(st.h - L.y - 2).toFixed(0)}px">${esc(n.label)}</span>`
+            : `left:${L.x.toFixed(0)}px`};bottom:${(st.h - L.y - 2).toFixed(0)}px">${brand(esc(n.label))}</span>`
         : '';
       return `<button class="aoi-node ${n.state === 'verified' ? 'is-lit' : ''} ${st.selected === n.id ? 'is-selected' : ''}"
         data-id="${esc(n.id)}" data-layer="${n.layer}" data-state="${n.state}" data-side="${side}"
@@ -462,7 +464,7 @@
     }
     host.innerHTML = `
       <header class="aoi-detail__head">
-        <h2>${esc(n.label)}</h2>
+        <h2>${brand(esc(n.label))}</h2>
         <div class="aoi-detail__meta">
           <span class="aoi-state aoi-state--${n.state}">${sv.glyph} ${sv.label}</span>
           <span class="mono">id=${esc(String(n.id).slice(0, 34))}</span>

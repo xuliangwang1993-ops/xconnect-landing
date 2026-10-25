@@ -500,3 +500,5 @@ h1, h2, h3, h4, legend {
   .aoi-body { grid-template-columns: 1fr; }
   .aoi-sidebar, .aoi-detail { display: none; }
 }
+/* 品牌名 AoI 保持大小写（上方标题/节点标签有 text-transform: uppercase） */
+.aoi-name { text-transform: none; letter-spacing: inherit; }
