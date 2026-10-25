@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Metal light",
+    "file": "1-impactMetal_light_000.wav",
+    "sourceFile": "impactMetal_light_000.ogg",
+    "sourceUrl": "https://kenney.nl/assets/impact-sounds",
+    "license": "CC0 1.0",
+    "duration": 0.18,
+    "peak": 0.3178,
+    "sourceSha256": "33b5e6e37c6e9d54e07bf5a89b12c76e879f40c1ea83cdd82714df1d6f9fec6d"
+  },
+  {
+    "name": "Metal medium",
+    "file": "2-impactMetal_medium_000.wav",
+    "sourceFile": "impactMetal_medium_000.ogg",
+    "sourceUrl": "https://kenney.nl/assets/impact-sounds",
+    "license": "CC0 1.0",
+    "duration": 0.18,
+    "peak": 0.3317,
+    "sourceSha256": "a96f879fec0864a8938e0c745b6996a6c5679c16a234ce31a01cc995e8401003"
+  },
+  {
+    "name": "Metal heavy",
+    "file": "3-impactMetal_heavy_000.wav",
+    "sourceFile": "impactMetal_heavy_000.ogg",
+    "sourceUrl": "https://kenney.nl/assets/impact-sounds",
+    "license": "CC0 1.0",
+    "duration": 0.1648,
+    "peak": 0.461,
+    "sourceSha256": "e07045693e4a2b3d165c424e3dab4c781d9ff8880a386880ac89a51315d7f831"
+  },
+  {
+    "name": "Switch",
+    "file": "4-switch_001.wav",
+    "sourceFile": "switch_001.ogg",
+    "sourceUrl": "https://kenney.nl/assets/interface-sounds",
+    "license": "CC0 1.0",
+    "duration": 0.18,
+    "peak": 0.4954,
+    "sourceSha256": "3b74efad87f1e69dbd1d05c5ad952ab90859b5a3d11da6ec5bd79b4f03b42afa"
+  },
+  {
+    "name": "Toggle",
+    "file": "5-toggle_001.wav",
+    "sourceFile": "toggle_001.ogg",
+    "sourceUrl": "https://kenney.nl/assets/interface-sounds",
+    "license": "CC0 1.0",
+    "duration": 0.1364,
+    "peak": 0.2531,
+    "sourceSha256": "ca1d2dde5f0b286abac4f070e23edab8f30927c8a533665cdf2ac6492a415e49"
+  },
+  {
+    "name": "Click",
+    "file": "6-click_001.wav",
+    "sourceFile": "click_001.ogg",
+    "sourceUrl": "https://kenney.nl/assets/interface-sounds",
+    "license": "CC0 1.0",
+    "duration": 0.0971,
+    "peak": 0.5,
+    "sourceSha256": "ccfb7fa0cccdd9faec0eb16033c732b1e308d139d80f799161495d58f7adcdb9"
+  }
+]

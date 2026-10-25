@@ -1,0 +1,42 @@
+/* 站内充值页（#topup）。沿用 facade-theme.css 的变量与卡片/按钮风格。 */
+.topup-page[hidden],.xcs-modal[hidden]{display:none!important}
+.topup-page .topup-inner{max-width:760px;margin:2vh auto 0;text-align:center;animation:arrive .45s both}
+.topup-page .eyebrow{margin:0}
+.topup-page .topup-title{font-size:clamp(28px,4.4vw,44px);font-weight:400;line-height:1.1;letter-spacing:-.03em;margin:16px 0 10px;outline:0}
+.topup-page .topup-lede{margin:0 auto;max-width:560px;font-size:13.5px;line-height:1.7;color:var(--fx-ink-2,#8B98A8)}
+.topup-account{margin:26px auto 0;max-width:420px;text-align:left}
+.topup-account label{display:block;margin:0 0 7px;font-family:var(--fx-mono,monospace);font-size:11px;letter-spacing:.08em;color:var(--fx-ink-2,#8B98A8)}
+.topup-account .fx-field{display:block}
+.topup-account input{width:100%;height:40px;background:none;border:0;outline:none;color:var(--fx-ink,#E7EEF6);font-family:var(--fx-body,inherit);font-size:14px;padding:0 12px}
+.topup-account input::placeholder{color:var(--fx-ink-3,#64707F)}
+.topup-page .topup-hint{margin:10px 0 0;font-size:12px;line-height:1.6;color:var(--fx-ink-3,#64707F);text-align:center}
+.topup-body{margin-top:24px;text-align:left}
+.topup-page .topup-who{margin:0 0 14px;text-align:center;font-size:12.5px;color:var(--fx-ink-2,#8B98A8)}
+.topup-page .topup-who strong{color:var(--fx-ink,#E7EEF6);font-weight:500;overflow-wrap:anywhere}
+.topup-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.topup-card{background:var(--fx-bg-2,#0F151E);border:1px solid var(--fx-line-2,#2A3547);border-radius:14px;padding:18px 16px 16px;text-align:center;min-width:0}
+.topup-card h3{margin:0;font-family:var(--fx-display,inherit);font-size:19px;font-weight:500;letter-spacing:-.01em;color:var(--fx-ink,#E7EEF6)}
+.topup-page .topup-net{margin:4px 0 0;font-family:var(--fx-mono,monospace);font-size:11px;letter-spacing:.06em;color:var(--fx-accent-2,#7BE4F5)}
+.topup-tag{display:inline-block;margin:10px 0 12px;padding:3px 10px;border:1px solid var(--fx-line-2,#2A3547);border-radius:999px;font-size:11px;letter-spacing:.04em;color:var(--fx-ink-2,#8B98A8)}
+.topup-qr{display:block;width:176px;height:176px;max-width:100%;margin:0 auto 12px;background:#fff;border-radius:10px;padding:0}
+.topup-page .topup-addr{margin:0 0 10px;font-family:var(--fx-mono,monospace);font-size:12px;line-height:1.55;color:var(--fx-ink,#E7EEF6);overflow-wrap:anywhere;word-break:break-all}
+.topup-copy{height:34px;padding:0 16px;border:1px solid var(--fx-line-2,#2A3547);border-radius:10px;background:var(--fx-bg-3,#151D28);color:var(--fx-ink-2,#8B98A8);font-family:var(--fx-body,inherit);font-size:12.5px;letter-spacing:.03em;transition:color .2s,border-color .2s,background .2s}
+.topup-copy:hover{color:var(--fx-ink,#E7EEF6);border-color:var(--fx-accent,#34D3EB);background:#1b2533}
+.topup-notes{margin:18px 0 0;padding:14px 16px 14px 32px;border:1px solid var(--fx-line,#1C2532);border-radius:14px;background:var(--fx-bg,#080B10);font-size:12.5px;line-height:1.75;color:var(--fx-ink-2,#8B98A8)}
+.topup-notes li+li{margin-top:4px}
+.topup-notes .warn{color:#e3a4a4}
+.topup-page .topup-done{margin:18px 0 0;text-align:center}
+.topup-page .topup-done button{height:38px;padding:0 22px;border-radius:999px;background:#e9edf0;color:#0b0d10;font-family:inherit;font-size:12.5px;font-weight:500;letter-spacing:.07em;transition:background .2s}
+.topup-page .topup-done button:hover{background:#fff}
+.auth-entries{margin-top:4px}
+.xcs-modal .xcv-note{margin-bottom:18px}
+@media(max-width:700px){
+  .topup-page{padding:96px 16px 36px}
+  .topup-page .topup-inner{margin-top:1vh}
+  .topup-account input{font-size:16px;height:44px}
+  .topup-qr{width:168px;height:168px}
+}
+.topup-page.destination{background:radial-gradient(ellipse at 50% 40%,#0b111bfa,#020305 85%)}
+
+/* 未登录时不显示充值页（auth.js 登录后会把 body[data-auth] 置为 in） */
+body:not([data-auth="in"]) #topup-page{display:none!important}

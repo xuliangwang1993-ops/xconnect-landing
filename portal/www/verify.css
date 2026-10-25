@@ -1,0 +1,60 @@
+/* 充值前邮箱验证弹窗 —— 尽量少引入新样式，沿用门户的深色玻璃感。 */
+.xcv-modal[hidden] { display: none !important; }
+.xcv-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(4, 6, 10, .72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.xcv-card {
+  width: min(420px, 100%);
+  background: #0b0d12;
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 18px;
+  padding: 22px 20px 16px;
+  color: #eef0f4;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .55);
+  font-family: inherit;
+}
+.xcv-card h2 { margin: 0 0 6px; font-size: 19px; font-weight: 600; letter-spacing: -.01em; }
+.xcv-note { margin: 0 0 16px; font-size: 13px; line-height: 1.5; color: rgba(238, 240, 244, .62); }
+.xcv-field { display: block; margin-bottom: 12px; }
+.xcv-field[hidden] { display: none !important; }
+.xcv-field > span { display: block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: rgba(238, 240, 244, .5); margin-bottom: 6px; }
+.xcv-field input {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, .05);
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 10px;
+  padding: 11px 12px;
+  color: #eef0f4;
+  font: inherit;
+  font-size: 14px;
+}
+.xcv-field input:focus { outline: none; border-color: rgba(120, 180, 255, .65); }
+.xcv-field input[readonly] { color: rgba(238, 240, 244, .55); }
+.xcv-msg { min-height: 18px; margin: 4px 0 14px; font-size: 12.5px; line-height: 1.5; color: rgba(238, 240, 244, .7); }
+.xcv-msg[data-kind="err"] { color: #ff8f8f; }
+.xcv-msg[data-kind="ok"] { color: #7ee0a8; }
+.xcv-foot { display: flex; gap: 10px; justify-content: flex-end; }
+.xcv-btn {
+  font: inherit;
+  font-size: 13px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .16);
+  background: transparent;
+  color: #eef0f4;
+  cursor: pointer;
+}
+.xcv-btn[hidden] { display: none !important; }
+.xcv-btn.primary { background: #2f7cf6; border-color: transparent; color: #fff; }
+.xcv-btn.ghost { opacity: .75; }
+.xcv-btn:hover { opacity: 1; }
+.xcv-btn:disabled { opacity: .45; cursor: default; }
