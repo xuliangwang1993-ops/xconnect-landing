@@ -1,19 +1,30 @@
 {
   "run": {
-    "run_id": "v3-20261023-130640",
+    "id": "v3-20261023-130640",
     "sentence": "给悉尼小锅米线（Slurp Slurp Noodle）做一支 30 秒宣传短视频，配中英字幕和三个社媒尺寸",
     "status": "ok",
     "exit_code": 0,
-    "elapsed_s": 109.1
+    "elapsed_s": 109.1,
+    "stations": [
+      "00_brief",
+      "01_ingest",
+      "02_script",
+      "03_grade",
+      "04_subs",
+      "05_export",
+      "06_qa",
+      "07_kb"
+    ],
+    "chain_closed": 16,
+    "chain_total": 17
   },
   "stations": [
     {
       "id": "00_brief",
       "index": "00",
-      "name": "Brief",
       "zh": "需求解析",
-      "aoi": "M07",
       "note": "把一句话拆成字段：时长、语种、尺寸、交付清单",
+      "aoi": "M07",
       "tools": [
         {
           "name": "jq",
@@ -28,9 +39,7 @@
       "outputs": [
         {
           "path": "00_brief/brief.json",
-          "name": "brief.json",
           "sha256": "af15adfc07409be9108179214f00ffba0c839712018ed038accc025990dce9e3",
-          "sha8": "af15adfc",
           "schema": "brief",
           "bytes": 681
         }
@@ -40,6 +49,7 @@
       "started_at": "2026-10-23T13:10:56+11:00",
       "ended_at": "2026-10-23T13:10:56+11:00",
       "qa": {
+        "station": "00_brief",
         "pass": true,
         "checks": [
           {
@@ -58,13 +68,7 @@
           }
         ]
       },
-      "score": 4.0,
-      "dims": {
-        "commercial": 4,
-        "handoff": 5,
-        "craft": 4,
-        "benchmark": 3
-      },
+      "score": null,
       "reasons": {
         "commercial": "需求字段齐全，但平台列表为默认值，客户未确认",
         "craft": "规则解析，对句式敏感（换说法可能解析失败）",
@@ -74,10 +78,9 @@
     {
       "id": "01_ingest",
       "index": "01",
-      "name": "Ingest",
       "zh": "素材入库",
-      "aoi": "M02",
       "note": "抓官网、核事实、给每个素材记来源与许可",
+      "aoi": "M02",
       "tools": [
         {
           "name": "curl",
@@ -96,57 +99,44 @@
         {
           "path": "00_brief/brief.json",
           "sha256": "af15adfc07409be9108179214f00ffba0c839712018ed038accc025990dce9e3",
-          "sha8": "af15adfc",
-          "from": "00_brief",
-          "closed": true
+          "closed": true,
+          "from": "00_brief"
         }
       ],
       "outputs": [
         {
           "path": "01_ingest/site.md",
-          "name": "site.md",
           "sha256": "a0b44438659512eb644b8b0f77f8125ad2ea4ab63ffbb6aa7d055037694fc803",
-          "sha8": "a0b44438",
           "schema": null,
           "bytes": 264
         },
         {
           "path": "01_ingest/facts.json",
-          "name": "facts.json",
           "sha256": "62a5830c642994267cec506d7a7f1212b8e1dfd74727a72cdf630569361a5774",
-          "sha8": "62a5830c",
           "schema": "facts",
           "bytes": 3066
         },
         {
           "path": "01_ingest/wordmark.png",
-          "name": "wordmark.png",
           "sha256": "da8c2095eb0d53f7c65293632c84bb61d9f5e9d28d96f24bd9db5910fc6dc607",
-          "sha8": "da8c2095",
           "schema": null,
           "bytes": 8670
         },
         {
           "path": "01_ingest/media_manifest.json",
-          "name": "media_manifest.json",
           "sha256": "5e24d112d10e26caac91539ee48fb258afaec7ae00e7fd7edc8df47e129a3306",
-          "sha8": "5e24d112",
           "schema": "media_manifest",
           "bytes": 2028
         },
         {
           "path": "01_ingest/licenses.json",
-          "name": "licenses.json",
           "sha256": "e203aeed0a2a5365647c3d7b81ad49b041acaa68aa69ec1ccebc769991918c29",
-          "sha8": "e203aeed",
           "schema": null,
           "bytes": 1362
         },
         {
           "path": "01_ingest/shot_request.md",
-          "name": "shot_request.md",
           "sha256": "abeabed59b36e9b891ba3b879ce3aa3d67cf291965e53ab56d57679f4591a965",
-          "sha8": "abeabed5",
           "schema": null,
           "bytes": 1193
         }
@@ -156,6 +146,7 @@
       "started_at": "2026-10-23T13:10:56+11:00",
       "ended_at": "2026-10-23T13:10:59+11:00",
       "qa": {
+        "station": "01_ingest",
         "pass": false,
         "checks": [
           {
@@ -198,13 +189,7 @@
           }
         ]
       },
-      "score": 3.25,
-      "dims": {
-        "commercial": 2,
-        "handoff": 5,
-        "craft": 3,
-        "benchmark": 3
-      },
+      "score": null,
       "reasons": {
         "commercial": "无客户实拍素材，只能出未授权样片，不可交付",
         "craft": "来源/许可 100% 记录；但素材分辨率不达标（占位）",
@@ -214,10 +199,9 @@
     {
       "id": "02_script",
       "index": "02",
-      "name": "Script",
       "zh": "脚本分镜",
-      "aoi": "M07",
       "note": "把事实写成六镜，出分镜 PDF 与菜单卡",
+      "aoi": "M07",
       "tools": [
         {
           "name": "python-docx",
@@ -236,48 +220,38 @@
         {
           "path": "01_ingest/facts.json",
           "sha256": "62a5830c642994267cec506d7a7f1212b8e1dfd74727a72cdf630569361a5774",
-          "sha8": "62a5830c",
-          "from": "01_ingest",
-          "closed": true
+          "closed": true,
+          "from": "01_ingest"
         },
         {
           "path": "01_ingest/media_manifest.json",
           "sha256": "5e24d112d10e26caac91539ee48fb258afaec7ae00e7fd7edc8df47e129a3306",
-          "sha8": "5e24d112",
-          "from": "01_ingest",
-          "closed": true
+          "closed": true,
+          "from": "01_ingest"
         }
       ],
       "outputs": [
         {
           "path": "02_script/menu.json",
-          "name": "menu.json",
           "sha256": "bc0fde9fe2eff888d17c0b1225b0bfa8e06beea6f0dc1dc6a1e8317fbab59320",
-          "sha8": "bc0fde9f",
           "schema": "menu",
           "bytes": 73
         },
         {
           "path": "02_script/script.json",
-          "name": "script.json",
           "sha256": "b663711507be827a103953069d11b902e565a03f92a75166be728fbed6a24b54",
-          "sha8": "b6637115",
           "schema": "script",
           "bytes": 2093
         },
         {
           "path": "02_script/storyboard.pdf",
-          "name": "storyboard.pdf",
           "sha256": "c6b29c6a109f8c9c0a9a8d10dba3e04f43ffdfa239c80efddde74c9a7c4932c0",
-          "sha8": "c6b29c6a",
           "schema": null,
           "bytes": 145629
         },
         {
           "path": "02_script/storyboard.docx",
-          "name": "storyboard.docx",
           "sha256": "b65e9e0310589ecd7ea6d83393533752aed78d3e2cb29981bf2164ee468d5b31",
-          "sha8": "b65e9e03",
           "schema": null,
           "bytes": 37405
         }
@@ -287,6 +261,7 @@
       "started_at": "2026-10-23T13:10:59+11:00",
       "ended_at": "2026-10-23T13:10:59+11:00",
       "qa": {
+        "station": "02_script",
         "pass": true,
         "checks": [
           {
@@ -305,13 +280,7 @@
           }
         ]
       },
-      "score": 4.0,
-      "dims": {
-        "commercial": 3,
-        "handoff": 5,
-        "craft": 5,
-        "benchmark": 3
-      },
+      "score": null,
       "reasons": {
         "commercial": "只敢用店名+电话两条已核实事实，文案偏泛，缺菜品/价格卖点",
         "craft": "引用核对 0 不一致",
@@ -321,10 +290,9 @@
     {
       "id": "03_grade",
       "index": "03",
-      "name": "Grade",
       "zh": "画面与混音",
-      "aoi": "M04",
       "note": "逐帧生成、调色、合成底乐，独立取证",
+      "aoi": "M04",
       "tools": [
         {
           "name": "ffmpeg",
@@ -347,80 +315,62 @@
         {
           "path": "02_script/script.json",
           "sha256": "b663711507be827a103953069d11b902e565a03f92a75166be728fbed6a24b54",
-          "sha8": "b6637115",
-          "from": "02_script",
-          "closed": true
+          "closed": true,
+          "from": "02_script"
         },
         {
           "path": "01_ingest/media_manifest.json",
           "sha256": "5e24d112d10e26caac91539ee48fb258afaec7ae00e7fd7edc8df47e129a3306",
-          "sha8": "5e24d112",
-          "from": "01_ingest",
-          "closed": true
+          "closed": true,
+          "from": "01_ingest"
         }
       ],
       "outputs": [
         {
           "path": "03_grade/clips/sh1.mp4",
-          "name": "sh1.mp4",
           "sha256": "349d16e299851094b05e3c4ce35e984581d0b53017d0dda959b7c6ea781c5fc3",
-          "sha8": "349d16e2",
           "schema": null,
           "bytes": null
         },
         {
           "path": "03_grade/clips/sh2.mp4",
-          "name": "sh2.mp4",
           "sha256": "b61eddf5f669a30cea0a0ad348182283778a434bc79300b4ed7624d3b7d2e05d",
-          "sha8": "b61eddf5",
           "schema": null,
           "bytes": null
         },
         {
           "path": "03_grade/clips/sh3.mp4",
-          "name": "sh3.mp4",
           "sha256": "c03d12196fdef06f05e4272d14ea96e4d4271b9f89d5336e8fcccf824618bd44",
-          "sha8": "c03d1219",
           "schema": null,
           "bytes": null
         },
         {
           "path": "03_grade/clips/sh4.mp4",
-          "name": "sh4.mp4",
           "sha256": "964c9e04468dde9fc7b98656a668ffa1493334dd84a5420056546acacc982b5d",
-          "sha8": "964c9e04",
           "schema": null,
           "bytes": null
         },
         {
           "path": "03_grade/clips/sh5.mp4",
-          "name": "sh5.mp4",
           "sha256": "0ea5833dd247a474ce4c29469576ccabb54634843b4977bbe26f7669ff73c791",
-          "sha8": "0ea5833d",
           "schema": null,
           "bytes": null
         },
         {
           "path": "03_grade/clips/sh6.mp4",
-          "name": "sh6.mp4",
           "sha256": "96d091932bbddbbdbdd39d1bf15b3863647e81d74d2bb24feaffc5aadd8cbede",
-          "sha8": "96d09193",
           "schema": null,
           "bytes": null
         },
         {
           "path": "03_grade/grade.json",
-          "name": "grade.json",
           "sha256": "adabab5c3948b1406f2c2d019a792da83b45fa2ad3af834bb9e9743865dd2854",
-          "sha8": "adabab5c",
           "schema": null,
           "bytes": 1557
         },
         {
           "path": "03_grade/audio/mix.wav",
-          "name": "mix.wav",
           "sha256": "2d60260daae50bb7d868283953c81c1c244acdceb38b9a460aee0e5bc1e42914",
-          "sha8": "2d60260d",
           "schema": null,
           "bytes": null
         }
@@ -430,6 +380,7 @@
       "started_at": "2026-10-23T13:10:59+11:00",
       "ended_at": "2026-10-23T13:11:50+11:00",
       "qa": {
+        "station": "03_grade",
         "pass": true,
         "checks": [
           {
@@ -469,13 +420,7 @@
           }
         ]
       },
-      "score": 3.75,
-      "dims": {
-        "commercial": 2,
-        "handoff": 5,
-        "craft": 4,
-        "benchmark": 4
-      },
+      "score": null,
       "reasons": {
         "commercial": "占位图推拉，不是真实出餐镜头；垫乐是合成正弦和弦，商业可用性低",
         "craft": "调色按 Lab 实测拉齐、响度/峰值达标；切点复核见 qa",
@@ -485,10 +430,9 @@
     {
       "id": "04_subs",
       "index": "04",
-      "name": "Subs",
       "zh": "字幕",
-      "aoi": "M01",
       "note": "中英字幕、行宽与安全区校核",
+      "aoi": "M01",
       "tools": [
         {
           "name": "argos-translate",
@@ -503,48 +447,38 @@
         {
           "path": "02_script/script.json",
           "sha256": "b663711507be827a103953069d11b902e565a03f92a75166be728fbed6a24b54",
-          "sha8": "b6637115",
-          "from": "02_script",
-          "closed": true
+          "closed": true,
+          "from": "02_script"
         },
         {
           "path": "03_grade/audio/mix.wav",
           "sha256": "2d60260daae50bb7d868283953c81c1c244acdceb38b9a460aee0e5bc1e42914",
-          "sha8": "2d60260d",
-          "from": "03_grade",
-          "closed": true
+          "closed": true,
+          "from": "03_grade"
         }
       ],
       "outputs": [
         {
           "path": "04_subs/subs/zh.srt",
-          "name": "zh.srt",
           "sha256": "9e3d0193fdd81ea20fae27d06d1cf511a6fc53472ed35cf9da871bfaae9ee1f9",
-          "sha8": "9e3d0193",
           "schema": null,
           "bytes": 358
         },
         {
           "path": "04_subs/subs/en.srt",
-          "name": "en.srt",
           "sha256": "86c69258776deaa534c0bb4caab3cfa16f129de86d7add74cda62bf0e9081a34",
-          "sha8": "86c69258",
           "schema": null,
           "bytes": 373
         },
         {
           "path": "04_subs/subs/en_mt.srt",
-          "name": "en_mt.srt",
           "sha256": "f87238583103abc0c9a844df3ac0ebc1e67decff1159003cbcb6d63015d960fb",
-          "sha8": "f8723858",
           "schema": null,
           "bytes": 1353
         },
         {
           "path": "04_subs/subs/review.json",
-          "name": "review.json",
           "sha256": "77558d802d01d834eeba09118449514c8f9b07daf38389361022cb8e354eb316",
-          "sha8": "77558d80",
           "schema": null,
           "bytes": 2717
         }
@@ -554,6 +488,7 @@
       "started_at": "2026-10-23T13:11:53+11:00",
       "ended_at": "2026-10-23T13:11:55+11:00",
       "qa": {
+        "station": "04_subs",
         "pass": true,
         "checks": [
           {
@@ -579,13 +514,7 @@
           }
         ]
       },
-      "score": 4.0,
-      "dims": {
-        "commercial": 4,
-        "handoff": 5,
-        "craft": 4,
-        "benchmark": 3
-      },
+      "score": null,
       "reasons": {
         "commercial": "中英字幕齐，文案由脚本给定；人工终审未签",
         "craft": "行长达标；CER 无对象不可测；argos 机翻直接采纳 1/6 行，其余人工改写",
@@ -595,10 +524,9 @@
     {
       "id": "05_export",
       "index": "05",
-      "name": "Export",
       "zh": "三尺寸导出",
-      "aoi": "M04",
       "note": "9:16 / 1:1 / 16:9 各 30.000s，封面与角标",
+      "aoi": "M04",
       "tools": [
         {
           "name": "ffmpeg+libass",
@@ -617,118 +545,92 @@
         {
           "path": "02_script/script.json",
           "sha256": "b663711507be827a103953069d11b902e565a03f92a75166be728fbed6a24b54",
-          "sha8": "b6637115",
-          "from": "02_script",
-          "closed": true
+          "closed": true,
+          "from": "02_script"
         },
         {
           "path": "03_grade/audio/mix.wav",
           "sha256": "2d60260daae50bb7d868283953c81c1c244acdceb38b9a460aee0e5bc1e42914",
-          "sha8": "2d60260d",
-          "from": "03_grade",
-          "closed": true
+          "closed": true,
+          "from": "03_grade"
         },
         {
           "path": "04_subs/subs/zh.srt",
           "sha256": "9e3d0193fdd81ea20fae27d06d1cf511a6fc53472ed35cf9da871bfaae9ee1f9",
-          "sha8": "9e3d0193",
-          "from": "04_subs",
-          "closed": true
+          "closed": true,
+          "from": "04_subs"
         },
         {
           "path": "04_subs/subs/en.srt",
           "sha256": "86c69258776deaa534c0bb4caab3cfa16f129de86d7add74cda62bf0e9081a34",
-          "sha8": "86c69258",
-          "from": "04_subs",
-          "closed": true
+          "closed": true,
+          "from": "04_subs"
         }
       ],
       "outputs": [
         {
           "path": "05_export/promo_9x16.mp4",
-          "name": "promo_9x16.mp4",
           "sha256": "bec82dca3f216afe1bbac791314141598c6ef53d08645c4cb5265269e5de73b6",
-          "sha8": "bec82dca",
           "schema": null,
           "bytes": 6966391
         },
         {
           "path": "05_export/cover_9x16.jpg",
-          "name": "cover_9x16.jpg",
           "sha256": "989258a83b22e80bc9a6bf1bcf3875cbad93220c1554be7b368da02a65b7bd14",
-          "sha8": "989258a8",
           "schema": null,
           "bytes": 78591
         },
         {
           "path": "05_export/subs_9x16.ass",
-          "name": "subs_9x16.ass",
           "sha256": "74610a359e567fe5b80e44ce0b3bb9069848e94277aff8a1cf9f62099fd5dec0",
-          "sha8": "74610a35",
           "schema": null,
           "bytes": 1527
         },
         {
           "path": "05_export/promo_1x1.mp4",
-          "name": "promo_1x1.mp4",
           "sha256": "17e137a27371ba395cf1b26c7ddf113d39cf55d9b471d68c06be30bc648be0b5",
-          "sha8": "17e137a2",
           "schema": null,
           "bytes": 5076727
         },
         {
           "path": "05_export/cover_1x1.jpg",
-          "name": "cover_1x1.jpg",
           "sha256": "d2e7942b968a388ae0f02d75c686b7668dde772ad2704f154402ffddbc31c9ac",
-          "sha8": "d2e7942b",
           "schema": null,
           "bytes": 48743
         },
         {
           "path": "05_export/subs_1x1.ass",
-          "name": "subs_1x1.ass",
           "sha256": "7637d9668597fa050affd121142e6f40e24c4ae8aadab4325fa80c3ea2e43eda",
-          "sha8": "7637d966",
           "schema": null,
           "bytes": 1526
         },
         {
           "path": "05_export/promo_16x9.mp4",
-          "name": "promo_16x9.mp4",
           "sha256": "6da2d672047e47c29e7e3b2a7dde71452a9c96ddc1de0e7b81f10d9cc5dfb6dc",
-          "sha8": "6da2d672",
           "schema": null,
           "bytes": 6421656
         },
         {
           "path": "05_export/cover_16x9.jpg",
-          "name": "cover_16x9.jpg",
           "sha256": "4edacf1b52b0828eb249f18c6b93b02d5dc500abbe95504320bc7012c7d51ecd",
-          "sha8": "4edacf1b",
           "schema": null,
           "bytes": 66140
         },
         {
           "path": "05_export/subs_16x9.ass",
-          "name": "subs_16x9.ass",
           "sha256": "d347eeeace8c470881da909efe659c270ebac4a4cbe8c7e31738adde8b5609e1",
-          "sha8": "d347eeea",
           "schema": null,
           "bytes": 1526
         },
         {
           "path": "05_export/zh.srt",
-          "name": "zh.srt",
           "sha256": "9e3d0193fdd81ea20fae27d06d1cf511a6fc53472ed35cf9da871bfaae9ee1f9",
-          "sha8": "9e3d0193",
           "schema": null,
           "bytes": 358
         },
         {
           "path": "05_export/en.srt",
-          "name": "en.srt",
           "sha256": "86c69258776deaa534c0bb4caab3cfa16f129de86d7add74cda62bf0e9081a34",
-          "sha8": "86c69258",
           "schema": null,
           "bytes": 373
         }
@@ -738,6 +640,7 @@
       "started_at": "2026-10-23T13:11:55+11:00",
       "ended_at": "2026-10-23T13:12:38+11:00",
       "qa": {
+        "station": "05_export",
         "pass": true,
         "checks": [
           {
@@ -749,13 +652,7 @@
           }
         ]
       },
-      "score": 3.75,
-      "dims": {
-        "commercial": 2,
-        "handoff": 5,
-        "craft": 4,
-        "benchmark": 4
-      },
+      "score": null,
       "reasons": {
         "commercial": "三尺寸齐、可直接上传，但画面为未授权占位 + 水印，不可交付",
         "craft": "libass 烧录 + 外挂 srt、透明角标、平台安全边距；见第 6 站实测",
@@ -765,10 +662,9 @@
     {
       "id": "06_qa",
       "index": "06",
-      "name": "QA",
       "zh": "验收",
-      "aoi": "M05",
       "note": "解码、时长、响度、安全区、追溯链",
+      "aoi": "M05",
       "tools": [
         {
           "name": "ffprobe",
@@ -783,63 +679,50 @@
         {
           "path": "05_export/promo_9x16.mp4",
           "sha256": "bec82dca3f216afe1bbac791314141598c6ef53d08645c4cb5265269e5de73b6",
-          "sha8": "bec82dca",
-          "from": "05_export",
-          "closed": true
+          "closed": true,
+          "from": "05_export"
         },
         {
           "path": "05_export/promo_1x1.mp4",
           "sha256": "17e137a27371ba395cf1b26c7ddf113d39cf55d9b471d68c06be30bc648be0b5",
-          "sha8": "17e137a2",
-          "from": "05_export",
-          "closed": true
+          "closed": true,
+          "from": "05_export"
         },
         {
           "path": "05_export/promo_16x9.mp4",
           "sha256": "6da2d672047e47c29e7e3b2a7dde71452a9c96ddc1de0e7b81f10d9cc5dfb6dc",
-          "sha8": "6da2d672",
-          "from": "05_export",
-          "closed": true
+          "closed": true,
+          "from": "05_export"
         }
       ],
       "outputs": [
         {
           "path": "reports/decode.json",
-          "name": "decode.json",
           "sha256": "65f28f780f23a67a894c7e7e01fea0af0817de5896a401c4ffc30cdbdc161934",
-          "sha8": "65f28f78",
           "schema": null,
           "bytes": 350
         },
         {
           "path": "reports/loudness.json",
-          "name": "loudness.json",
           "sha256": "f8ce2d1d455e37faa9904775dadb6b5223538a821f37cbb340dce28d067f92fc",
-          "sha8": "f8ce2d1d",
           "schema": null,
           "bytes": 209
         },
         {
           "path": "reports/safe_area.json",
-          "name": "safe_area.json",
           "sha256": "0b6c83b6eab50a84b41f59e39cc6d6b51c5f725c103b151b9ccaf9b275bb765c",
-          "sha8": "0b6c83b6",
           "schema": null,
           "bytes": 1896
         },
         {
           "path": "reports/cer.json",
-          "name": "cer.json",
           "sha256": "b00e362f39b3182e4e181b4f848a763dcebc32bf84bdd5155d4aea654d1ae49e",
-          "sha8": "b00e362f",
           "schema": null,
           "bytes": 160
         },
         {
           "path": "reports/trace.json",
-          "name": "trace.json",
           "sha256": "3a289ebf1117b74cb38dff6b88d5d0931d473201b65278b14acf06e32bfc7980",
-          "sha8": "3a289ebf",
           "schema": null,
           "bytes": 196
         }
@@ -849,6 +732,7 @@
       "started_at": "2026-10-23T13:12:38+11:00",
       "ended_at": "2026-10-23T13:12:45+11:00",
       "qa": {
+        "station": "06_qa",
         "pass": true,
         "checks": [
           {
@@ -989,13 +873,7 @@
           }
         ]
       },
-      "score": 4.5,
-      "dims": {
-        "commercial": 4,
-        "handoff": 5,
-        "craft": 5,
-        "benchmark": 4
-      },
+      "score": null,
       "reasons": {
         "commercial": "后测全自动，客户可见的问题（时长/响度/安全区/事实）都有证据",
         "craft": "全部阈值实测",
@@ -1005,10 +883,9 @@
     {
       "id": "07_kb",
       "index": "07",
-      "name": "KB",
       "zh": "知识包",
-      "aoi": "M08",
       "note": "把事实与菜单编成小助手可答的知识包",
+      "aoi": "M08",
       "tools": [
         {
           "name": "python",
@@ -1019,79 +896,62 @@
         {
           "path": "01_ingest/facts.json",
           "sha256": "62a5830c642994267cec506d7a7f1212b8e1dfd74727a72cdf630569361a5774",
-          "sha8": "62a5830c",
-          "from": "01_ingest",
-          "closed": true
+          "closed": true,
+          "from": "01_ingest"
         },
         {
           "path": "02_script/menu.json",
           "sha256": "bc0fde9fe2eff888d17c0b1225b0bfa8e06beea6f0dc1dc6a1e8317fbab59320",
-          "sha8": "bc0fde9f",
-          "from": "02_script",
-          "closed": true
+          "closed": true,
+          "from": "02_script"
         },
         {
           "path": "06_qa/qa.json",
           "sha256": "3cba4685c127b66fb9fa7880b08e4f32d9c7c4e1b4d29759cd775d047bd44e82",
-          "sha8": "3cba4685",
-          "from": null,
-          "closed": false
+          "closed": false,
+          "from": null
         }
       ],
       "outputs": [
         {
           "path": "../../customer/kb/店铺事实.md",
-          "name": "店铺事实.md",
           "sha256": "84a71224daef3bb2666ad2b6bd30f5683b9b6e3259d265da723613a3b0a5d35d",
-          "sha8": "84a71224",
           "schema": null,
           "bytes": 1079
         },
         {
           "path": "../../customer/kb/交付说明.md",
-          "name": "交付说明.md",
           "sha256": "1c246b186606bc5d58541752bcf13dec3fe34281aec31d3f0f849eba1fe29765",
-          "sha8": "1c246b18",
           "schema": null,
           "bytes": 477
         },
         {
           "path": "../../customer/kb/修改流程.md",
-          "name": "修改流程.md",
           "sha256": "6cb580e544ae91b93fe73c8214470d798b4bff298ea73a5a57c1eaa975a7184d",
-          "sha8": "6cb580e5",
           "schema": null,
           "bytes": 364
         },
         {
           "path": "../../customer/kb/发布指南.md",
-          "name": "发布指南.md",
           "sha256": "36957d477239eac1a11ee7faf80f41d0d976108d4687236f46414ddea0d54da4",
-          "sha8": "36957d47",
           "schema": null,
           "bytes": 401
         },
         {
           "path": "../../customer/kb/FAQ.md",
-          "name": "FAQ.md",
           "sha256": "0aa11e366693ef765a7394676a27833b05ccb06e698cf4ded570252941c672ea",
-          "sha8": "0aa11e36",
           "schema": null,
           "bytes": 2808
         },
         {
           "path": "../../customer/kb/kb_manifest.json",
-          "name": "kb_manifest.json",
           "sha256": "952cb0007bc8e1163fce39d82d3009f32e80a32734a39047ba4bf98d883bccbc",
-          "sha8": "952cb000",
           "schema": null,
           "bytes": 234
         },
         {
           "path": "07_kb/assistant_test.json",
-          "name": "assistant_test.json",
           "sha256": "9f2cc5c6f2a1895e3671539c72ae4880bac19d70b8aaea9f6ff4b58458d9cd34",
-          "sha8": "9f2cc5c6",
           "schema": null,
           "bytes": 4426
         }
@@ -1101,6 +961,7 @@
       "started_at": "2026-10-23T13:12:45+11:00",
       "ended_at": "2026-10-23T13:12:45+11:00",
       "qa": {
+        "station": "07_kb",
         "pass": true,
         "checks": [
           {
@@ -1133,13 +994,7 @@
           }
         ]
       },
-      "score": 4.0,
-      "dims": {
-        "commercial": 4,
-        "handoff": 5,
-        "craft": 5,
-        "benchmark": 2
-      },
+      "score": null,
       "reasons": {
         "commercial": "客户常问的价格/时间都能安全兜底，转人工话术一致",
         "craft": "FAQ 20 问；自测答对率 100%",
@@ -1154,8 +1009,9 @@
       "total": 1,
       "links": [
         {
-          "from": "00_brief",
-          "artifact": "brief.json"
+          "artifact": "brief.json",
+          "closed": true,
+          "from": "00_brief"
         }
       ]
     },
@@ -1165,12 +1021,14 @@
       "total": 2,
       "links": [
         {
-          "from": "01_ingest",
-          "artifact": "facts.json"
+          "artifact": "facts.json",
+          "closed": true,
+          "from": "01_ingest"
         },
         {
-          "from": "01_ingest",
-          "artifact": "media_manifest.json"
+          "artifact": "media_manifest.json",
+          "closed": true,
+          "from": "01_ingest"
         }
       ]
     },
@@ -1180,12 +1038,14 @@
       "total": 2,
       "links": [
         {
-          "from": "02_script",
-          "artifact": "script.json"
+          "artifact": "script.json",
+          "closed": true,
+          "from": "02_script"
         },
         {
-          "from": "01_ingest",
-          "artifact": "media_manifest.json"
+          "artifact": "media_manifest.json",
+          "closed": true,
+          "from": "01_ingest"
         }
       ]
     },
@@ -1195,12 +1055,14 @@
       "total": 2,
       "links": [
         {
-          "from": "02_script",
-          "artifact": "script.json"
+          "artifact": "script.json",
+          "closed": true,
+          "from": "02_script"
         },
         {
-          "from": "03_grade",
-          "artifact": "mix.wav"
+          "artifact": "mix.wav",
+          "closed": true,
+          "from": "03_grade"
         }
       ]
     },
@@ -1210,20 +1072,24 @@
       "total": 4,
       "links": [
         {
-          "from": "02_script",
-          "artifact": "script.json"
+          "artifact": "script.json",
+          "closed": true,
+          "from": "02_script"
         },
         {
-          "from": "03_grade",
-          "artifact": "mix.wav"
+          "artifact": "mix.wav",
+          "closed": true,
+          "from": "03_grade"
         },
         {
-          "from": "04_subs",
-          "artifact": "zh.srt"
+          "artifact": "zh.srt",
+          "closed": true,
+          "from": "04_subs"
         },
         {
-          "from": "04_subs",
-          "artifact": "en.srt"
+          "artifact": "en.srt",
+          "closed": true,
+          "from": "04_subs"
         }
       ]
     },
@@ -1233,16 +1099,19 @@
       "total": 3,
       "links": [
         {
-          "from": "05_export",
-          "artifact": "promo_9x16.mp4"
+          "artifact": "promo_9x16.mp4",
+          "closed": true,
+          "from": "05_export"
         },
         {
-          "from": "05_export",
-          "artifact": "promo_1x1.mp4"
+          "artifact": "promo_1x1.mp4",
+          "closed": true,
+          "from": "05_export"
         },
         {
-          "from": "05_export",
-          "artifact": "promo_16x9.mp4"
+          "artifact": "promo_16x9.mp4",
+          "closed": true,
+          "from": "05_export"
         }
       ]
     },
@@ -1252,16 +1121,19 @@
       "total": 3,
       "links": [
         {
-          "from": "01_ingest",
-          "artifact": "facts.json"
+          "artifact": "facts.json",
+          "closed": true,
+          "from": "01_ingest"
         },
         {
-          "from": "02_script",
-          "artifact": "menu.json"
+          "artifact": "menu.json",
+          "closed": true,
+          "from": "02_script"
         },
         {
-          "from": null,
-          "artifact": "qa.json"
+          "artifact": "qa.json",
+          "closed": false,
+          "from": null
         }
       ]
     }

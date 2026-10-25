@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-25T13:29:14+1100",
+  "generated_at": "2026-10-25T13:56:45+1100",
   "probe": {
     "key": true,
     "base": "https://rest.runpod.io/v1",
@@ -25,7 +25,7 @@
       "memoryInGb": 46,
       "containerDiskInGb": 50,
       "costPerHr": 0.89,
-      "burnSinceCreated": 0.0703,
+      "burnSinceCreated": 0.4784,
       "imageName": "runpod/pytorch:1.4.1-cu1281-torch280-ubuntu2204",
       "templateId": "",
       "createdAt": "2026-10-25 02:24:31.605 +0000 UTC",
@@ -52,7 +52,7 @@
       "memoryInGb": 125,
       "containerDiskInGb": 50,
       "costPerHr": 0.5,
-      "burnSinceCreated": 1.2268,
+      "burnSinceCreated": 1.4561,
       "imageName": "runpod/pytorch:1.4.1-cu1281-torch280-ubuntu2204",
       "templateId": "gqny086gqo",
       "createdAt": "2026-10-25 00:02:02.971 +0000 UTC",
@@ -63,14 +63,14 @@
       "volumeInGb": 0,
       "billing": [
         {
-          "amount": 0.7246629636501893,
-          "timeBilledMs": 5146740,
-          "diskSpaceBilledGB": 850,
+          "amount": 0.9782019878039137,
+          "timeBilledMs": 6947221,
+          "diskSpaceBilledGB": 1150,
           "podId": "40uk5ivksc2zi3",
           "time": "2026-10-25 00:00:00"
         }
       ],
-      "billedTotal": 0.7247
+      "billedTotal": 0.9782
     }
   ],
   "orders": [
@@ -121,7 +121,7 @@
       "wanted": "RUNNING",
       "live": "EXITED",
       "billable": 0.5,
-      "burn": 1.2268
+      "burn": 1.4561
     }
   ],
   "actions": []

@@ -55,7 +55,7 @@ def main():
             "note": HAND_NOTE.get(sid, ""),
             "aoi": HAND_AOI.get(sid, ""),
             "tools": hand.get("tools", []),
-            "inputs": [{**i, "closed": bool(i.get("sha256"))} for i in hand.get("inputs", [])],
+            "inputs": [{**i, "closed": False, "from": None} for i in hand.get("inputs", [])],
             "outputs": outs,
             "elapsed_s": hand.get("elapsed_s"),
             "exit_code": hand.get("exit_code", 0),
@@ -66,26 +66,39 @@ def main():
             "reasons": (rj(d / "scorecard.json").get("reasons") if (d / "scorecard.json").exists() else {}),
         })
 
-    chain = []
-    for i, st in enumerate(stations):
-        if i == 0:
-            continue
-        prev = stations[i - 1]
-        prev_out = {o.get("path"): o for o in prev.get("outputs", [])}
+    # 交接账本：按**全上游**比对 sha256（03_grade 吃 01_ingest 的产物，
+    # 只看上一站会误判成没闭合；07_kb 吃 06_qa 的 qa.json 是真缺口——没登记进 outputs）
+    all_prev = {}          # sha256 -> 站 id
+    for o in stations[0].get("outputs", []):
+        if o.get("sha256"):
+            all_prev[o["sha256"]] = stations[0]["id"]
+    chain, closed_total, link_total = [], 0, 0
+    for st in stations[1:]:
         links = []
         for inp in st.get("inputs", []):
-            up = prev_out.get(inp.get("path"))
+            hit = all_prev.get(inp.get("sha256"))
+            closed = bool(hit)
             links.append({"artifact": (inp.get("path") or "").split("/")[-1],
-                          "closed": bool(up and up.get("sha256") == inp.get("sha256"))})
-        chain.append({"to": st["id"], "closed": sum(1 for l in links if l["closed"]),
-                      "total": len(links), "links": links})
+                          "closed": closed, "from": hit or None})
+            inp["closed"] = closed
+            inp["from"] = hit or None
+        c = sum(1 for l in links if l["closed"])
+        closed_total += c
+        link_total += len(links)
+        chain.append({"to": st["id"], "closed": c, "total": len(links), "links": links})
+        for o in st.get("outputs", []):
+            if o.get("sha256"):
+                all_prev[o["sha256"]] = st["id"]
 
     run = {"id": manifest.get("run_id"), "sentence": manifest.get("sentence", ""),
            "status": manifest.get("status"), "exit_code": manifest.get("exit_code"),
-           "elapsed_s": manifest.get("elapsed_s"), "stations": manifest.get("stations", [])}
+           "elapsed_s": manifest.get("elapsed_s"), "stations": manifest.get("stations", []),
+           "chain_closed": closed_total, "chain_total": link_total}
     stations_out = {"run": run, "stations": stations, "chain": chain}
     (DATA / "stations.js").write_text(
         "window.XCF_STATIONS = " + json.dumps(stations_out, ensure_ascii=False) + ";\n")
+    # 同步给 05_verify 读（Python 口径），保证 JS 包与验收读的是同一份
+    (DATA / "stations.json").write_text(json.dumps(stations_out, ensure_ascii=False, indent=2))
 
     tools_src = rj(DATA / "tools.json")
     (DATA / "tools.js").write_text("window.XCF_TOOLS = " + json.dumps(tools_src, ensure_ascii=False) + ";\n")
@@ -104,7 +117,8 @@ def main():
                      {"path": "site/data/bundle.js", "sha256": sha(DATA / "bundle.js")}],
          "started_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "exit_code": 0}
     json.dump(h, open(OUT / "03_handoff.json", "w"), indent=2, ensure_ascii=False)
-    print(json.dumps({"stations": len(stations), "chain": len(chain), "run": run["id"]},
+    print(json.dumps({"stations": len(stations), "chain": len(chain),
+                      "闭合": f"{closed_total}/{link_total}", "run": run["id"]},
                      ensure_ascii=False))
 
 

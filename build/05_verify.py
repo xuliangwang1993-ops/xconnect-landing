@@ -53,7 +53,10 @@ def main():
     chain = st.get("chain", [])
     closed = sum(c["closed"] for c in chain)
     total = sum(c["total"] for c in chain)
-    ck("交接账本 16/17 闭合（已知缺口 1 张）", (closed, total) == (16, 17), [closed, total], [16, 17])
+    # 03_compile 按全上游建 chain：唯一缺口是 07_kb 吃的 06_qa/qa.json（没登记进 06_qa.outputs）
+    ck("交接账本 16/17 闭合（已知缺口 06_qa/qa.json）", (closed, total) == (16, 17), [closed, total], [16, 17])
+    gaps = [(c["to"], l["artifact"]) for c in chain for l in c["links"] if not l["closed"]]
+    ck("缺口只有已知一处", gaps == [("07_kb", "qa.json")], gaps, "[('07_kb','qa.json')]")
 
     # 5) 每站退出码 0
     bad_exit = [s["id"] for s in st["stations"] if s.get("exit_code") != 0]

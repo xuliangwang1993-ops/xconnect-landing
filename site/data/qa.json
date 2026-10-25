@@ -115,7 +115,7 @@
       "hard": true
     },
     {
-      "check": "交接账本 16/17 闭合（已知缺口 1 张）",
+      "check": "交接账本 16/17 闭合（已知缺口 06_qa/qa.json）",
       "pass": true,
       "value": [
         16,
@@ -125,6 +125,18 @@
         16,
         17
       ],
+      "hard": true
+    },
+    {
+      "check": "缺口只有已知一处",
+      "pass": true,
+      "value": [
+        [
+          "07_kb",
+          "qa.json"
+        ]
+      ],
+      "threshold": "[('07_kb','qa.json')]",
       "hard": true
     },
     {
@@ -157,5 +169,5 @@
     }
   ],
   "pod_connected": true,
-  "run": null
+  "run": "v3-20261023-130640"
 }
