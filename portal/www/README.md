@@ -29,5 +29,4 @@ Nothing was stripped. Do not add service-role keys, Stripe secret keys or webhoo
 wrangler pages deploy portal/www --project-name xconnect-portal --branch <preview-branch>   # preview first
 ```
 Production = the same command with `--branch main` (project production branch), **only after Martin's OK**.
-Live drift note: the live site currently equals commit 1; `/privacy /terms /source /pricing /redeem /download`
-soft-404 to the homepage until the H06 PR is deployed.
+Live drift note: the live site currently equals commit 1. Commit 2 adds Refuel + balance (v9/v10), not yet deployed.
