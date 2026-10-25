@@ -9,7 +9,7 @@ echo "→ 02 tokens      Python 组皮肤（对比度实测）"
 python3 build/02_tokens.py
 echo "→ 02b skins      皮肤包 → XCF_SKINS"
 python3 build/02b_skins.py
-echo "→ 03 compile     编 run + 工具 + AOI + 配方"
+echo "→ 03 compile     编 run + 工具 + AoI + 配方"
 python3 build/03_compile.py
 echo "→ 03b trees      编两棵内置树（AoI 施工包 / GitHub MCP）"
 python3 build/03b_trees.py

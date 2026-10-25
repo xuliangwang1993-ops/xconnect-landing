@@ -4,7 +4,7 @@ The factory page (`site/index.html`) is static and public, but it carries **no u
 signed-in user's own rows from Supabase (project `elecldbgysdbymkyucwf`, same auth users as www.x-connect.ai).
 
 ## What is public (site/)
-`data/stations-def.js` (station names/notes/AOI/tools), `tools.*`, `recipes.*` (no run evidence), `skins.*`, `trees.js`, `aoi.json`.
+`data/stations-def.js` (station names/notes/AoI/tools), `tools.*`, `recipes.*` (no run evidence), `skins.*`, `trees.js`, `aoi.json`.
 `aoi-tree.html` is a static knowledge tree and stays public.
 
 ## What is private (never in site/, never in git)
