@@ -16,6 +16,9 @@
   const SKINS = (window.XCF_SKINS || {}).skins || [];
   const BUILD = window.XCF_BUILD || {};
   const ART = window.XCF_ARTIFACTS || { files: [] };
+  /* i18n (site/i18n.js)：zh 是源文本；lang=en 时 tr() 才翻译，zh 下原样返回 */
+  const XCI = window.XCI || { lang: () => 'zh', tr: (s) => s, kw: () => [] };
+  const tr = (s) => XCI.tr(s);
 
   /* ---------- 小工具 ---------- */
   const kb = (n) => n == null ? '—' : n >= 1048576 ? (n / 1048576).toFixed(1) + ' MB' : n >= 1024 ? (n / 1024).toFixed(1) + ' KB' : n + ' B';
@@ -136,6 +139,18 @@
     $$('#ledgerBody tr').forEach((tr) => tr.addEventListener('click', () => selectStation(tr.dataset.id, 'flow')));
   }
 
+  function renderOrderRows(o, rec) {
+    $('#orderRows').innerHTML = !o ? '<p class="note">没有待派的单。</p>' : `
+      <div class="kv">
+        <span>单号</span><span class="mono">${esc(o.order_id)}</span>
+        <span>配方</span><span>${esc(o.recipe)} · ${esc(short(tr(o.sentence), 44))}</span>
+        <span>发起</span><span>${esc((o.owner || {}).name || '—')} · ${esc((o.owner || {}).role || '')}</span>
+        <span>派到</span><span class="mono">${esc(o.pod_name)}（${esc(o.pod_id)}）</span>
+        <span>关单</span><span class="mono">${esc((o.close_policy || {}).who || 'owner')} · ${esc((o.close_policy || {}).note || '')}</span>
+        <span>对账</span><span class="mono ${rec && rec.status === 'matched' ? 'ok' : 'warn'}">${rec ? esc(rec.status + ' · 期望 ' + rec.wanted + ' / 实况 ' + rec.live + ' · $' + rec.billable + '/hr') : '未对账'}</span>
+      </div>`;
+  }
+
   /* ---------- Pod 派单面板 ---------- */
   function renderPod() {
     const pods = POD.pods || [];
@@ -158,15 +173,7 @@
         ${live.volumeInGb ? `<span>卷</span><span class="mono">${esc(live.volumeMountPath)} · ${live.volumeInGb} GB</span>` : ''}
       </div>`;
 
-    $('#orderRows').innerHTML = !o ? '<p class="note">没有待派的单。</p>' : `
-      <div class="kv">
-        <span>单号</span><span class="mono">${esc(o.order_id)}</span>
-        <span>配方</span><span>${esc(o.recipe)} · ${esc(short(o.sentence, 44))}</span>
-        <span>发起</span><span>${esc((o.owner || {}).name || '—')} · ${esc((o.owner || {}).role || '')}</span>
-        <span>派到</span><span class="mono">${esc(o.pod_name)}（${esc(o.pod_id)}）</span>
-        <span>关单</span><span class="mono">${esc((o.close_policy || {}).who || 'owner')} · ${esc((o.close_policy || {}).note || '')}</span>
-        <span>对账</span><span class="mono ${rec && rec.status === 'matched' ? 'ok' : 'warn'}">${rec ? esc(rec.status + ' · 期望 ' + rec.wanted + ' / 实况 ' + rec.live + ' · $' + rec.billable + '/hr') : '未对账'}</span>
-      </div>`;
+    renderOrderRows(o, rec);
 
     $('#podMeta').textContent = probe.generated_at || '';
     const alive = live && live.desiredStatus === 'RUNNING';
@@ -193,7 +200,8 @@
   function matchRecipe(text) {
     const t = (text || '').toLowerCase();
     return RECIPES.map((r) => {
-      const hits = (r.keywords || []).filter((k) => t.includes(String(k).toLowerCase()));
+      const en = XCI.lang() === 'en';
+      const hits = (r.keywords || []).filter((k) => t.includes(String(k).toLowerCase()) || (en && XCI.kw(k).some((a) => t.includes(a))));
       const weight = hits.reduce((n, k) => n + (k.length >= 4 ? 2.2 : k.length >= 3 ? 1.6 : 1), 0);
       let score = hits.length ? Math.min(97, Math.round(24 + weight * 12)) : 8;
       if (r.status === 'verified' && hits.length) score = Math.min(98, score + 2);
@@ -314,10 +322,17 @@
     // 小助手：默认填那句话
     const ask = $('#askInput');
     const def = RUN.sentence || '';
-    if (ask && def) { ask.value = def; renderMatch(def); }
+    let askZh = def;   // 输入框里「还没被用户改过」的中文源句，切语言时跟着换
+    let askShown = ask ? tr(def) : '';
+    if (ask && def) { ask.value = askShown; renderMatch(ask.value); }
     $('#matchBtn').addEventListener('click', () => renderMatch(ask.value));
     ask.addEventListener('keydown', (e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) renderMatch(ask.value); });
-    $('#askInput').closest('.tab').querySelectorAll('.chips button').forEach((b) => b.addEventListener('click', () => { ask.value = b.dataset.q; renderMatch(b.dataset.q); }));
+    $('#askInput').closest('.tab').querySelectorAll('.chips button').forEach((b) => b.addEventListener('click', () => { askZh = b.dataset.q; askShown = tr(askZh); ask.value = askShown; renderMatch(ask.value); }));
+    document.addEventListener('xc:lang', () => {
+      renderOrderRows(ORDERS[0], (POD.reconcile || [])[0]);   // 订单句子被 short() 截断过，要从源头重画
+      if (ask.value === askShown) { askShown = tr(askZh); ask.value = askShown; }   // 用户没改过才跟着换
+      renderMatch(ask.value);
+    });
     previewOrder('R01');
 
     // 皮肤

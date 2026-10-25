@@ -40,6 +40,12 @@ body {
 }
 .pill.live::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ok); }
 .pill.ghost:hover { color: #F8FAFC; border-color: var(--line2); }
+/* 语言切换：沿用顶栏胶囊的描边/底色，两段式 中文 | EN */
+.langSw { display: inline-flex; align-items: stretch; height: 28px; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: rgba(15,23,42,.6); }
+.langSw button { padding: 0 10px; font-size: 11px; color: #94A3B8; background: none; border: 0; cursor: pointer; }
+.langSw button + button { border-left: 1px solid var(--line); }
+.langSw button:hover { color: #F8FAFC; }
+.langSw button.on { color: #F8FAFC; background: rgba(148,163,184,.16); }
 
 /* ---------- 三栏 ---------- */
 .layout {

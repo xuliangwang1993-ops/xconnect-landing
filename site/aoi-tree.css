@@ -136,6 +136,12 @@ h1, h2, h3, h4, legend {
   letter-spacing: .1em;
 }
 .aoi-topbar .tag:hover { background: rgba(255,138,91,.2); }
+/* 语言切换：沿用顶栏胶囊（.aoi-search）的描边，两段式 中文 | EN */
+.langSw { display: inline-flex; align-items: stretch; height: 24px; border: 1px solid var(--aoi-hairline); border-radius: 999px; overflow: hidden; }
+.langSw button { padding: 0 10px; font-size: 11px; letter-spacing: .08em; color: var(--aoi-text-muted); background: none; border: 0; cursor: pointer; }
+.langSw button + button { border-left: 1px solid var(--aoi-hairline); }
+.langSw button:hover { color: var(--aoi-text); }
+.langSw button.on { color: var(--aoi-control); background: rgba(255,210,122,.1); }
 
 /* ---------- 主体 ---------- */
 .aoi-body {

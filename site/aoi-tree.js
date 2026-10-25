@@ -7,6 +7,11 @@
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const TREES = window.XCF_TREES;
   if (!TREES) { console.error('XCF_TREES missing'); return; }
+  /* i18n (site/i18n.js)：zh 是源文本；lang=en 时 tr() 才翻译，zh 下原样返回 */
+  const XCI = window.XCI || { lang: () => 'zh', tr: (s) => s };
+  const tr = (s) => XCI.tr(s);
+  // 节点标签：英文下优先用数据里现成的 title_en（GitHub 工具），否则查字典
+  const nodeLabel = (e) => (XCI.lang() === 'en' && e.title_en) ? e.title_en : tr(e.label_zh);
 
   const C = {
     control: '#FFD27A', trunk: '#DCEFFF', fn: '#38F4FF', tech: '#A45CFF',
@@ -45,14 +50,14 @@
   function buildModel(tree) {
     const nodes = [], edges = [];
     const rootId = 'service:' + tree.root.id;
-    nodes.push({ id: rootId, kind: 'service', label: tree.root.label_zh, state: 'unverified', layer: 'control', tree, entity: tree.root });
+    nodes.push({ id: rootId, kind: 'service', label: tr(tree.root.label_zh), state: 'unverified', layer: 'control', tree, entity: tree.root });
     tree.toolsets.forEach((ts) => {
       const tsId = ts.uuid || ts.id;
-      nodes.push({ id: tsId, kind: 'toolset', label: ts.label_zh, state: tsState(ts), layer: 'control', tree, entity: ts, parentId: rootId });
+      nodes.push({ id: tsId, kind: 'toolset', label: tr(ts.label_zh), state: tsState(ts), layer: 'control', tree, entity: ts, parentId: rootId });
       edges.push({ from: rootId, to: tsId });
       (ts.tools || []).forEach((tl) => {
         const tlId = tl.uuid || tl.id || (tsId + ':' + tl.name);
-        nodes.push({ id: tlId, kind: 'tool', label: tl.label_zh, state: tlState(tl), layer: tl.risk === 'read' ? 'function' : 'technical', tree, entity: tl, parentId: tsId });
+        nodes.push({ id: tlId, kind: 'tool', label: nodeLabel(tl), state: tlState(tl), layer: tl.risk === 'read' ? 'function' : 'technical', tree, entity: tl, parentId: tsId });
         edges.push({ from: tsId, to: tlId });
       });
     });
@@ -401,7 +406,7 @@
       const cur = st.selected === (ts.uuid || ts.id);
       return `<li><button data-id="${esc(ts.uuid || ts.id)}" class="${cur ? 'is-current' : ''}">
         <span class="code">${esc(ts.name)}</span>
-        <span class="nm">${esc(ts.label_zh.replace(ts.name, '').trim())}</span>
+        <span class="nm">${esc(tr(ts.label_zh).replace(ts.name, '').trim())}</span>
         <span class="st">${STATE[tsState(ts)].glyph} ${(ts.tools || []).length}</span></button></li>`;
     }).join('');
     $$('#aoiRailList button').forEach((b) => b.addEventListener('click', () => selectNode(b.dataset.id)));
@@ -429,16 +434,16 @@
     const parent = n.parentId ? nodeById(n.parentId) : null;
     let card = '';
     if (n.kind === 'service') {
-      card = `<p>${esc(ent.summary_zh || '')}</p>
+      card = `<p>${esc(tr(ent.summary_zh || ''))}</p>
         <p class="aoi-muted">源：${esc(ent.source.repo)} · ${esc(ent.source.version)}${ent.source.commit ? ' @ ' + esc(ent.source.commit.slice(0, 7)) : ''}</p>
         <p class="aoi-muted">${isAoi ? '金色主枝是 AoI 的 12 个施工模块，枝头是每个模块的关键接口、能力与守护规则。' : '主枝是按工具名分组的能力域，枝头是每个工具。'}</p>`;
     } else if (n.kind === 'toolset') {
       const tools = ent.tools || [], cnt = (k) => tools.filter((x) => x.leaf_type === k).length;
-      card = `<p>${esc(ent.summary_zh)}</p>
+      card = `<p>${esc(tr(ent.summary_zh))}</p>
         <p class="aoi-muted">${isAoi
-          ? `接口 ${cnt('interface')} · 能力 ${cnt('capability')} · 守护规则 ${cnt('guard')}${cnt('scenario') ? ` · 验收场景 ${cnt('scenario')}` : ''}${ent.note ? ' · ' + esc(ent.note) : ''}`
-          : `${tools.length} 个工具 · 只读 ${tools.filter((x) => x.risk === 'read').length} · 写入 ${tools.filter((x) => x.risk === 'write').length} · 破坏性 ${tools.filter((x) => x.risk === 'destructive').length}${ent.remote_only ? ' · ' + esc(ent.note || '仅远程服务提供') : ''}`}</p>
-        ${(ent.suggested_actions_zh || []).length ? `<h4>可以这样问</h4><ul class="aoi-preview-detail__list">${ent.suggested_actions_zh.slice(0, 3).map((q) => `<li>${esc(q)}</li>`).join('')}</ul>` : ''}
+          ? `接口 ${cnt('interface')} · 能力 ${cnt('capability')} · 守护规则 ${cnt('guard')}${cnt('scenario') ? ` · 验收场景 ${cnt('scenario')}` : ''}${ent.note ? ' · ' + esc(tr(ent.note)) : ''}`
+          : `${tools.length} 个工具 · 只读 ${tools.filter((x) => x.risk === 'read').length} · 写入 ${tools.filter((x) => x.risk === 'write').length} · 破坏性 ${tools.filter((x) => x.risk === 'destructive').length}${ent.remote_only ? ' · ' + esc(tr(ent.note || '仅远程服务提供')) : ''}`}</p>
+        ${(ent.suggested_actions_zh || []).length ? `<h4>可以这样问</h4><ul class="aoi-preview-detail__list">${ent.suggested_actions_zh.slice(0, 3).map((q) => `<li>${esc(tr(q))}</li>`).join('')}</ul>` : ''}
         <h4>${isAoi ? '规范出处' : '源码出处'}</h4><ul class="aoi-preview-detail__list">${(ent.evidence || []).slice(0, 4).map((e) => `<li><code>${esc(e)}</code></li>`).join('')}</ul>
         <p class="aoi-muted" style="font-size:11px">${isAoi ? `预览说明：AoI 能力树来自施工 Prompt 包 v1（${esc(t.root.source.version)}）的规范原文，平台仍在施工；亮度只表示施工批次，不代表已实现或已验证。` : `预览说明：来自 ${esc(t.root.source.version)} 源码导出，未实际调用任何工具。`}</p>`;
     } else {
@@ -448,11 +453,11 @@
           <span class="aoi-preview-chip" style="color:${isAoi ? (LEAF_C[ent.leaf_type] || C.control) : (RISK_C[ent.risk] || C.stale)}">${isAoi ? (lt ? '类型 · ' + lt : '') : '风险 · ' + (RISK_CN[ent.risk] || '')}</span>
           <span class="aoi-preview-chip" style="color:${ent.default_enabled ? '#FFD27A' : '#8C95AA'}">${isAoi ? (parent ? '施工批次 ' + (parent.entity.wave || '?') : '') : (ent.default_enabled ? '默认启用' : '默认关闭')}</span>
         </div>
-        ${ent.title_en ? `<p class="aoi-muted">${esc(ent.title_en)}</p>` : ''}
-        <p>${esc(ent.summary_zh)}</p>
+        ${ent.title_en && ent.title_en !== n.label ? `<p class="aoi-muted">${esc(ent.title_en)}</p>` : ''}
+        <p>${esc(tr(ent.summary_zh))}</p>
         <p class="aoi-muted">${isAoi ? (parent ? '所属模块：' + esc(parent.label) : '') : '只读清单，未调用'}</p>
-        ${ent.evidence_excerpt ? `<blockquote style="margin:8px 0;padding:6px 9px;border-left:2px solid rgba(255,210,122,.7);background:rgba(255,210,122,.06);color:#d8dce6;font-size:11.5px">${esc(ent.evidence_excerpt.slice(0, 260))}</blockquote>` : ''}
-        ${(ent.suggested_actions_zh || []).length ? `<h4>可以这样问</h4><ul class="aoi-preview-detail__list">${ent.suggested_actions_zh.slice(0, 3).map((q) => `<li>${esc(q)}</li>`).join('')}</ul>` : ''}
+        ${ent.evidence_excerpt ? `<blockquote style="margin:8px 0;padding:6px 9px;border-left:2px solid rgba(255,210,122,.7);background:rgba(255,210,122,.06);color:#d8dce6;font-size:11.5px">${esc(tr(ent.evidence_excerpt.slice(0, 260)))}</blockquote>` : ''}
+        ${(ent.suggested_actions_zh || []).length ? `<h4>可以这样问</h4><ul class="aoi-preview-detail__list">${ent.suggested_actions_zh.slice(0, 3).map((q) => `<li>${esc(tr(q))}</li>`).join('')}</ul>` : ''}
         <h4>${isAoi ? '规范出处' : '源码出处'}</h4><ul class="aoi-preview-detail__list">${(ent.evidence || []).slice(0, 4).map((e) => `<li><code>${esc(e)}</code></li>`).join('')}</ul>`;
     }
     host.innerHTML = `
@@ -501,6 +506,16 @@
     // 调试钩子：给页面探针读取真实投影参数
     window.__TREE_DBG = { model: st.model, skel: st.skel, K, st };
   }
+  document.addEventListener('xc:lang', () => {
+    if (!st.model) return;
+    const sel = st.selected, tab = st.tab;
+    st.model = buildModel(TREES[st.key]);
+    st.skel = buildSkeleton(st.model);
+    st.selected = sel && nodeById(sel) ? sel : null;
+    st.tab = tab;
+    renderStage(); renderRail(); renderDetail();
+    window.__TREE_DBG = { model: st.model, skel: st.skel, K, st };
+  });
   function resize() { const r = $('#aoiStage').getBoundingClientRect(); st.w = Math.max(320, r.width); st.h = Math.max(300, r.height); }
 
   function boot() {
