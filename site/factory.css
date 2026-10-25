@@ -227,3 +227,21 @@ body[data-auth="loading"] .crumbs, body[data-auth="out"] .crumbs, body:not([data
 .pill.who { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; line-height: 26px; }
 .pill.who[hidden], button.pill[hidden] { display: none; }
 button.pill { cursor: pointer; font-family: inherit; }
+
+/* ---------- 左栏：AOI 能力表 M00–M11 ---------- */
+.aoiList { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.aoiList > li > button {
+  width: 100%; display: grid; grid-template-columns: 34px minmax(0,1fr) auto; align-items: center; gap: 6px;
+  padding: 5px 8px; border: 0; border-left: 2px solid transparent; border-radius: 6px; background: none;
+  color: #CBD5E1; font: inherit; font-size: 12.5px; text-align: left; cursor: pointer;
+}
+.aoiList > li > button:hover { background: rgba(30,41,59,.5); }
+.aoiList .mc { color: var(--accent2); font-size: 11px; }
+.aoiList .mn { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.aoiList .mw { color: #64748B; font-size: 10px; border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; }
+.aoiList > li.used > button { background: rgba(251,191,36,.08); border-left-color: var(--accent2); color: #fff; }
+.aoiList > li.open > button { background: rgba(124,58,237,.14); }
+.aoiList .md { margin: 2px 0 6px 10px; padding: 6px 10px; border-left: 1px solid var(--line2); color: #94A3B8; font-size: 11.5px; line-height: 1.55; }
+.aoiList .md[hidden] { display: none; }
+.aoiList .md p { margin: 2px 0; }
+.aoiOpen { display: inline-block; margin-top: 6px; text-decoration: none; }

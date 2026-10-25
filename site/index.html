@@ -6,10 +6,11 @@
 <meta name="color-scheme" content="dark">
 <title>X-Connect Factory · 产线与 Pod 派单</title>
 <link rel="icon" href="assets/crystal-x.jpg">
-<link rel="stylesheet" href="factory.css?v=ade91195">
+<link rel="stylesheet" href="factory.css?v=f19a3779">
 <script src="i18n.js?v=6670446f"></script>
 <script src="i18n/en-common.js?v=d2cd0df9"></script>
 <script src="i18n/en-factory.js?v=95eeaabe"></script>
+<script src="i18n/en-aoi.js?v=813e42f6"></script>
 <script>window.__ERR=[];addEventListener('error',function(e){window.__ERR.push((e.message||'?')+' @'+e.lineno);document.documentElement.setAttribute('data-err',window.__ERR.join(' | '));});</script>
 </head>
 <body data-auth="loading">
@@ -23,6 +24,8 @@
   <div class="right">
     <span class="pill live" id="podPill">POD · —</span>
     <span class="pill" id="runPill">RUN · —</span>
+    <a class="pill ghost" id="aoiViewLink" href="aoi-tree.html" title="AOI 能力树视图（公开静态页，不含个人数据）">AOI 视图</a>
+    <a class="pill ghost" id="workbenchLink" href="https://xconnect-workbench-preview.onrender.com/" target="_blank" rel="noopener noreferrer" title="工作台（独立服务，含设置）。需用自己的网关 key 登录；与本页账号无关">工作台（预览）</a>
     <a class="pill ghost" href="https://www.x-connect.ai/">回右门</a>
     <span class="pill who" id="whoPill" hidden></span>
     <button class="pill ghost" id="signOutBtn" type="button" hidden>退出登录</button>
@@ -65,6 +68,12 @@
       <h2>配方</h2>
       <select id="recipeSelect" class="sel"></select>
       <p class="note" id="recipeNote"></p>
+    </section>
+    <section id="aoiSection">
+      <h2>AOI 能力 · M00–M11</h2>
+      <ul id="aoiList" class="aoiList"></ul>
+      <p class="note">12 个施工模块；亮起的是当前所选工位用到的模块。公开架构信息，不含个人数据。</p>
+      <a class="btn sm aoiOpen" href="aoi-tree.html">打开 AOI 能力树 →</a>
     </section>
   </aside>
 
@@ -178,10 +187,13 @@
 <script src="data/stations-def.js?v=1726cc77"></script>
 <script src="vendor/supabase.js?v=9ccb70b9"></script>
 <script src="sso.js?v=1"></script>
-<script src="auth.js?v=sso1"></script>
+<script src="auth.js?v=28446f2b"></script>
 <script src="data/tools.js?v=c6ab7292"></script>
 <script src="data/recipes.js?v=c9a8aa5f"></script>
 <script src="data/skins.js?v=7db744e6"></script>
-<script src="factory.js?v=18581a47"></script>
+<script src="data/aoi-modules.js?v=d300336e"></script>
+<script src="data/guide.js?v=f27b3f57"></script>
+<script src="factory.js?v=8c16d113"></script>
+<script src="guide.js?v=f473a701"></script>
 </body>
 </html>

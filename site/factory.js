@@ -46,6 +46,40 @@
     $$('#stationList button').forEach((b) => b.addEventListener('click', () => selectStation(b.dataset.id, 'flow')));
   }
 
+  /* ---------- 左栏：AOI 能力表 M00–M11（公开架构信息，data/aoi-modules.js；点一行展开，亮起 = 所选工位用到） ---------- */
+  const AOI_MODS = (window.XCF_AOI_MODULES || {}).modules || [];
+  let aoiOpen = '';
+  let aoiStation = '';
+  function renderAoi() {
+    const list = $('#aoiList');
+    if (!list) return;
+    const names = {};
+    DEF.forEach((s) => { names[s.id] = `<span class="mono">${esc(s.index)}</span> <span>${esc(s.zh)}</span>`; });
+    list.innerHTML = AOI_MODS.map((m) => {
+      const used = (m.stations || []).includes(aoiStation);
+      const open = aoiOpen === m.code;
+      return `
+      <li class="${used ? 'used' : ''}${open ? ' open' : ''}" data-code="${esc(m.code)}">
+        <button type="button" aria-expanded="${open}">
+          <span class="mc mono">${esc(m.code)}</span>
+          <span class="mn">${esc(m.name)}</span>
+          <span class="mw mono" title="施工批次 ${esc(m.wave)}">${esc(m.wave)}</span>
+        </button>
+        <div class="md"${open ? '' : ' hidden'}>
+          <p>${esc(m.role)}</p>
+          <p>${esc(m.summary)}</p>
+          <p class="mono"><span>施工批次 ${esc(m.wave)}</span>${m.optional ? ' · <span>可选模块</span>' : ''}</p>
+          <p><span>接入工位：</span> ${(m.stations || []).length ? (m.stations || []).map((id) => `<span class="stn">${names[id] || esc(id)}</span>`).join(' · ') : '<span>暂无工位接入</span>'}</p>
+        </div>
+      </li>`;
+    }).join('');
+    $$('#aoiList li > button').forEach((b) => b.addEventListener('click', () => {
+      const code = b.parentElement.dataset.code;
+      aoiOpen = aoiOpen === code ? '' : code;
+      renderAoi();
+    }));
+  }
+
   /* ---------- 中栏：产线卡片 ---------- */
   function renderFlow() {
     $('#flow').innerHTML = STATIONS.map((s, i) => {
@@ -87,6 +121,7 @@
       b.classList.toggle('on', on);
     });
     $$('#flow .st-card').forEach((c) => c.classList.toggle('on', c.dataset.id === id));
+    aoiStation = id; renderAoi();
     renderDetail(s);
     if (tab === 'flow') setTab('flow');
   }
@@ -401,6 +436,7 @@
   /* ---------- 启动 ---------- */
   function boot() {
     renderSkins();
+    renderAoi();
     $$('.center .tabBtn, .side .tabBtn').forEach((b) => b.addEventListener('click', () => setTab(b.dataset.tab)));
     $('#closeBtn').addEventListener('click', closeOrder);
 
