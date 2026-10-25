@@ -9,20 +9,20 @@
   const UI = {
     btn: { zh: '📚 导览员', en: '📚 Guide' },
     title: { zh: '📚 <b>图书馆管理员</b> · 工厂导览', en: '📚 <b>Librarian</b> · Factory guide' },
-    ph: { zh: '问我：AOI 能力表是什么？设置在哪？', en: 'Ask: what is the AOI table? Where are Settings?' },
+    ph: { zh: '问我：AoI 能力表是什么？设置在哪？', en: 'Ask: what is the AoI table? Where are Settings?' },
     ask: { zh: '问', en: 'Ask' }, close: { zh: '关闭', en: 'Close' },
     next: { zh: '下一步', en: 'Next' }, skip: { zh: '跳过', en: 'Skip' }, ok: { zh: '好的', en: 'Got it' },
     tour: { zh: '导览', en: 'Tour' },
-    chips: { zh: ['工厂整体怎么用？', 'AOI 能力表是什么？', '设置在哪里？', 'Pod 派单怎么看？', '登录和隐私'], en: ['How do I use the factory?', 'What is the AOI table?', 'Where are Settings?', 'How does Pod dispatch work?', 'Sign-in and privacy'] },
+    chips: { zh: ['工厂整体怎么用？', 'AoI 能力表是什么？', '设置在哪里？', 'Pod 派单怎么看？', '登录和隐私'], en: ['How do I use the factory?', 'What is the AoI table?', 'Where are Settings?', 'How does Pod dispatch work?', 'Sign-in and privacy'] },
     chipsIntro: { zh: '可以直接问我，或点这些常见问题：', en: 'Ask me anything, or tap a common question:' },
     none: { zh: '没找到完全对应的内容，先给你看总览：\n\n', en: 'I could not find an exact match, so here is the overview:\n\n' },
     guard: { zh: '我只负责讲解和带路，不能替你下单、付款、关 pod、批准或改数据，要你自己去对应页面操作哦。\n\n', en: 'I only explain and point the way — I cannot place orders, pay, close pods, approve or change data for you. Please do that yourself on the relevant page.\n\n' }
   };
   const TOUR = [
     { zh: '你好，我是工厂的图书馆管理员 📚 带你 30 秒逛一圈。', en: 'Hi, I am the factory librarian 📚 — a 30-second tour.', links: [] },
-    { zh: '左栏：8 个工位、AOI 能力表（M00–M11）和配方。点工位，中栏下方看它的入/出产物和 QA。', en: 'Left column: the 8 stations, the AOI table (M00–M11) and recipes. Click a station to see its inputs/outputs and QA below the line.', links: [] },
+    { zh: '左栏：8 个工位、AoI 能力表（M00–M11）和配方。点工位，中栏下方看它的入/出产物和 QA。', en: 'Left column: the 8 stations, the AoI table (M00–M11) and recipes. Click a station to see its inputs/outputs and QA below the line.', links: [] },
     { zh: '中栏：产线 FLOW、Pod 派单、交接账本。右栏：小助手、皮肤、运行。订单和 Pod 只显示你自己账号的。', en: 'Centre: line FLOW, Pod dispatch, handoff ledger. Right: assistant, skins, run. Orders and Pods show only your own account.', links: [] },
-    { zh: '想看完整能力树，点顶栏「AOI 视图」。设置在独立的工作台里，不在本页。', en: 'For the full capability tree, use “AOI view” in the header. Settings live in the separate Workbench, not on this page.', links: [['AOI 能力树 / AOI tree', 'aoi-tree.html'], ['工作台（预览） / Workbench', 'https://xconnect-workbench-preview.onrender.com/']] },
+    { zh: '想看完整能力树，点顶栏「AoI 视图」。设置在独立的工作台里，不在本页。', en: 'For the full capability tree, use “AoI view” in the header. Settings live in the separate Workbench, not on this page.', links: [['AoI 能力树 / AoI tree', 'aoi-tree.html'], ['工作台（预览） / Workbench', 'https://xconnect-workbench-preview.onrender.com/']] },
     { zh: '我只讲解和带路，不会替你下单、付款或改数据。有问题随时点右下角问我！', en: 'I only explain and guide — I never place orders, pay or change data. Ask me anytime from the bottom-right button!', links: [] }
   ];
   const css = `

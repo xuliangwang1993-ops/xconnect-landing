@@ -6,7 +6,7 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const DEF = (window.XCF_STATIONS_DEF || {}).stations || [];   // 工位的静态说明（名称/说明/AOI/工具），不含运行结果
+  const DEF = (window.XCF_STATIONS_DEF || {}).stations || [];   // 工位的静态说明（名称/说明/AoI/工具），不含运行结果
   let STATIONS = DEF.slice();
   let CHAIN = [];
   let RUN = {};
@@ -46,7 +46,7 @@
     $$('#stationList button').forEach((b) => b.addEventListener('click', () => selectStation(b.dataset.id, 'flow')));
   }
 
-  /* ---------- 左栏：AOI 能力表 M00–M11（公开架构信息，data/aoi-modules.js；点一行展开，亮起 = 所选工位用到） ---------- */
+  /* ---------- 左栏：AoI 能力表 M00–M11（公开架构信息，data/aoi-modules.js；点一行展开，亮起 = 所选工位用到） ---------- */
   const AOI_MODS = (window.XCF_AOI_MODULES || {}).modules || [];
   let aoiOpen = '';
   let aoiStation = '';
@@ -136,7 +136,7 @@
       <div class="meta-row">
         <span class="chip ${statusOf(s)}">${s.exit_code == null ? 'NO RUN' : qa.pass === true ? 'QA PASS' : qa.pass === false ? 'QA HOLD' : 'EXIT ' + (s.exit_code ?? 0)}</span>
         <span class="chip mono">${esc(s.id)}</span>
-        <span class="chip">AOI ${esc(s.aoi || '—')}</span>
+        <span class="chip">AoI ${esc(s.aoi || '—')}</span>
         <span class="chip mono">${fmtDur(s.elapsed_s)}</span>
         ${s.score != null ? `<span class="chip">score ${s.score}</span>` : ''}
       </div>
