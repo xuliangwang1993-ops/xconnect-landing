@@ -2,7 +2,8 @@
 """站 06b · 派单到 RunPod：拉全部 pod 实况 + 拉已发的单，两边对账。
 
 上游 = 小助手在工厂里发的单（build/orders.json）
-输出 = site/data/pod.js（window.XCF_POD = {pods[], orders[], reconcile[], probe{}}）
+输出 = build/private/pod.json（私有 {pods[], orders[], reconcile[], probe{}}；不进 site/）
+      设了 FACTORY_USER_EMAIL（或 FACTORY_USER_ID）+ SUPABASE_SERVICE_ROLE_KEY 时，同步 upsert 到 Supabase（见 tools/push_factory_data.py）
 
 安全：RunPod key 只从环境变量 RUNPOD_KEY 读，不落盘、不进 JS 包。
 没 key 也能跑：live=null + probe.error，界面照实标"未连接"。
@@ -19,7 +20,7 @@ import time
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT = ROOT / "build/out"
-DATA = ROOT / "site/data"
+DATA = ROOT / "build/private"
 DATA.mkdir(parents=True, exist_ok=True)
 
 BASE = "https://rest.runpod.io/v1"
@@ -68,7 +69,7 @@ def slim(p):
 
 
 def load_orders():
-    p = ROOT / "build/orders.json"
+    p = ROOT / "build/private/orders.json"
     return json.loads(p.read_text()) if p.exists() else {"orders": []}
 
 
@@ -130,13 +131,26 @@ def main():
     return 0 if out["pods"] else 1
 
 
+def push_to_supabase():
+    """把本次 pod/订单对账结果 upsert 到该用户名下（RLS：页面只读，写只走 service role）。"""
+    if not (os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("FACTORY_SECRET_FILE")):
+        print("（未设 SUPABASE_SERVICE_ROLE_KEY：只写本地 build/private/pod.json，不同步到页面）")
+        return
+    if not (os.environ.get("FACTORY_USER_EMAIL") or os.environ.get("FACTORY_USER_ID")):
+        print("（未设 FACTORY_USER_EMAIL / FACTORY_USER_ID：不同步）")
+        return
+    r = subprocess.run([sys.executable, str(ROOT / "tools/push_factory_data.py"), "--pods", "--orders"],
+                       capture_output=True, text=True)
+    print((r.stdout + r.stderr).strip()[-400:])
+
+
 def write(out):
     (DATA / "pod.json").write_text(json.dumps(out, ensure_ascii=False, indent=2))
-    (DATA / "pod.js").write_text("window.XCF_POD = " + json.dumps(out, ensure_ascii=False) + ";\n")
+    push_to_supabase()
     h = {"station": "06b_pod", "tool": "runpod-rest",
-         "inputs": [{"path": "build/orders.json",
-                     "sha256": sha(ROOT / "build/orders.json") if (ROOT / "build/orders.json").exists() else None}],
-         "outputs": [{"path": "site/data/pod.js", "sha256": sha(DATA / "pod.js")}],
+         "inputs": [{"path": "build/private/orders.json",
+                     "sha256": sha(ROOT / "build/private/orders.json") if (ROOT / "build/private/orders.json").exists() else None}],
+         "outputs": [{"path": "build/private/pod.json", "sha256": sha(DATA / "pod.json")}],
          "started_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
          "exit_code": 0 if out.get("pods") else 1}
     json.dump(h, open(OUT / "06b_handoff.json", "w"), indent=2, ensure_ascii=False)

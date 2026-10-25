@@ -11,6 +11,7 @@ import time
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
 DATA = SITE / "data"
+PRIV = ROOT / "build/private"
 OUT = ROOT / "build/out"
 
 checks = []
@@ -37,18 +38,16 @@ def main():
     ck("js/css 都带 ?v=", not unversioned, unversioned, "[]")
 
     # 3) 数据包齐全可解析（window.XCF_* 五块 + 产物包）
-    expect = {"stations.js": "XCF_STATIONS", "tools.js": "XCF_TOOLS",
-              "recipes.js": "XCF_RECIPES", "pod.js": "XCF_POD",
-              "artifacts.js": "XCF_ARTIFACTS", "build-order.js": "XCF_BUILD_ORDER",
-              "bundle.js": "XCF_BUNDLE", "trees.js": "XCF_TREES",
-              "skins.js": "XCF_SKINS", "build.js": "XCF_BUILD", "skins.json": None}
+    expect = {"stations-def.js": "XCF_STATIONS_DEF", "tools.js": "XCF_TOOLS",
+              "recipes.js": "XCF_RECIPES", "trees.js": "XCF_TREES",
+              "skins.js": "XCF_SKINS", "skins.json": None}
     for f, win in expect.items():
         p = DATA / f
         ok = p.exists() and (win is None or win in p.read_text(errors="ignore"))
         ck(f"data/{f} 在且可解析", ok, p.exists())
 
     # 4) 站数 = 8，交接账本闭合数 ≤ 总数（缺口已知且标红）
-    st = json.loads((DATA / "stations.json").read_text())
+    st = json.loads((PRIV / "stations.json").read_text())
     ck("station 数 = 8", len(st.get("stations", [])) == 8, len(st.get("stations", [])), 8)
     chain = st.get("chain", [])
     closed = sum(c["closed"] for c in chain)
@@ -63,7 +62,7 @@ def main():
     ck("8 站退出码全 0", not bad_exit, bad_exit, "[]")
 
     # 6) pod 数据有订单；没 key 时 probe.error 明确
-    pod = json.loads((DATA / "pod.json").read_text())
+    pod = json.loads((PRIV / "pod.json").read_text())
     ck("pod 有订单", len(pod.get("orders", [])) >= 1, len(pod.get("orders", [])), ">=1")
     if pod.get("probe", {}).get("key") is False:
         ck("没 key 时 probe.error 明确", bool(pod["probe"].get("error")), pod["probe"].get("error"), "non-empty")
@@ -79,13 +78,18 @@ def main():
                     low.append(f"{s['id']}:{a}/{b}")
     ck("皮肤正文对比度 ≥ 4.5", not low, low, "[]")
 
+    # 7b) 隐私门：site/ 下不能有订单 / pod / 运行结果 / 产物内联
+    leaks = [str(p.relative_to(SITE)) for p in SITE.rglob("*") if p.is_file() and p.suffix in (".js", ".json", ".html")
+             and p.name != "supabase.js" and re.search(r"(ord-\d{8}-\d{3}|\bv\d+-\d{8}-\d{6}\b|\"dataurl\"|XCF_POD|XCF_ARTIFACTS|XCF_BUILD_ORDER|XCF_BUNDLE)", p.read_text(errors="ignore"))]
+    ck("site/ 下没有订单/Pod/运行私有数据", not leaks, leaks, "[]")
+
     # 8) 无外链 CDN / 字体
     ck("无外链 CDN/字体", not re.search(r"(fonts\.googleapis|cdn\.|unpkg|jsdelivr)", html), True, True)
 
     hard_fail = [c for c in checks if c["hard"] and not c["pass"]]
     qa = {"station": "05_verify", "pass": not hard_fail, "checks": checks,
           "pod_connected": bool(pod.get("pods")), "run": st.get("run", {}).get("id")}
-    (SITE / "data/qa.json").write_text(json.dumps(qa, ensure_ascii=False, indent=2))
+    (PRIV / "qa.json").write_text(json.dumps(qa, ensure_ascii=False, indent=2))
     json.dump(qa, open(OUT / "05_qa.json", "w"), ensure_ascii=False, indent=2)
 
     # 构建链写进 build.js，页面右下角可以看
@@ -97,7 +101,7 @@ def main():
             if f.exists():
                 steps.append(sid)
                 break
-    (DATA / "build.js").write_text("window.XCF_BUILD = " + json.dumps(
+    (PRIV / "build.js").write_text("window.XCF_BUILD = " + json.dumps(
         {"steps": steps, "pass": not hard_fail, "at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
          "checks": len(checks), "hard_fail": len(hard_fail)}, ensure_ascii=False) + ";\n")
     print(json.dumps({"pass": not hard_fail, "checks": len(checks),

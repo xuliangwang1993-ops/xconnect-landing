@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """站 03 · 编数据：把 run 的 8 站交接书、工具表、配方表编成页面可吃的 JS 包。
 输入 = craft-skills/runs/v3-20261023-130640/{manifest.json, 0*/handoff.json, 0*/qa.json, 0*/scorecard.json}
-输出 = site/data/{stations,tools,recipes,bundle}.js
+输出 = site/data/{stations-def,tools,recipes}.js（公开，只含静态说明）
+      build/private/{stations.json,bundle.json}（私有运行结果，不进 site/，由 tools/push_factory_data.py 推到 Supabase）
 """
 import hashlib
 import json
@@ -13,7 +14,9 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 RUN = ROOT / "craft-skills/runs/v3-20261023-130640"
 OUT = ROOT / "build/out"
 DATA = ROOT / "site/data"
+PRIV = ROOT / "build/private"
 DATA.mkdir(parents=True, exist_ok=True)
+PRIV.mkdir(parents=True, exist_ok=True)
 
 HAND_ZH = {"00_brief": "需求解析", "01_ingest": "素材入库", "02_script": "脚本分镜",
            "03_grade": "画面与混音", "04_subs": "字幕", "05_export": "三尺寸导出",
@@ -95,10 +98,11 @@ def main():
            "elapsed_s": manifest.get("elapsed_s"), "stations": manifest.get("stations", []),
            "chain_closed": closed_total, "chain_total": link_total}
     stations_out = {"run": run, "stations": stations, "chain": chain}
-    (DATA / "stations.js").write_text(
-        "window.XCF_STATIONS = " + json.dumps(stations_out, ensure_ascii=False) + ";\n")
-    # 同步给 05_verify 读（Python 口径），保证 JS 包与验收读的是同一份
-    (DATA / "stations.json").write_text(json.dumps(stations_out, ensure_ascii=False, indent=2))
+    # 公开：只有工位的静态说明（无运行结果）。运行结果是私有数据，写到 build/private/
+    defs = [{k: s[k] for k in ("id", "index", "zh", "note", "aoi")} | {"tools": s.get("tools", [])} for s in stations]
+    (DATA / "stations-def.js").write_text(
+        "window.XCF_STATIONS_DEF = " + json.dumps({"stations": defs}, ensure_ascii=False) + ";\n")
+    (PRIV / "stations.json").write_text(json.dumps(stations_out, ensure_ascii=False, indent=2))
 
     tools_src = rj(DATA / "tools.json")
     (DATA / "tools.js").write_text("window.XCF_TOOLS = " + json.dumps(tools_src, ensure_ascii=False) + ";\n")
@@ -108,13 +112,13 @@ def main():
     aoi_src = rj(DATA / "aoi.json")
     bundle = {"stations": stations_out, "aoi": aoi_src, "tools": tools_src, "recipes": rec_src,
               "manifest": manifest}
-    (DATA / "bundle.js").write_text("window.XCF_BUNDLE = " + json.dumps(bundle, ensure_ascii=False) + ";\n")
+    (PRIV / "bundle.json").write_text(json.dumps(bundle, ensure_ascii=False))   # 私有，不进 site/
 
     h = {"station": "03_compile", "tool": "python3",
          "inputs": [{"path": "craft-skills/runs/v3-20261023-130640/manifest.json",
                      "sha256": sha(RUN / "manifest.json")}],
-         "outputs": [{"path": "site/data/stations.js", "sha256": sha(DATA / "stations.js")},
-                     {"path": "site/data/bundle.js", "sha256": sha(DATA / "bundle.js")}],
+         "outputs": [{"path": "site/data/stations-def.js", "sha256": sha(DATA / "stations-def.js")},
+                     {"path": "build/private/stations.json", "sha256": sha(PRIV / "stations.json")}],
          "started_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "exit_code": 0}
     json.dump(h, open(OUT / "03_handoff.json", "w"), indent=2, ensure_ascii=False)
     print(json.dumps({"stations": len(stations), "chain": len(chain),

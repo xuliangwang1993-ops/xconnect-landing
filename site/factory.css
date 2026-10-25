@@ -200,3 +200,30 @@ textarea { width: 100%; padding: 9px 10px; border: 1px solid var(--line); border
   .rail { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--line); }
   .crumbs { display: none; }
 }
+
+/* ---------- 登录门（未登录只看到它；已登录 / 加载中时隐藏产线） ---------- */
+body[data-auth="loading"] .layout, body[data-auth="loading"] .foot-bar,
+body[data-auth="out"] .layout, body[data-auth="out"] .foot-bar { display: none; }
+body:not([data-auth]) .layout, body:not([data-auth]) .foot-bar { display: none; }
+body:not([data-auth="in"]) #podPill, body:not([data-auth="in"]) #runPill { display: none; }
+body[data-auth="loading"] .crumbs, body[data-auth="out"] .crumbs, body:not([data-auth]) .crumbs { display: none; }
+.gate { display: flex; justify-content: center; padding: 72px 20px; }
+.gate[hidden] { display: none; }
+.gateCard { width: 100%; max-width: 380px; padding: 26px 24px; border: 1px solid var(--line); border-radius: var(--r); background: rgba(15,23,42,.6); }
+.gateCard h1 { margin: 0 0 6px; font-size: 18px; font-weight: 500; letter-spacing: -.01em; }
+.gateTabs { display: flex; gap: 6px; margin: 14px 0 12px; }
+.gTab { flex: 1; padding: 7px 8px; font-size: 12px; color: #94A3B8; background: none; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; }
+.gTab.on { color: #F8FAFC; background: rgba(148,163,184,.16); border-color: var(--line2); }
+.gForm { display: none; flex-direction: column; gap: 10px; }
+.gForm.on { display: flex; }
+.gForm label { display: flex; flex-direction: column; gap: 4px; font-size: 11.5px; color: #94A3B8; }
+.gForm label[hidden], .gForm .btn[hidden] { display: none; }
+.gForm input { padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: #F8FAFC; font: inherit; font-size: 13px; }
+.gForm input:focus { outline: none; border-color: var(--line2); }
+.gMsg { min-height: 18px; margin: 10px 2px 0; font-size: 12px; color: #94A3B8; }
+.gMsg[data-kind="bad"] { color: var(--bad); }
+.gMsg[data-kind="ok"] { color: var(--ok); }
+.gateCard a { color: #CBD5E1; }
+.pill.who { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; line-height: 26px; }
+.pill.who[hidden], button.pill[hidden] { display: none; }
+button.pill { cursor: pointer; font-family: inherit; }

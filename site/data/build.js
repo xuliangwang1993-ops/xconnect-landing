@@ -1,1 +1,0 @@
-window.XCF_BUILD = {"steps": ["01_extract", "02_tokens", "03_compile", "03b_trees", "03c_artifacts", "04_render", "05_verify"], "pass": true, "at": "2026-10-25T13:56:49+1100", "checks": 22, "hard_fail": 0};

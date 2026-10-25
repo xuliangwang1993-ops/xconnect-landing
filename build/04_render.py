@@ -13,10 +13,10 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
 OUT = ROOT / "build/out"
 
-REFS = ["factory.css", "factory.js", "aoi-tree.css", "aoi-tree.js",
-        "data/bundle.js", "data/stations.js", "data/tools.js", "data/recipes.js",
-        "data/pod.js", "data/build-order.js", "data/artifacts.js", "data/trees.js",
-        "data/skins.js", "data/build.js"]
+REFS = ["factory.css", "factory.js", "auth.js", "i18n.js", "i18n/en-common.js", "i18n/en-factory.js", "i18n/en-tree.js",
+        "vendor/supabase.js", "aoi-tree.css", "aoi-tree.js",
+        "data/stations-def.js", "data/tools.js", "data/recipes.js",
+        "data/trees.js", "data/skins.js"]
 
 
 def sha(p):

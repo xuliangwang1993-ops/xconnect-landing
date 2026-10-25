@@ -6,26 +6,52 @@
 <meta name="color-scheme" content="dark">
 <title>X-Connect Factory · 产线与 Pod 派单</title>
 <link rel="icon" href="assets/crystal-x.jpg">
-<link rel="stylesheet" href="factory.css?v=333702fd">
-<script src="i18n.js?v=6a67a57c"></script>
-<script src="i18n/en-common.js?v=31cd72ce"></script>
-<script src="i18n/en-factory.js?v=af3fd17f"></script>
+<link rel="stylesheet" href="factory.css?v=ade91195">
+<script src="i18n.js?v=6670446f"></script>
+<script src="i18n/en-common.js?v=d2cd0df9"></script>
+<script src="i18n/en-factory.js?v=95eeaabe"></script>
 <script>window.__ERR=[];addEventListener('error',function(e){window.__ERR.push((e.message||'?')+' @'+e.lineno);document.documentElement.setAttribute('data-err',window.__ERR.join(' | '));});</script>
 </head>
-<body>
+<body data-auth="loading">
 <header class="bar">
   <a class="brand" href="https://www.x-connect.ai/">
     <span class="jewel"></span><span>-connect</span><span class="pipe"></span><span class="fac">FACTORY</span>
   </a>
   <nav class="crumbs">
-    <span>Code</span><i>›</i><span>产线</span><i>›</i><b>v3-20261023-130640</b>
+    <span>Code</span><i>›</i><span>产线</span><i>›</i><b id="crumbRun">—</b>
   </nav>
   <div class="right">
     <span class="pill live" id="podPill">POD · —</span>
     <span class="pill" id="runPill">RUN · —</span>
     <a class="pill ghost" href="https://www.x-connect.ai/">回右门</a>
+    <span class="pill who" id="whoPill" hidden></span>
+    <button class="pill ghost" id="signOutBtn" type="button" hidden>退出登录</button>
   </div>
 </header>
+
+<section class="gate" id="authGate" hidden>
+  <div class="gateCard">
+    <h1>登录后查看你的产线</h1>
+    <p class="note">订单、Pod 与运行记录只属于你自己的账号。请用 X-connect 账号登录（与首页是同一套账号）。</p>
+    <div class="gateTabs" role="tablist">
+      <button type="button" class="gTab on" data-g="pw" role="tab" aria-selected="true">邮箱 + 密码</button>
+      <button type="button" class="gTab" data-g="otp" role="tab" aria-selected="false">邮件验证码</button>
+    </div>
+    <form class="gForm on" data-g="pw" id="formPw" autocomplete="on">
+      <label>邮箱<input type="email" id="pwEmail" name="email" autocomplete="username" required></label>
+      <label>密码<input type="password" id="pwPass" name="password" autocomplete="current-password" required></label>
+      <button class="btn" type="submit" id="pwBtn">登录</button>
+    </form>
+    <form class="gForm" data-g="otp" id="formOtp" autocomplete="off">
+      <label>邮箱<input type="email" id="otpEmail" name="email" autocomplete="email" required></label>
+      <button class="btn" type="submit" id="otpSend">发送验证码 / 登录链接</button>
+      <label id="otpCodeRow" hidden>邮件里的验证码<input type="text" id="otpCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10"></label>
+      <button class="btn" type="button" id="otpVerify" hidden>验证并登录</button>
+    </form>
+    <p class="gMsg" id="gateMsg" role="status" aria-live="polite"></p>
+    <p class="note">还没有账号？先到 <a href="https://www.x-connect.ai/">x-connect.ai</a> 注册，再回到这里登录。</p>
+  </div>
+</section>
 
 <main class="layout">
   <!-- 左栏 -->
@@ -83,7 +109,7 @@
       <div class="card chain-card">
         <h3>这段链怎么走</h3>
         <ol class="chain">
-          <li><b>建单</b><span>小助手把配方 + 一句话写成 <code>build/orders.json</code></span></li>
+          <li><b>建单</b><span>小助手把配方 + 一句话写成 <code>build/private/orders.json</code></span></li>
           <li><b>派单</b><span><code>build/06_pod.py</code> 读 <code>RUNPOD_KEY</code>（只读环境变量，不落盘）拉 pod 实况，与订单对账</span></li>
           <li><b>干活</b><span>03/05 两站的重活走 <code>ffmpeg + GPU</code>；iSH 这边只保留 06 验收</span></li>
           <li><b>交付</b><span>成片落 <code>runs/&lt;id&gt;/05_export/</code>，QA 全过才写 <code>delivered</code></span></li>
@@ -99,7 +125,7 @@
           <thead><tr><th>#</th><th>站</th><th>产物 → 上游</th><th>闭合</th><th>缺</th></tr></thead>
           <tbody id="ledgerBody"></tbody>
         </table>
-        <p class="note">闭合 = 上一站 outputs 里的 sha256 与本站 inputs 记的一致。16/17 里那张缺的是 <code>06_qa/qa.json</code>——它没被登记进 06_qa 的 outputs，却被 07_kb 当输入用了。这一条照实标黄，不补写。</p>
+        <p class="note" id="ledgerNote">闭合 = 上一站 outputs 里的 sha256 与本站 inputs 记的一致。</p>
       </div>
     </div>
   </section>
@@ -149,15 +175,12 @@
   <span class="mono" id="genAt"></span>
 </footer>
 
-<script src="data/bundle.js?v=e4a9c27d"></script>
-<script src="data/stations.js?v=8b31a776"></script>
+<script src="data/stations-def.js?v=1726cc77"></script>
+<script src="vendor/supabase.js?v=9ccb70b9"></script>
+<script src="auth.js?v=210f7a4c"></script>
 <script src="data/tools.js?v=c6ab7292"></script>
-<script src="data/recipes.js?v=ad6ecf5e"></script>
+<script src="data/recipes.js?v=c9a8aa5f"></script>
 <script src="data/skins.js?v=7db744e6"></script>
-<script src="data/pod.js?v=711bc7a9"></script>
-<script src="data/build-order.js?v=17ccea36"></script>
-<script src="data/artifacts.js?v=bba03403"></script>
-<script src="data/build.js?v=00a04076"></script>
-<script src="factory.js?v=06807b06"></script>
+<script src="factory.js?v=18581a47"></script>
 </body>
 </html>
