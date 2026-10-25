@@ -1,0 +1,58 @@
+/* Balance card modal (signed-in homepage). Self-contained; reuses .xcv-modal / .xcv-card / .xcv-btn from verify.css.
+ * Dark by default (matches the site); a light variant follows prefers-color-scheme. */
+.auth-quota.xc-bal-trigger{cursor:pointer;display:inline-block;padding:3px 2px;border-bottom:1px dotted currentColor;transition:opacity .2s,border-color .2s}
+.auth-quota.xc-bal-trigger::after{content:" \203A";opacity:.7}
+.auth-quota.xc-bal-trigger:hover{opacity:.85}
+.auth-quota.xc-bal-trigger:focus-visible{outline:2px solid var(--fx-accent,#34D3EB);outline-offset:3px;border-radius:4px}
+.auth-quota.xc-bal-trigger:empty{display:none}
+
+#xc-bal-modal .xc-bal-card{width:min(440px,100%);max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;position:relative;padding:20px 18px 14px;--b-ink:#eef0f4;--b-ink2:rgba(238,240,244,.62);--b-ink3:rgba(238,240,244,.45);--b-line:rgba(255,255,255,.12);--b-fill:rgba(255,255,255,.05);--b-ok:#7ee0a8;--b-warn:#e9c27a;--b-err:#ff8f8f}
+#xc-bal-modal h2{font-size:17px;color:var(--b-ink)}
+#xc-bal-modal .xcb-x{position:absolute;top:10px;right:12px;width:32px;height:32px;border:0;border-radius:50%;background:transparent;color:var(--b-ink2);font-size:22px;line-height:1;cursor:pointer}
+#xc-bal-modal .xcb-x:hover{color:var(--b-ink);background:var(--b-fill)}
+#xc-bal-modal .xcb-x:focus-visible,#xc-bal-modal .xcv-btn:focus-visible,#xc-bal-modal input:focus-visible{outline:2px solid var(--fx-accent,#34D3EB);outline-offset:2px}
+
+/* virtual-card visual (decorative only: no card number, no digits that look like one) */
+.xcb-vcard{position:relative;margin:12px 0 14px;padding:16px 16px 14px;border-radius:16px;color:#f4f7fb;overflow:hidden;min-height:150px;
+  background:radial-gradient(120% 140% at 0% 0%,#24405f 0%,#13202f 45%,#0b1119 100%);border:1px solid rgba(255,255,255,.14);box-shadow:0 14px 34px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
+.xcb-vcard::after{content:"";position:absolute;right:-40px;top:-40px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(123,228,245,.22),transparent 70%);pointer-events:none}
+.xcb-vtop{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.xcb-brand{font-family:var(--fx-display,inherit);font-weight:600;letter-spacing:.14em;font-size:12px}
+.xcb-chip{width:30px;height:22px;border-radius:5px;background:linear-gradient(135deg,#e6cf94,#a98a45);opacity:.85;box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
+.xcb-label{margin:14px 0 2px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,247,251,.62)}
+.xcb-amount{margin:0;font-family:var(--fx-display,inherit);font-size:clamp(28px,8vw,36px);font-weight:500;letter-spacing:-.02em;line-height:1.1;overflow-wrap:anywhere}
+.xcb-amount small{font-size:12px;letter-spacing:.08em;font-weight:500;margin-left:6px;color:rgba(244,247,251,.7)}
+.xcb-amount .xcb-orig{display:block;margin-top:4px;font-size:12.5px;letter-spacing:0;font-weight:400;color:rgba(244,247,251,.78)}
+.xcb-vfoot{margin:10px 0 0;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:11.5px;color:rgba(244,247,251,.72)}
+.xcb-badge{display:inline-block;padding:2px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.22);font-size:11px}
+.xcb-badge[data-k=full]{color:var(--b-ok);border-color:rgba(126,224,168,.45)}
+.xcb-badge[data-k=partial]{color:var(--b-warn);border-color:rgba(233,194,122,.45)}
+.xcb-note{margin:0 0 12px;font-size:12px;line-height:1.55;color:var(--b-ink2)}
+.xcb-sec{margin:0 0 12px;padding:10px 12px;border:1px solid var(--b-line);border-radius:12px;background:var(--b-fill)}
+.xcb-sec h3{margin:0 0 6px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--b-ink3)}
+.xcb-row{display:flex;justify-content:space-between;gap:12px;font-size:13px;line-height:1.7;color:var(--b-ink)}
+.xcb-row span:first-child{color:var(--b-ink2)}
+.xcb-row span:last-child{text-align:right;overflow-wrap:anywhere}
+.xcb-na{color:var(--b-ink3);font-style:italic}
+.xcb-sec p{margin:4px 0 0;font-size:12px;line-height:1.5;color:var(--b-ink2)}
+.xcb-sec p.xcb-err{color:var(--b-err)}
+.xcb-hist{list-style:none;margin:0;padding:0}
+.xcb-hist li{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;line-height:1.8;color:var(--b-ink)}
+.xcb-hist li span:first-child{color:var(--b-ink2)}
+.xcb-form{display:flex;gap:8px;align-items:stretch}
+.xcb-form input{flex:1;min-width:0;box-sizing:border-box;background:var(--b-fill);border:1px solid var(--b-line);border-radius:10px;padding:10px 12px;color:var(--b-ink);font:inherit;font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+.xcb-form input::placeholder{text-transform:none;letter-spacing:0;color:var(--b-ink3)}
+.xcb-msg{min-height:16px;margin:6px 0 0;font-size:12px;line-height:1.5;color:var(--b-ink2)}
+.xcb-msg[data-kind=err]{color:var(--b-err)}.xcb-msg[data-kind=ok]{color:var(--b-ok)}
+.xcb-skel{height:14px;margin:6px 0;border-radius:6px;background:linear-gradient(90deg,var(--b-fill),rgba(255,255,255,.12),var(--b-fill));background-size:200% 100%;animation:xcbsk 1.2s linear infinite}
+@keyframes xcbsk{to{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){.xcb-skel{animation:none}}
+.xcb-foot{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:4px}
+.xcb-foot a.xcv-btn{text-decoration:none;display:inline-block}
+@media(max-width:480px){#xc-bal-modal.xcv-modal{padding:10px}.xcb-foot .xcv-btn{flex:1 1 auto;text-align:center}.xcb-form{flex-direction:column}.xcb-form input{font-size:16px;padding:12px}}
+@media(prefers-color-scheme:light){
+  #xc-bal-modal.xcv-modal{background:rgba(235,238,243,.72)}
+  #xc-bal-modal .xc-bal-card{background:#fff;color:#14181f;border-color:rgba(0,0,0,.12);--b-ink:#14181f;--b-ink2:rgba(20,24,31,.66);--b-ink3:rgba(20,24,31,.5);--b-line:rgba(0,0,0,.12);--b-fill:rgba(0,0,0,.04);--b-ok:#12804a;--b-warn:#8a5a00;--b-err:#c0392b;box-shadow:0 24px 60px rgba(0,0,0,.2)}
+  #xc-bal-modal .xcv-btn{color:#14181f;border-color:rgba(0,0,0,.2)}
+  #xc-bal-modal .xcv-btn.primary{color:#fff;border-color:transparent}
+}

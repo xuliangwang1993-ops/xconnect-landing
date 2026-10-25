@@ -1,0 +1,82 @@
+/* Refuel — fuel-nozzle entry on the signed-out homepage.
+ * Additive only: nothing here changes an existing selector. The button is
+ * absolutely positioned, so it never takes part in (or shifts) the hero layout.
+ * Icon only (+ tiny label). Lives inside the signed-out auth block, right under "No account? Sign up", so it hides with it. Desktop: child of .centerpiece (absolute) -> sits right under the sign-in card,
+ *          horizontally centred between Chat and Code.
+ * Mobile : same anchor (.centerpiece made position:relative, no offsets), compact 44px tile. */
+.refuel-lockup{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:20px;z-index:3;display:flex;flex-direction:column;align-items:center;width:max-content}
+.refuel-fab{
+  --rf-accent:var(--fx-accent-2,#7BE4F5);--rf-accent-2:var(--fx-accent,#34D3EB);
+  --rf-bg:var(--fx-bg-2,#0F151E);--rf-line:var(--fx-line-2,#2A3547);--rf-ink:var(--fx-ink-2,#8B98A8);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  padding:0;border:0;background:none;color:var(--rf-accent);cursor:pointer;
+  -webkit-user-select:none;user-select:none;
+}
+.refuel-fab .rf-tile{
+  position:relative;display:grid;place-items:center;width:64px;height:64px;border-radius:20px;
+  border:1px solid var(--rf-line);
+  background:radial-gradient(circle at 50% 38%,rgba(52,211,235,.14),transparent 68%),var(--rf-bg);
+  box-shadow:0 0 0 0 rgba(52,211,235,0),0 0 18px rgba(52,211,235,.14),inset 0 1px 0 rgba(255,255,255,.05);
+  transition:border-color .25s,box-shadow .25s,transform .25s;
+}
+.refuel-fab svg{width:42px;height:42px;overflow:visible;filter:drop-shadow(0 0 5px rgba(123,228,245,.45));transition:transform .3s cubic-bezier(.2,.8,.2,1),filter .3s}
+.refuel-fab .rf-drop{transform-box:fill-box;transform-origin:50% 0}
+.rf-inlay{fill:var(--fx-ink,#E7EEF6);stroke:var(--fx-accent-2,#7BE4F5);stroke-width:.9}
+.rf-facet{fill:none;stroke:var(--fx-accent,#34D3EB);stroke-width:.8;opacity:.6}
+.refuel-fab .rf-label{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap} /* icon-only: text kept for screen readers */
+.refuel-fab:hover .rf-tile,.refuel-fab:focus-visible .rf-tile{border-color:var(--rf-accent-2);box-shadow:0 0 0 1px rgba(52,211,235,.25),0 0 28px rgba(52,211,235,.34),inset 0 1px 0 rgba(255,255,255,.08)}
+.refuel-fab:hover svg,.refuel-fab:focus-visible svg{transform:rotate(-8deg) scale(1.06);filter:drop-shadow(0 0 8px rgba(123,228,245,.8))}
+.refuel-fab:hover,.refuel-fab:focus-visible{color:var(--rf-accent)}
+.refuel-fab:active .rf-tile{transform:scale(.96)}
+.refuel-fab:focus-visible{outline:none}
+.refuel-fab:focus-visible .rf-tile{outline:2px solid #b4e5ff;outline-offset:4px}
+@media (prefers-reduced-motion:no-preference){
+  .refuel-fab .rf-tile{animation:rf-glow 4.2s ease-in-out infinite}
+  .refuel-fab .rf-drop{animation:rf-drip 3.2s ease-in infinite}
+  .refuel-fab:hover .rf-drop{animation-duration:1.3s}
+}
+@keyframes rf-glow{0%,100%{box-shadow:0 0 0 0 rgba(52,211,235,0),0 0 14px rgba(52,211,235,.10),inset 0 1px 0 rgba(255,255,255,.05)}50%{box-shadow:0 0 0 0 rgba(52,211,235,0),0 0 26px rgba(52,211,235,.28),inset 0 1px 0 rgba(255,255,255,.05)}}
+@keyframes rf-drip{0%{transform:translateY(-1px) scale(.3);opacity:0}15%{transform:translateY(0) scale(1);opacity:1}38%{transform:translateY(0) scale(1);opacity:1}78%{transform:translateY(13px) scale(.9);opacity:.85}100%{transform:translateY(17px) scale(.8);opacity:0}}
+@media (prefers-reduced-motion:reduce){.refuel-fab *,.refuel-fab{transition:none!important;animation:none!important}.refuel-fab:hover svg,.refuel-fab:focus-visible svg{transform:none}}
+
+/* short viewports: free band under the sign-in card is small -> compact tile, label stays for screen readers */
+@media (min-width:701px) and (max-height:760px){
+  .refuel-lockup{margin-top:10px}
+  .refuel-fab .rf-tile{width:48px;height:48px;border-radius:15px}
+  .refuel-fab svg{width:32px;height:32px}
+}
+/* mobile */
+@media (max-width:700px){
+  /* .centerpiece is static on mobile: make it the containing block (no offsets, so nothing moves)
+     and fit a compact tile into the 54px band between the sign-in card and the Chat / Code row. */
+  .centerpiece{position:relative;top:auto;left:auto}
+  .refuel-lockup{margin-top:5px}
+  .refuel-fab .rf-tile{width:44px;height:44px;border-radius:14px}
+  .refuel-fab svg{width:30px;height:30px}
+}
+
+/* modal — reuses .xcv-modal/.xcv-card/.xcv-btn from verify.css */
+#refuel-modal .xcv-card{position:relative;padding-top:24px;border-color:rgba(52,211,235,.28);box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 40px rgba(52,211,235,.10)}
+#refuel-modal .rf-head{display:flex;align-items:center;gap:10px;margin:0 0 10px;padding-inline-end:28px}
+#refuel-modal .rf-head svg{width:30px;height:30px;flex:none;color:var(--fx-accent-2,#7BE4F5);filter:drop-shadow(0 0 5px rgba(123,228,245,.45))}
+#refuel-modal h2{margin:0;font-size:19px}
+#refuel-modal .rf-badge{margin-inline-start:auto;font-family:var(--fx-mono,ui-monospace,Menlo,Consolas,monospace);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1px solid rgba(52,211,235,.4);color:var(--fx-accent-2,#7BE4F5);background:rgba(52,211,235,.08);white-space:nowrap}
+#refuel-modal .rf-slogan{margin:0 0 10px;font-size:17px;font-weight:600;line-height:1.45;letter-spacing:.01em;color:var(--fx-accent-2,#7BE4F5)}
+#refuel-modal .rf-lead{margin:0 0 8px;font-size:14.5px;line-height:1.5;color:#eef0f4}
+#refuel-modal .xcv-note{margin-bottom:10px}
+#refuel-modal .rf-x{position:absolute;top:12px;inset-inline-end:12px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:18px;line-height:1;color:rgba(238,240,244,.6);border:0;background:none;cursor:pointer;padding:0}
+#refuel-modal .rf-x:hover{color:#fff;background:rgba(255,255,255,.08)}
+#refuel-modal .xcv-foot{margin-top:16px}
+#refuel-modal a.xcv-btn{text-decoration:none;display:inline-block}
+#refuel-modal a.xcv-btn.primary{background:#2f7cf6}
+#refuel-modal :focus-visible{outline:2px solid #b4e5ff;outline-offset:2px}
+#refuel-modal .rf-mcp{margin:12px 0 0;padding:11px 12px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:rgba(255,255,255,.03)}
+#refuel-modal .rf-mcp p{margin:0}
+#refuel-modal .rf-mcp-h{font-family:var(--fx-mono,ui-monospace,Menlo,Consolas,monospace);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--fx-accent-2,#7BE4F5);margin-bottom:3px!important}
+#refuel-modal .rf-mcp-sub{font-size:13.5px;font-weight:600;color:#eef0f4;margin-bottom:4px!important}
+#refuel-modal .rf-mcp-soon{font-size:12.5px;line-height:1.5;color:rgba(238,240,244,.62)}
+#refuel-modal .rf-mcp-row{font-size:12.5px;line-height:1.6;color:rgba(238,240,244,.8)}
+#refuel-modal .rf-mcp-row span{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(238,240,244,.5)}
+#refuel-modal .rf-mcp-row code{display:block;font-family:var(--fx-mono,ui-monospace,Menlo,Consolas,monospace);font-size:12px;word-break:break-all;color:#eef0f4}
+#refuel-modal .rf-mcp-row a{color:var(--fx-accent-2,#7BE4F5)}
+#refuel-modal .xcv-foot{flex-wrap:wrap}

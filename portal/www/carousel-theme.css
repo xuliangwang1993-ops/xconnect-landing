@@ -1,0 +1,19 @@
+/* Facade theme overlay for the draggable service panel.
+ * Rotation (app.js inline transforms), sound (app.js / assets/audio) and the
+ * jade "Verify" sparkle are untouched; only fonts, text colors and decorations change. */
+body{font-family:"Figtree","PingFang SC",system-ui,sans-serif;color:#E7EEF6}
+h2,.card h3{font-family:"Archivo","PingFang SC",system-ui,sans-serif;color:#E7EEF6}
+.eyebrow,.heading>span,.card-top,.badge,.counter,.bottom,.audio-lab,.sample-note,.card-foot>span{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.card p{color:#8B98A8}.card-top,.card-foot,.bottom,.sample-note{color:#64707F}
+.counter strong{color:#E7EEF6}#name{color:#8B98A8}
+/* remove decorative slanted gem blocks / logo marks at the top of each card */
+.art{display:none}
+.card h3{margin-top:26px}
+/* Verify: add material depth on top of the existing jade image (sparkle kept) */
+.card-foot .verify{position:relative}
+.card-foot .verify .verify-jade{filter:drop-shadow(0 1px 0 #0a5c43) drop-shadow(0 2px 0 #043226) drop-shadow(0 3px 3px rgba(0,0,0,.6)) saturate(1.15) contrast(1.08)}
+.card-foot .verify::after{content:'';position:absolute;inset:3px 0;pointer-events:none;
+  -webkit-mask:url(assets/verify-jade-review.png) center/contain no-repeat;mask:url(assets/verify-jade-review.png) center/contain no-repeat;
+  background:linear-gradient(160deg,rgba(230,255,245,.55) 0%,rgba(230,255,245,0) 28%,rgba(0,40,28,0) 55%,rgba(0,30,20,.45) 100%),
+    repeating-linear-gradient(115deg,rgba(255,255,255,.07) 0 1px,transparent 1px 3px);
+  mix-blend-mode:overlay;opacity:.9}

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "S02",
+    "title": "Brand Mark & Vector Asset Suite",
+    "tierLabel": "Tier V \u00b7 Verified Sample",
+    "audience": "New shops & creators; production-ready vector mark & multi-resolution exports",
+    "deliverables": "logo.svg + logo.pdf + transparent logo.png (1024/512/256) + color spec",
+    "engines": "VectorCraft 0.11.0 \u2192 PdfCraft 0.8.0",
+    "proof": "logo.pdf (20.7KB) / logo.png (84KB)",
+    "exclusions": "Excludes trademark legal search, commercial font licensing, packaging dielines",
+    "defaultAccept": "Crisp SVG scaling, verified PNG alpha channel, exact hex color match"
+  },
+  {
+    "id": "S03",
+    "title": "Menu / Price List / Business Doc Typesetting",
+    "tierLabel": "Tier V \u00b7 Verified Sample",
+    "audience": "Restaurants, cafes & local businesses; turn raw lists into print & mobile PDFs",
+    "deliverables": "Print PDF + Screen PDF + Editable .docx/.md + Page Preview PNG",
+    "engines": "WordCraft 0.7.0 \u2192 PdfCraft 0.8.0",
+    "proof": "menu.pdf (73KB) / spec.pdf (98KB)",
+    "exclusions": "Excludes photography, nutrition lab calc, custom illustration, press proofing",
+    "defaultAccept": "100% item count & price sum match, searchable text, zero layout clipping"
+  },
+  {
+    "id": "S14",
+    "title": "Single-Page Interactive Product & Order Site",
+    "tierLabel": "Tier V \u00b7 Verified Sample",
+    "audience": "Launches, shops & indie projects; interactive showcase with order intake & live URL",
+    "deliverables": "Full static bundle (HTML/CSS/JS) + Vector/PDF assets + Live Preview URL",
+    "engines": "Web + VectorCraft + WordCraft + PhotoCraft",
+    "proof": "sanxian-shouzuo.onrender.com (Live)",
+    "exclusions": "Excludes merchant payment gateway licensing, ERP inventory, SEO rank guarantees",
+    "defaultAccept": "HTTP 200 live, zero horizontal overflow on 390px mobile, complete order flow"
+  },
+  {
+    "id": "DEMO",
+    "title": "Product Demo Prototype",
+    "tierLabel": "Illustrative demo \u00b7 not verified",
+    "audience": "An authorized example of an interactive product prototype.",
+    "deliverables": "Scope and specifications to be agreed; no existing commercial package asserted.",
+    "engines": "This private interactive preview only",
+    "proof": "No verified service artifact claimed",
+    "exclusions": "No production integration, real sign-in, payments or entitlements",
+    "defaultAccept": "Review interaction and layout; not a delivery commitment"
+  }
+]
