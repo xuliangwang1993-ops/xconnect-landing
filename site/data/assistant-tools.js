@@ -1,10 +1,22 @@
 window.XCF_ASSISTANT_TOOLS = {
-  "generated_at": "2026-10-26T06:44:43.859Z",
+  "generated_at": "2026-10-26T07:32:02.014Z",
   "assistant": {
     "id": "duck-lee",
     "runner": "grok-build-cli",
     "protocol": "MCP 2025-11-25",
-    "verified_transport": "Grok 1.0.41 stdio → xc-tools"
+    "verified_transports": [
+      {
+        "server": "xc-tools",
+        "status": "handshake_tools_list_verified",
+        "tools": 6
+      },
+      {
+        "server": "xconnect",
+        "status": "handshake_tools_list_verified_tools_call_auth_expired",
+        "tools": 6,
+        "action": "Sign in to X-Connect and refresh the MCP bearer token before calling tools"
+      }
+    ]
   },
   "groups": {
     "probe": [
@@ -76,6 +88,27 @@ window.XCF_ASSISTANT_TOOLS = {
       "read_only": true,
       "endpoint": "xc-tools",
       "transport": "grok-stdio"
+    }
+  ],
+  "connected_servers": [
+    {
+      "name": "xc-tools",
+      "tools": 6,
+      "status": "probe_ready",
+      "credential_required": false
+    },
+    {
+      "name": "xconnect",
+      "tools": 6,
+      "status": "connected_auth_refresh_required",
+      "tool_names": [
+        "health_check",
+        "list_models",
+        "get_balance",
+        "invoke_model",
+        "save_work_checkpoint",
+        "read_work_checkpoint"
+      ]
     }
   ],
   "planned_adapters": {

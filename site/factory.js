@@ -344,7 +344,7 @@
   function initAssistantTools() {
     const host = $('#assistantTools'), data = window.XCF_ASSISTANT_TOOLS;
     if (!host || !data) return;
-    host.innerHTML = (data.tools || []).map(t => `<div class="mcpTool"><span class="chip ok">MCP 已握手</span><b>${esc(t.name)}</b><small>${esc(t.description)}</small></div>`).join('') +
+    host.innerHTML = (data.connected_servers || []).map(s => `<div class="mcpTool"><span class="chip ${s.status === 'probe_ready' ? 'ok' : ''}">${s.status === 'probe_ready' ? 'MCP 已握手' : '需刷新登录'}</span><b>${esc(s.name)} · ${s.tools} 工具</b><small>${s.status === 'probe_ready' ? '只读探针已接入工厂 Grok；不包含任意 Shell 或自动开 Pod。' : 'Open Minis 模型、余额与工作检查点。MCP 握手通过；现有 bearer 调用返回 401，需重新登录后调用。'}</small></div>`).join('') +
       `<p class="note">${Object.keys(data.planned_adapters || {}).length} 类写入/GPU/联网工具仍为待验收适配器，未注册为可执行工具。</p>`;
   }
   function initOrderFlow() {
