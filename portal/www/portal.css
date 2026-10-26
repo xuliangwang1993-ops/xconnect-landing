@@ -107,3 +107,8 @@ body::before{content:'';position:fixed;inset:0;z-index:-3;pointer-events:none;ba
 .auth-quota{margin:0 0 6px;font-size:11px;letter-spacing:.02em;color:#9aa3ab}
 .auth-quota[data-mode=full]{color:#a6d8b8}
 .auth-quota[data-mode=partial]{color:#d9b48a}
+
+/* Direct path between the assistant and the factory. */
+.factory-direct{position:absolute;right:6.7%;top:calc(59.7% + 122px);z-index:2;display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:7px 14px;border:1px solid #6f7c8744;border-radius:20px;color:#cbd6df;font-size:12px;letter-spacing:.02em;background:#07101666}
+.factory-direct:hover{border-color:#cbd6df;color:#fff;background:#101c2666}
+@media(max-width:700px){.factory-direct{left:50%;right:auto;top:calc(62.5% + 125px);transform:translateX(-50%);white-space:nowrap;font-size:11px;min-height:36px;padding:6px 12px}}
