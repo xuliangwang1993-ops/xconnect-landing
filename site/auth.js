@@ -45,6 +45,9 @@
     const who = $('#whoPill'), out = $('#signOutBtn');
     if (who) { who.hidden = !user; who.textContent = user ? (user.email || '已登录') : ''; }
     if (out) out.hidden = !user;
+    const mobileWho = $('#mobileWho'), mobileOut = $('#mobileSignOutBtn');
+    if (mobileWho) { mobileWho.hidden = !user; mobileWho.textContent = user ? (user.email || '已登录') : ''; }
+    if (mobileOut) mobileOut.hidden = !user;
     document.dispatchEvent(new CustomEvent('xcf:session', { detail: { session: current } }));
   }
 
@@ -83,6 +86,7 @@
     if (error) say(zhErr(error), 'bad'); else say('');
   });
 
+  $('#mobileSignOutBtn') && $('#mobileSignOutBtn').addEventListener('click', () => $('#signOutBtn').click());
   $('#signOutBtn') && $('#signOutBtn').addEventListener('click', async () => {
     if (window.XCSSO) await window.XCSSO.signOut(client); else await client.auth.signOut();   // x-connect.ai 下同时清域级 cookie
     render(null);

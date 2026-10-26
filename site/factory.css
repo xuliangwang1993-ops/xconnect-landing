@@ -256,6 +256,9 @@ button:focus-visible, a:focus-visible, summary:focus-visible, textarea:focus-vis
 .mobileMore > summary::-webkit-details-marker { display: none; }
 .mobileMoreMenu { position: absolute; z-index: 50; right: 0; top: calc(100% + 10px); width: 180px; padding: 6px; border: 1px solid var(--line2); border-radius: 8px; background: #0F172A; box-shadow: 0 12px 30px #0008; }
 .mobileMoreMenu a { display: flex; align-items: center; min-height: 44px; padding: 8px 12px; color: #CBD5E1; text-decoration: none; }
+.mobileAccount { padding: 8px 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; overflow-wrap: anywhere; }
+.mobileAccountAction { width: 100%; min-height: 44px; padding: 8px 12px; border: 0; background: none; color: #CBD5E1; text-align: left; cursor: pointer; font: inherit; }
+.mobileAccount[hidden], .mobileAccountAction[hidden] { display: none; }
 .order-flow { width: min(100% - 48px, 1120px); margin: 0 auto; padding: 52px 0 30px; }
 .orderHero { max-width: 660px; }
 .eyebrow { color: var(--accent2); font: 11px ui-monospace, monospace; letter-spacing: .13em; }
@@ -308,7 +311,8 @@ body:not([data-auth]) .order-flow { display: none; }
   .brand > span:nth-child(2), .brand .pipe { display: none; }
   .brand .fac { font-size: 10px; letter-spacing: .12em; }
   .bar .right { min-width: 0; gap: 6px; }
-  .bar .right > a, .bar .right > #podPill, .bar .right > #runPill { display: none !important; }
+  .bar .right > a, .bar .right > #podPill, .bar .right > #runPill,
+  .bar .right > #whoPill, .bar .right > #signOutBtn { display: none !important; }
   .mobileMore { display: block; }
   .mobileMore > summary { display: flex; align-items: center; min-height: 36px; padding: 0 10px; white-space: nowrap; }
   .langSw { height: 36px; }
