@@ -1,0 +1,5083 @@
+{
+  "generated_at": "2026-10-23T23:10:51Z",
+  "source": "https://skillsmp.com/categories",
+  "domains": [
+    {
+      "domain": "Tools",
+      "categories": [
+        {
+          "slug": "debugging",
+          "label": "Debugging",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "shell": 30,
+            "node/npm": 16,
+            "llm-api": 9,
+            "sqlite": 7,
+            "git": 4,
+            "gh-cli": 3,
+            "docker": 2,
+            "sql": 1
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/agents-skills-channel-message-flows",
+              "chars": 5276,
+              "tools": {
+                "node/npm": 4,
+                "shell": 2,
+                "llm-api": 2
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-clawdtributor",
+              "chars": 8024,
+              "tools": {}
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-deslop",
+              "chars": 5765,
+              "tools": {
+                "git": 1
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-discrawl",
+              "chars": 9394,
+              "tools": {
+                "sqlite": 1,
+                "git": 2,
+                "shell": 11
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-notcrawl",
+              "chars": 5069,
+              "tools": {
+                "shell": 3
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-openclaw-debugging",
+              "chars": 11900,
+              "tools": {
+                "sqlite": 5,
+                "git": 1,
+                "node/npm": 3,
+                "shell": 4,
+                "sql": 1,
+                "llm-api": 2
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-openclaw-qa-testing",
+              "chars": 15820,
+              "tools": {
+                "docker": 2,
+                "gh-cli": 3,
+                "node/npm": 6,
+                "shell": 9,
+                "llm-api": 5
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-openclaw-test-heap-leaks",
+              "chars": 11732,
+              "tools": {
+                "sqlite": 1,
+                "node/npm": 3,
+                "shell": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "system-admin",
+          "label": "System Administration",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "node/npm": 52,
+            "shell": 22,
+            "aws-cli": 12,
+            "gh-cli": 9,
+            "git": 6,
+            "jq": 4,
+            "llm-api": 2
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/agents-skills-clawsweeper",
+              "chars": 15700,
+              "tools": {
+                "git": 4,
+                "gh-cli": 9,
+                "shell": 11
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-crabbox",
+              "chars": 17347,
+              "tools": {
+                "jq": 4,
+                "aws-cli": 12,
+                "node/npm": 2
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-openclaw-parallels-smoke",
+              "chars": 28690,
+              "tools": {
+                "git": 2,
+                "node/npm": 49,
+                "shell": 6,
+                "llm-api": 2
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-openclaw-update",
+              "chars": 8077,
+              "tools": {}
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-update-team-server",
+              "chars": 10277,
+              "tools": {}
+            },
+            {
+              "path": "openclaw/openclaw/extensions-canvas-skills-canvas",
+              "chars": 5088,
+              "tools": {
+                "node/npm": 1
+              }
+            },
+            {
+              "path": "openclaw/openclaw/extensions-feishu-skills-feishu-perm",
+              "chars": 5120,
+              "tools": {}
+            },
+            {
+              "path": "openclaw/openclaw/skills-apple-reminders",
+              "chars": 6777,
+              "tools": {
+                "shell": 5
+              }
+            }
+          ]
+        },
+        {
+          "slug": "productivity-tools",
+          "label": "Productivity & Integration",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "shell": 23,
+            "curl/wget": 2,
+            "node/npm": 1
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/extensions-feishu-skills-feishu-drive",
+              "chars": 5580,
+              "tools": {}
+            },
+            {
+              "path": "openclaw/openclaw/extensions-slack-skills-slack",
+              "chars": 5190,
+              "tools": {}
+            },
+            {
+              "path": "openclaw/openclaw/extensions-whatsapp-skills-wacli",
+              "chars": 6307,
+              "tools": {}
+            },
+            {
+              "path": "openclaw/openclaw/skills-gog",
+              "chars": 8268,
+              "tools": {
+                "shell": 2
+              }
+            },
+            {
+              "path": "openclaw/openclaw/skills-notion",
+              "chars": 7603,
+              "tools": {
+                "curl/wget": 2,
+                "node/npm": 1,
+                "shell": 9
+              }
+            },
+            {
+              "path": "openclaw/openclaw/skills-peekaboo",
+              "chars": 10746,
+              "tools": {
+                "shell": 10
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-in-progress-claude-handoff",
+              "chars": 5581,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-in-progress-loop-me",
+              "chars": 6807,
+              "tools": {
+                "shell": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "automation-tools",
+          "label": "Automation Tools",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "git": 15,
+            "openpyxl": 13,
+            "node/npm": 10,
+            "python": 10,
+            "spreadsheet": 9,
+            "shell": 8,
+            "pandoc": 7,
+            "docker": 2,
+            "gh-cli": 1,
+            "pandas": 1
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/agents-skills-openclaw-changelog-update",
+              "chars": 21341,
+              "tools": {
+                "git": 13,
+                "node/npm": 5,
+                "shell": 3
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-openclaw-refactor-docs",
+              "chars": 11759,
+              "tools": {
+                "git": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-continuous-learning",
+              "chars": 6514,
+              "tools": {
+                "git": 1,
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-master-agreement-generator",
+              "chars": 16201,
+              "tools": {
+                "pandoc": 7,
+                "docker": 1,
+                "node/npm": 1
+              }
+            },
+            {
+              "path": "morluto/rea/agents-skills-rea-changelog-update",
+              "chars": 11441,
+              "tools": {
+                "gh-cli": 1,
+                "node/npm": 4,
+                "shell": 2
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-finance-excel-author",
+              "chars": 12642,
+              "tools": {
+                "openpyxl": 13,
+                "pandas": 1,
+                "python": 7,
+                "shell": 2,
+                "spreadsheet": 9
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-productivity-live-dashboard",
+              "chars": 12024,
+              "tools": {}
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-security-unbroker",
+              "chars": 21178,
+              "tools": {
+                "python": 3,
+                "shell": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "ide-plugins",
+          "label": "IDE Plugins",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "playwright": 60,
+            "shell": 25,
+            "node/npm": 18,
+            "llm-api": 10,
+            "git": 6,
+            "python": 2,
+            "curl/wget": 2
+          },
+          "skills": [
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-autonomous-ai-agents-openhands",
+              "chars": 12029,
+              "tools": {
+                "python": 2,
+                "llm-api": 10
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-creative-draw-your-font",
+              "chars": 10746,
+              "tools": {
+                "node/npm": 2,
+                "shell": 5
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-creative-ip-as-logo",
+              "chars": 22690,
+              "tools": {}
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-research-gitnexus-explorer",
+              "chars": 10974,
+              "tools": {
+                "git": 4,
+                "curl/wget": 2,
+                "node/npm": 7,
+                "shell": 6
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/skills-creative-design-md",
+              "chars": 12272,
+              "tools": {
+                "node/npm": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "deepseek-ai/deepseek-harness/packages-preset-agent-preset-skills-cordis-composition-reference",
+              "chars": 7031,
+              "tools": {}
+            },
+            {
+              "path": "anomalyco/opencode/opencode-skills-effect",
+              "chars": 7711,
+              "tools": {
+                "git": 2,
+                "playwright": 2
+              }
+            },
+            {
+              "path": "microsoft/vscode/extensions-copilot-agents-skills-launch",
+              "chars": 18924,
+              "tools": {
+                "playwright": 58,
+                "node/npm": 8,
+                "shell": 13
+              }
+            }
+          ]
+        },
+        {
+          "slug": "cli-tools",
+          "label": "CLI Tools",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "shell": 14,
+            "git": 10,
+            "node/npm": 8,
+            "gh-cli": 3,
+            "python": 3,
+            "curl/wget": 2,
+            "docker": 1
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/skills-apple-notes",
+              "chars": 5705,
+              "tools": {}
+            },
+            {
+              "path": "openclaw/openclaw/skills-bear-notes",
+              "chars": 6313,
+              "tools": {
+                "shell": 5
+              }
+            },
+            {
+              "path": "openclaw/openclaw/skills-blucli",
+              "chars": 4737,
+              "tools": {}
+            },
+            {
+              "path": "mattpocock/skills/skills-in-progress-setup-ts-deep-modules",
+              "chars": 12039,
+              "tools": {
+                "node/npm": 2,
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-terminal-opener",
+              "chars": 7344,
+              "tools": {
+                "docker": 1,
+                "node/npm": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-autonomous-ai-agents-grok",
+              "chars": 16419,
+              "tools": {
+                "git": 10,
+                "curl/wget": 2,
+                "gh-cli": 3,
+                "node/npm": 4,
+                "shell": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-creative-pretext",
+              "chars": 17749,
+              "tools": {
+                "node/npm": 1,
+                "python": 3
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/skills-apple-apple-notes",
+              "chars": 6095,
+              "tools": {
+                "shell": 6
+              }
+            }
+          ]
+        },
+        {
+          "slug": "domain-utilities",
+          "label": "Domain & DNS Tools",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "shell": 29,
+            "python": 16,
+            "curl/wget": 12,
+            "docker": 7,
+            "git": 2,
+            "jq": 2,
+            "postgresql": 1
+          },
+          "skills": [
+            {
+              "path": "mattpocock/skills/skills-engineering-domain-modeling",
+              "chars": 7527,
+              "tools": {
+                "postgresql": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-homelab-pihole-dns",
+              "chars": 13465,
+              "tools": {
+                "git": 1,
+                "curl/wget": 2,
+                "docker": 3,
+                "shell": 4
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-scientific-db-uspto-database",
+              "chars": 8214,
+              "tools": {
+                "docker": 1,
+                "python": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-homelab-pihole-dns",
+              "chars": 14082,
+              "tools": {
+                "git": 1,
+                "curl/wget": 2,
+                "docker": 3,
+                "shell": 4
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-productivity-here-now",
+              "chars": 12601,
+              "tools": {
+                "jq": 2,
+                "curl/wget": 4,
+                "shell": 14
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-productivity-property-listings",
+              "chars": 8574,
+              "tools": {}
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-research-domain-intel",
+              "chars": 8339,
+              "tools": {
+                "curl/wget": 2,
+                "python": 7,
+                "shell": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-research-duckduckgo-search",
+              "chars": 12122,
+              "tools": {
+                "curl/wget": 2,
+                "python": 8,
+                "shell": 4
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "Business",
+      "categories": [
+        {
+          "slug": "sales-marketing",
+          "label": "Sales & Marketing",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "shell": 5,
+            "git": 1
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/skills-taskflow-inbox-triage",
+              "chars": 6657,
+              "tools": {}
+            },
+            {
+              "path": "obra/superpowers/skills-brainstorming",
+              "chars": 13915,
+              "tools": {}
+            },
+            {
+              "path": "obra/superpowers/skills-using-superpowers",
+              "chars": 7197,
+              "tools": {
+                "git": 1
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-engineering-grill-with-docs",
+              "chars": 4617,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-engineering-implement",
+              "chars": 4713,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-engineering-triage",
+              "chars": 10987,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-productivity-grill-me",
+              "chars": 4708,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-productivity-grilling",
+              "chars": 6216,
+              "tools": {
+                "shell": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "project-management",
+          "label": "Project Management",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "shell": 14,
+            "node/npm": 8,
+            "python": 8,
+            "jq": 5,
+            "docker": 4,
+            "git": 3,
+            "curl/wget": 3,
+            "gh-cli": 2,
+            "llm-api": 2
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/agents-skills-graincrawl",
+              "chars": 5190,
+              "tools": {
+                "shell": 3
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-openclaw-ci-limits",
+              "chars": 22857,
+              "tools": {
+                "jq": 5,
+                "git": 2,
+                "curl/wget": 3,
+                "gh-cli": 2,
+                "node/npm": 8,
+                "shell": 7,
+                "llm-api": 1
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-engineering-to-tickets",
+              "chars": 10272,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-engineering-wayfinder",
+              "chars": 16794,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-carrier-relationship-management",
+              "chars": 7086,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-cost-aware-llm-pipeline",
+              "chars": 8980,
+              "tools": {
+                "docker": 1,
+                "python": 5,
+                "llm-api": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-skill-comply",
+              "chars": 5802,
+              "tools": {
+                "git": 1,
+                "docker": 1,
+                "python": 3,
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-nextjs-turbopack",
+              "chars": 5476,
+              "tools": {
+                "docker": 1,
+                "shell": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "finance-investment",
+          "label": "Finance & Investment",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "docker": 8
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/agents-skills-competitive-platform-analysis",
+              "chars": 16572,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/agents-skills-market-research",
+              "chars": 6870,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/cursor-skills-market-research",
+              "chars": 6760,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-ecc-tools-cost-audit",
+              "chars": 10439,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-investor-materials",
+              "chars": 6700,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-investor-outreach",
+              "chars": 6686,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-carrier-relationship-management",
+              "chars": 13335,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-energy-procurement",
+              "chars": 14205,
+              "tools": {
+                "docker": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "real-estate-legal",
+          "label": "Real Estate & Legal",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "git": 10,
+            "docker": 7,
+            "sql": 4,
+            "python": 1
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-council",
+              "chars": 8099,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-healthcare-phi-compliance",
+              "chars": 9654,
+              "tools": {
+                "docker": 1,
+                "sql": 4
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-logistics-exception-management",
+              "chars": 10794,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/pi-core-skills-conventional-commit-review",
+              "chars": 8908,
+              "tools": {
+                "git": 10,
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/pi-core-skills-rust-patterns",
+              "chars": 15014,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-logistics-exception-management",
+              "chars": 21191,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-operator-approval-loop",
+              "chars": 17801,
+              "tools": {
+                "docker": 1,
+                "python": 1
+              }
+            },
+            {
+              "path": "morluto/rea/agents-skills-rea-tool-design",
+              "chars": 4799,
+              "tools": {}
+            }
+          ]
+        },
+        {
+          "slug": "ecommerce",
+          "label": "E-commerce",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "node/npm": 21,
+            "shell": 9,
+            "docker": 6,
+            "python": 5,
+            "curl/wget": 4,
+            "git": 3,
+            "kubectl": 2,
+            "postgresql": 1,
+            "sql": 1
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/skills-ordercli",
+              "chars": 5880,
+              "tools": {}
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-returns-reverse-logistics",
+              "chars": 15765,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-tr-skills-deployment-patterns",
+              "chars": 15883,
+              "tools": {
+                "postgresql": 1,
+                "git": 1,
+                "curl/wget": 2,
+                "docker": 5,
+                "kubectl": 2,
+                "node/npm": 16,
+                "python": 5,
+                "shell": 2,
+                "sql": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-finance-polymarket",
+              "chars": 6833,
+              "tools": {
+                "curl/wget": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-productivity-shop",
+              "chars": 20422,
+              "tools": {
+                "curl/wget": 1,
+                "node/npm": 4,
+                "shell": 5
+              }
+            },
+            {
+              "path": "addyosmani/agent-skills/skills-shipping-and-launch",
+              "chars": 15762,
+              "tools": {
+                "git": 2,
+                "node/npm": 1
+              }
+            },
+            {
+              "path": "nexu-io/open-design/skills-fal-tryon",
+              "chars": 5428,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "nexu-io/open-design/skills-ui-ux-pro-max",
+              "chars": 6137,
+              "tools": {
+                "shell": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "payment",
+          "label": "Payment",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "docker": 7,
+            "python": 6,
+            "curl/wget": 3,
+            "node/npm": 3,
+            "jq": 2,
+            "shell": 2
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-agent-payment-x402",
+              "chars": 20269,
+              "tools": {
+                "jq": 1,
+                "curl/wget": 1,
+                "docker": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-customer-billing-ops",
+              "chars": 6908,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-agent-payment-x402",
+              "chars": 18566,
+              "tools": {
+                "jq": 1,
+                "curl/wget": 1,
+                "docker": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-customer-billing-ops",
+              "chars": 5979,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-llm-trading-agent-security",
+              "chars": 7712,
+              "tools": {
+                "docker": 1,
+                "python": 6
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-agent-payment-x402",
+              "chars": 22707,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-customer-billing-ops",
+              "chars": 8814,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-payments-mpp-agent",
+              "chars": 8748,
+              "tools": {
+                "curl/wget": 1,
+                "node/npm": 3
+              }
+            }
+          ]
+        },
+        {
+          "slug": "health-fitness",
+          "label": "Health & Fitness",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "shell": 32,
+            "llm-api": 28,
+            "python": 13,
+            "jq": 12,
+            "curl/wget": 10,
+            "node/npm": 6,
+            "matplotlib": 3,
+            "spreadsheet": 2,
+            "docker": 1,
+            "git": 1,
+            "gh-cli": 1,
+            "huggingface": 1
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-healthcare-eval-harness",
+              "chars": 11799,
+              "tools": {
+                "jq": 9,
+                "docker": 1,
+                "node/npm": 3,
+                "shell": 7
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-health-fitness-nutrition",
+              "chars": 13684,
+              "tools": {
+                "curl/wget": 5,
+                "python": 13,
+                "shell": 5
+              }
+            },
+            {
+              "path": "google-gemini/gemini-cli/packages-core-src-skills-builtin-antigravity-support",
+              "chars": 7402,
+              "tools": {
+                "git": 1,
+                "curl/wget": 2,
+                "node/npm": 1,
+                "shell": 3,
+                "llm-api": 13
+              }
+            },
+            {
+              "path": "nexu-io/open-design/plugins-official-examples-motion-ui-morph",
+              "chars": 9582,
+              "tools": {}
+            },
+            {
+              "path": "vllm-project/vllm/agents-skills-model-recipes",
+              "chars": 11415,
+              "tools": {
+                "jq": 3,
+                "curl/wget": 3,
+                "gh-cli": 1,
+                "node/npm": 2,
+                "shell": 3,
+                "huggingface": 1
+              }
+            },
+            {
+              "path": "asgeirtj/system_prompts_leaks/meta-muse-agent-skills-apple-healthkit",
+              "chars": 14319,
+              "tools": {
+                "matplotlib": 1,
+                "shell": 7,
+                "llm-api": 5,
+                "spreadsheet": 1
+              }
+            },
+            {
+              "path": "asgeirtj/system_prompts_leaks/meta-muse-agent-skills-function-health",
+              "chars": 9791,
+              "tools": {
+                "matplotlib": 1,
+                "llm-api": 5
+              }
+            },
+            {
+              "path": "asgeirtj/system_prompts_leaks/meta-muse-agent-skills-google-health-connect",
+              "chars": 14403,
+              "tools": {
+                "matplotlib": 1,
+                "shell": 7,
+                "llm-api": 5,
+                "spreadsheet": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "business-apps",
+          "label": "Business Apps",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "spreadsheet": 10,
+            "openpyxl": 9,
+            "shell": 9,
+            "python": 7,
+            "llm-api": 5,
+            "matplotlib": 1,
+            "node/npm": 1
+          },
+          "skills": [
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-finance-comps-analysis",
+              "chars": 21111,
+              "tools": {
+                "openpyxl": 3,
+                "python": 1,
+                "spreadsheet": 3
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-finance-lbo-model",
+              "chars": 20573,
+              "tools": {
+                "openpyxl": 6,
+                "python": 2,
+                "shell": 1,
+                "spreadsheet": 6
+              }
+            },
+            {
+              "path": "microsoft/ai-agents-for-beginners/translations-cs-agents-skills-jupyter-notebook",
+              "chars": 9783,
+              "tools": {
+                "python": 4,
+                "shell": 4
+              }
+            },
+            {
+              "path": "asgeirtj/system_prompts_leaks/meta-muse-agent-skills-quickbooks",
+              "chars": 13258,
+              "tools": {
+                "matplotlib": 1,
+                "llm-api": 5
+              }
+            },
+            {
+              "path": "twentyhq/twenty/packages-twenty-claude-skills-skills-twenty-record-presentation",
+              "chars": 12729,
+              "tools": {
+                "node/npm": 1
+              }
+            },
+            {
+              "path": "outline/outline/server-mcp-skills-meeting-notes",
+              "chars": 6111,
+              "tools": {}
+            },
+            {
+              "path": "googleworkspace/cli/skills-gws-gmail-forward",
+              "chars": 6529,
+              "tools": {
+                "shell": 2
+              }
+            },
+            {
+              "path": "googleworkspace/cli/skills-gws-gmail-send",
+              "chars": 6031,
+              "tools": {
+                "shell": 2,
+                "spreadsheet": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "Development",
+      "categories": [
+        {
+          "slug": "architecture-patterns",
+          "label": "Architecture Patterns",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "docker": 40,
+            "postgresql": 13,
+            "node/npm": 11,
+            "shell": 5,
+            "git": 3,
+            "llm-api": 3,
+            "curl/wget": 2,
+            "spreadsheet": 1
+          },
+          "skills": [
+            {
+              "path": "obra/superpowers/skills-dispatching-parallel-agents",
+              "chars": 9943,
+              "tools": {}
+            },
+            {
+              "path": "mattpocock/skills/skills-engineering-implement",
+              "chars": 4713,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/agents-skills-context-and-decisions",
+              "chars": 9268,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/agents-skills-ecc-conventions",
+              "chars": 15458,
+              "tools": {
+                "git": 1,
+                "docker": 1,
+                "shell": 1,
+                "llm-api": 3
+              }
+            },
+            {
+              "path": "affaan-m/ecc/agents-skills-product-capability",
+              "chars": 9068,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-es-skills-docker-patterns",
+              "chars": 13093,
+              "tools": {
+                "postgresql": 13,
+                "git": 2,
+                "curl/wget": 2,
+                "docker": 35,
+                "node/npm": 11,
+                "shell": 3
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-es-skills-jpa-patterns",
+              "chars": 9170,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-es-skills-kotlin-patterns",
+              "chars": 17336,
+              "tools": {
+                "docker": 1,
+                "spreadsheet": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "backend",
+          "label": "Backend",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "docker": 15,
+            "node/npm": 10,
+            "shell": 9,
+            "llm-api": 6,
+            "sql": 4,
+            "python": 2
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/agents-skills-openclaw-docker-e2e-authoring",
+              "chars": 6460,
+              "tools": {
+                "docker": 9,
+                "node/npm": 3,
+                "shell": 2
+              }
+            },
+            {
+              "path": "openclaw/openclaw/extensions-acpx-skills-acp-router",
+              "chars": 13932,
+              "tools": {
+                "node/npm": 3,
+                "shell": 5,
+                "llm-api": 6
+              }
+            },
+            {
+              "path": "affaan-m/ecc/agents-skills-api-design",
+              "chars": 15514,
+              "tools": {
+                "docker": 1,
+                "python": 1,
+                "sql": 2
+              }
+            },
+            {
+              "path": "affaan-m/ecc/agents-skills-backend-patterns",
+              "chars": 16721,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/agents-skills-mcp-server-patterns",
+              "chars": 8579,
+              "tools": {
+                "docker": 1,
+                "node/npm": 2,
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/cursor-skills-mcp-server-patterns",
+              "chars": 8240,
+              "tools": {
+                "docker": 1,
+                "node/npm": 2,
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-es-skills-api-design",
+              "chars": 16068,
+              "tools": {
+                "docker": 1,
+                "python": 1,
+                "sql": 2
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-es-skills-backend-patterns",
+              "chars": 17050,
+              "tools": {
+                "docker": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "frontend",
+          "label": "Frontend",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "docker": 8
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/agents-skills-documentation-lookup",
+              "chars": 9448,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/agents-skills-frontend-patterns",
+              "chars": 15955,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/cursor-skills-documentation-lookup",
+              "chars": 9334,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-angular-developer",
+              "chars": 12690,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-crosspost",
+              "chars": 6366,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-dart-flutter-patterns",
+              "chars": 6179,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-frontend-patterns",
+              "chars": 14675,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-remotion-video-creation",
+              "chars": 7039,
+              "tools": {
+                "docker": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "gaming",
+          "label": "Game Development",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "python": 16,
+            "numpy/scipy": 4,
+            "huggingface": 4,
+            "docker": 3,
+            "playwright": 2,
+            "git": 2,
+            "blender": 2,
+            "postgresql": 1,
+            "shell": 1,
+            "pillow": 1
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-ui-demo",
+              "chars": 14615,
+              "tools": {
+                "playwright": 1,
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-tr-skills-golang-patterns",
+              "chars": 15971,
+              "tools": {
+                "postgresql": 1,
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-ui-demo",
+              "chars": 13816,
+              "tools": {
+                "playwright": 1,
+                "docker": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-creative-audiocraft-audio-generation",
+              "chars": 16734,
+              "tools": {
+                "numpy/scipy": 4,
+                "git": 2,
+                "python": 13,
+                "shell": 1,
+                "huggingface": 4
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-creative-creative-ideation",
+              "chars": 14186,
+              "tools": {}
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-creative-dream-loop",
+              "chars": 17761,
+              "tools": {
+                "pillow": 1,
+                "blender": 2,
+                "python": 2
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-dogfood-adversarial-ux-test",
+              "chars": 12659,
+              "tools": {}
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-gaming-pokemon-player",
+              "chars": 12515,
+              "tools": {
+                "python": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "mobile",
+          "label": "Mobile",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "docker": 8,
+            "shell": 6
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-accessibility",
+              "chars": 9055,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-compose-multiplatform-patterns",
+              "chars": 11561,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-ios-icon-gen",
+              "chars": 8874,
+              "tools": {
+                "docker": 1,
+                "shell": 6
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-kotlin-coroutines-flows",
+              "chars": 11197,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-swiftui-patterns",
+              "chars": 10155,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-compose-multiplatform-patterns",
+              "chars": 11345,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-foundation-models-on-device",
+              "chars": 10277,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-kotlin-coroutines-flows",
+              "chars": 10986,
+              "tools": {
+                "docker": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "scripting",
+          "label": "Scripting",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "shell": 18,
+            "docker": 6,
+            "node/npm": 6,
+            "gh-cli": 2,
+            "python": 1,
+            "playwright": 1
+          },
+          "skills": [
+            {
+              "path": "mattpocock/skills/skills-engineering-wizard",
+              "chars": 8545,
+              "tools": {
+                "docker": 1,
+                "gh-cli": 2,
+                "shell": 4
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-hookify-rules",
+              "chars": 7601,
+              "tools": {
+                "docker": 1,
+                "python": 1,
+                "shell": 6
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ko-kr-skills-strategic-compact",
+              "chars": 7184,
+              "tools": {
+                "docker": 1,
+                "node/npm": 2
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-tw-skills-strategic-compact",
+              "chars": 5894,
+              "tools": {
+                "docker": 1,
+                "node/npm": 2
+              }
+            },
+            {
+              "path": "affaan-m/ecc/kiro-skills-strategic-compact",
+              "chars": 10899,
+              "tools": {
+                "docker": 1,
+                "node/npm": 2
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-creative-unreal-mcp",
+              "chars": 17671,
+              "tools": {}
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-devops-setup-wizard-generator",
+              "chars": 8821,
+              "tools": {
+                "docker": 1,
+                "shell": 8
+              }
+            },
+            {
+              "path": "microsoft/vscode/extensions-copilot-assets-prompts-skills-create-prompt",
+              "chars": 5863,
+              "tools": {
+                "playwright": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "package-distribution",
+          "label": "Package & Distribution",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "python": 77,
+            "shell": 27,
+            "node/npm": 15,
+            "docker": 7,
+            "git": 4,
+            "sqlite": 3,
+            "gh-cli": 3,
+            "opencv": 2,
+            "numpy/scipy": 2,
+            "pandas": 1,
+            "playwright": 1,
+            "sql": 1
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/agents-skills-bun-runtime",
+              "chars": 9969,
+              "tools": {
+                "sqlite": 1,
+                "docker": 1,
+                "node/npm": 5,
+                "shell": 3
+              }
+            },
+            {
+              "path": "affaan-m/ecc/cursor-skills-bun-runtime",
+              "chars": 9860,
+              "tools": {
+                "sqlite": 1,
+                "docker": 1,
+                "node/npm": 5,
+                "shell": 3
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-es-skills-python-patterns",
+              "chars": 16373,
+              "tools": {
+                "docker": 1,
+                "python": 31
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-tr-skills-python-patterns",
+              "chars": 16030,
+              "tools": {
+                "docker": 1,
+                "python": 31
+              }
+            },
+            {
+              "path": "affaan-m/ecc/pi-core-skills-bun-runtime",
+              "chars": 9872,
+              "tools": {
+                "sqlite": 1,
+                "docker": 1,
+                "node/npm": 5,
+                "shell": 3
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-generating-python-installer",
+              "chars": 13886,
+              "tools": {
+                "opencv": 2,
+                "pandas": 1,
+                "numpy/scipy": 2,
+                "playwright": 1,
+                "docker": 1,
+                "python": 12,
+                "shell": 3
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-opensource-pipeline",
+              "chars": 13469,
+              "tools": {
+                "git": 4,
+                "docker": 1,
+                "gh-cli": 3,
+                "shell": 4
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-mcp-fastmcp",
+              "chars": 12015,
+              "tools": {
+                "python": 3,
+                "shell": 11,
+                "sql": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "framework-internals",
+          "label": "Framework Internals",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "python": 89,
+            "shell": 11,
+            "huggingface": 10,
+            "docker": 6,
+            "node/npm": 6,
+            "git": 1,
+            "curl/wget": 1
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-python-patterns",
+              "chars": 15330,
+              "tools": {
+                "docker": 1,
+                "python": 31
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-pytorch-patterns",
+              "chars": 14813,
+              "tools": {
+                "docker": 1,
+                "python": 15
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-regex-vs-llm-structured-text",
+              "chars": 9166,
+              "tools": {
+                "docker": 1,
+                "python": 4
+              }
+            },
+            {
+              "path": "affaan-m/ecc/pi-core-skills-benchmark-optimization-loop",
+              "chars": 7149,
+              "tools": {
+                "docker": 1,
+                "node/npm": 3
+              }
+            },
+            {
+              "path": "affaan-m/ecc/pi-core-skills-pytorch-patterns",
+              "chars": 16104,
+              "tools": {
+                "docker": 1,
+                "python": 15
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-tinystruct-patterns",
+              "chars": 20652,
+              "tools": {
+                "git": 1,
+                "curl/wget": 1,
+                "docker": 1,
+                "shell": 3
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-mlops-accelerate",
+              "chars": 13000,
+              "tools": {
+                "node/npm": 3,
+                "python": 12,
+                "shell": 7,
+                "huggingface": 5
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-mlops-peft",
+              "chars": 14296,
+              "tools": {
+                "python": 12,
+                "shell": 1,
+                "huggingface": 5
+              }
+            }
+          ]
+        },
+        {
+          "slug": "cms-platforms",
+          "label": "CMS & Platforms",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "node/npm": 57,
+            "python": 24,
+            "shell": 14,
+            "python-pptx": 10,
+            "huggingface": 6,
+            "llm-api": 5,
+            "openpyxl": 3,
+            "spreadsheet": 3,
+            "git": 2
+          },
+          "skills": [
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-creative-heartmula",
+              "chars": 10242,
+              "tools": {
+                "git": 2,
+                "python": 3,
+                "shell": 5,
+                "huggingface": 5
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-creative-meme-generation",
+              "chars": 9456,
+              "tools": {
+                "python": 8,
+                "shell": 8
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-creative-pretext",
+              "chars": 17749,
+              "tools": {
+                "node/npm": 1,
+                "python": 3
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-finance-pptx-author",
+              "chars": 10128,
+              "tools": {
+                "openpyxl": 3,
+                "python-pptx": 10,
+                "python": 10,
+                "shell": 1,
+                "spreadsheet": 3
+              }
+            },
+            {
+              "path": "anthropics/skills/skills-theme-factory",
+              "chars": 9042,
+              "tools": {
+                "llm-api": 5
+              }
+            },
+            {
+              "path": "twbs/bootstrap/skills-bootstrap-color-system",
+              "chars": 16083,
+              "tools": {
+                "node/npm": 7
+              }
+            },
+            {
+              "path": "twbs/bootstrap/skills-bootstrap-npm",
+              "chars": 9111,
+              "tools": {
+                "node/npm": 34
+              }
+            },
+            {
+              "path": "twbs/bootstrap/skills-bootstrap-parcel",
+              "chars": 8222,
+              "tools": {
+                "node/npm": 15,
+                "huggingface": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "full-stack",
+          "label": "Full Stack",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "docker": 8,
+            "shell": 7,
+            "curl/wget": 2,
+            "git": 1
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/agents-skills-nextjs-turbopack",
+              "chars": 6584,
+              "tools": {
+                "docker": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/cursor-skills-nextjs-turbopack",
+              "chars": 6471,
+              "tools": {
+                "docker": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-es-skills-nextjs-turbopack",
+              "chars": 7703,
+              "tools": {
+                "docker": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-coding-standards",
+              "chars": 14777,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-nuxt4-patterns",
+              "chars": 7598,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-tinystruct-patterns",
+              "chars": 19232,
+              "tools": {
+                "git": 1,
+                "curl/wget": 2,
+                "docker": 1,
+                "shell": 3
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-tr-skills-frontend-patterns",
+              "chars": 15365,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-tr-skills-nextjs-turbopack",
+              "chars": 6812,
+              "tools": {
+                "docker": 1,
+                "shell": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "ecommerce-development",
+          "label": "E-commerce Development",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "llm-api": 5,
+            "node/npm": 3,
+            "shell": 2,
+            "matplotlib": 1
+          },
+          "skills": [
+            {
+              "path": "mattpocock/skills/skills-engineering-implement",
+              "chars": 4713,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/skills-productivity-product-price-monitor",
+              "chars": 8157,
+              "tools": {}
+            },
+            {
+              "path": "nexu-io/open-design/plugins-community-registry-starter",
+              "chars": 4654,
+              "tools": {}
+            },
+            {
+              "path": "nexu-io/open-design/skills-figma-code-connect-components",
+              "chars": 5465,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "asgeirtj/system_prompts_leaks/meta-muse-agent-skills-shopify",
+              "chars": 13879,
+              "tools": {
+                "matplotlib": 1,
+                "node/npm": 3,
+                "llm-api": 5
+              }
+            },
+            {
+              "path": "warpdotdev/warp/resources-bundled-harness-skills-oz-report-pr",
+              "chars": 4075,
+              "tools": {}
+            },
+            {
+              "path": "moeru-ai/airi/agents-skills-enforce-rules-for-pinia-synced",
+              "chars": 7045,
+              "tools": {}
+            },
+            {
+              "path": "posthog/posthog/agents-skills-building-product-empty-states",
+              "chars": 22197,
+              "tools": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "Testing & Security",
+      "categories": [
+        {
+          "slug": "code-quality",
+          "label": "Code Quality",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "git": 16,
+            "python": 15,
+            "gh-cli": 14,
+            "shell": 13,
+            "jq": 6,
+            "node/npm": 5,
+            "duckdb": 1,
+            "selenium": 1
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/agents-skills-autoreview",
+              "chars": 11726,
+              "tools": {
+                "jq": 1,
+                "git": 1,
+                "gh-cli": 1,
+                "shell": 3
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-openclaw-pr-maintainer",
+              "chars": 32947,
+              "tools": {
+                "jq": 5,
+                "git": 8,
+                "gh-cli": 11,
+                "shell": 5
+              }
+            },
+            {
+              "path": "vinta/awesome-python/claude-skills-audit-the-list",
+              "chars": 12087,
+              "tools": {
+                "duckdb": 1,
+                "selenium": 1,
+                "gh-cli": 1,
+                "python": 8
+              }
+            },
+            {
+              "path": "vinta/awesome-python/claude-skills-preview-verdicts",
+              "chars": 7350,
+              "tools": {
+                "git": 1,
+                "python": 7
+              }
+            },
+            {
+              "path": "obra/superpowers/skills-receiving-code-review",
+              "chars": 10170,
+              "tools": {
+                "gh-cli": 1
+              }
+            },
+            {
+              "path": "obra/superpowers/skills-requesting-code-review",
+              "chars": 6754,
+              "tools": {
+                "git": 6,
+                "shell": 1
+              }
+            },
+            {
+              "path": "obra/superpowers/skills-test-driven-development",
+              "chars": 13552,
+              "tools": {
+                "node/npm": 5,
+                "shell": 4
+              }
+            },
+            {
+              "path": "obra/superpowers/skills-verification-before-completion",
+              "chars": 7631,
+              "tools": {}
+            }
+          ]
+        },
+        {
+          "slug": "testing",
+          "label": "Testing",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "git": 23,
+            "shell": 15,
+            "node/npm": 10,
+            "playwright": 1
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/agents-skills-control-ui-e2e",
+              "chars": 9993,
+              "tools": {
+                "playwright": 1,
+                "node/npm": 1,
+                "shell": 2
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-prototype-openclaw-tui",
+              "chars": 9494,
+              "tools": {
+                "node/npm": 6,
+                "shell": 2
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-test-audit",
+              "chars": 11221,
+              "tools": {
+                "git": 2,
+                "node/npm": 2
+              }
+            },
+            {
+              "path": "openclaw/openclaw/skills-spike",
+              "chars": 5874,
+              "tools": {}
+            },
+            {
+              "path": "obra/superpowers/skills-finishing-a-development-branch",
+              "chars": 11612,
+              "tools": {
+                "git": 21,
+                "node/npm": 1,
+                "shell": 8
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-engineering-implement",
+              "chars": 4713,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-engineering-implement-spec",
+              "chars": 6897,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-engineering-tdd",
+              "chars": 7849,
+              "tools": {
+                "shell": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "security",
+          "label": "Security",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "shell": 20,
+            "gh-cli": 16,
+            "llm-api": 9,
+            "git": 8,
+            "node/npm": 7,
+            "jq": 6,
+            "curl/wget": 1
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/agents-skills-discord-user-post",
+              "chars": 6420,
+              "tools": {}
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-openclaw-ghsa-maintainer",
+              "chars": 7064,
+              "tools": {
+                "jq": 4,
+                "gh-cli": 5,
+                "node/npm": 2,
+                "shell": 5
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-openclaw-release-validation",
+              "chars": 24368,
+              "tools": {
+                "git": 8,
+                "curl/wget": 1,
+                "gh-cli": 6,
+                "node/npm": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-parallels-discord-roundtrip",
+              "chars": 7287,
+              "tools": {
+                "jq": 1,
+                "node/npm": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-release-openclaw-mac",
+              "chars": 10424,
+              "tools": {
+                "gh-cli": 5,
+                "node/npm": 1,
+                "shell": 4
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-telegram-e2e-userbot",
+              "chars": 12047,
+              "tools": {
+                "node/npm": 2,
+                "shell": 5,
+                "llm-api": 2
+              }
+            },
+            {
+              "path": "openclaw/openclaw/custodian-skills-add-model-provider",
+              "chars": 8067,
+              "tools": {
+                "jq": 1,
+                "llm-api": 7
+              }
+            },
+            {
+              "path": "openclaw/openclaw/skills-1password",
+              "chars": 10668,
+              "tools": {
+                "shell": 4
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "DevOps",
+      "categories": [
+        {
+          "slug": "git-workflows",
+          "label": "Git Workflows",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "gh-cli": 66,
+            "shell": 57,
+            "git": 14,
+            "node/npm": 13,
+            "python": 12,
+            "jq": 6,
+            "curl/wget": 2
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/agents-skills-agent-transcript",
+              "chars": 8234,
+              "tools": {
+                "gh-cli": 1,
+                "shell": 6
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-gitcrawl",
+              "chars": 5800,
+              "tools": {
+                "gh-cli": 4,
+                "shell": 4
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-openclaw-secret-scanning-maintainer",
+              "chars": 14248,
+              "tools": {
+                "node/npm": 13,
+                "shell": 8
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-tag-duplicate-prs-issues",
+              "chars": 19582,
+              "tools": {
+                "curl/wget": 2,
+                "gh-cli": 9,
+                "shell": 25
+              }
+            },
+            {
+              "path": "openclaw/openclaw/extensions-oc-path-src-oc-path-tests-fixtures-real",
+              "chars": 5453,
+              "tools": {
+                "gh-cli": 7,
+                "shell": 2
+              }
+            },
+            {
+              "path": "openclaw/openclaw/skills-gh-issues",
+              "chars": 10097,
+              "tools": {
+                "jq": 2,
+                "git": 11,
+                "gh-cli": 17,
+                "shell": 7
+              }
+            },
+            {
+              "path": "openclaw/openclaw/skills-github",
+              "chars": 6790,
+              "tools": {
+                "jq": 4,
+                "git": 1,
+                "gh-cli": 23,
+                "shell": 5
+              }
+            },
+            {
+              "path": "vinta/awesome-python/claude-skills-review-prs",
+              "chars": 8702,
+              "tools": {
+                "git": 2,
+                "gh-cli": 5,
+                "python": 12
+              }
+            }
+          ]
+        },
+        {
+          "slug": "cicd",
+          "label": "CI/CD",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "node/npm": 65,
+            "git": 53,
+            "shell": 30,
+            "docker": 13,
+            "gh-cli": 13,
+            "aws-cli": 8,
+            "jq": 7,
+            "llm-api": 6
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/agents-skills-auto-qa",
+              "chars": 21807,
+              "tools": {
+                "git": 4,
+                "node/npm": 1,
+                "llm-api": 1
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-openclaw-live-updater",
+              "chars": 17993,
+              "tools": {
+                "node/npm": 2,
+                "shell": 2,
+                "llm-api": 1
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-openclaw-testing",
+              "chars": 27659,
+              "tools": {
+                "jq": 3,
+                "git": 2,
+                "docker": 3,
+                "aws-cli": 8,
+                "gh-cli": 5,
+                "node/npm": 19,
+                "shell": 6
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-release-openclaw-nightly",
+              "chars": 23676,
+              "tools": {
+                "jq": 4,
+                "git": 24,
+                "gh-cli": 6,
+                "node/npm": 26,
+                "shell": 11
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-release-openclaw-plugin-testing",
+              "chars": 15743,
+              "tools": {
+                "git": 2,
+                "docker": 10,
+                "gh-cli": 2,
+                "node/npm": 13,
+                "shell": 6,
+                "llm-api": 4
+              }
+            },
+            {
+              "path": "openclaw/openclaw/skills-taskflow",
+              "chars": 9048,
+              "tools": {}
+            },
+            {
+              "path": "obra/superpowers/skills-executing-plans",
+              "chars": 24182,
+              "tools": {
+                "git": 10,
+                "node/npm": 4
+              }
+            },
+            {
+              "path": "obra/superpowers/skills-subagent-driven-development",
+              "chars": 27339,
+              "tools": {
+                "git": 11,
+                "shell": 5
+              }
+            }
+          ]
+        },
+        {
+          "slug": "cloud",
+          "label": "Cloud",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "node/npm": 27,
+            "python": 19,
+            "shell": 17,
+            "huggingface": 6,
+            "git": 4,
+            "docker": 3,
+            "aws-cli": 2,
+            "ffmpeg": 1,
+            "whisper": 1,
+            "jq": 1,
+            "curl/wget": 1,
+            "llm-api": 1,
+            "spreadsheet": 1
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-crosspost",
+              "chars": 7229,
+              "tools": {
+                "docker": 1,
+                "python": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-mlops-modal",
+              "chars": 12834,
+              "tools": {
+                "ffmpeg": 1,
+                "whisper": 1,
+                "git": 1,
+                "python": 15,
+                "shell": 2,
+                "huggingface": 6
+              }
+            },
+            {
+              "path": "anthropics/claude-code/plugins-plugin-dev-skills-mcp-integration",
+              "chars": 16296,
+              "tools": {
+                "git": 2,
+                "python": 1,
+                "shell": 2
+              }
+            },
+            {
+              "path": "garrytan/gstack/land-and-deploy",
+              "chars": 24814,
+              "tools": {
+                "shell": 2
+              }
+            },
+            {
+              "path": "garrytan/gstack/skill",
+              "chars": 19689,
+              "tools": {
+                "shell": 4
+              }
+            },
+            {
+              "path": "paperclipai/paperclip/agents-skills-paperclip-page",
+              "chars": 8454,
+              "tools": {
+                "jq": 1,
+                "curl/wget": 1,
+                "aws-cli": 2,
+                "node/npm": 1,
+                "shell": 2
+              }
+            },
+            {
+              "path": "ruvnet/ruview/claude-skills-v3-security-overhaul",
+              "chars": 6473,
+              "tools": {
+                "git": 1,
+                "node/npm": 5,
+                "shell": 2,
+                "llm-api": 1
+              }
+            },
+            {
+              "path": "ruvnet/ruview/plugins-ruview-skills-ruview-configure",
+              "chars": 10752,
+              "tools": {
+                "docker": 2,
+                "node/npm": 21,
+                "python": 2,
+                "shell": 3,
+                "spreadsheet": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "containers",
+          "label": "Containers",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "docker": 108,
+            "tts": 19,
+            "shell": 15,
+            "python": 10,
+            "kubectl": 10,
+            "node/npm": 9,
+            "git": 4,
+            "postgresql": 4,
+            "curl/wget": 2
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/skills-sherpa-onnx-tts",
+              "chars": 5928,
+              "tools": {
+                "tts": 19,
+                "node/npm": 1,
+                "shell": 3
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-content-hash-cache-pattern",
+              "chars": 8581,
+              "tools": {
+                "docker": 1,
+                "python": 5
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-deployment-patterns",
+              "chars": 5027,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/pi-core-skills-kubernetes-patterns",
+              "chars": 19302,
+              "tools": {
+                "docker": 1,
+                "kubectl": 10,
+                "node/npm": 2,
+                "python": 1,
+                "shell": 2
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-ito-inference",
+              "chars": 10706,
+              "tools": {
+                "docker": 1,
+                "node/npm": 2
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-creative-brag",
+              "chars": 6566,
+              "tools": {}
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-data-science-jupyter-notebook",
+              "chars": 9723,
+              "tools": {
+                "git": 3,
+                "curl/wget": 1,
+                "python": 2
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-devops-docker-management",
+              "chars": 14152,
+              "tools": {
+                "postgresql": 4,
+                "git": 1,
+                "curl/wget": 1,
+                "docker": 104,
+                "node/npm": 4,
+                "python": 2,
+                "shell": 10
+              }
+            }
+          ]
+        },
+        {
+          "slug": "monitoring",
+          "label": "Monitoring",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "node/npm": 18,
+            "shell": 9,
+            "curl/wget": 1,
+            "sqlite": 1,
+            "playwright": 1,
+            "postgresql": 1
+          },
+          "skills": [
+            {
+              "path": "nousresearch/hermes-agent/skills-apple-findmy",
+              "chars": 7503,
+              "tools": {
+                "shell": 4
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/skills-autonomous-ai-agents-computer-use",
+              "chars": 21059,
+              "tools": {
+                "curl/wget": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "n8n-io/n8n/agents-skills-telemetry",
+              "chars": 9426,
+              "tools": {
+                "node/npm": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "microsoft/vscode/github-skills-otel",
+              "chars": 15525,
+              "tools": {
+                "sqlite": 1,
+                "playwright": 1,
+                "node/npm": 12,
+                "shell": 2
+              }
+            },
+            {
+              "path": "supabase/supabase/agents-skills-telemetry-standards",
+              "chars": 12768,
+              "tools": {
+                "postgresql": 1
+              }
+            },
+            {
+              "path": "pytorch/pytorch/agents-skills-distributed-triage",
+              "chars": 15344,
+              "tools": {
+                "node/npm": 2
+              }
+            },
+            {
+              "path": "openhands/openhands/agents-skills-telemetry-analytics",
+              "chars": 6005,
+              "tools": {}
+            },
+            {
+              "path": "ruvnet/ruflo/plugins-ruflo-cost-tracker-skills-cost-export",
+              "chars": 6953,
+              "tools": {
+                "node/npm": 3,
+                "shell": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "Data & AI",
+      "categories": [
+        {
+          "slug": "llm-ai",
+          "label": "LLM & AI",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "llm-api": 23,
+            "shell": 20,
+            "whisper": 11,
+            "jq": 9,
+            "python": 3
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/agents-skills-discord-clawd",
+              "chars": 5237,
+              "tools": {
+                "python": 3,
+                "shell": 2
+              }
+            },
+            {
+              "path": "openclaw/openclaw/custodian-skills-configure-channel",
+              "chars": 6711,
+              "tools": {
+                "jq": 1
+              }
+            },
+            {
+              "path": "openclaw/openclaw/extensions-discord-skills-discord",
+              "chars": 5686,
+              "tools": {}
+            },
+            {
+              "path": "openclaw/openclaw/extensions-imessage-skills-imsg",
+              "chars": 14613,
+              "tools": {
+                "jq": 8,
+                "shell": 16
+              }
+            },
+            {
+              "path": "openclaw/openclaw/extensions-voice-call-skills-voice-call",
+              "chars": 5074,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "openclaw/openclaw/skills-gemini",
+              "chars": 4876,
+              "tools": {
+                "llm-api": 16
+              }
+            },
+            {
+              "path": "openclaw/openclaw/skills-openai-whisper",
+              "chars": 4638,
+              "tools": {
+                "whisper": 11,
+                "llm-api": 7
+              }
+            },
+            {
+              "path": "openclaw/openclaw/skills-sag",
+              "chars": 5978,
+              "tools": {
+                "shell": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "machine-learning",
+          "label": "Machine Learning",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "git": 11,
+            "docker": 11,
+            "python": 8,
+            "shell": 8,
+            "llm-api": 4,
+            "postgresql": 3,
+            "playwright": 3,
+            "node/npm": 1
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/agents-skills-mle-workflow",
+              "chars": 26999,
+              "tools": {
+                "postgresql": 3,
+                "git": 1,
+                "docker": 4,
+                "python": 8
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-es-skills-continuous-learning",
+              "chars": 9498,
+              "tools": {
+                "git": 1,
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-es-skills-continuous-learning-v2",
+              "chars": 13910,
+              "tools": {
+                "git": 6,
+                "docker": 1,
+                "shell": 3
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-agentic-engineering",
+              "chars": 5241,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-ai-first-engineering",
+              "chars": 4996,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-continuous-learning",
+              "chars": 6640,
+              "tools": {
+                "git": 1,
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-continuous-learning-v2",
+              "chars": 10682,
+              "tools": {
+                "git": 1,
+                "docker": 1,
+                "shell": 2
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-gan-style-harness",
+              "chars": 16011,
+              "tools": {
+                "git": 1,
+                "playwright": 3,
+                "docker": 1,
+                "node/npm": 1,
+                "shell": 3,
+                "llm-api": 4
+              }
+            }
+          ]
+        },
+        {
+          "slug": "data-engineering",
+          "label": "Data Engineering",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "sql": 36,
+            "docker": 14,
+            "node/npm": 10,
+            "shell": 3,
+            "jq": 1,
+            "aws-cli": 1,
+            "postgresql": 1
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/custodian-skills-cloud-image-bake",
+              "chars": 7749,
+              "tools": {
+                "jq": 1,
+                "aws-cli": 1,
+                "shell": 2
+              }
+            },
+            {
+              "path": "affaan-m/ecc/agents-skills-crosspost",
+              "chars": 7988,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-claude-devfleet",
+              "chars": 6173,
+              "tools": {
+                "docker": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-clickhouse-io",
+              "chars": 13319,
+              "tools": {
+                "docker": 1,
+                "node/npm": 1,
+                "sql": 18
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-docker-patterns",
+              "chars": 5568,
+              "tools": {
+                "postgresql": 1,
+                "docker": 8,
+                "node/npm": 8
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-ralphinho-rfc-pipeline",
+              "chars": 5646,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ko-kr-skills-clickhouse-io",
+              "chars": 13571,
+              "tools": {
+                "docker": 1,
+                "node/npm": 1,
+                "sql": 18
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-ai-first-engineering",
+              "chars": 4767,
+              "tools": {
+                "docker": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "data-analysis",
+          "label": "Data Analysis",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "node/npm": 10,
+            "shell": 2,
+            "docker": 1
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/skills-deep-research",
+              "chars": 10444,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-creative-anatomy",
+              "chars": 25868,
+              "tools": {
+                "node/npm": 10,
+                "shell": 2
+              }
+            },
+            {
+              "path": "supabase/supabase/apps-studio-claude-skills-explorer",
+              "chars": 8077,
+              "tools": {}
+            },
+            {
+              "path": "nexu-io/open-design/design-templates-social-media-dashboard",
+              "chars": 10351,
+              "tools": {}
+            },
+            {
+              "path": "nexu-io/open-design/design-templates-social-media-matrix-tracker-template",
+              "chars": 9191,
+              "tools": {}
+            },
+            {
+              "path": "nexu-io/open-design/plugins-official-examples-social-media-dashboard",
+              "chars": 10406,
+              "tools": {}
+            },
+            {
+              "path": "nexu-io/open-design/plugins-official-examples-social-media-matrix-tracker-template",
+              "chars": 9240,
+              "tools": {}
+            },
+            {
+              "path": "nexu-io/open-design/plugins-official-video-templates-frame-nyt-graph",
+              "chars": 5882,
+              "tools": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "Documentation",
+      "categories": [
+        {
+          "slug": "knowledge-base",
+          "label": "Knowledge Base",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "shell": 10,
+            "git": 4,
+            "gh-cli": 2,
+            "node/npm": 2,
+            "python": 1
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/agents-skills-openclaw-repair-sweep",
+              "chars": 20613,
+              "tools": {
+                "git": 4,
+                "gh-cli": 2
+              }
+            },
+            {
+              "path": "openclaw/openclaw/extensions-feishu-skills-feishu-wiki",
+              "chars": 5384,
+              "tools": {
+                "node/npm": 2
+              }
+            },
+            {
+              "path": "openclaw/openclaw/extensions-memory-wiki-skills-obsidian-vault-maintainer",
+              "chars": 5197,
+              "tools": {}
+            },
+            {
+              "path": "openclaw/openclaw/extensions-memory-wiki-skills-wiki-maintainer",
+              "chars": 5939,
+              "tools": {}
+            },
+            {
+              "path": "openclaw/openclaw/extensions-tavily-skills-tavily",
+              "chars": 8806,
+              "tools": {}
+            },
+            {
+              "path": "openclaw/openclaw/skills-obsidian",
+              "chars": 6970,
+              "tools": {
+                "shell": 9
+              }
+            },
+            {
+              "path": "openclaw/openclaw/skills-skill-creator",
+              "chars": 6508,
+              "tools": {
+                "python": 1
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-productivity-to-questionnaire",
+              "chars": 7261,
+              "tools": {
+                "shell": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "technical-docs",
+          "label": "Technical Docs",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "node/npm": 18,
+            "git": 10,
+            "shell": 10,
+            "docker": 7,
+            "postgresql": 2
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/agents-skills-release-openclaw-announcement",
+              "chars": 8255,
+              "tools": {
+                "node/npm": 2
+              }
+            },
+            {
+              "path": "openclaw/openclaw/agents-skills-technical-documentation",
+              "chars": 10088,
+              "tools": {}
+            },
+            {
+              "path": "openclaw/openclaw/skills-coding-agent",
+              "chars": 14059,
+              "tools": {
+                "git": 6,
+                "shell": 10
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-brand-voice",
+              "chars": 6055,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-codebase-onboarding",
+              "chars": 8887,
+              "tools": {
+                "git": 2,
+                "docker": 2,
+                "node/npm": 4
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-search-first",
+              "chars": 7734,
+              "tools": {
+                "docker": 1,
+                "node/npm": 8
+              }
+            },
+            {
+              "path": "affaan-m/ecc/pi-core-skills-architecture-decision-records",
+              "chars": 11496,
+              "tools": {
+                "postgresql": 2,
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/pi-core-skills-codebase-onboarding",
+              "chars": 12448,
+              "tools": {
+                "git": 2,
+                "docker": 2,
+                "node/npm": 4
+              }
+            }
+          ]
+        },
+        {
+          "slug": "education",
+          "label": "Education",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "node/npm": 12,
+            "shell": 8,
+            "git": 5,
+            "docker": 4,
+            "python": 2,
+            "ripgrep": 1,
+            "gh-cli": 1
+          },
+          "skills": [
+            {
+              "path": "mattpocock/skills/skills-engineering-codebase-design",
+              "chars": 10667,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-engineering-prototype",
+              "chars": 7388,
+              "tools": {
+                "python": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-engineering-retro",
+              "chars": 8427,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-misc-scaffold-exercises",
+              "chars": 8031,
+              "tools": {
+                "git": 4,
+                "shell": 3
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-es-skills-eval-harness",
+              "chars": 10297,
+              "tools": {
+                "docker": 1,
+                "node/npm": 3,
+                "shell": 2
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-code-tour",
+              "chars": 5492,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-codebase-onboarding",
+              "chars": 5430,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-search-first",
+              "chars": 9234,
+              "tools": {
+                "ripgrep": 1,
+                "git": 1,
+                "docker": 1,
+                "gh-cli": 1,
+                "node/npm": 9,
+                "python": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "Content & Media",
+      "categories": [
+        {
+          "slug": "documents",
+          "label": "Documents",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "shell": 9,
+            "jq": 1,
+            "yt-dlp": 1,
+            "llm-api": 1
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/extensions-diffs-skills-diffs",
+              "chars": 5881,
+              "tools": {}
+            },
+            {
+              "path": "openclaw/openclaw/extensions-feishu-skills-feishu-doc",
+              "chars": 6225,
+              "tools": {}
+            },
+            {
+              "path": "openclaw/openclaw/skills-gifgrep",
+              "chars": 6088,
+              "tools": {
+                "jq": 1
+              }
+            },
+            {
+              "path": "openclaw/openclaw/skills-himalaya",
+              "chars": 5602,
+              "tools": {
+                "shell": 4
+              }
+            },
+            {
+              "path": "openclaw/openclaw/skills-nano-pdf",
+              "chars": 4672,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "openclaw/openclaw/skills-summarize",
+              "chars": 5863,
+              "tools": {
+                "yt-dlp": 1,
+                "shell": 2,
+                "llm-api": 1
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-productivity-handoff",
+              "chars": 5050,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-productivity-writing-for-agents",
+              "chars": 15294,
+              "tools": {
+                "shell": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "content-creation",
+          "label": "Content Creation",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "docker": 7,
+            "shell": 1
+          },
+          "skills": [
+            {
+              "path": "mattpocock/skills/skills-engineering-pr",
+              "chars": 8170,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/agents-skills-article-writing",
+              "chars": 7554,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/agents-skills-brand-voice",
+              "chars": 8230,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/agents-skills-content-engine",
+              "chars": 8938,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/cursor-skills-article-writing",
+              "chars": 7672,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/cursor-skills-content-engine",
+              "chars": 7059,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-article-writing",
+              "chars": 5900,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-content-engine",
+              "chars": 6821,
+              "tools": {
+                "docker": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "design",
+          "label": "Design",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "python": 10,
+            "python-pptx": 6,
+            "shell": 6,
+            "docker": 5,
+            "curl/wget": 2,
+            "node/npm": 1
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/skills-diagram-maker",
+              "chars": 6507,
+              "tools": {}
+            },
+            {
+              "path": "openclaw/openclaw/skills-meme-maker",
+              "chars": 6727,
+              "tools": {
+                "node/npm": 1,
+                "python": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/agents-skills-frontend-slides",
+              "chars": 11245,
+              "tools": {
+                "python-pptx": 2,
+                "docker": 1,
+                "python": 3
+              }
+            },
+            {
+              "path": "affaan-m/ecc/cursor-skills-frontend-slides",
+              "chars": 11191,
+              "tools": {
+                "python-pptx": 2,
+                "docker": 1,
+                "python": 3
+              }
+            },
+            {
+              "path": "affaan-m/ecc/pi-core-skills-design-system",
+              "chars": 7234,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-frontend-slides",
+              "chars": 11360,
+              "tools": {
+                "python-pptx": 2,
+                "docker": 1,
+                "python": 3
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-ios-icon-gen",
+              "chars": 10220,
+              "tools": {
+                "docker": 1,
+                "shell": 6
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-creative-baoyu-article-illustrator",
+              "chars": 13743,
+              "tools": {
+                "curl/wget": 2
+              }
+            }
+          ]
+        },
+        {
+          "slug": "media",
+          "label": "Media",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "shell": 29,
+            "python": 27,
+            "ffmpeg": 26,
+            "whisper": 10,
+            "llm-api": 8,
+            "docker": 5,
+            "tts": 4,
+            "curl/wget": 2
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/skills-camsnap",
+              "chars": 5555,
+              "tools": {
+                "ffmpeg": 1
+              }
+            },
+            {
+              "path": "openclaw/openclaw/skills-openai-whisper-api",
+              "chars": 5938,
+              "tools": {
+                "whisper": 10,
+                "curl/wget": 2,
+                "shell": 2,
+                "llm-api": 8
+              }
+            },
+            {
+              "path": "openclaw/openclaw/skills-video-frames",
+              "chars": 4788,
+              "tools": {
+                "ffmpeg": 4,
+                "shell": 2
+              }
+            },
+            {
+              "path": "affaan-m/ecc/agents-skills-fal-ai-media",
+              "chars": 11439,
+              "tools": {
+                "tts": 1,
+                "docker": 1,
+                "python": 2
+              }
+            },
+            {
+              "path": "affaan-m/ecc/agents-skills-video-editing",
+              "chars": 14308,
+              "tools": {
+                "ffmpeg": 10,
+                "tts": 1,
+                "docker": 1,
+                "python": 3,
+                "shell": 11
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-fal-ai-media",
+              "chars": 10018,
+              "tools": {
+                "tts": 1,
+                "docker": 1,
+                "python": 2
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-video-editing",
+              "chars": 11688,
+              "tools": {
+                "ffmpeg": 10,
+                "tts": 1,
+                "docker": 1,
+                "python": 3,
+                "shell": 11
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-videodb",
+              "chars": 16057,
+              "tools": {
+                "ffmpeg": 1,
+                "docker": 1,
+                "python": 17,
+                "shell": 3
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "Research",
+      "categories": [
+        {
+          "slug": "academic",
+          "label": "Academic",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "docker": 7,
+            "python": 2
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/skills-goplaces",
+              "chars": 5176,
+              "tools": {}
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-scientific-db-pubmed-database",
+              "chars": 7810,
+              "tools": {
+                "docker": 1,
+                "python": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-scientific-thinking-literature-review",
+              "chars": 7133,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-scientific-thinking-scholar-evaluation",
+              "chars": 6625,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-research-ops",
+              "chars": 8025,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-scientific-db-pubmed-database",
+              "chars": 9151,
+              "tools": {
+                "docker": 1,
+                "python": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-scientific-thinking-literature-review",
+              "chars": 9606,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-scientific-thinking-scholar-evaluation",
+              "chars": 9318,
+              "tools": {
+                "docker": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "lab-tools",
+          "label": "Lab Tools",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "python": 19,
+            "shell": 6,
+            "docker": 5,
+            "node/npm": 3,
+            "huggingface": 2,
+            "spreadsheet": 2,
+            "opencv": 1,
+            "matplotlib": 1,
+            "playwright": 1
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/agents-skills-claw-score",
+              "chars": 12012,
+              "tools": {
+                "node/npm": 2,
+                "shell": 3
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-automation-audit-ops",
+              "chars": 8607,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-orch-fix-defect",
+              "chars": 6057,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-orch-refine-code",
+              "chars": 6206,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-quality-nonconformance",
+              "chars": 33931,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-taste-distillation",
+              "chars": 13806,
+              "tools": {
+                "opencv": 1,
+                "docker": 1,
+                "node/npm": 1,
+                "python": 2,
+                "shell": 2
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-mlops-evaluation-weights-and-biases",
+              "chars": 14299,
+              "tools": {
+                "matplotlib": 1,
+                "python": 17,
+                "shell": 1,
+                "huggingface": 2,
+                "spreadsheet": 2
+              }
+            },
+            {
+              "path": "microsoft/vscode/github-skills-feedback-learning",
+              "chars": 8517,
+              "tools": {
+                "playwright": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "bioinformatics",
+          "label": "Bioinformatics",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "python": 28,
+            "huggingface": 17,
+            "shell": 13,
+            "llm-api": 10,
+            "git": 5,
+            "node/npm": 5,
+            "docker": 2,
+            "curl/wget": 1
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-healthcare-emr-patterns",
+              "chars": 10550,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-nanoclaw-repl",
+              "chars": 4731,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-mlops-inference-llama-cpp",
+              "chars": 12712,
+              "tools": {
+                "git": 1,
+                "curl/wget": 1,
+                "python": 8,
+                "shell": 7,
+                "huggingface": 17
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-mlops-instructor",
+              "chars": 15691,
+              "tools": {
+                "python": 20,
+                "shell": 1,
+                "llm-api": 10
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-research-bioinformatics",
+              "chars": 17452,
+              "tools": {
+                "git": 4,
+                "shell": 3
+              }
+            },
+            {
+              "path": "n8n-io/n8n/agents-skills-conventions",
+              "chars": 7396,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "thedotmack/claude-mem/plugin-skills-smart-explore",
+              "chars": 13601,
+              "tools": {
+                "node/npm": 4
+              }
+            },
+            {
+              "path": "ruvnet/ruflo/plugins-ruflo-knowledge-graph-skills-kg-traverse",
+              "chars": 6997,
+              "tools": {
+                "node/npm": 1,
+                "shell": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "computational-chemistry",
+          "label": "Computational Chemistry",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "python": 52,
+            "shell": 34,
+            "curl/wget": 10,
+            "llm-api": 5,
+            "docker": 2,
+            "numpy/scipy": 2,
+            "git": 2,
+            "pandas": 1,
+            "matplotlib": 1,
+            "huggingface": 1,
+            "aws-cli": 1
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-healthcare-cdss-patterns",
+              "chars": 13391,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-healthcare-cdss-patterns",
+              "chars": 13976,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-mlops-evaluation-evaluating-llms-harness",
+              "chars": 14085,
+              "tools": {
+                "pandas": 1,
+                "matplotlib": 1,
+                "python": 4,
+                "shell": 22,
+                "huggingface": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-mlops-faiss",
+              "chars": 8614,
+              "tools": {
+                "numpy/scipy": 2,
+                "python": 9,
+                "shell": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-mlops-research-dspy",
+              "chars": 16107,
+              "tools": {
+                "git": 2,
+                "python": 22,
+                "shell": 1,
+                "llm-api": 4
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-research-drug-discovery",
+              "chars": 12768,
+              "tools": {
+                "curl/wget": 10,
+                "python": 14,
+                "shell": 8
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-research-pinecone-research",
+              "chars": 6898,
+              "tools": {
+                "aws-cli": 1,
+                "python": 3,
+                "shell": 2,
+                "llm-api": 1
+              }
+            },
+            {
+              "path": "nexu-io/open-design/plugins-official-examples-fs-notebook-tabs",
+              "chars": 13677,
+              "tools": {}
+            }
+          ]
+        },
+        {
+          "slug": "astronomy-physics",
+          "label": "Astronomy & Physics",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "huggingface": 11,
+            "llm-api": 8,
+            "python": 7,
+            "shell": 6,
+            "curl/wget": 5,
+            "jq": 4,
+            "numpy/scipy": 3,
+            "pillow": 2,
+            "git": 2,
+            "tectonic/latex": 2,
+            "docker": 1,
+            "matplotlib": 1,
+            "node/npm": 1
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-hermes-imports",
+              "chars": 7042,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-mlops-clip",
+              "chars": 10488,
+              "tools": {
+                "pillow": 2,
+                "numpy/scipy": 3,
+                "git": 2,
+                "python": 7,
+                "shell": 1,
+                "llm-api": 3,
+                "huggingface": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-mlops-models-huggingface-hub",
+              "chars": 7452,
+              "tools": {
+                "curl/wget": 1,
+                "shell": 1,
+                "huggingface": 10
+              }
+            },
+            {
+              "path": "koala73/worldmonitor/public-well-known-agent-skills-track-earthquakes",
+              "chars": 7909,
+              "tools": {
+                "jq": 1,
+                "curl/wget": 1,
+                "tectonic/latex": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "koala73/worldmonitor/public-well-known-agent-skills-track-military-flights",
+              "chars": 8416,
+              "tools": {
+                "jq": 1,
+                "curl/wget": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "koala73/worldmonitor/skills-track-earthquakes",
+              "chars": 7864,
+              "tools": {
+                "jq": 1,
+                "curl/wget": 1,
+                "tectonic/latex": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "koala73/worldmonitor/skills-track-military-flights",
+              "chars": 8391,
+              "tools": {
+                "jq": 1,
+                "curl/wget": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "asgeirtj/system_prompts_leaks/anthropic-claude-design-skills-maps-geography",
+              "chars": 8370,
+              "tools": {
+                "matplotlib": 1,
+                "node/npm": 1,
+                "llm-api": 5
+              }
+            }
+          ]
+        },
+        {
+          "slug": "scientific-computing",
+          "label": "Scientific Computing",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "python": 60,
+            "shell": 30,
+            "opencv": 11,
+            "huggingface": 4,
+            "numpy/scipy": 3,
+            "matplotlib": 3,
+            "curl/wget": 3,
+            "ripgrep": 3,
+            "docker": 2,
+            "git": 2,
+            "pandas": 2,
+            "duckdb": 2,
+            "node/npm": 2,
+            "pillow": 1,
+            "sql": 1,
+            "spreadsheet": 1
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-scientific-pkg-gget",
+              "chars": 7630,
+              "tools": {
+                "docker": 1,
+                "python": 5,
+                "shell": 7
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-scientific-pkg-gget",
+              "chars": 9415,
+              "tools": {
+                "docker": 1,
+                "python": 5,
+                "shell": 7
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-mlops-models-segment-anything-model",
+              "chars": 15069,
+              "tools": {
+                "opencv": 11,
+                "pillow": 1,
+                "numpy/scipy": 1,
+                "matplotlib": 1,
+                "git": 2,
+                "curl/wget": 3,
+                "python": 18,
+                "shell": 3,
+                "huggingface": 4
+              }
+            },
+            {
+              "path": "code-yeongyu/oh-my-openagent/packages-shared-skills-skills-data-scientist",
+              "chars": 10028,
+              "tools": {
+                "pandas": 2,
+                "duckdb": 2,
+                "numpy/scipy": 2,
+                "matplotlib": 2,
+                "node/npm": 1,
+                "python": 1,
+                "sql": 1,
+                "spreadsheet": 1
+              }
+            },
+            {
+              "path": "mem0ai/mem0/integrations-pi-agent-plugin-skills-forget",
+              "chars": 7035,
+              "tools": {
+                "node/npm": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "k-dense-ai/scientific-agent-skills/skills-biopython",
+              "chars": 19894,
+              "tools": {
+                "ripgrep": 3,
+                "python": 18,
+                "shell": 2
+              }
+            },
+            {
+              "path": "k-dense-ai/scientific-agent-skills/skills-deeptools",
+              "chars": 21722,
+              "tools": {
+                "python": 11,
+                "shell": 10
+              }
+            },
+            {
+              "path": "k-dense-ai/scientific-agent-skills/skills-glycoengineering",
+              "chars": 16619,
+              "tools": {
+                "python": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "Lifestyle",
+      "categories": [
+        {
+          "slug": "literature-writing",
+          "label": "Literature & Writing",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "llm-api": 12,
+            "shell": 4
+          },
+          "skills": [
+            {
+              "path": "mattpocock/skills/skills-in-progress-writing-beats",
+              "chars": 9215,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-in-progress-writing-fragments",
+              "chars": 7886,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "mattpocock/skills/skills-in-progress-writing-shape",
+              "chars": 10246,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "earendil-works/pi/packages-coding-agent-test-fixtures-skills-unknown-field",
+              "chars": 3630,
+              "tools": {}
+            },
+            {
+              "path": "google-gemini/gemini-cli/packages-sdk-test-data-skills-pirate-skill",
+              "chars": 4115,
+              "tools": {
+                "llm-api": 12
+              }
+            },
+            {
+              "path": "nexu-io/open-design/plugins-official-examples-frame-light-leak-cinema",
+              "chars": 7534,
+              "tools": {}
+            },
+            {
+              "path": "nexu-io/open-design/skills-frame-light-leak-cinema",
+              "chars": 7506,
+              "tools": {}
+            },
+            {
+              "path": "zed-industries/zed/docs-conventions-brand-writer",
+              "chars": 13071,
+              "tools": {
+                "shell": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "philosophy-ethics",
+          "label": "Philosophy & Ethics",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "shell": 8,
+            "git": 4,
+            "curl/wget": 4,
+            "ffmpeg": 1
+          },
+          "skills": [
+            {
+              "path": "nexu-io/open-design/design-templates-html-ppt-zhangzara-vellum",
+              "chars": 9254,
+              "tools": {}
+            },
+            {
+              "path": "nexu-io/open-design/plugins-official-examples-html-ppt-zhangzara-vellum",
+              "chars": 9238,
+              "tools": {}
+            },
+            {
+              "path": "eternity4719/howtolivebetter/skills-life-decision-guide",
+              "chars": 7234,
+              "tools": {
+                "git": 3,
+                "curl/wget": 2,
+                "shell": 4
+              }
+            },
+            {
+              "path": "vectorize-io/hindsight/hindsight-integrations-grok-bot-skills-memory-reflect",
+              "chars": 5279,
+              "tools": {
+                "git": 1
+              }
+            },
+            {
+              "path": "yeachan-heo/oh-my-claudecode/skills-research",
+              "chars": 4936,
+              "tools": {}
+            },
+            {
+              "path": "halo-dev/halo/claude-skills-openspec-explore",
+              "chars": 14062,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "alibaba/druid/cursor-skills-openspec-explore",
+              "chars": 13020,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "danielmiessler/lifeos/lifeos-install-skills-firstprinciples",
+              "chars": 12765,
+              "tools": {
+                "ffmpeg": 1,
+                "curl/wget": 2,
+                "shell": 2
+              }
+            }
+          ]
+        },
+        {
+          "slug": "arts-crafts",
+          "label": "Arts & Crafts",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "curl/wget": 25,
+            "shell": 20,
+            "python": 13,
+            "llm-api": 5,
+            "whisper": 4,
+            "playwright": 4,
+            "ffmpeg": 3,
+            "python-pptx": 1
+          },
+          "skills": [
+            {
+              "path": "mattpocock/skills/skills-productivity-teach",
+              "chars": 14009,
+              "tools": {
+                "shell": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-creative-ascii-art",
+              "chars": 14179,
+              "tools": {
+                "curl/wget": 25,
+                "python": 5,
+                "shell": 18
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-creative-pixel-art",
+              "chars": 11525,
+              "tools": {
+                "ffmpeg": 3,
+                "python": 7,
+                "shell": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/skills-creative-songwriting-and-ai-music",
+              "chars": 14666,
+              "tools": {
+                "whisper": 4
+              }
+            },
+            {
+              "path": "anomalyco/opencode/packages-core-test-config-fixture-skills-first-source-first",
+              "chars": 5027,
+              "tools": {
+                "playwright": 2
+              }
+            },
+            {
+              "path": "anomalyco/opencode/packages-core-test-config-fixture-skills-second-source-second",
+              "chars": 5037,
+              "tools": {
+                "playwright": 2
+              }
+            },
+            {
+              "path": "anthropics/skills/skills-brand-guidelines",
+              "chars": 8069,
+              "tools": {
+                "python-pptx": 1,
+                "python": 1,
+                "llm-api": 5
+              }
+            },
+            {
+              "path": "earendil-works/pi/packages-coding-agent-test-fixtures-skills-consecutive-hyphens",
+              "chars": 3585,
+              "tools": {}
+            }
+          ]
+        },
+        {
+          "slug": "wellness-health",
+          "label": "Wellness & Health",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "shell": 24,
+            "jq": 8,
+            "llm-api": 5,
+            "node/npm": 2,
+            "curl/wget": 2,
+            "tectonic/latex": 2,
+            "graphviz": 1,
+            "matplotlib": 1,
+            "python": 1,
+            "git": 1
+          },
+          "skills": [
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-health-neuroskill-bci",
+              "chars": 17836,
+              "tools": {
+                "jq": 6,
+                "graphviz": 1,
+                "node/npm": 2,
+                "shell": 19
+              }
+            },
+            {
+              "path": "nexu-io/open-design/design-templates-kami-deck",
+              "chars": 13023,
+              "tools": {}
+            },
+            {
+              "path": "nexu-io/open-design/plugins-official-examples-kami-deck",
+              "chars": 13049,
+              "tools": {}
+            },
+            {
+              "path": "koala73/worldmonitor/public-well-known-agent-skills-monitor-health-alerts",
+              "chars": 8582,
+              "tools": {
+                "jq": 1,
+                "curl/wget": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "koala73/worldmonitor/skills-monitor-health-alerts",
+              "chars": 8557,
+              "tools": {
+                "jq": 1,
+                "curl/wget": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "asgeirtj/system_prompts_leaks/meta-muse-agent-skills-healthex",
+              "chars": 20167,
+              "tools": {
+                "matplotlib": 1,
+                "llm-api": 5
+              }
+            },
+            {
+              "path": "davila7/claude-code-templates/cli-tool-components-skills-scientific-treatment-plans",
+              "chars": 26989,
+              "tools": {
+                "tectonic/latex": 2,
+                "python": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "garrytan/gbrain/plugin-skills-gbrain-advisor",
+              "chars": 9808,
+              "tools": {
+                "git": 1,
+                "shell": 2
+              }
+            }
+          ]
+        },
+        {
+          "slug": "divination-mysticism",
+          "label": "Divination & Mysticism",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "python": 29,
+            "llm-api": 25,
+            "numpy/scipy": 10,
+            "tectonic/latex": 5,
+            "git": 3,
+            "shell": 3,
+            "docker": 2,
+            "kubectl": 1,
+            "node/npm": 1,
+            "matplotlib": 1
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-safety-guard",
+              "chars": 5531,
+              "tools": {
+                "git": 3,
+                "docker": 2,
+                "kubectl": 1,
+                "node/npm": 1
+              }
+            },
+            {
+              "path": "anthropics/skills/template",
+              "chars": 5647,
+              "tools": {
+                "llm-api": 5
+              }
+            },
+            {
+              "path": "juliusbrussee/caveman/plugins-caveman-skills-megacave",
+              "chars": 6305,
+              "tools": {}
+            },
+            {
+              "path": "juliusbrussee/caveman/skills-megacave",
+              "chars": 6413,
+              "tools": {}
+            },
+            {
+              "path": "google-gemini/gemini-cli/packages-cli-src-commands-extensions-examples-skills-skills-greeter",
+              "chars": 4190,
+              "tools": {
+                "llm-api": 13
+              }
+            },
+            {
+              "path": "codewhale-hq/codewhale/crates-tui-tests-fixtures-extension-host-native-dsh-composition-source-skills-receipt-check",
+              "chars": 3909,
+              "tools": {}
+            },
+            {
+              "path": "yeachan-heo/oh-my-codex/plugins-oh-my-codex-skills-ask",
+              "chars": 5032,
+              "tools": {
+                "shell": 3,
+                "llm-api": 7
+              }
+            },
+            {
+              "path": "davila7/claude-code-templates/cli-tool-components-skills-scientific-sympy",
+              "chars": 16546,
+              "tools": {
+                "numpy/scipy": 10,
+                "matplotlib": 1,
+                "tectonic/latex": 5,
+                "python": 29
+              }
+            }
+          ]
+        },
+        {
+          "slug": "culinary-arts",
+          "label": "Culinary Arts",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "git": 20,
+            "llm-api": 11,
+            "shell": 8,
+            "matplotlib": 2,
+            "python": 1
+          },
+          "skills": [
+            {
+              "path": "asgeirtj/system_prompts_leaks/meta-muse-agent-skills-opentable",
+              "chars": 14843,
+              "tools": {
+                "matplotlib": 1,
+                "llm-api": 5
+              }
+            },
+            {
+              "path": "asgeirtj/system_prompts_leaks/openai-dots-skills-restaurant-recommendations",
+              "chars": 8417,
+              "tools": {
+                "matplotlib": 1,
+                "llm-api": 5
+              }
+            },
+            {
+              "path": "google-ai-edge/gallery/skills-featured-restaurant-roulette",
+              "chars": 5142,
+              "tools": {
+                "llm-api": 1
+              }
+            },
+            {
+              "path": "nvidia/skillspector/tests-fixtures-malicious-skill",
+              "chars": 5153,
+              "tools": {}
+            },
+            {
+              "path": "px4/px4-autopilot/agents-skills-rebase-onto-main",
+              "chars": 7807,
+              "tools": {
+                "git": 20,
+                "shell": 1
+              }
+            },
+            {
+              "path": "google/adk-go/examples-skills-skills-grocery-prices",
+              "chars": 4963,
+              "tools": {
+                "python": 1
+              }
+            },
+            {
+              "path": "nomadamas/k-skill/bccard-eatpl-search",
+              "chars": 6821,
+              "tools": {
+                "shell": 4
+              }
+            },
+            {
+              "path": "nomadamas/k-skill/k-schoollunch-menu",
+              "chars": 5742,
+              "tools": {
+                "shell": 3
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "Databases",
+      "categories": [
+        {
+          "slug": "database-tools",
+          "label": "Database Tools",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "python": 23,
+            "shell": 22,
+            "sqlite": 10,
+            "docker": 5,
+            "sql": 5,
+            "git": 5,
+            "playwright": 1
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/docs-es-skills-database-migrations",
+              "chars": 17497,
+              "tools": {
+                "docker": 1,
+                "python": 6,
+                "shell": 6,
+                "sql": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-database-migrations",
+              "chars": 5707,
+              "tools": {
+                "docker": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-tr-skills-database-migrations",
+              "chars": 13948,
+              "tools": {
+                "docker": 1,
+                "python": 5,
+                "shell": 5,
+                "sql": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-database-migrations",
+              "chars": 11880,
+              "tools": {
+                "docker": 1,
+                "python": 6,
+                "shell": 5,
+                "sql": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/pi-core-skills-database-migrations",
+              "chars": 16453,
+              "tools": {
+                "docker": 1,
+                "python": 6,
+                "shell": 6,
+                "sql": 1
+              }
+            },
+            {
+              "path": "n8n-io/n8n/agents-skills-db-migrations",
+              "chars": 18497,
+              "tools": {
+                "sqlite": 10,
+                "sql": 1
+              }
+            },
+            {
+              "path": "microsoft/vscode/github-skills-setup-environment",
+              "chars": 8862,
+              "tools": {
+                "git": 5,
+                "playwright": 1
+              }
+            },
+            {
+              "path": "supabase/supabase/agents-skills-clickhouse-logs-queries",
+              "chars": 14844,
+              "tools": {}
+            }
+          ]
+        },
+        {
+          "slug": "sql-databases",
+          "label": "SQL Databases",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "sql": 70,
+            "postgresql": 42,
+            "docker": 8,
+            "python": 6,
+            "shell": 5
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/docs-es-skills-postgres-patterns",
+              "chars": 8443,
+              "tools": {
+                "postgresql": 6,
+                "docker": 1,
+                "sql": 10
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-postgres-patterns",
+              "chars": 7725,
+              "tools": {
+                "postgresql": 6,
+                "docker": 1,
+                "sql": 9
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ko-kr-skills-postgres-patterns",
+              "chars": 7675,
+              "tools": {
+                "postgresql": 6,
+                "docker": 1,
+                "sql": 10
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-tr-skills-postgres-patterns",
+              "chars": 8276,
+              "tools": {
+                "postgresql": 6,
+                "docker": 1,
+                "sql": 10
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-postgres-patterns",
+              "chars": 7508,
+              "tools": {
+                "postgresql": 6,
+                "docker": 1,
+                "sql": 10
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-tw-skills-postgres-patterns",
+              "chars": 7506,
+              "tools": {
+                "postgresql": 6,
+                "docker": 1,
+                "sql": 10
+              }
+            },
+            {
+              "path": "affaan-m/ecc/kiro-skills-database-migrations",
+              "chars": 14227,
+              "tools": {
+                "docker": 1,
+                "python": 6,
+                "shell": 5,
+                "sql": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/kiro-skills-postgres-patterns",
+              "chars": 8586,
+              "tools": {
+                "postgresql": 6,
+                "docker": 1,
+                "sql": 10
+              }
+            }
+          ]
+        },
+        {
+          "slug": "nosql-databases",
+          "label": "NoSQL Databases",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "shell": 28,
+            "python": 14,
+            "postgresql": 12,
+            "node/npm": 11,
+            "llm-api": 7,
+            "sql": 3,
+            "docker": 2,
+            "jq": 2
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-redis-patterns",
+              "chars": 15084,
+              "tools": {
+                "postgresql": 1,
+                "docker": 1,
+                "python": 13,
+                "sql": 1
+              }
+            },
+            {
+              "path": "rightnow-ai/openfang/crates-openfang-skills-bundled-elasticsearch",
+              "chars": 6851,
+              "tools": {}
+            },
+            {
+              "path": "rightnow-ai/openfang/crates-openfang-skills-bundled-redis-expert",
+              "chars": 6908,
+              "tools": {}
+            },
+            {
+              "path": "carla-simulator/carla/skills-ros2-add-ros-message-type--path-8c4463637730225e33ebf607c706a1997a8f00d9cfe165f27d9b0736b50ca82a",
+              "chars": 14892,
+              "tools": {
+                "jq": 2,
+                "docker": 1,
+                "node/npm": 1,
+                "python": 1,
+                "shell": 13
+              }
+            },
+            {
+              "path": "abpframework/abp/agents-skills-abp-mongodb",
+              "chars": 9763,
+              "tools": {}
+            },
+            {
+              "path": "nomadamas/k-skill/kakaotalk-mac",
+              "chars": 6441,
+              "tools": {
+                "shell": 4
+              }
+            },
+            {
+              "path": "openai/plugins/plugins-vercel-skills-vercel-storage",
+              "chars": 18878,
+              "tools": {
+                "postgresql": 11,
+                "node/npm": 10,
+                "shell": 11,
+                "sql": 2,
+                "llm-api": 7
+              }
+            },
+            {
+              "path": "mongodb/laravel-mongodb/resources-boost-skills-laravel-mongodb",
+              "chars": 12680,
+              "tools": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "Blockchain",
+      "categories": [
+        {
+          "slug": "smart-contracts",
+          "label": "Smart Contracts",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "python": 13,
+            "shell": 10,
+            "docker": 6,
+            "node/npm": 3,
+            "curl/wget": 1,
+            "tts": 1
+          },
+          "skills": [
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-evm-token-decimals",
+              "chars": 7576,
+              "tools": {
+                "docker": 1,
+                "python": 3,
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-nodejs-keccak256",
+              "chars": 6856,
+              "tools": {
+                "docker": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-defi-amm-security",
+              "chars": 8009,
+              "tools": {
+                "docker": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-zh-cn-skills-evm-token-decimals",
+              "chars": 7328,
+              "tools": {
+                "docker": 1,
+                "python": 3,
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-defi-amm-security",
+              "chars": 9884,
+              "tools": {
+                "docker": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/skills-nodejs-keccak256",
+              "chars": 7518,
+              "tools": {
+                "docker": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "browser-use/browser-use/skills-x402",
+              "chars": 19271,
+              "tools": {
+                "curl/wget": 1,
+                "node/npm": 3,
+                "python": 7,
+                "shell": 4
+              }
+            },
+            {
+              "path": "calesthio/openmontage/agents-skills-hyperframes-core",
+              "chars": 11337,
+              "tools": {
+                "tts": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "web3-tools",
+          "label": "Web3 Tools",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "python": 61,
+            "shell": 24,
+            "docker": 2
+          },
+          "skills": [
+            {
+              "path": "openclaw/openclaw/skills-things-mac",
+              "chars": 7106,
+              "tools": {}
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-nextjs-turbopack",
+              "chars": 5746,
+              "tools": {
+                "docker": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "affaan-m/ecc/docs-ja-jp-skills-ui-to-vue",
+              "chars": 6813,
+              "tools": {
+                "docker": 1,
+                "shell": 1
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-blockchain-evm",
+              "chars": 12169,
+              "tools": {
+                "python": 39,
+                "shell": 11
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-blockchain-solana",
+              "chars": 10187,
+              "tools": {
+                "python": 22,
+                "shell": 10
+              }
+            },
+            {
+              "path": "nousresearch/hermes-agent/optional-skills-yuanbao",
+              "chars": 7424,
+              "tools": {}
+            },
+            {
+              "path": "shubhamsaboo/awesome-llm-apps/generative-ui-agents-ai-mcp-app-builder-apps-mcp-use-server-agent-skills-chatgpt-app-builder",
+              "chars": 9088,
+              "tools": {}
+            },
+            {
+              "path": "nexu-io/open-design/skills-gif-sticker-maker",
+              "chars": 5489,
+              "tools": {
+                "shell": 1
+              }
+            }
+          ]
+        },
+        {
+          "slug": "defi",
+          "label": "DeFi",
+          "skills_listed": 10,
+          "skills_read": 8,
+          "tools": {
+            "docker": 33,
+            "python": 15,
+            "shell": 12,
+            "spreadsheet": 6,
+            "sqlite": 2,
+            "node/npm": 2,
+            "sql": 2,
+            "git": 2,
+            "aws-cli": 1,
+            "pandas": 1,
+            "curl/wget": 1
+          },
+          "skills": [
+            {
+              "path": "nexu-io/open-design/design-templates-html-ppt-pitch-deck",
+              "chars": 9763,
+              "tools": {}
+            },
+            {
+              "path": "nexu-io/open-design/plugins-official-examples-fs-creative-voltage",
+              "chars": 14181,
+              "tools": {}
+            },
+            {
+              "path": "nexu-io/open-design/plugins-official-examples-html-ppt-pitch-deck",
+              "chars": 9832,
+              "tools": {}
+            },
+            {
+              "path": "shareai-lab/learn-claude-code/skills-mcp-builder",
+              "chars": 9152,
+              "tools": {
+                "sqlite": 2,
+                "node/npm": 2,
+                "python": 9,
+                "shell": 3,
+                "sql": 2
+              }
+            },
+            {
+              "path": "wshobson/agents/plugins-blockchain-web3-skills-defi-protocol-templates",
+              "chars": 11812,
+              "tools": {
+                "git": 1
+              }
+            },
+            {
+              "path": "posthog/posthog/agents-skills-depot-container-builds",
+              "chars": 20308,
+              "tools": {
+                "git": 1,
+                "docker": 33,
+                "aws-cli": 1,
+                "shell": 7
+              }
+            },
+            {
+              "path": "hkuds/vibe-trading/agent-src-skills-defi-yield",
+              "chars": 14686,
+              "tools": {
+                "pandas": 1,
+                "python": 6
+              }
+            },
+            {
+              "path": "iofficeai/officecli/skills-officecli-pitch-deck",
+              "chars": 23137,
+              "tools": {
+                "curl/wget": 1,
+                "shell": 2,
+                "spreadsheet": 6
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

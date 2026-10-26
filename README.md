@@ -12,7 +12,9 @@ gh repo create xuliangwang1993-ops/xconnect-factory --private --source=. --push
 # Render 上建 static_site，publishPath=site，然后真部署
 ```
 
-线上：https://xconnect-factory.onrender.com（右门 `.entry.code` 换成 `?from=code` 即可接上）。
+线上：https://xconnect-factory-ui.onrender.com（旧 `xconnect-factory.onrender.com` 已 404）。
+
+**工具登记簿**：https://xconnect-factory-ui.onrender.com/registry/ 。96 个入库技能、63 个行业需求分类、部署与验收证据、输入输出接力；扩容和安装前先查这里。见 [`docs/REGISTRY.md`](docs/REGISTRY.md)。
 
 ```
 www.x-connect.ai  ──右门 Code──▶  factory/  ──▶  runs/<id>/  ──▶  可交付

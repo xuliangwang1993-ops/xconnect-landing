@@ -1,0 +1,4252 @@
+{
+  "schema_version": "1.0",
+  "source_repository": "/var/minis/workspace/craft-registry-source",
+  "source_branch": "main",
+  "io_semantics": "仅列出各 SKILL.md 明确出现的格式示例/能力；空数组表示文档未明确，不代表工具无输入输出。",
+  "verification_semantics": "repo_documented 仅表示仓库文档已登记，不表示已安装或已实测。",
+  "tools": [
+    {
+      "id": "craft:cadcraft",
+      "name": "cadcraft",
+      "zh": "工程图纸",
+      "layer": "craft",
+      "category": "arts-design-media",
+      "summary": "用 CADCraft 引擎处理 CAD 图纸：读取与检查 DXF/DWG、查询图元、查找文字、执行命令与脚本、渲染导出为 SVG/PNG/PDF。当任务涉及工程图、建筑图、图纸转换或图元分析时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/cadcraft/SKILL.md",
+      "source_relpath": "skills/cadcraft/SKILL.md",
+      "inputs": [
+        "DXF",
+        "DWG"
+      ],
+      "outputs": [
+        "SVG",
+        "PNG",
+        "PDF"
+      ],
+      "install_command": "",
+      "license": "Proprietary",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "task",
+          "description": "任务描述与交付要求",
+          "required": true
+        }
+      ],
+      "mcp": [
+        "cadcraft"
+      ],
+      "tools": [],
+      "permissions": [
+        "read_file",
+        "write_file"
+      ],
+      "backs": "",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:qpdf",
+        "base:inkscape"
+      ],
+      "source": "https://getartcraft.com/apps/cadcraft"
+    },
+    {
+      "id": "craft:deckcraft",
+      "name": "deckcraft",
+      "zh": "演示文稿",
+      "layer": "craft",
+      "category": "office-admin",
+      "summary": "用 DeckCraft 引擎制作演示文稿：新建/打开幻灯片、增删页、加形状与文本框、插入图片/表格/图表、渲染导出。当任务涉及 PPT/演示稿/路演材料/汇报幻灯片的制作或修改时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/deckcraft/SKILL.md",
+      "source_relpath": "skills/deckcraft/SKILL.md",
+      "inputs": [],
+      "outputs": [],
+      "install_command": "",
+      "license": "Proprietary",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "task",
+          "description": "任务描述与交付要求",
+          "required": true
+        }
+      ],
+      "mcp": [
+        "deckcraft"
+      ],
+      "tools": [],
+      "permissions": [
+        "read_file",
+        "write_file"
+      ],
+      "backs": "",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [],
+      "source": "https://getartcraft.com/apps/deckcraft"
+    },
+    {
+      "id": "craft:designcraft",
+      "name": "designcraft",
+      "zh": "版面设计",
+      "layer": "craft",
+      "category": "arts-design-media",
+      "summary": "用 DesignCraft 引擎做版面与视觉设计：新建文档、写入图文、放置图片、渲染页面、导出 PNG，支持脚本化批处理。当任务涉及海报、封面、宣传页、图文排版或设计稿导出时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/designcraft/SKILL.md",
+      "source_relpath": "skills/designcraft/SKILL.md",
+      "inputs": [],
+      "outputs": [
+        "PNG"
+      ],
+      "install_command": "",
+      "license": "Proprietary",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "brief",
+          "description": "设计需求描述（尺寸、风格、必备元素）",
+          "required": true
+        }
+      ],
+      "mcp": [
+        "designcraft"
+      ],
+      "tools": [],
+      "permissions": [
+        "read_file",
+        "write_file"
+      ],
+      "backs": "",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [],
+      "source": "https://getartcraft.com/apps/designcraft"
+    },
+    {
+      "id": "craft:effectcraft",
+      "name": "effectcraft",
+      "zh": "动效合成",
+      "layer": "craft",
+      "category": "arts-design-media",
+      "summary": "用 EffectCraft 引擎做动效与合成：读写合成与图层、查询与设置属性、加关键帧与特效、渲染帧。当任务涉及动效、合成、特效、关键帧动画或逐帧渲染时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/effectcraft/SKILL.md",
+      "source_relpath": "skills/effectcraft/SKILL.md",
+      "inputs": [],
+      "outputs": [],
+      "install_command": "",
+      "license": "Proprietary",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "task",
+          "description": "任务描述与交付要求",
+          "required": true
+        }
+      ],
+      "mcp": [
+        "effectcraft"
+      ],
+      "tools": [],
+      "permissions": [
+        "read_file",
+        "write_file"
+      ],
+      "backs": "",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [],
+      "source": "https://getartcraft.com/apps/effectcraft"
+    },
+    {
+      "id": "craft:figcraft",
+      "name": "figcraft",
+      "zh": "界面设计",
+      "layer": "craft",
+      "category": "arts-design-media",
+      "summary": "用 FigCraft 引擎做界面设计与原型：建稿、绘制图形与路径、自动布局、组件、导出 PNG/SVG。当任务涉及 UI 稿、界面原型、组件库、设计规范交付时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/figcraft/SKILL.md",
+      "source_relpath": "skills/figcraft/SKILL.md",
+      "inputs": [
+        "FIGCRAFT",
+        "JSON"
+      ],
+      "outputs": [
+        "FIGCRAFT",
+        "PNG",
+        "SVG"
+      ],
+      "install_command": "",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "task",
+          "description": "设计需求（页面、组件、尺寸、目标平台）",
+          "required": true
+        }
+      ],
+      "mcp": [
+        "figcraft"
+      ],
+      "tools": [],
+      "permissions": [
+        "read_file",
+        "write_file"
+      ],
+      "backs": "",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:resvg",
+        "base:inkscape"
+      ],
+      "source": "https://github.com/storytold/figcraft"
+    },
+    {
+      "id": "craft:filmcraft",
+      "name": "filmcraft",
+      "zh": "视频剪辑",
+      "layer": "craft",
+      "category": "arts-design-media",
+      "summary": "用 FilmCraft 引擎处理视频项目：导入素材、编排时间线、渲染帧与预览。当任务涉及视频剪辑、序列编排、素材整理或视频预览渲染时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/filmcraft/SKILL.md",
+      "source_relpath": "skills/filmcraft/SKILL.md",
+      "inputs": [],
+      "outputs": [],
+      "install_command": "",
+      "license": "Proprietary",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "task",
+          "description": "任务描述与交付要求",
+          "required": true
+        }
+      ],
+      "mcp": [
+        "filmcraft"
+      ],
+      "tools": [],
+      "permissions": [
+        "read_file",
+        "write_file"
+      ],
+      "backs": "",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [],
+      "source": "https://getartcraft.com/apps/filmcraft"
+    },
+    {
+      "id": "craft:gridcraft",
+      "name": "gridcraft",
+      "zh": "表格数据处理",
+      "layer": "craft",
+      "category": "office-admin",
+      "summary": "用 GridCraft 引擎读写电子表格：读取/写入区域、逐格赋值、求值公式、插图表、建表、排序筛选，并校验 XLSX 缓存值与往返保真。当任务涉及 .xlsx/.csv/.tsv 的读取、计算、生成或格式转换时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/gridcraft/SKILL.md",
+      "source_relpath": "skills/gridcraft/SKILL.md",
+      "inputs": [
+        "XLSX",
+        "CSV",
+        "TSV",
+        "JSON",
+        "HTML"
+      ],
+      "outputs": [
+        "XLSX",
+        "CSV",
+        "TSV",
+        "JSON",
+        "HTML"
+      ],
+      "install_command": "",
+      "license": "Proprietary",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "目标表格路径（.xlsx/.csv/.tsv/.json/.html）",
+          "required": false
+        }
+      ],
+      "mcp": [
+        "gridcraft"
+      ],
+      "tools": [],
+      "permissions": [
+        "read_file",
+        "write_file"
+      ],
+      "backs": "",
+      "direct_upstream_ids": [
+        "base:openpyxl"
+      ],
+      "direct_downstream_ids": [
+        "base:openpyxl"
+      ],
+      "source": "https://getartcraft.com/apps/gridcraft"
+    },
+    {
+      "id": "craft:lightcraft",
+      "name": "lightcraft",
+      "zh": "照片调色",
+      "layer": "craft",
+      "category": "arts-design-media",
+      "summary": "用 LightCraft 引擎（330 个工具）管理照片库并调色：导入、查询筛选、调整显影参数、套用预设、裁剪、渲染导出。当任务涉及照片批量调色、图库整理、预设套用或批量出图时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/lightcraft/SKILL.md",
+      "source_relpath": "skills/lightcraft/SKILL.md",
+      "inputs": [],
+      "outputs": [
+        "TIF",
+        "JPG"
+      ],
+      "install_command": "",
+      "license": "Proprietary",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "task",
+          "description": "任务描述与交付要求",
+          "required": true
+        }
+      ],
+      "mcp": [
+        "lightcraft"
+      ],
+      "tools": [],
+      "permissions": [
+        "read_file",
+        "write_file"
+      ],
+      "backs": "",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [],
+      "source": "https://getartcraft.com/apps/lightcraft"
+    },
+    {
+      "id": "craft:pdfcraft",
+      "name": "pdfcraft",
+      "zh": "PDF 文档处理",
+      "layer": "craft",
+      "category": "office-admin",
+      "summary": "用 PdfCraft 引擎处理 PDF：提取文本、渲染页面、旋转/删除/移动/插入页、合并拆分、批量 OCR 与优化，并审计虚假遮盖（faux redaction）。当任务涉及 .pdf 的读取、编辑、拆分合并、OCR、压缩或安全审计时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/pdfcraft/SKILL.md",
+      "source_relpath": "skills/pdfcraft/SKILL.md",
+      "inputs": [
+        "PDF"
+      ],
+      "outputs": [
+        "PDF"
+      ],
+      "install_command": "",
+      "license": "Proprietary",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "目标 PDF 路径",
+          "required": true
+        }
+      ],
+      "mcp": [
+        "pdfcraft"
+      ],
+      "tools": [],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "network"
+      ],
+      "backs": "",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [],
+      "source": "https://getartcraft.com/apps/pdfcraft"
+    },
+    {
+      "id": "craft:photocraft",
+      "name": "photocraft",
+      "zh": "位图与图层",
+      "layer": "craft",
+      "category": "arts-design-media",
+      "summary": "用 PhotoCraft 引擎处理位图与图层文件：打开/新建文档、置入素材、图层导出、数据集合成、批量渲染。当任务涉及 PSD/图层文件、图片合成、批处理导出或格式转换时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/photocraft/SKILL.md",
+      "source_relpath": "skills/photocraft/SKILL.md",
+      "inputs": [
+        "PSD"
+      ],
+      "outputs": [
+        "PSD"
+      ],
+      "install_command": "",
+      "license": "Proprietary",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "task",
+          "description": "任务描述与交付要求",
+          "required": true
+        }
+      ],
+      "mcp": [
+        "photocraft"
+      ],
+      "tools": [],
+      "permissions": [
+        "read_file",
+        "write_file"
+      ],
+      "backs": "",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [],
+      "source": "https://getartcraft.com/apps/photocraft"
+    },
+    {
+      "id": "craft:soundcraft",
+      "name": "soundcraft",
+      "zh": "音频处理",
+      "layer": "craft",
+      "category": "arts-design-media",
+      "summary": "用 SoundCraft 引擎处理音频：新建/打开工程、导入音频、编排音轨、混音导出、格式与采样率转换、响度归一。当任务涉及音频剪辑、混音、格式转换、响度标准化时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/soundcraft/SKILL.md",
+      "source_relpath": "skills/soundcraft/SKILL.md",
+      "inputs": [],
+      "outputs": [],
+      "install_command": "",
+      "license": "Proprietary",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "task",
+          "description": "任务描述与交付要求",
+          "required": true
+        }
+      ],
+      "mcp": [
+        "soundcraft"
+      ],
+      "tools": [],
+      "permissions": [
+        "read_file",
+        "write_file"
+      ],
+      "backs": "",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [],
+      "source": "https://getartcraft.com/apps/soundcraft"
+    },
+    {
+      "id": "craft:vectorcraft",
+      "name": "vectorcraft",
+      "zh": "矢量图形",
+      "layer": "craft",
+      "category": "arts-design-media",
+      "summary": "用 VectorCraft 引擎绘制矢量图形：画路径与形状、设置填充描边、编排图层、导出。当任务涉及 logo、图标、插画、矢量海报或 SVG/EPS 类交付物时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/vectorcraft/SKILL.md",
+      "source_relpath": "skills/vectorcraft/SKILL.md",
+      "inputs": [],
+      "outputs": [
+        "SVG",
+        "EPS"
+      ],
+      "install_command": "",
+      "license": "Proprietary",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "task",
+          "description": "任务描述与交付要求",
+          "required": true
+        }
+      ],
+      "mcp": [
+        "vectorcraft"
+      ],
+      "tools": [],
+      "permissions": [
+        "read_file",
+        "write_file"
+      ],
+      "backs": "",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:inkscape"
+      ],
+      "source": "https://getartcraft.com/apps/vectorcraft"
+    },
+    {
+      "id": "craft:wordcraft",
+      "name": "wordcraft",
+      "zh": "Word 文档处理",
+      "layer": "craft",
+      "category": "office-admin",
+      "summary": "用 WordCraft 引擎读写与排版 Word 文档：新建/打开 docx，改写正文、套用样式、处理表格、审阅修订与批注、邮件合并、Zotero 引用，并导出 docx/pdf/odt/rtf/html/md/tex/txt/png。当任务涉及 .docx/.doc/.odt/.rtf 文档的生成、修改、格式转换或渲染预览时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/wordcraft/SKILL.md",
+      "source_relpath": "skills/wordcraft/SKILL.md",
+      "inputs": [
+        "DOCX",
+        "DOC",
+        "ODT",
+        "RTF",
+        "MD",
+        "TEX",
+        "HTML",
+        "TXT",
+        "JSON"
+      ],
+      "outputs": [
+        "DOCX",
+        "PDF",
+        "ODT",
+        "RTF",
+        "HTML",
+        "MD",
+        "TEX",
+        "TXT",
+        "PNG"
+      ],
+      "install_command": "",
+      "license": "Proprietary",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "目标文档路径（.docx/.doc/.odt/.rtf/.md/.tex/.html/.txt）",
+          "required": false
+        }
+      ],
+      "mcp": [
+        "wordcraft"
+      ],
+      "tools": [],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "network"
+      ],
+      "backs": "",
+      "direct_upstream_ids": [
+        "base:pandoc",
+        "base:crawl4ai"
+      ],
+      "direct_downstream_ids": [
+        "base:qpdf"
+      ],
+      "source": "https://getartcraft.com/apps/wordcraft"
+    },
+    {
+      "id": "base:aeneas",
+      "name": "aeneas",
+      "zh": "文本音频强制对齐（aeneas）",
+      "layer": "base",
+      "category": "asr",
+      "summary": "用 aeneas 开源工具把已知文案逐句对齐到音频，输出 SRT/JSON。⚠️ AGPL。当任务需要 文本音频强制对齐 且希望用开源、可独立运行的底层工具（filmcraft 字幕补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/aeneas/SKILL.md",
+      "source_relpath": "skills/base/aeneas/SKILL.md",
+      "inputs": [
+        "MP3",
+        "TXT"
+      ],
+      "outputs": [
+        "SRT"
+      ],
+      "install_command": "sudo apt install espeak libespeak-dev && pip install numpy aeneas",
+      "license": "⚠️ AGPL-3.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "filmcraft 字幕补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:ffmpeg"
+      ]
+    },
+    {
+      "id": "base:animatediff",
+      "name": "animatediff",
+      "zh": "动画化扩散（AnimateDiff）",
+      "layer": "base",
+      "category": "ai-video",
+      "summary": "用 animatediff 开源工具给 Stable Diffusion 加运动模块生成短动画，常在 ComfyUI 内使用。当任务需要 动画化扩散 且希望用开源、可独立运行的底层工具（effectcraft 补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/animatediff/SKILL.md",
+      "source_relpath": "skills/base/animatediff/SKILL.md",
+      "inputs": [
+        "YAML"
+      ],
+      "outputs": [],
+      "install_command": "git clone https://github.com/guoyww/AnimateDiff && cd AnimateDiff && pip install -r requirements.txt",
+      "license": "Apache-2.0（SD 底模许可另计）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "effectcraft 补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:argos-translate",
+      "name": "argos-translate",
+      "zh": "离线翻译（Argos Translate）",
+      "layer": "base",
+      "category": "text",
+      "summary": "用 argos-translate 开源工具完成「机器翻译（离线）」。当任务需要 机器翻译（离线） 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/argos-translate/SKILL.md",
+      "source_relpath": "skills/base/argos-translate/SKILL.md",
+      "inputs": [
+        "TEXT"
+      ],
+      "outputs": [
+        "TEXT"
+      ],
+      "install_command": "pip install argostranslate",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "机器翻译（离线）",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:audiowaveform",
+      "name": "audiowaveform",
+      "zh": "波形图生成（audiowaveform）",
+      "layer": "base",
+      "category": "audio",
+      "summary": "用 audiowaveform 开源工具BBC 出品，从音频生成波形 PNG 或 JSON 数据，用于剪辑卡点可视化或片内波形动效。当任务需要 波形图生成 且希望用开源、可独立运行的底层工具（soundcraft / effectcraft 补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/audiowaveform/SKILL.md",
+      "source_relpath": "skills/base/audiowaveform/SKILL.md",
+      "inputs": [
+        "WAV"
+      ],
+      "outputs": [
+        "PNG",
+        "JSON"
+      ],
+      "install_command": "sudo add-apt-repository ppa:chris-needham/ppa && sudo apt install audiowaveform",
+      "license": "GPL-3.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "soundcraft / effectcraft 补位",
+      "direct_upstream_ids": [
+        "base:sox"
+      ],
+      "direct_downstream_ids": [
+        "base:jq"
+      ]
+    },
+    {
+      "id": "base:blender",
+      "name": "blender",
+      "zh": "3D 建模与渲染（Blender 无界面）",
+      "layer": "base",
+      "category": "3d",
+      "summary": "用 blender 开源工具完成「3D 建模/渲染」。当任务需要 3D 建模/渲染 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/blender/SKILL.md",
+      "source_relpath": "skills/base/blender/SKILL.md",
+      "inputs": [
+        "BLEND",
+        "PY"
+      ],
+      "outputs": [
+        "PNG",
+        "GLB"
+      ],
+      "install_command": "sudo apt install blender  # 或官网下载（版本更新）",
+      "license": "GPL-2.0+",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "3D 建模/渲染",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:cc0-music-sources",
+      "name": "cc0-music-sources",
+      "zh": "免版权音乐来源（CC0 / 可商用）",
+      "layer": "base",
+      "category": "audio",
+      "summary": "用 cc0-music-sources 清单为宣传短片挑选可确认免版权的背景音乐与音效，逐首核对许可并留证。当任务需要 免版权音乐 且希望用开源、可独立运行的底层素材来源（soundcraft 素材补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/cc0-music-sources/SKILL.md",
+      "source_relpath": "skills/base/cc0-music-sources/SKILL.md",
+      "inputs": [],
+      "outputs": [],
+      "install_command": "",
+      "license": "各曲目许可不同，逐首核对",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "soundcraft 素材补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:cogvideox",
+      "name": "cogvideox",
+      "zh": "AI 视频生成（CogVideoX）",
+      "layer": "base",
+      "category": "ai-video",
+      "summary": "用 cogvideox 开源工具智谱开源文生视频模型。⚠️ 5B 权重为自有许可，商用须登记。当任务需要 AI 视频生成 且希望用开源、可独立运行的底层工具（effectcraft / filmcraft 空镜补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/cogvideox/SKILL.md",
+      "source_relpath": "skills/base/cogvideox/SKILL.md",
+      "inputs": [
+        "TEXT"
+      ],
+      "outputs": [
+        "MP4"
+      ],
+      "install_command": "pip install diffusers transformers accelerate",
+      "license": "⚠️ 代码 Apache-2.0；2B 权重 Apache-2.0；5B 权重 CogVideoX License（商用须登记）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "effectcraft / filmcraft 空镜补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:comfyui",
+      "name": "comfyui",
+      "zh": "本地图像生成（ComfyUI，需 GPU）",
+      "layer": "base",
+      "category": "image",
+      "summary": "用 comfyui 开源工具完成「AI 图像生成」。当任务需要 AI 图像生成 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/comfyui/SKILL.md",
+      "source_relpath": "skills/base/comfyui/SKILL.md",
+      "inputs": [
+        "JSON"
+      ],
+      "outputs": [],
+      "install_command": "git clone https://github.com/comfyanonymous/ComfyUI && cd ComfyUI && pip install -r requirements.txt && python main.py --listen",
+      "license": "GPL-3.0（模型权重另见各自许可）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "AI 图像生成",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:coqui-tts",
+      "name": "coqui-tts",
+      "zh": "多语种 TTS（Coqui TTS / XTTS）",
+      "layer": "base",
+      "category": "tts",
+      "summary": "用 coqui-tts 开源工具Coqui TTS 工具包，含 XTTS-v2 多语种克隆。⚠️ XTTS 权重为 CPML，不可商用。当任务需要 多语种 TTS 且希望用开源、可独立运行的底层工具（soundcraft 配音补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/coqui-tts/SKILL.md",
+      "source_relpath": "skills/base/coqui-tts/SKILL.md",
+      "inputs": [
+        "TEXT",
+        "WAV"
+      ],
+      "outputs": [
+        "WAV"
+      ],
+      "install_command": "pip install coqui-tts   # 原 coqui-ai/TTS 已停更，社区维护版 idiap/coqui-ai-TTS",
+      "license": "⚠️ 代码 MPL-2.0；XTTS-v2 权重 CPML（不可商用）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "soundcraft 配音补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:sox"
+      ]
+    },
+    {
+      "id": "base:cosyvoice",
+      "name": "cosyvoice",
+      "zh": "中文配音 TTS（CosyVoice）",
+      "layer": "base",
+      "category": "audio",
+      "summary": "用 cosyvoice 开源工具阿里通义开源多语种语音合成，支持预置音色、3 秒零样本声音复刻、跨语种与情感指令。当任务需要 中文配音 TTS（CosyVoice） 且希望用开源、可独立运行的底层工具（soundcraft / filmcraft 配音补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/cosyvoice/SKILL.md",
+      "source_relpath": "skills/base/cosyvoice/SKILL.md",
+      "inputs": [
+        "TEXT",
+        "WAV"
+      ],
+      "outputs": [
+        "WAV"
+      ],
+      "install_command": "# requirements.txt 锁定 torch==2.3.1、onnxruntime-gpu、TensorRT、deepspeed，只支持 Python 3.10，需独立 conda 环境\nconda create -n cosyvoice -y python=3.10 && conda activate cosyvoice\ngit clone --recursive https://github.com/FunAudioLLM/CosyVoice && cd CosyVoice && pip install -r requirements.txt\n# 模型需单独下载（数 GB），否则下面的 pretrained_models 路径不存在\npython -c \"from modelscope import snapshot_download; snapshot_download('iic/CosyVoice2-0.5B', local_dir='pretrained_models/CosyVoice2-0.5B')\"",
+      "license": "Apache-2.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "soundcraft / filmcraft 配音补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:sox"
+      ]
+    },
+    {
+      "id": "base:crawl4ai",
+      "name": "crawl4ai",
+      "zh": "网页抓取与正文提取（Crawl4AI）",
+      "layer": "base",
+      "category": "web",
+      "summary": "用 crawl4ai 开源工具完成「网页抓取/正文提取」。当任务需要 网页抓取/正文提取 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/crawl4ai/SKILL.md",
+      "source_relpath": "skills/base/crawl4ai/SKILL.md",
+      "inputs": [
+        "URL"
+      ],
+      "outputs": [
+        "MD"
+      ],
+      "install_command": "pip install -U crawl4ai && crawl4ai-setup",
+      "license": "Apache-2.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "网页抓取/正文提取",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:pandoc",
+        "craft:wordcraft"
+      ]
+    },
+    {
+      "id": "base:darktable-cli",
+      "name": "darktable-cli",
+      "zh": "照片批量调色（darktable）",
+      "layer": "base",
+      "category": "photo",
+      "summary": "用 darktable-cli 开源工具专业 RAW 冲印软件；`darktable-cli` 无界面按 XMP 调色参数批量导出。当任务需要 照片批量调色（darktable） 且希望用开源、可独立运行的底层工具（lightcraft 开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/darktable-cli/SKILL.md",
+      "source_relpath": "skills/base/darktable-cli/SKILL.md",
+      "inputs": [
+        "CR3",
+        "NEF",
+        "XMP"
+      ],
+      "outputs": [
+        "JPG",
+        "TIF"
+      ],
+      "install_command": "sudo apt install darktable  # macOS: brew install --cask darktable",
+      "license": "GPL-3.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "lightcraft 开源替代",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:imagemagick",
+        "base:libvips"
+      ]
+    },
+    {
+      "id": "base:demucs",
+      "name": "demucs",
+      "zh": "人声/伴奏分离（Demucs）",
+      "layer": "base",
+      "category": "audio",
+      "summary": "用 demucs 开源工具Meta 开源音源分离模型（Hybrid Transformer），把歌曲拆成人声、鼓、贝斯、其他。当任务需要 人声/伴奏分离（Demucs） 且希望用开源、可独立运行的底层工具（soundcraft 开源补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/demucs/SKILL.md",
+      "source_relpath": "skills/base/demucs/SKILL.md",
+      "inputs": [
+        "MP3"
+      ],
+      "outputs": [
+        "WAV",
+        "MP3"
+      ],
+      "install_command": "pip install -U demucs",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "soundcraft 开源补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:sox"
+      ]
+    },
+    {
+      "id": "base:docker",
+      "name": "docker",
+      "zh": "容器运行（Docker）",
+      "layer": "base",
+      "category": "ops",
+      "summary": "用 docker 开源工具完成「容器/环境隔离」。当任务需要 容器/环境隔离 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/docker/SKILL.md",
+      "source_relpath": "skills/base/docker/SKILL.md",
+      "inputs": [
+        "MP4"
+      ],
+      "outputs": [
+        "WEBM"
+      ],
+      "install_command": "curl -fsSL https://get.docker.com | sh",
+      "license": "Apache-2.0（Docker Engine / Moby）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "容器/环境隔离",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:duckdb",
+      "name": "duckdb",
+      "zh": "嵌入式分析（DuckDB）",
+      "layer": "base",
+      "category": "data",
+      "summary": "用 duckdb 开源工具完成「数据分析/SQL on 文件」。当任务需要 数据分析/SQL on 文件 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/duckdb/SKILL.md",
+      "source_relpath": "skills/base/duckdb/SKILL.md",
+      "inputs": [
+        "CSV"
+      ],
+      "outputs": [
+        "PARQUET"
+      ],
+      "install_command": "pip install duckdb  # 或下载 duckdb CLI",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "数据分析/SQL on 文件",
+      "direct_upstream_ids": [
+        "base:postgresql"
+      ],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:editly",
+      "name": "editly",
+      "zh": "声明式成片（editly）",
+      "layer": "base",
+      "category": "video",
+      "summary": "用 editly 开源工具用 JSON5 描述片段、转场、标题，命令行一键出宣传短片。当任务需要 声明式成片 且希望用开源、可独立运行的底层工具（filmcraft 开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/editly/SKILL.md",
+      "source_relpath": "skills/base/editly/SKILL.md",
+      "inputs": [
+        "JSON5"
+      ],
+      "outputs": [
+        "MP4"
+      ],
+      "install_command": "npm install -g editly",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "filmcraft 开源替代",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:f5-tts",
+      "name": "f5-tts",
+      "zh": "零样本声音克隆（F5-TTS）",
+      "layer": "base",
+      "category": "tts",
+      "summary": "用 f5-tts 开源工具流匹配 TTS，零样本克隆。⚠️ 官方预训练权重 CC-BY-NC，不可商用。当任务需要 零样本声音克隆 且希望用开源、可独立运行的底层工具（soundcraft 配音补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/f5-tts/SKILL.md",
+      "source_relpath": "skills/base/f5-tts/SKILL.md",
+      "inputs": [
+        "WAV",
+        "TEXT"
+      ],
+      "outputs": [],
+      "install_command": "pip install f5-tts",
+      "license": "⚠️ 代码 MIT；官方权重 CC-BY-NC-4.0（不可商用）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "soundcraft 配音补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:ffmpeg",
+      "name": "ffmpeg",
+      "zh": "音视频转码与处理（共享底层）",
+      "layer": "base",
+      "category": "video",
+      "summary": "用 ffmpeg 开源工具音视频解码、转码、剪切、拼接、滤镜、抽帧、混流的事实标准。当任务需要 音视频转码与处理（共享底层） 且希望用开源、可独立运行的底层工具（共享底层 · 支撑 filmcraft / soundcraft / effectcraft）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/ffmpeg/SKILL.md",
+      "source_relpath": "skills/base/ffmpeg/SKILL.md",
+      "inputs": [
+        "MP4",
+        "SRT",
+        "TXT",
+        "PNG"
+      ],
+      "outputs": [
+        "MP4",
+        "JSON",
+        "PNG"
+      ],
+      "install_command": "sudo apt install ffmpeg  # macOS: brew install ffmpeg",
+      "license": "LGPL-2.1+（启用 --enable-gpl 编译时为 GPL）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "共享底层 · 支撑 filmcraft / soundcraft / effectcraft",
+      "direct_upstream_ids": [
+        "base:real-esrgan",
+        "base:robust-video-matting",
+        "base:whisper",
+        "base:whisperx",
+        "base:stable-ts",
+        "base:aeneas",
+        "base:yt-dlp"
+      ],
+      "direct_downstream_ids": [
+        "base:real-esrgan"
+      ]
+    },
+    {
+      "id": "base:ffmpeg-normalize",
+      "name": "ffmpeg-normalize",
+      "zh": "批量响度归一（ffmpeg-normalize）",
+      "layer": "base",
+      "category": "audio",
+      "summary": "用 ffmpeg-normalize 开源工具基于 ffmpeg loudnorm 双遍法，批量把音视频响度统一到目标 LUFS。当任务需要 批量响度归一 且希望用开源、可独立运行的底层工具（soundcraft 开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/ffmpeg-normalize/SKILL.md",
+      "source_relpath": "skills/base/ffmpeg-normalize/SKILL.md",
+      "inputs": [
+        "MP4"
+      ],
+      "outputs": [
+        "MP4"
+      ],
+      "install_command": "pip install ffmpeg-normalize",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "soundcraft 开源替代",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:fish-speech",
+      "name": "fish-speech",
+      "zh": "声音克隆（Fish-Speech）",
+      "layer": "base",
+      "category": "tts",
+      "summary": "用 fish-speech 开源工具多语种 TTS 与克隆。⚠️ 模型权重 CC-BY-NC-SA，不可商用。当任务需要 声音克隆 且希望用开源、可独立运行的底层工具（soundcraft 配音补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/fish-speech/SKILL.md",
+      "source_relpath": "skills/base/fish-speech/SKILL.md",
+      "inputs": [],
+      "outputs": [],
+      "install_command": "git clone https://github.com/fishaudio/fish-speech && cd fish-speech && pip install -e .",
+      "license": "⚠️ 代码见仓库 LICENSE；权重 CC-BY-NC-SA-4.0（不可商用）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "soundcraft 配音补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:framepack",
+      "name": "framepack",
+      "zh": "长视频图生视频（FramePack）",
+      "layer": "base",
+      "category": "ai-video",
+      "summary": "用 framepack 开源工具基于 HunyuanVideo 的下一帧预测，低显存生成长时视频。当任务需要 长视频图生视频 且希望用开源、可独立运行的底层工具（effectcraft 补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/framepack/SKILL.md",
+      "source_relpath": "skills/base/framepack/SKILL.md",
+      "inputs": [],
+      "outputs": [],
+      "install_command": "git clone https://github.com/lllyasviel/FramePack && cd FramePack && pip install -r requirements.txt",
+      "license": "Apache-2.0（底座模型 HunyuanVideo 许可另计 ⚠️）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "effectcraft 补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:funasr",
+      "name": "funasr",
+      "zh": "中文语音识别（FunASR / Paraformer）",
+      "layer": "base",
+      "category": "audio",
+      "summary": "用 funasr 开源工具阿里达摩院开源语音识别工具包，Paraformer 中文识别准确率高，带 VAD 断句、标点恢复、时间戳。当任务需要 中文语音识别（FunASR / Paraformer） 且希望用开源、可独立运行的底层工具（filmcraft / soundcraft 中文字幕补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/funasr/SKILL.md",
+      "source_relpath": "skills/base/funasr/SKILL.md",
+      "inputs": [
+        "WAV"
+      ],
+      "outputs": [
+        "TEXT"
+      ],
+      "install_command": "pip install -U funasr modelscope torch torchaudio",
+      "license": "MIT（模型权重另见各自模型许可）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "filmcraft / soundcraft 中文字幕补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:gdal",
+      "name": "gdal",
+      "zh": "地图与地理数据（GDAL/OGR）",
+      "layer": "base",
+      "category": "gis",
+      "summary": "用 gdal 开源工具完成「GIS/地理数据」。当任务需要 GIS/地理数据 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/gdal/SKILL.md",
+      "source_relpath": "skills/base/gdal/SKILL.md",
+      "inputs": [
+        "TIF",
+        "SHP",
+        "GEOJSON"
+      ],
+      "outputs": [
+        "GEOJSON",
+        "TIF"
+      ],
+      "install_command": "sudo apt install gdal-bin",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "GIS/地理数据",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:ges",
+      "name": "ges",
+      "zh": "时间线编辑服务（GStreamer Editing Services）",
+      "layer": "base",
+      "category": "video",
+      "summary": "用 ges 开源工具GStreamer 的非线性编辑层，ges-launch-1.0 命令行拼时间线、转场、导出。当任务需要 时间线编辑服务 且希望用开源、可独立运行的底层工具（filmcraft 开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/ges/SKILL.md",
+      "source_relpath": "skills/base/ges/SKILL.md",
+      "inputs": [
+        "MP4"
+      ],
+      "outputs": [
+        "MP4"
+      ],
+      "install_command": "sudo apt install ges1.0-tools gstreamer1.0-plugins-good gstreamer1.0-libav",
+      "license": "LGPL-2.1+",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "filmcraft 开源替代",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:gimp",
+      "name": "gimp",
+      "zh": "GIMP 批处理",
+      "layer": "base",
+      "category": "image",
+      "summary": "用 gimp 开源工具GIMP 无界面批处理模式（Script-Fu / Python-Fu）。需要再包一层脚本才能稳定调用。当任务需要 GIMP 批处理 且希望用开源、可独立运行的底层工具（photocraft 补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/gimp/SKILL.md",
+      "source_relpath": "skills/base/gimp/SKILL.md",
+      "inputs": [
+        "PNG"
+      ],
+      "outputs": [
+        "JPG"
+      ],
+      "install_command": "sudo apt install gimp",
+      "license": "GPL-3.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "photocraft 补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:imagemagick"
+      ]
+    },
+    {
+      "id": "base:glaxnimate",
+      "name": "glaxnimate",
+      "zh": "Lottie 动画（Glaxnimate）",
+      "layer": "base",
+      "category": "motion",
+      "summary": "用 glaxnimate 开源工具矢量动画编辑器，支持 Lottie/SVG 动画，带命令行导出。当任务需要 Lottie 动画 且希望用开源、可独立运行的底层工具（effectcraft / vectorcraft 补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/glaxnimate/SKILL.md",
+      "source_relpath": "skills/base/glaxnimate/SKILL.md",
+      "inputs": [
+        "RAWR"
+      ],
+      "outputs": [
+        "JSON"
+      ],
+      "install_command": "sudo apt install glaxnimate",
+      "license": "GPL-3.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "effectcraft / vectorcraft 补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:gpt-sovits",
+      "name": "gpt-sovits",
+      "zh": "中文声音克隆（GPT-SoVITS）",
+      "layer": "base",
+      "category": "tts",
+      "summary": "用 gpt-sovits 开源工具少样本声音克隆 TTS，中文效果好，带 API 服务。当任务需要 中文声音克隆 且希望用开源、可独立运行的底层工具（soundcraft 配音补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/gpt-sovits/SKILL.md",
+      "source_relpath": "skills/base/gpt-sovits/SKILL.md",
+      "inputs": [
+        "WAV",
+        "TEXT"
+      ],
+      "outputs": [],
+      "install_command": "git clone https://github.com/RVC-Boss/GPT-SoVITS && cd GPT-SoVITS && bash install.sh",
+      "license": "MIT（使用他人声音须授权）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "soundcraft 配音补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:graphviz",
+      "name": "graphviz",
+      "zh": "图表与流程图（Graphviz）",
+      "layer": "base",
+      "category": "diagram",
+      "summary": "用 graphviz 开源工具完成「流程图/关系图」。当任务需要 流程图/关系图 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/graphviz/SKILL.md",
+      "source_relpath": "skills/base/graphviz/SKILL.md",
+      "inputs": [
+        "DOT"
+      ],
+      "outputs": [
+        "SVG",
+        "PDF",
+        "PNG"
+      ],
+      "install_command": "sudo apt install graphviz",
+      "license": "EPL-1.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "流程图/关系图",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:python-docx",
+        "base:inkscape",
+        "base:qpdf"
+      ]
+    },
+    {
+      "id": "base:himalaya",
+      "name": "himalaya",
+      "zh": "命令行邮件（Himalaya）",
+      "layer": "base",
+      "category": "comm",
+      "summary": "用 himalaya 开源工具完成「邮件收发」。当任务需要 邮件收发 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/himalaya/SKILL.md",
+      "source_relpath": "skills/base/himalaya/SKILL.md",
+      "inputs": [],
+      "outputs": [
+        "JSON"
+      ],
+      "install_command": "cargo install himalaya  # 或下载 GitHub Releases 二进制",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "邮件收发",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:jq"
+      ]
+    },
+    {
+      "id": "base:hunyuanvideo",
+      "name": "hunyuanvideo",
+      "zh": "AI 视频生成（HunyuanVideo）",
+      "layer": "base",
+      "category": "ai-video",
+      "summary": "用 hunyuanvideo 开源工具腾讯混元开源文生视频大模型。⚠️ 自有许可，欧盟、英国、韩国不可用。当任务需要 AI 视频生成 且希望用开源、可独立运行的底层工具（effectcraft / filmcraft 空镜补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/hunyuanvideo/SKILL.md",
+      "source_relpath": "skills/base/hunyuanvideo/SKILL.md",
+      "inputs": [
+        "TEXT"
+      ],
+      "outputs": [],
+      "install_command": "git clone https://github.com/Tencent-Hunyuan/HunyuanVideo && cd HunyuanVideo && pip install -r requirements.txt",
+      "license": "⚠️ Tencent Hunyuan Community License（排除欧盟/英国/韩国；超大规模用户需另授权）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "effectcraft / filmcraft 空镜补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:imagemagick",
+      "name": "imagemagick",
+      "zh": "通用图片处理（ImageMagick）",
+      "layer": "base",
+      "category": "photo",
+      "summary": "用 imagemagick 开源工具覆盖 200+ 格式的图像命令行：缩放、裁剪、合成、加字、水印、拼图、格式转换。当任务需要 通用图片处理（ImageMagick） 且希望用开源、可独立运行的底层工具（photocraft 批处理开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/imagemagick/SKILL.md",
+      "source_relpath": "skills/base/imagemagick/SKILL.md",
+      "inputs": [
+        "JPG",
+        "PNG"
+      ],
+      "outputs": [
+        "JPG",
+        "WEBP"
+      ],
+      "install_command": "sudo apt install imagemagick  # macOS: brew install imagemagick",
+      "license": "ImageMagick License（Apache-2.0 风格）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "photocraft 批处理开源替代",
+      "direct_upstream_ids": [
+        "base:darktable-cli",
+        "base:gimp",
+        "base:pillow"
+      ],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:inkscape",
+      "name": "inkscape",
+      "zh": "矢量图命令行（Inkscape）",
+      "layer": "base",
+      "category": "design",
+      "summary": "用 inkscape 开源工具专业矢量编辑器，1.x 命令行可导出 PNG/PDF/EPS、文字转路径、执行 actions 批处理。当任务需要 矢量图命令行（Inkscape） 且希望用开源、可独立运行的底层工具（vectorcraft 开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/inkscape/SKILL.md",
+      "source_relpath": "skills/base/inkscape/SKILL.md",
+      "inputs": [
+        "SVG"
+      ],
+      "outputs": [
+        "PNG",
+        "PDF",
+        "SVG"
+      ],
+      "install_command": "sudo apt install inkscape  # macOS: brew install --cask inkscape",
+      "license": "GPL-2.0+",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "vectorcraft 开源替代",
+      "direct_upstream_ids": [
+        "base:graphviz",
+        "craft:figcraft",
+        "base:satori",
+        "craft:vectorcraft",
+        "craft:cadcraft"
+      ],
+      "direct_downstream_ids": [
+        "base:qpdf"
+      ]
+    },
+    {
+      "id": "base:jq",
+      "name": "jq",
+      "zh": "JSON 处理（jq）",
+      "layer": "base",
+      "category": "dev",
+      "summary": "用 jq 开源工具完成「JSON 处理」。当任务需要 JSON 处理 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/jq/SKILL.md",
+      "source_relpath": "skills/base/jq/SKILL.md",
+      "inputs": [
+        "JSON"
+      ],
+      "outputs": [
+        "JSON"
+      ],
+      "install_command": "sudo apt install jq",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "JSON 处理",
+      "direct_upstream_ids": [
+        "base:ripgrep",
+        "base:himalaya",
+        "base:searxng",
+        "base:audiowaveform",
+        "base:librosa"
+      ],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:kdenlive",
+      "name": "kdenlive",
+      "zh": "剪辑工程（Kdenlive + melt 渲染）",
+      "layer": "base",
+      "category": "video",
+      "summary": "用 kdenlive 开源工具KDE 剪辑软件；工程文件 .kdenlive 是 MLT XML，可交给已有的 melt 无界面渲染。当任务需要 剪辑工程 且希望用开源、可独立运行的底层工具（filmcraft 开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/kdenlive/SKILL.md",
+      "source_relpath": "skills/base/kdenlive/SKILL.md",
+      "inputs": [
+        "KDENLIVE"
+      ],
+      "outputs": [
+        "MP4"
+      ],
+      "install_command": "sudo apt install kdenlive",
+      "license": "GPL-3.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "filmcraft 开源替代",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:krita",
+      "name": "krita",
+      "zh": "Krita 命令行导出",
+      "layer": "base",
+      "category": "image",
+      "summary": "用 krita 开源工具Krita 支持 --export 把 .kra 等工程无界面导出为图片。当任务需要 Krita 命令行导出 且希望用开源、可独立运行的底层工具（photocraft / designcraft 补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/krita/SKILL.md",
+      "source_relpath": "skills/base/krita/SKILL.md",
+      "inputs": [
+        "KRA"
+      ],
+      "outputs": [
+        "PNG"
+      ],
+      "install_command": "sudo apt install krita",
+      "license": "GPL-3.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "photocraft / designcraft 补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:libass",
+      "name": "libass",
+      "zh": "ASS 特效字幕渲染（libass）",
+      "layer": "base",
+      "category": "subtitle",
+      "summary": "用 libass 开源工具ASS/SSA 字幕渲染库，通过 ffmpeg subtitles/ass 滤镜烧录描边、卡拉 OK、定位字幕。当任务需要 ASS 特效字幕渲染 且希望用开源、可独立运行的底层工具（filmcraft 字幕烧录补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/libass/SKILL.md",
+      "source_relpath": "skills/base/libass/SKILL.md",
+      "inputs": [
+        "MP4",
+        "ASS"
+      ],
+      "outputs": [
+        "MP4"
+      ],
+      "install_command": "sudo apt install libass9 ffmpeg",
+      "license": "ISC",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "filmcraft 字幕烧录补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:libopenshot",
+      "name": "libopenshot",
+      "zh": "剪辑核心库（libopenshot）",
+      "layer": "base",
+      "category": "video",
+      "summary": "用 libopenshot 开源工具OpenShot 的 C++ 剪辑引擎，带 Python 绑定，可脚本化时间线、关键帧、导出。当任务需要 剪辑核心库 且希望用开源、可独立运行的底层工具（filmcraft 开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/libopenshot/SKILL.md",
+      "source_relpath": "skills/base/libopenshot/SKILL.md",
+      "inputs": [
+        "MP4"
+      ],
+      "outputs": [],
+      "install_command": "sudo apt install python3-openshot",
+      "license": "LGPL-3.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "filmcraft 开源替代",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:librosa",
+      "name": "librosa",
+      "zh": "音乐节拍分析（librosa）",
+      "layer": "base",
+      "category": "audio",
+      "summary": "用 librosa 开源工具完成「节拍/音乐分析（卡点）」。当任务需要 节拍/音乐分析（卡点） 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/librosa/SKILL.md",
+      "source_relpath": "skills/base/librosa/SKILL.md",
+      "inputs": [
+        "WAV"
+      ],
+      "outputs": [
+        "JSON"
+      ],
+      "install_command": "pip install librosa soundfile",
+      "license": "ISC",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "节拍/音乐分析（卡点）",
+      "direct_upstream_ids": [
+        "base:sox"
+      ],
+      "direct_downstream_ids": [
+        "base:jq"
+      ]
+    },
+    {
+      "id": "base:libvips",
+      "name": "libvips",
+      "zh": "高速批量图片处理（libvips）",
+      "layer": "base",
+      "category": "photo",
+      "summary": "用 libvips 开源工具流式、低内存的图像处理库，大图和批量缩略/转码比 ImageMagick 快数倍。当任务需要 高速批量图片处理（libvips） 且希望用开源、可独立运行的底层工具（photocraft 批处理开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/libvips/SKILL.md",
+      "source_relpath": "skills/base/libvips/SKILL.md",
+      "inputs": [
+        "JPG",
+        "TIF"
+      ],
+      "outputs": [
+        "JPG",
+        "WEBP"
+      ],
+      "install_command": "sudo apt install libvips-tools  # macOS: brew install vips；Python: pip install pyvips",
+      "license": "LGPL-2.1+",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "photocraft 批处理开源替代",
+      "direct_upstream_ids": [
+        "base:darktable-cli"
+      ],
+      "direct_downstream_ids": [
+        "base:pillow"
+      ]
+    },
+    {
+      "id": "base:ltx-video",
+      "name": "ltx-video",
+      "zh": "AI 视频生成（LTX-Video）",
+      "layer": "base",
+      "category": "ai-video",
+      "summary": "用 ltx-video 开源工具Lightricks 开源实时级文/图生视频模型。当任务需要 AI 视频生成 且希望用开源、可独立运行的底层工具（effectcraft / filmcraft 空镜补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/ltx-video/SKILL.md",
+      "source_relpath": "skills/base/ltx-video/SKILL.md",
+      "inputs": [
+        "TEXT",
+        "YAML"
+      ],
+      "outputs": [],
+      "install_command": "git clone https://github.com/Lightricks/LTX-Video && cd LTX-Video && pip install -e .[inference]",
+      "license": "Apache-2.0（各版本权重另见模型卡许可）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "effectcraft / filmcraft 空镜补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:manim",
+      "name": "manim",
+      "zh": "代码动画（Manim）",
+      "layer": "base",
+      "category": "motion",
+      "summary": "用 manim 开源工具用 Python 代码生成精确的图形、文字、数据动画。当任务需要 代码动画 且希望用开源、可独立运行的底层工具（effectcraft 动效补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/manim/SKILL.md",
+      "source_relpath": "skills/base/manim/SKILL.md",
+      "inputs": [
+        "PY"
+      ],
+      "outputs": [
+        "MP4"
+      ],
+      "install_command": "pip install manim  # 需先 apt install libcairo2-dev libpango1.0-dev ffmpeg",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "effectcraft 动效补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:mlt",
+      "name": "mlt",
+      "zh": "多轨时间线剪辑（melt）",
+      "layer": "base",
+      "category": "video",
+      "summary": "用 mlt 开源工具Kdenlive/Shotcut 背后的多轨时间线引擎，`melt` 命令行可直接拼接、转场、叠轨、渲染 MLT XML 工程。当任务需要 多轨时间线剪辑（melt） 且希望用开源、可独立运行的底层工具（filmcraft 开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/mlt/SKILL.md",
+      "source_relpath": "skills/base/mlt/SKILL.md",
+      "inputs": [
+        "MP4",
+        "MLT"
+      ],
+      "outputs": [
+        "MP4"
+      ],
+      "install_command": "sudo apt install melt  # macOS: brew install mlt",
+      "license": "LGPL-2.1（部分模块 GPL）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "filmcraft 开源替代",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:motion-canvas",
+      "name": "motion-canvas",
+      "zh": "TypeScript 动效（Motion Canvas）",
+      "layer": "base",
+      "category": "motion",
+      "summary": "用 motion-canvas 开源工具用 TypeScript 生成器函数写时间轴动画，浏览器预览，渲染出图序列/视频。当任务需要 TypeScript 动效 且希望用开源、可独立运行的底层工具（effectcraft 动效补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/motion-canvas/SKILL.md",
+      "source_relpath": "skills/base/motion-canvas/SKILL.md",
+      "inputs": [],
+      "outputs": [],
+      "install_command": "npm init @motion-canvas@latest",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "effectcraft 动效补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:moviepy",
+      "name": "moviepy",
+      "zh": "Python 视频剪辑（MoviePy）",
+      "layer": "base",
+      "category": "video",
+      "summary": "用 moviepy 开源工具用 Python 脚本剪辑、拼接、叠字、合成视频，适合批量出多尺寸宣传片。当任务需要 Python 视频剪辑 且希望用开源、可独立运行的底层工具（filmcraft 开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/moviepy/SKILL.md",
+      "source_relpath": "skills/base/moviepy/SKILL.md",
+      "inputs": [
+        "MP4"
+      ],
+      "outputs": [
+        "MP4"
+      ],
+      "install_command": "pip install moviepy",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "filmcraft 开源替代",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:natron",
+      "name": "natron",
+      "zh": "节点式合成（Natron）",
+      "layer": "base",
+      "category": "compositing",
+      "summary": "用 natron 开源工具类 Nuke 的节点合成软件，NatronRenderer 可无界面渲染工程。基本停更，仅作合成补位。当任务需要 节点式合成 且希望用开源、可独立运行的底层工具（effectcraft 合成补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/natron/SKILL.md",
+      "source_relpath": "skills/base/natron/SKILL.md",
+      "inputs": [
+        "NTP"
+      ],
+      "outputs": [],
+      "install_command": "下载官方 Linux 包：https://github.com/NatronGitHub/Natron/releases",
+      "license": "GPL-2.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "effectcraft 合成补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:ocrmypdf",
+      "name": "ocrmypdf",
+      "zh": "扫描件 OCR（OCRmyPDF）",
+      "layer": "base",
+      "category": "office-admin",
+      "summary": "用 ocrmypdf 开源工具给扫描 PDF 加可搜索文字层，自动纠偏、去噪、输出 PDF/A。当任务需要 扫描件 OCR（OCRmyPDF） 且希望用开源、可独立运行的底层工具（pdfcraft OCR 开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/ocrmypdf/SKILL.md",
+      "source_relpath": "skills/base/ocrmypdf/SKILL.md",
+      "inputs": [
+        "PDF"
+      ],
+      "outputs": [
+        "PDF"
+      ],
+      "install_command": "sudo apt install ocrmypdf tesseract-ocr-chi-sim  # macOS: brew install ocrmypdf tesseract-lang",
+      "license": "MPL-2.0（依赖 Tesseract Apache-2.0、Ghostscript AGPL）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "pdfcraft OCR 开源替代",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:opencv",
+      "name": "opencv",
+      "zh": "计算机视觉（共享底层）",
+      "layer": "base",
+      "category": "vision",
+      "summary": "用 opencv 开源工具图像/视频读取、几何变换、特征检测、目标跟踪、色彩空间、绿幕抠像等视觉分析。当任务需要 计算机视觉（共享底层） 且希望用开源、可独立运行的底层工具（共享底层 · 支撑 photocraft / filmcraft / effectcraft）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/opencv/SKILL.md",
+      "source_relpath": "skills/base/opencv/SKILL.md",
+      "inputs": [
+        "JPG",
+        "MP4"
+      ],
+      "outputs": [
+        "PNG"
+      ],
+      "install_command": "pip install opencv-python-headless",
+      "license": "Apache-2.0（4.5 起）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "共享底层 · 支撑 photocraft / filmcraft / effectcraft",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:openpyxl",
+      "name": "openpyxl",
+      "zh": "Excel 读写（openpyxl）",
+      "layer": "base",
+      "category": "office-admin",
+      "summary": "用 openpyxl 开源工具纯 Python 读写 .xlsx：单元格、公式、样式、图表、筛选、条件格式。当任务需要 Excel 读写（openpyxl） 且希望用开源、可独立运行的底层工具（gridcraft 开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/openpyxl/SKILL.md",
+      "source_relpath": "skills/base/openpyxl/SKILL.md",
+      "inputs": [
+        "XLSX"
+      ],
+      "outputs": [
+        "XLSX"
+      ],
+      "install_command": "pip install openpyxl",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "gridcraft 开源替代",
+      "direct_upstream_ids": [
+        "craft:gridcraft"
+      ],
+      "direct_downstream_ids": [
+        "craft:gridcraft"
+      ]
+    },
+    {
+      "id": "base:paddleocr",
+      "name": "paddleocr",
+      "zh": "图片 OCR（PaddleOCR，中文最强）",
+      "layer": "base",
+      "category": "image",
+      "summary": "用 paddleocr 开源工具完成「图片文字识别（中英文）」。当任务需要 图片文字识别（中英文） 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/paddleocr/SKILL.md",
+      "source_relpath": "skills/base/paddleocr/SKILL.md",
+      "inputs": [
+        "JPG"
+      ],
+      "outputs": [],
+      "install_command": "pip install paddlepaddle paddleocr",
+      "license": "Apache-2.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "图片文字识别（中英文）",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:pandoc",
+      "name": "pandoc",
+      "zh": "文档格式互转（Pandoc）",
+      "layer": "base",
+      "category": "office-admin",
+      "summary": "用 pandoc 开源工具通用文档转换器：Markdown、docx、HTML、LaTeX、EPUB、pptx 等互转，支持参考样式模板与引用。当任务需要 文档格式互转（Pandoc） 且希望用开源、可独立运行的底层工具（wordcraft / deckcraft 格式转换补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/pandoc/SKILL.md",
+      "source_relpath": "skills/base/pandoc/SKILL.md",
+      "inputs": [
+        "MD",
+        "DOCX",
+        "BIB"
+      ],
+      "outputs": [
+        "DOCX",
+        "MD",
+        "PDF",
+        "PPTX"
+      ],
+      "install_command": "sudo apt install pandoc  # macOS: brew install pandoc\n# 出中文 PDF 另需：sudo apt install texlive-xetex texlive-lang-chinese texlive-fonts-recommended fonts-noto-cjk（缺 fonts-recommended 会报 pzdr 字体错）",
+      "license": "GPL-2.0+",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "wordcraft / deckcraft 格式转换补位",
+      "direct_upstream_ids": [
+        "base:python-docx",
+        "base:crawl4ai"
+      ],
+      "direct_downstream_ids": [
+        "base:qpdf",
+        "base:python-docx",
+        "craft:wordcraft"
+      ]
+    },
+    {
+      "id": "base:pillow",
+      "name": "pillow",
+      "zh": "Python 图像处理（Pillow）",
+      "layer": "base",
+      "category": "image",
+      "summary": "用 pillow 开源工具Python 标准图像库：裁剪、缩放、叠字、合成。当任务需要 Python 图像处理 且希望用开源、可独立运行的底层工具（photocraft 批处理补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/pillow/SKILL.md",
+      "source_relpath": "skills/base/pillow/SKILL.md",
+      "inputs": [
+        "JPG"
+      ],
+      "outputs": [
+        "JPG"
+      ],
+      "install_command": "pip install pillow",
+      "license": "MIT-CMU（HPND）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "photocraft 批处理补位",
+      "direct_upstream_ids": [
+        "base:libvips"
+      ],
+      "direct_downstream_ids": [
+        "base:imagemagick"
+      ]
+    },
+    {
+      "id": "base:piper",
+      "name": "piper",
+      "zh": "轻量离线配音（Piper）",
+      "layer": "base",
+      "category": "tts",
+      "summary": "用 piper 开源工具CPU 即可实时运行的神经 TTS，命令行读文本出 wav。当任务需要 轻量离线配音 且希望用开源、可独立运行的底层工具（soundcraft / filmcraft 配音补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/piper/SKILL.md",
+      "source_relpath": "skills/base/piper/SKILL.md",
+      "inputs": [
+        "TEXT"
+      ],
+      "outputs": [
+        "WAV"
+      ],
+      "install_command": "pip install piper-tts",
+      "license": "GPL-3.0（新版 piper1-gpl；旧版 MIT 已归档；各音色模型许可另见模型卡）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "soundcraft / filmcraft 配音补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:sox"
+      ]
+    },
+    {
+      "id": "base:playwright",
+      "name": "playwright",
+      "zh": "浏览器自动化（Playwright）",
+      "layer": "base",
+      "category": "web",
+      "summary": "用 playwright 开源工具完成「浏览器自动化」。当任务需要 浏览器自动化 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/playwright/SKILL.md",
+      "source_relpath": "skills/base/playwright/SKILL.md",
+      "inputs": [
+        "URL"
+      ],
+      "outputs": [
+        "PNG",
+        "PDF"
+      ],
+      "install_command": "pip install playwright && playwright install chromium",
+      "license": "Apache-2.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "浏览器自动化",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:pymupdf",
+        "base:zbar"
+      ]
+    },
+    {
+      "id": "base:postgresql",
+      "name": "postgresql",
+      "zh": "关系数据库（PostgreSQL / psql）",
+      "layer": "base",
+      "category": "data",
+      "summary": "用 postgresql 开源工具完成「关系数据库」。当任务需要 关系数据库 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/postgresql/SKILL.md",
+      "source_relpath": "skills/base/postgresql/SKILL.md",
+      "inputs": [
+        "SQL"
+      ],
+      "outputs": [
+        "CSV"
+      ],
+      "install_command": "sudo apt install postgresql-client  # 服务端: postgresql 或 docker run postgres",
+      "license": "PostgreSQL License（类 MIT）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "关系数据库",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:duckdb"
+      ]
+    },
+    {
+      "id": "base:pyloudnorm",
+      "name": "pyloudnorm",
+      "zh": "响度测量（pyloudnorm）",
+      "layer": "base",
+      "category": "audio",
+      "summary": "用 pyloudnorm 开源工具按 ITU-R BS.1770-4 测量积分响度，Python 调用，适合做 QA 校验。当任务需要 响度测量 且希望用开源、可独立运行的底层工具（soundcraft 响度校验补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/pyloudnorm/SKILL.md",
+      "source_relpath": "skills/base/pyloudnorm/SKILL.md",
+      "inputs": [
+        "WAV"
+      ],
+      "outputs": [],
+      "install_command": "pip install pyloudnorm soundfile",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "soundcraft 响度校验补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:pymupdf",
+      "name": "pymupdf",
+      "zh": "PDF 读取/渲染/编辑（PyMuPDF）",
+      "layer": "base",
+      "category": "office-admin",
+      "summary": "用 pymupdf 开源工具高速 PDF 解析库：提文字/坐标、渲染图片、增删页、真正的遮盖（redaction）、检测假遮盖。当任务需要 PDF 读取/渲染/编辑（PyMuPDF） 且希望用开源、可独立运行的底层工具（pdfcraft 开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/pymupdf/SKILL.md",
+      "source_relpath": "skills/base/pymupdf/SKILL.md",
+      "inputs": [
+        "PDF"
+      ],
+      "outputs": [
+        "PNG",
+        "PDF",
+        "TEXT"
+      ],
+      "install_command": "pip install pymupdf",
+      "license": "⚠️ AGPL-3.0（或付费商业许可）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "pdfcraft 开源替代",
+      "direct_upstream_ids": [
+        "base:playwright"
+      ],
+      "direct_downstream_ids": [
+        "base:zbar"
+      ]
+    },
+    {
+      "id": "base:pyscenedetect",
+      "name": "pyscenedetect",
+      "zh": "镜头切分（PySceneDetect）",
+      "layer": "base",
+      "category": "video",
+      "summary": "用 pyscenedetect 开源工具完成「镜头/场景检测」。当任务需要 镜头/场景检测 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/pyscenedetect/SKILL.md",
+      "source_relpath": "skills/base/pyscenedetect/SKILL.md",
+      "inputs": [
+        "MP4"
+      ],
+      "outputs": [],
+      "install_command": "pip install \"scenedetect[opencv]\"",
+      "license": "BSD-3-Clause",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "镜头/场景检测",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:python-docx",
+      "name": "python-docx",
+      "zh": "Word 读写（python-docx）",
+      "layer": "base",
+      "category": "office-admin",
+      "summary": "用 python-docx 开源工具Python 读写 .docx：段落、样式、表格、图片、页眉页脚、分节。当任务需要 Word 读写（python-docx） 且希望用开源、可独立运行的底层工具（wordcraft 开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/python-docx/SKILL.md",
+      "source_relpath": "skills/base/python-docx/SKILL.md",
+      "inputs": [
+        "DOCX",
+        "PNG"
+      ],
+      "outputs": [
+        "DOCX"
+      ],
+      "install_command": "pip install python-docx",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "wordcraft 开源替代",
+      "direct_upstream_ids": [
+        "base:resvg",
+        "base:graphviz",
+        "base:pandoc"
+      ],
+      "direct_downstream_ids": [
+        "base:pandoc"
+      ]
+    },
+    {
+      "id": "base:python-pptx",
+      "name": "python-pptx",
+      "zh": "PPT 生成（python-pptx）",
+      "layer": "base",
+      "category": "office-admin",
+      "summary": "用 python-pptx 开源工具Python 生成/修改 .pptx：版式、文本、图片、表格、原生图表。当任务需要 PPT 生成（python-pptx） 且希望用开源、可独立运行的底层工具（deckcraft 开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/python-pptx/SKILL.md",
+      "source_relpath": "skills/base/python-pptx/SKILL.md",
+      "inputs": [
+        "PNG"
+      ],
+      "outputs": [
+        "PPTX"
+      ],
+      "install_command": "pip install python-pptx",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "deckcraft 开源替代",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:qdrant",
+      "name": "qdrant",
+      "zh": "向量检索（Qdrant）",
+      "layer": "base",
+      "category": "data",
+      "summary": "用 qdrant 开源工具完成「向量数据库/语义检索」。当任务需要 向量数据库/语义检索 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/qdrant/SKILL.md",
+      "source_relpath": "skills/base/qdrant/SKILL.md",
+      "inputs": [],
+      "outputs": [],
+      "install_command": "docker run -d -p 6333:6333 -v $PWD/qdrant:/qdrant/storage qdrant/qdrant  # 客户端: pip install qdrant-client",
+      "license": "Apache-2.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "向量数据库/语义检索",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:qpdf",
+      "name": "qpdf",
+      "zh": "PDF 结构操作（qpdf）",
+      "layer": "base",
+      "category": "office-admin",
+      "summary": "用 qpdf 开源工具无损的 PDF 结构变换：合并、拆分、选页、旋转、加解密、线性化、修复。当任务需要 PDF 结构操作（qpdf） 且希望用开源、可独立运行的底层工具（pdfcraft 开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/qpdf/SKILL.md",
+      "source_relpath": "skills/base/qpdf/SKILL.md",
+      "inputs": [
+        "PDF"
+      ],
+      "outputs": [
+        "PDF"
+      ],
+      "install_command": "sudo apt install qpdf  # macOS: brew install qpdf",
+      "license": "Apache-2.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "pdfcraft 开源替代",
+      "direct_upstream_ids": [
+        "base:graphviz",
+        "base:inkscape",
+        "base:pandoc",
+        "base:tectonic",
+        "craft:wordcraft",
+        "craft:cadcraft"
+      ],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:real-esrgan",
+      "name": "real-esrgan",
+      "zh": "超分辨率放大（Real-ESRGAN）",
+      "layer": "base",
+      "category": "vision",
+      "summary": "用 real-esrgan 开源工具腾讯 ARC 开源的真实场景超分模型，图片/视频帧 2x–4x 放大并去噪。当任务需要 超分辨率放大（Real-ESRGAN） 且希望用开源、可独立运行的底层工具（photocraft / filmcraft 画质增强补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/real-esrgan/SKILL.md",
+      "source_relpath": "skills/base/real-esrgan/SKILL.md",
+      "inputs": [
+        "JPG",
+        "PNG"
+      ],
+      "outputs": [
+        "PNG"
+      ],
+      "install_command": "# 推荐：ncnn 便携版（pip install realesrgan basicsr 在新版 Python/torchvision 上构建失败，不推荐）\ncurl -LO https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424-ubuntu.zip\nunzip realesrgan-ncnn-vulkan-20220424-ubuntu.zip && chmod +x realesrgan-ncnn-vulkan   # 自带 models/\n# 无显卡机器：sudo apt install mesa-vulkan-drivers，再 export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.json（CPU 软件渲染，慢但可用）",
+      "license": "BSD-3-Clause",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "photocraft / filmcraft 画质增强补位",
+      "direct_upstream_ids": [
+        "base:ffmpeg"
+      ],
+      "direct_downstream_ids": [
+        "base:ffmpeg"
+      ]
+    },
+    {
+      "id": "base:rembg",
+      "name": "rembg",
+      "zh": "图片去背景（rembg）",
+      "layer": "base",
+      "category": "image",
+      "summary": "用 rembg 开源工具完成「图片抠图/去背景」。当任务需要 图片抠图/去背景 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/rembg/SKILL.md",
+      "source_relpath": "skills/base/rembg/SKILL.md",
+      "inputs": [
+        "JPG"
+      ],
+      "outputs": [
+        "PNG"
+      ],
+      "install_command": "pip install \"rembg[cli]\"",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "图片抠图/去背景",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:remotion",
+      "name": "remotion",
+      "zh": "React 视频（Remotion）",
+      "layer": "base",
+      "category": "motion",
+      "summary": "用 remotion 开源工具用 React 组件写视频，CLI 渲染。⚠️ 非 OSI 开源：3 人以上公司商用须买许可。当任务需要 React 视频 且希望用开源、可独立运行的底层工具（effectcraft / filmcraft 补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/remotion/SKILL.md",
+      "source_relpath": "skills/base/remotion/SKILL.md",
+      "inputs": [
+        "TS"
+      ],
+      "outputs": [
+        "MP4"
+      ],
+      "install_command": "npx create-video@latest",
+      "license": "⚠️ Remotion License（源码可见；个人/≤3 人公司免费，其余需付费）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "effectcraft / filmcraft 补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:resvg",
+      "name": "resvg",
+      "zh": "SVG 渲染（resvg）",
+      "layer": "base",
+      "category": "image",
+      "summary": "用 resvg 开源工具快速、准确的 SVG 转 PNG 渲染器，适合从分镜 SVG 批量出帧。当任务需要 SVG 渲染 且希望用开源、可独立运行的底层工具（figcraft / vectorcraft 开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/resvg/SKILL.md",
+      "source_relpath": "skills/base/resvg/SKILL.md",
+      "inputs": [
+        "SVG"
+      ],
+      "outputs": [
+        "PNG"
+      ],
+      "install_command": "sudo apt install resvg   # 或 cargo install resvg",
+      "license": "Apache-2.0 / MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "figcraft / vectorcraft 开源替代",
+      "direct_upstream_ids": [
+        "craft:figcraft",
+        "base:satori"
+      ],
+      "direct_downstream_ids": [
+        "base:python-docx"
+      ]
+    },
+    {
+      "id": "base:revideo",
+      "name": "revideo",
+      "zh": "可无界面渲染的代码动效（Revideo）",
+      "layer": "base",
+      "category": "motion",
+      "summary": "用 revideo 开源工具Motion Canvas 的分支，增加 headless 渲染 API，适合服务端批量出片。当任务需要 可无界面渲染的代码动效 且希望用开源、可独立运行的底层工具（effectcraft / filmcraft 开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/revideo/SKILL.md",
+      "source_relpath": "skills/base/revideo/SKILL.md",
+      "inputs": [],
+      "outputs": [],
+      "install_command": "npm init @revideo@latest",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "effectcraft / filmcraft 开源替代",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:ripgrep",
+      "name": "ripgrep",
+      "zh": "代码与文本搜索（ripgrep）",
+      "layer": "base",
+      "category": "dev",
+      "summary": "用 ripgrep 开源工具完成「全文/代码搜索」。当任务需要 全文/代码搜索 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/ripgrep/SKILL.md",
+      "source_relpath": "skills/base/ripgrep/SKILL.md",
+      "inputs": [],
+      "outputs": [
+        "JSON"
+      ],
+      "install_command": "sudo apt install ripgrep",
+      "license": "MIT OR Unlicense",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "全文/代码搜索",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:jq"
+      ]
+    },
+    {
+      "id": "base:robust-video-matting",
+      "name": "robust-video-matting",
+      "zh": "无绿幕人像抠像（RVM）",
+      "layer": "base",
+      "category": "video",
+      "summary": "用 robust-video-matting 开源工具字节开源实时人像视频抠图，不需绿幕，输出 alpha 通道或合成视频。当任务需要 无绿幕人像抠像（RVM） 且希望用开源、可独立运行的底层工具（effectcraft / filmcraft 抠像补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/robust-video-matting/SKILL.md",
+      "source_relpath": "skills/base/robust-video-matting/SKILL.md",
+      "inputs": [
+        "MP4"
+      ],
+      "outputs": [
+        "PNG"
+      ],
+      "install_command": "git clone https://github.com/PeterL1n/RobustVideoMatting\n# requirements_inference.txt 锁定 torch==1.9 / av==8.0.3，新版 Python 装不上；直接装新版依赖即可：\npip install torch torchvision av pims tqdm\n# 权重直接下载（torch.hub 走 GitHub API，容易卡住）\ncurl -L -o RobustVideoMatting/rvm_mobilenetv3.pth https://github.com/PeterL1n/RobustVideoMatting/releases/download/v1.0.0/rvm_mobilenetv3.pth",
+      "license": "GPL-3.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "effectcraft / filmcraft 抠像补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:ffmpeg"
+      ]
+    },
+    {
+      "id": "base:rubberband",
+      "name": "rubberband",
+      "zh": "变速不变调（Rubber Band）",
+      "layer": "base",
+      "category": "audio",
+      "summary": "用 rubberband 开源工具高质量时间伸缩与变调，用于把音乐/配音卡到精确时长。当任务需要 变速不变调 且希望用开源、可独立运行的底层工具（soundcraft 开源补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/rubberband/SKILL.md",
+      "source_relpath": "skills/base/rubberband/SKILL.md",
+      "inputs": [
+        "WAV"
+      ],
+      "outputs": [
+        "WAV"
+      ],
+      "install_command": "sudo apt install rubberband-cli",
+      "license": "GPL-2.0（另有商业许可）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "soundcraft 开源补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:satori",
+      "name": "satori",
+      "zh": "HTML/CSS 转 SVG（Satori）",
+      "layer": "base",
+      "category": "layout",
+      "summary": "用 satori 开源工具Vercel 出品，把 JSX/HTML+CSS 转成 SVG，常配 resvg 出封面。当任务需要 HTML/CSS 转 SVG 且希望用开源、可独立运行的底层工具（designcraft / figcraft 补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/satori/SKILL.md",
+      "source_relpath": "skills/base/satori/SKILL.md",
+      "inputs": [
+        "TTF"
+      ],
+      "outputs": [
+        "SVG"
+      ],
+      "install_command": "npm install satori",
+      "license": "MPL-2.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "designcraft / figcraft 补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:resvg",
+        "base:inkscape"
+      ]
+    },
+    {
+      "id": "base:searxng",
+      "name": "searxng",
+      "zh": "元搜索（SearXNG，自托管）",
+      "layer": "base",
+      "category": "web",
+      "summary": "用 searxng 开源工具完成「网页搜索」。当任务需要 网页搜索 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/searxng/SKILL.md",
+      "source_relpath": "skills/base/searxng/SKILL.md",
+      "inputs": [
+        "URL"
+      ],
+      "outputs": [
+        "JSON"
+      ],
+      "install_command": "docker run -d -p 8888:8080 --name searxng searxng/searxng",
+      "license": "AGPL-3.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "网页搜索",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:jq"
+      ]
+    },
+    {
+      "id": "base:sharp",
+      "name": "sharp",
+      "zh": "Node 高速图像处理（sharp）",
+      "layer": "base",
+      "category": "image",
+      "summary": "用 sharp 开源工具基于 libvips 的 Node 图像库，缩放、转码极快。当任务需要 Node 高速图像处理 且希望用开源、可独立运行的底层工具（photocraft 批处理补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/sharp/SKILL.md",
+      "source_relpath": "skills/base/sharp/SKILL.md",
+      "inputs": [
+        "JPG"
+      ],
+      "outputs": [
+        "WEBP"
+      ],
+      "install_command": "npm install sharp",
+      "license": "Apache-2.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "photocraft 批处理补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:sherpa-onnx",
+      "name": "sherpa-onnx",
+      "zh": "离线语音识别与合成（sherpa-onnx）",
+      "layer": "base",
+      "category": "tts",
+      "summary": "用 sherpa-onnx 开源工具新一代 Kaldi 的 ONNX 推理框架，离线 ASR/TTS/VAD，支持中文，CPU 可跑。当任务需要 离线语音识别与合成 且希望用开源、可独立运行的底层工具（soundcraft / filmcraft 字幕与配音补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/sherpa-onnx/SKILL.md",
+      "source_relpath": "skills/base/sherpa-onnx/SKILL.md",
+      "inputs": [
+        "ONNX",
+        "TXT",
+        "TEXT"
+      ],
+      "outputs": [
+        "WAV"
+      ],
+      "install_command": "pip install sherpa-onnx",
+      "license": "Apache-2.0（模型另见各自许可）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "soundcraft / filmcraft 字幕与配音补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:sox"
+      ]
+    },
+    {
+      "id": "base:sox",
+      "name": "sox",
+      "zh": "音频处理（SoX）",
+      "layer": "base",
+      "category": "audio",
+      "summary": "用 sox 开源工具命令行音频瑞士军刀：格式/采样率转换、裁剪、拼接、淡入淡出、增益、降噪、统计。当任务需要 音频处理（SoX） 且希望用开源、可独立运行的底层工具（soundcraft 开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/sox/SKILL.md",
+      "source_relpath": "skills/base/sox/SKILL.md",
+      "inputs": [
+        "WAV"
+      ],
+      "outputs": [
+        "WAV"
+      ],
+      "install_command": "sudo apt install sox libsox-fmt-all  # macOS: brew install sox",
+      "license": "GPL-2.0（libsox 为 LGPL）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "soundcraft 开源替代",
+      "direct_upstream_ids": [
+        "base:demucs",
+        "base:cosyvoice",
+        "base:coqui-tts",
+        "base:piper",
+        "base:sherpa-onnx"
+      ],
+      "direct_downstream_ids": [
+        "base:audiowaveform",
+        "base:whisperx",
+        "base:stable-ts",
+        "base:librosa"
+      ]
+    },
+    {
+      "id": "base:stable-ts",
+      "name": "stable-ts",
+      "zh": "稳定字幕时间戳（stable-ts）",
+      "layer": "base",
+      "category": "asr",
+      "summary": "用 stable-ts 开源工具让 Whisper 时间戳更稳，并可把已有文案对齐到音频。仓库已归档，仍可用。当任务需要 稳定字幕时间戳 且希望用开源、可独立运行的底层工具（filmcraft 字幕补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/stable-ts/SKILL.md",
+      "source_relpath": "skills/base/stable-ts/SKILL.md",
+      "inputs": [
+        "WAV"
+      ],
+      "outputs": [
+        "SRT"
+      ],
+      "install_command": "pip install stable-ts",
+      "license": "MIT（已归档）",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "filmcraft 字幕补位",
+      "direct_upstream_ids": [
+        "base:yt-dlp",
+        "base:sox"
+      ],
+      "direct_downstream_ids": [
+        "base:ffmpeg"
+      ]
+    },
+    {
+      "id": "base:synfig",
+      "name": "synfig",
+      "zh": "2D 矢量动画（Synfig）",
+      "layer": "base",
+      "category": "motion",
+      "summary": "用 synfig 开源工具2D 矢量/骨骼动画，synfig 命令行渲染 .sif 工程。当任务需要 2D 矢量动画 且希望用开源、可独立运行的底层工具（effectcraft 动效开源替代）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/synfig/SKILL.md",
+      "source_relpath": "skills/base/synfig/SKILL.md",
+      "inputs": [
+        "SIFZ"
+      ],
+      "outputs": [
+        "MP4"
+      ],
+      "install_command": "sudo apt install synfig",
+      "license": "GPL-3.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "effectcraft 动效开源替代",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:tectonic",
+      "name": "tectonic",
+      "zh": "LaTeX 排版（Tectonic）",
+      "layer": "base",
+      "category": "doc",
+      "summary": "用 tectonic 开源工具完成「数学公式/学术排版」。当任务需要 数学公式/学术排版 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/tectonic/SKILL.md",
+      "source_relpath": "skills/base/tectonic/SKILL.md",
+      "inputs": [
+        "TEX",
+        "MD"
+      ],
+      "outputs": [
+        "PDF"
+      ],
+      "install_command": "cargo install tectonic  # 或 conda install -c conda-forge tectonic / 官方安装脚本",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "数学公式/学术排版",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:qpdf"
+      ]
+    },
+    {
+      "id": "base:typst",
+      "name": "typst",
+      "zh": "现代排版（Typst）",
+      "layer": "base",
+      "category": "layout",
+      "summary": "用 typst 开源工具标记语言排版引擎，命令行出 PDF/PNG/SVG，适合字卡、海报、价目单。当任务需要 现代排版 且希望用开源、可独立运行的底层工具（designcraft / wordcraft 补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/typst/SKILL.md",
+      "source_relpath": "skills/base/typst/SKILL.md",
+      "inputs": [
+        "TYP"
+      ],
+      "outputs": [
+        "PNG"
+      ],
+      "install_command": "cargo install --locked typst-cli   # 或下载 release 二进制",
+      "license": "Apache-2.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "designcraft / wordcraft 补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:wan2",
+      "name": "wan2",
+      "zh": "AI 视频生成（Wan2.2）",
+      "layer": "base",
+      "category": "ai-video",
+      "summary": "用 wan2 开源工具阿里通义万相开源文生视频/图生视频模型。当任务需要 AI 视频生成 且希望用开源、可独立运行的底层工具（effectcraft / filmcraft 空镜补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/wan2/SKILL.md",
+      "source_relpath": "skills/base/wan2/SKILL.md",
+      "inputs": [
+        "TEXT"
+      ],
+      "outputs": [],
+      "install_command": "git clone https://github.com/Wan-Video/Wan2.2 && cd Wan2.2 && pip install -r requirements.txt",
+      "license": "Apache-2.0",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "effectcraft / filmcraft 空镜补位",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": []
+    },
+    {
+      "id": "base:whisper",
+      "name": "whisper",
+      "zh": "语音识别与字幕（Whisper）",
+      "layer": "base",
+      "category": "audio",
+      "summary": "用 whisper 开源工具OpenAI 开源多语种语音识别，直接输出 srt/vtt/txt 字幕。`faster-whisper`（CTranslate2，MIT）速度约 4 倍、显存更省。当任务需要 语音识别与字幕（Whisper） 且希望用开源、可独立运行的底层工具（filmcraft / soundcraft 字幕补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/whisper/SKILL.md",
+      "source_relpath": "skills/base/whisper/SKILL.md",
+      "inputs": [
+        "MP4"
+      ],
+      "outputs": [
+        "SRT"
+      ],
+      "install_command": "pip install -U openai-whisper  # 需系统 ffmpeg；更快：pip install faster-whisper",
+      "license": "MIT",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "filmcraft / soundcraft 字幕补位",
+      "direct_upstream_ids": [
+        "base:yt-dlp"
+      ],
+      "direct_downstream_ids": [
+        "base:ffmpeg"
+      ]
+    },
+    {
+      "id": "base:whisperx",
+      "name": "whisperx",
+      "zh": "逐字时间戳字幕（WhisperX）",
+      "layer": "base",
+      "category": "asr",
+      "summary": "用 whisperx 开源工具Whisper + 强制对齐，输出逐字时间戳与说话人区分，适合卡点字幕。当任务需要 逐字时间戳字幕 且希望用开源、可独立运行的底层工具（filmcraft / soundcraft 字幕补位）时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/whisperx/SKILL.md",
+      "source_relpath": "skills/base/whisperx/SKILL.md",
+      "inputs": [
+        "WAV"
+      ],
+      "outputs": [
+        "SRT"
+      ],
+      "install_command": "pip install whisperx",
+      "license": "BSD-2-Clause",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "file",
+          "description": "输入文件路径",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "filmcraft / soundcraft 字幕补位",
+      "direct_upstream_ids": [
+        "base:sox"
+      ],
+      "direct_downstream_ids": [
+        "base:ffmpeg"
+      ]
+    },
+    {
+      "id": "base:yt-dlp",
+      "name": "yt-dlp",
+      "zh": "媒体下载（yt-dlp）",
+      "layer": "base",
+      "category": "video",
+      "summary": "用 yt-dlp 开源工具完成「在线音视频下载」。当任务需要 在线音视频下载 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/yt-dlp/SKILL.md",
+      "source_relpath": "skills/base/yt-dlp/SKILL.md",
+      "inputs": [
+        "URL"
+      ],
+      "outputs": [
+        "MP4",
+        "WAV"
+      ],
+      "install_command": "pip install -U yt-dlp  # 依赖 ffmpeg",
+      "license": "Unlicense",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "在线音视频下载",
+      "direct_upstream_ids": [],
+      "direct_downstream_ids": [
+        "base:ffmpeg",
+        "base:whisper",
+        "base:stable-ts"
+      ]
+    },
+    {
+      "id": "base:zbar",
+      "name": "zbar",
+      "zh": "二维码/条码识别（ZBar）",
+      "layer": "base",
+      "category": "image",
+      "summary": "用 zbar 开源工具完成「二维码/条码」。当任务需要 二维码/条码 且希望用开源、可独立运行的底层工具时使用。",
+      "source_path": "/var/minis/workspace/craft-registry-source/skills/base/zbar/SKILL.md",
+      "source_relpath": "skills/base/zbar/SKILL.md",
+      "inputs": [
+        "PNG",
+        "JPG"
+      ],
+      "outputs": [
+        "TEXT",
+        "XML"
+      ],
+      "install_command": "sudo apt install zbar-tools  # 生成二维码另配 qrencode",
+      "license": "LGPL-2.1",
+      "verification_status": "repo_documented",
+      "frontmatter_inputs": [
+        {
+          "name": "input",
+          "description": "输入文件路径、URL 或查询",
+          "required": true
+        }
+      ],
+      "mcp": [],
+      "tools": [
+        "shell"
+      ],
+      "permissions": [
+        "read_file",
+        "write_file",
+        "shell"
+      ],
+      "backs": "二维码/条码",
+      "direct_upstream_ids": [
+        "base:playwright",
+        "base:pymupdf"
+      ],
+      "direct_downstream_ids": []
+    }
+  ],
+  "handoffs": [
+    {
+      "upstream": "base:aeneas",
+      "downstream": "base:ffmpeg",
+      "format": "SRT",
+      "compatibility": "inferred",
+      "evidence": "SRT 字幕可由 ffmpeg subtitles 滤镜烧录"
+    },
+    {
+      "upstream": "base:audiowaveform",
+      "downstream": "base:jq",
+      "format": "JSON",
+      "compatibility": "inferred",
+      "evidence": "波形 JSON 可由 jq 筛选"
+    },
+    {
+      "upstream": "base:coqui-tts",
+      "downstream": "base:sox",
+      "format": "WAV",
+      "compatibility": "inferred",
+      "evidence": "合成 WAV 可进入音频处理"
+    },
+    {
+      "upstream": "base:cosyvoice",
+      "downstream": "base:sox",
+      "format": "WAV",
+      "compatibility": "inferred",
+      "evidence": "合成 WAV 可进入音频处理"
+    },
+    {
+      "upstream": "base:crawl4ai",
+      "downstream": "base:pandoc",
+      "format": "MD",
+      "compatibility": "inferred",
+      "evidence": "正文 Markdown 可转换为 DOCX/PDF"
+    },
+    {
+      "upstream": "base:crawl4ai",
+      "downstream": "craft:wordcraft",
+      "format": "MD",
+      "compatibility": "inferred",
+      "evidence": "正文 Markdown 可由 WordCraft 打开"
+    },
+    {
+      "upstream": "base:darktable-cli",
+      "downstream": "base:imagemagick",
+      "format": "JPG",
+      "compatibility": "inferred",
+      "evidence": "调色 JPG 可继续缩放或加水印"
+    },
+    {
+      "upstream": "base:darktable-cli",
+      "downstream": "base:libvips",
+      "format": "JPG",
+      "compatibility": "inferred",
+      "evidence": "调色 JPG 可继续批量处理"
+    },
+    {
+      "upstream": "base:demucs",
+      "downstream": "base:sox",
+      "format": "WAV",
+      "compatibility": "inferred",
+      "evidence": "分离后的 WAV 音轨可混音或修剪"
+    },
+    {
+      "upstream": "base:ffmpeg",
+      "downstream": "base:real-esrgan",
+      "format": "PNG",
+      "compatibility": "documented",
+      "evidence": "Real-ESRGAN 用法：ffmpeg 拆帧后放大"
+    },
+    {
+      "upstream": "base:gimp",
+      "downstream": "base:imagemagick",
+      "format": "JPG",
+      "compatibility": "inferred",
+      "evidence": "GIMP 导出的 JPG 可继续批处理"
+    },
+    {
+      "upstream": "base:graphviz",
+      "downstream": "base:inkscape",
+      "format": "SVG",
+      "compatibility": "inferred",
+      "evidence": "Graphviz SVG 可由 Inkscape 编辑或导出"
+    },
+    {
+      "upstream": "base:graphviz",
+      "downstream": "base:python-docx",
+      "format": "PNG",
+      "compatibility": "inferred",
+      "evidence": "图表 PNG 可插入 DOCX"
+    },
+    {
+      "upstream": "base:graphviz",
+      "downstream": "base:qpdf",
+      "format": "PDF",
+      "compatibility": "inferred",
+      "evidence": "Graphviz PDF 可合并或线性化"
+    },
+    {
+      "upstream": "base:himalaya",
+      "downstream": "base:jq",
+      "format": "JSON",
+      "compatibility": "documented",
+      "evidence": "himalaya 用法：-o json 管道至 jq"
+    },
+    {
+      "upstream": "base:inkscape",
+      "downstream": "base:qpdf",
+      "format": "PDF",
+      "compatibility": "inferred",
+      "evidence": "Inkscape PDF 可合并或线性化"
+    },
+    {
+      "upstream": "base:librosa",
+      "downstream": "base:jq",
+      "format": "JSON",
+      "compatibility": "inferred",
+      "evidence": "节拍 JSON 可由 jq 筛选"
+    },
+    {
+      "upstream": "base:libvips",
+      "downstream": "base:pillow",
+      "format": "JPG",
+      "compatibility": "inferred",
+      "evidence": "libvips 导出的 JPG 可由 Pillow 读取"
+    },
+    {
+      "upstream": "base:openpyxl",
+      "downstream": "craft:gridcraft",
+      "format": "XLSX",
+      "compatibility": "inferred",
+      "evidence": "生成的 XLSX 可由 GridCraft 读写"
+    },
+    {
+      "upstream": "base:pandoc",
+      "downstream": "base:python-docx",
+      "format": "DOCX",
+      "compatibility": "inferred",
+      "evidence": "Pandoc DOCX 可继续由 python-docx 编辑"
+    },
+    {
+      "upstream": "base:pandoc",
+      "downstream": "base:qpdf",
+      "format": "PDF",
+      "compatibility": "inferred",
+      "evidence": "Pandoc PDF 可合并或线性化"
+    },
+    {
+      "upstream": "base:pandoc",
+      "downstream": "craft:wordcraft",
+      "format": "DOCX",
+      "compatibility": "inferred",
+      "evidence": "Pandoc DOCX 可由 WordCraft 打开"
+    },
+    {
+      "upstream": "base:pillow",
+      "downstream": "base:imagemagick",
+      "format": "JPG",
+      "compatibility": "inferred",
+      "evidence": "Pillow 保存的 JPG 可由 ImageMagick 读取"
+    },
+    {
+      "upstream": "base:piper",
+      "downstream": "base:sox",
+      "format": "WAV",
+      "compatibility": "inferred",
+      "evidence": "合成 WAV 可进入音频处理"
+    },
+    {
+      "upstream": "base:playwright",
+      "downstream": "base:pymupdf",
+      "format": "PDF",
+      "compatibility": "inferred",
+      "evidence": "网页 PDF 可继续提取或渲染"
+    },
+    {
+      "upstream": "base:playwright",
+      "downstream": "base:zbar",
+      "format": "PNG",
+      "compatibility": "inferred",
+      "evidence": "网页截图 PNG 可识别其中条码"
+    },
+    {
+      "upstream": "base:postgresql",
+      "downstream": "base:duckdb",
+      "format": "CSV",
+      "compatibility": "inferred",
+      "evidence": "psql 导出的 CSV 可由 DuckDB 查询"
+    },
+    {
+      "upstream": "base:pymupdf",
+      "downstream": "base:zbar",
+      "format": "PNG",
+      "compatibility": "inferred",
+      "evidence": "PDF 页面 PNG 可识别其中条码"
+    },
+    {
+      "upstream": "base:python-docx",
+      "downstream": "base:pandoc",
+      "format": "DOCX",
+      "compatibility": "inferred",
+      "evidence": "DOCX 可由 Pandoc 转为 Markdown/PDF"
+    },
+    {
+      "upstream": "base:real-esrgan",
+      "downstream": "base:ffmpeg",
+      "format": "PNG",
+      "compatibility": "documented",
+      "evidence": "Real-ESRGAN 用法：放大帧后由 ffmpeg 合帧"
+    },
+    {
+      "upstream": "base:resvg",
+      "downstream": "base:python-docx",
+      "format": "PNG",
+      "compatibility": "inferred",
+      "evidence": "SVG 渲染 PNG 可插入 DOCX"
+    },
+    {
+      "upstream": "base:ripgrep",
+      "downstream": "base:jq",
+      "format": "JSON",
+      "compatibility": "documented",
+      "evidence": "ripgrep 用法：rg --json 管道至 jq"
+    },
+    {
+      "upstream": "base:robust-video-matting",
+      "downstream": "base:ffmpeg",
+      "format": "PNG",
+      "compatibility": "documented",
+      "evidence": "RVM 用法：PNG alpha 序列由 ffmpeg 合成"
+    },
+    {
+      "upstream": "base:satori",
+      "downstream": "base:inkscape",
+      "format": "SVG",
+      "compatibility": "inferred",
+      "evidence": "Satori SVG 可由 Inkscape 处理"
+    },
+    {
+      "upstream": "base:satori",
+      "downstream": "base:resvg",
+      "format": "SVG",
+      "compatibility": "inferred",
+      "evidence": "Satori SVG 可由 resvg 渲染 PNG"
+    },
+    {
+      "upstream": "base:searxng",
+      "downstream": "base:jq",
+      "format": "JSON",
+      "compatibility": "documented",
+      "evidence": "SearXNG 用法：JSON 搜索结果管道至 jq"
+    },
+    {
+      "upstream": "base:sherpa-onnx",
+      "downstream": "base:sox",
+      "format": "WAV",
+      "compatibility": "inferred",
+      "evidence": "合成 WAV 可进入音频处理"
+    },
+    {
+      "upstream": "base:sox",
+      "downstream": "base:audiowaveform",
+      "format": "WAV",
+      "compatibility": "inferred",
+      "evidence": "处理后的 WAV 可生成波形"
+    },
+    {
+      "upstream": "base:sox",
+      "downstream": "base:librosa",
+      "format": "WAV",
+      "compatibility": "inferred",
+      "evidence": "处理后的 WAV 可做节拍分析"
+    },
+    {
+      "upstream": "base:sox",
+      "downstream": "base:stable-ts",
+      "format": "WAV",
+      "compatibility": "inferred",
+      "evidence": "处理后的 WAV 可生成稳定时间戳字幕"
+    },
+    {
+      "upstream": "base:sox",
+      "downstream": "base:whisperx",
+      "format": "WAV",
+      "compatibility": "inferred",
+      "evidence": "处理后的 WAV 可转写字幕"
+    },
+    {
+      "upstream": "base:stable-ts",
+      "downstream": "base:ffmpeg",
+      "format": "SRT",
+      "compatibility": "inferred",
+      "evidence": "SRT 字幕可由 ffmpeg subtitles 滤镜烧录"
+    },
+    {
+      "upstream": "base:tectonic",
+      "downstream": "base:qpdf",
+      "format": "PDF",
+      "compatibility": "inferred",
+      "evidence": "Tectonic PDF 可合并或线性化"
+    },
+    {
+      "upstream": "base:whisper",
+      "downstream": "base:ffmpeg",
+      "format": "SRT",
+      "compatibility": "inferred",
+      "evidence": "SRT 字幕可由 ffmpeg subtitles 滤镜烧录"
+    },
+    {
+      "upstream": "base:whisperx",
+      "downstream": "base:ffmpeg",
+      "format": "SRT",
+      "compatibility": "inferred",
+      "evidence": "SRT 字幕可由 ffmpeg subtitles 滤镜烧录"
+    },
+    {
+      "upstream": "base:yt-dlp",
+      "downstream": "base:ffmpeg",
+      "format": "MP4",
+      "compatibility": "inferred",
+      "evidence": "下载的 MP4 可作为转码输入"
+    },
+    {
+      "upstream": "base:yt-dlp",
+      "downstream": "base:stable-ts",
+      "format": "WAV",
+      "compatibility": "inferred",
+      "evidence": "提取的 WAV 可作为字幕输入"
+    },
+    {
+      "upstream": "base:yt-dlp",
+      "downstream": "base:whisper",
+      "format": "MP4",
+      "compatibility": "inferred",
+      "evidence": "下载的 MP4 可作为 Whisper 输入"
+    },
+    {
+      "upstream": "craft:cadcraft",
+      "downstream": "base:inkscape",
+      "format": "SVG",
+      "compatibility": "inferred",
+      "evidence": "CAD 导出的 SVG 可由 Inkscape 处理"
+    },
+    {
+      "upstream": "craft:cadcraft",
+      "downstream": "base:qpdf",
+      "format": "PDF",
+      "compatibility": "inferred",
+      "evidence": "CAD 导出的 PDF 可合并或线性化"
+    },
+    {
+      "upstream": "craft:figcraft",
+      "downstream": "base:inkscape",
+      "format": "SVG",
+      "compatibility": "inferred",
+      "evidence": "FigCraft SVG 可由 Inkscape 处理"
+    },
+    {
+      "upstream": "craft:figcraft",
+      "downstream": "base:resvg",
+      "format": "SVG",
+      "compatibility": "inferred",
+      "evidence": "FigCraft SVG 可由 resvg 渲染 PNG"
+    },
+    {
+      "upstream": "craft:gridcraft",
+      "downstream": "base:openpyxl",
+      "format": "XLSX",
+      "compatibility": "inferred",
+      "evidence": "GridCraft XLSX 可由 openpyxl 读取"
+    },
+    {
+      "upstream": "craft:vectorcraft",
+      "downstream": "base:inkscape",
+      "format": "SVG",
+      "compatibility": "inferred",
+      "evidence": "VectorCraft SVG 可由 Inkscape 处理"
+    },
+    {
+      "upstream": "craft:wordcraft",
+      "downstream": "base:qpdf",
+      "format": "PDF",
+      "compatibility": "inferred",
+      "evidence": "WordCraft PDF 可合并或线性化"
+    }
+  ],
+  "validation": {
+    "passed": true,
+    "total": 96,
+    "craft": 13,
+    "base": 83,
+    "unique_ids": 96,
+    "handoffs": 55,
+    "documented_handoffs": 6,
+    "inferred_handoffs": 49,
+    "checks": {
+      "total_96": true,
+      "ids_unique": true,
+      "names_unique": true,
+      "craft_13": true,
+      "base_83": true,
+      "required_fields_present": true,
+      "io_arrays": true,
+      "verification_repo_documented_only": true,
+      "source_paths_exist": true,
+      "io_rules_cover_every_tool": true,
+      "handoff_endpoints_exist": true,
+      "handoffs_not_self_loops": true,
+      "handoff_compatibility_valid": true,
+      "handoff_formats_connect": true,
+      "handoffs_unique": true
+    }
+  }
+}

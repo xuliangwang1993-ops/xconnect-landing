@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="X-Connect 底层工具唯一登记簿：96 个已入库技能、63 个行业分类、输入输出接力与真实部署证据。">
+<title>工具登记簿 · X-Connect MCP</title>
+<link rel="stylesheet" href="registry.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/" aria-label="返回 X-Connect 工厂"><span class="brandmark">X</span><span>X-Connect <b>工具登记簿</b></span></a>
+  <nav aria-label="页面视图"><button class="nav active" data-view="inventory">工具台账</button><button class="nav" data-view="industries">行业需求</button><button class="nav" data-view="chains">接力地图</button></nav>
+  <span class="edition">REGISTRY / 01</span>
+</header>
+<main>
+<section class="intro">
+  <div class="intro-copy"><p class="kicker">ONE REGISTRY. NO DOUBLE INSTALL.</p><h1>先查库存，<br>再谈安装。</h1><p>不是把工具堆满，而是让每件专业工具接上前后手。这里登记库存、部署、验证和输入输出；没有证据的，不写“可用”。</p></div>
+  <div class="rule"><strong>安装前检查</strong><ol><li><span>01</span> 查这里有没有同职责工具</li><li><span>02</span> 看部署位置与最近验证证据</li><li><span>03</span> 有重叠先比选，不直接新增</li><li><span>04</span> 只有通过验收，才标记“已验证”</li></ol></div>
+</section>
+<section class="metrics" aria-label="登记簿概览">
+  <div><b id="m-total">96</b><span>已入库技能</span></div><div><b>63</b><span>行业分类</span></div><div><b>504</b><span>真实 SKILL.md 样本</span></div><div><b id="m-verified">—</b><span>本次有运行证据</span></div><div class="metric-note"><span>市场总盘约 350 万（用户口径）</span><small>需求数字只来自抽样正文提及，不是调用量，也不是全行业份额。</small></div>
+</section>
+<section class="notice"><span class="notice-dot"></span><p><b>这是一条工具地图，不是 MCP 接通证明。</b> 13 个 Craft 文档声明 MCP；83 个底层工具主要以 CLI / Python 登记。运行状态按证据单列。</p></section>
+
+<section id="view-inventory" class="view active-view">
+  <div class="section-head"><div><p class="section-index">A / INVENTORY</p><h2>工具总账</h2></div><p id="result-count">正在读取登记数据…</p></div>
+  <div class="controls">
+    <label class="search"><span>搜索</span><input id="q" type="search" placeholder="工具、用途、格式，例如：TTS / SRT / 超分" autocomplete="off"></label>
+    <label><span>库存层</span><select id="layer"><option value="">全部</option><option value="craft">Craft 应用</option><option value="base">底层工具</option><option value="asset">卷上补充资产</option></select></label>
+    <label><span>状态</span><select id="status"><option value="">全部证据状态</option><option value="verified">运行已验证</option><option value="deployed">已部署未完整验证</option><option value="documented">仅文档登记</option></select></label>
+    <label><span>行业</span><select id="tool-industry"><option value="">全部行业</option></select></label>
+    <button id="reset" class="text-button">清除筛选</button>
+  </div>
+  <div class="ledger-wrap"><table class="ledger"><thead><tr><th>工具 / 职责</th><th>层</th><th>市场提及</th><th>交接格式</th><th>部署位置</th><th>证据</th><th><span class="sr-only">详情</span></th></tr></thead><tbody id="tool-rows"></tbody></table><div id="empty" class="empty" hidden>没有匹配项。清除一个筛选条件再查。</div></div>
+  <div class="legend"><span><i class="dot verified"></i>运行已验证</span><span><i class="dot deployed"></i>已部署，未完整验证</span><span><i class="dot documented"></i>仅文档登记</span><span>“提及”按样本正文计数；0 不代表无用，只代表此次样本未提到。</span></div>
+</section>
+
+<section id="view-industries" class="view">
+  <div class="section-head"><div><p class="section-index">B / DEMAND</p><h2>63 个行业，需求从样本里来</h2></div><p>12 个领域 · 每类前 8 个技能正文</p></div>
+  <div class="industry-layout"><aside id="domain-list" aria-label="领域"></aside><div class="industry-main"><div id="industry-summary" class="industry-summary"></div><div id="category-grid" class="category-grid"></div></div></div>
+  <details class="method"><summary>统计方法与边界</summary><p>来源：skillsmp.com 分类页。63 个行业分类，每类取前 10 个技能链接，实际读取前 8 个正文，共 504 份。单元格数字是正文提到工具的次数；不是工具调用量。分类页只取第一页，作者集中度较高，不能据此宣称覆盖整个市场。</p></details>
+</section>
+
+<section id="view-chains" class="view">
+  <div class="section-head"><div><p class="section-index">C / HANDOFFS</p><h2>产出不是终点，是下一手的素材</h2></div><p>只展示登记了输入输出关系的接力</p></div>
+  <div class="chain-intro"><h3>Craft 的范例：一条产业链，不是 12 个孤岛</h3><p>文档 → 数据 → 视觉 → 演示 → 视频 → 音频。每次交接必须有明确格式和验收人；大模型只选择、编排和核对，不自由改写已核实事实。</p></div>
+  <div id="craft-chain" class="craft-chain"></div>
+  <div class="chain-toolbar"><h3>已登记的上下游</h3><label class="search compact"><span>定位工具</span><input id="chain-q" type="search" placeholder="例如 ffmpeg / PDF / wav"></label></div>
+  <div id="handoff-list" class="handoff-list"></div>
+</section>
+</main>
+<footer><span>X-Connect · MCP Tool Registry</span><span>数据源：craft-skills main + Skill Market 504 样本 + RunPod 验收记录</span><a href="../">返回工厂</a></footer>
+<dialog id="detail"><button id="close-detail" class="dialog-close" aria-label="关闭">×</button><div id="detail-content"></div></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="../data/registry.js"></script><script src="registry.js"></script>
+</body></html>
