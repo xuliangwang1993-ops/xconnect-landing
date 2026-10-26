@@ -341,6 +341,12 @@
     });
     $('#orderEditBtn').addEventListener('click', () => { orderStage('brief'); orderInput().focus(); });
   }
+  function initAssistantTools() {
+    const host = $('#assistantTools'), data = window.XCF_ASSISTANT_TOOLS;
+    if (!host || !data) return;
+    host.innerHTML = (data.tools || []).map(t => `<div class="mcpTool"><span class="chip ok">MCP 已握手</span><b>${esc(t.name)}</b><small>${esc(t.description)}</small></div>`).join('') +
+      `<p class="note">${Object.keys(data.planned_adapters || {}).length} 类写入/GPU/联网工具仍为待验收适配器，未注册为可执行工具。</p>`;
+  }
   function initOrderFlow() {
     const input = orderInput();
     if (!input) return;
@@ -504,6 +510,7 @@
 
   /* ---------- 启动 ---------- */
   function boot() {
+    initAssistantTools();
     initOrderFlow();
     renderSkins();
     renderAoi();

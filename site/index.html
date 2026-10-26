@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="dark">
 <title>X-Connect Factory · 产线与 Pod 派单</title>
 <link rel="icon" href="assets/crystal-x.jpg">
-<link rel="stylesheet" href="factory.css?v=cdb0f405">
+<link rel="stylesheet" href="factory.css?v=3edff60a">
 <script src="i18n.js?v=6670446f"></script>
 <script src="i18n/en-common.js?v=d2cd0df9"></script>
 <script src="i18n/en-factory.js?v=95eeaabe"></script>
@@ -103,6 +103,11 @@
     </section>
   </div>
   <p class="orderTruth">流程预览：当前页面不会自动扣款或启动 Pod。真实生产与付款需要服务端确认，未接通的能力会明确标注。</p>
+  <details class="assistantMcp">
+    <summary>小助手执行链 · Grok Build CLI + MCP</summary>
+    <p class="note">Duck Lee 接单 → Grok Build CLI 编排 → 任务范围内的 MCP 工具 → 节点证据与成品。当前仅只读探针经过握手；RunPod 未启动，未执行真实生产订单。</p>
+    <div id="assistantTools"></div>
+  </details>
 </section>
 
 <main class="layout" id="runtime">
@@ -239,10 +244,11 @@
 <script src="auth.js?v=8230d6db"></script>
 <script src="data/tools.js?v=c6ab7292"></script>
 <script src="data/recipes.js?v=c9a8aa5f"></script>
+<script src="data/assistant-tools.js"></script>
 <script src="data/skins.js?v=7db744e6"></script>
 <script src="data/aoi-modules.js?v=d300336e"></script>
 <script src="data/guide.js?v=5de524c1"></script>
-<script src="factory.js?v=ccf6e36e"></script>
+<script src="factory.js?v=4af58cfc"></script>
 <script src="guide.js?v=605cd383"></script>
 </body>
 </html>

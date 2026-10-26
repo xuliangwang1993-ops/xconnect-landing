@@ -350,3 +350,11 @@ body:not([data-auth]) .order-flow { display: none; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+.assistantMcp { margin: 12px 0 0; border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
+.assistantMcp > summary { cursor: pointer; min-height: 32px; color: var(--muted); font-size: 12px; }
+#assistantTools { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+.mcpTool { display: grid; gap: 5px; min-width: 0; padding: 10px; border: 1px solid var(--line); border-radius: 6px; }
+.mcpTool .chip { justify-self: start; }
+.mcpTool small { color: var(--muted); line-height: 1.5; overflow-wrap: anywhere; }
+@media(max-width:760px){#assistantTools{grid-template-columns:1fr}.assistantMcp > summary{min-height:44px}}
