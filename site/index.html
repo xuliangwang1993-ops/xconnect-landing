@@ -22,6 +22,16 @@
     <span>Code</span><i>›</i><span>产线</span><i>›</i><b id="crumbRun">—</b>
   </nav>
   <div class="right">
+    <details class="mobileMore">
+      <summary class="pill ghost" aria-label="更多导航">更多</summary>
+      <div class="mobileMoreMenu">
+        <a href="registry/">工具登记簿</a>
+        <a href="aoi-tree.html">AoI 能力树</a>
+        <a href="https://xconnect-workbench-preview.onrender.com/">工作台（预览）</a>
+        <a href="https://www.x-connect.ai/">回右门</a>
+        <a href="#runtime" id="mobileRunLink" hidden>运行详情 · <span id="mobileRunStat">—</span></a>
+      </div>
+    </details>
     <span class="pill live" id="podPill">POD · —</span>
     <span class="pill" id="runPill">RUN · —</span>
     <a class="pill ghost" href="registry/" title="96 个入库工具、行业需求与部署验收登记">工具登记簿</a>
@@ -57,8 +67,44 @@
   </div>
 </section>
 
-<main class="layout">
-  <!-- 左栏 -->
+<section class="order-flow" id="orderFlow" aria-labelledby="orderTitle">
+  <header class="orderHero">
+    <span class="eyebrow">DUCK LEE · 小助手接单</span>
+    <h1 id="orderTitle">说清要做什么，再看怎么做。</h1>
+    <p>先看方案和节点，再授权生产。工位、Pod 和账本留在运行详情，不挡在第一屏。</p>
+  </header>
+  <ol class="orderSteps" aria-label="下单进度">
+    <li class="on" data-order-step="brief"><span>1</span>需求</li>
+    <li data-order-step="quote"><span>2</span>方案</li>
+    <li data-order-step="authorize"><span>3</span>授权</li>
+    <li data-order-step="produce"><span>4</span>生产</li>
+    <li data-order-step="deliver"><span>5</span>成品</li>
+  </ol>
+  <div class="orderWorkspace">
+    <div class="orderBrief">
+      <label for="orderAsk">您想做什么？</label>
+      <textarea id="orderAsk" rows="3" placeholder="例如：把40分钟访谈做成3条60秒中英竖屏"></textarea>
+      <div class="orderExamples" aria-label="需求示例">
+        <button type="button" data-order-example="把40分钟访谈做成3条60秒中英竖屏">访谈变短片</button>
+        <button type="button" data-order-example="门店菜单板 A3 打印，价目要能改">菜单板</button>
+        <button type="button" data-order-example="把扫描的合同 PDF 做成可搜索文档">扫描合同</button>
+      </div>
+      <fieldset class="taskKinds">
+        <legend>选择生产方式</legend>
+        <label><input type="radio" name="taskKind" value="simple" checked><span><b>简单任务 · 先出样</b><small>先看代表样品，满意后再付完整交付。</small></span></label>
+        <label><input type="radio" name="taskKind" value="long"><span><b>长线程 · 按节点预定</b><small>先看节点快照，确认预算再生产下一批。</small></span></label>
+      </fieldset>
+      <button class="btn orderPrimary" id="planOrderBtn" type="button">生成制作方案</button>
+    </div>
+    <section class="orderPlan" id="orderPlan" aria-live="polite">
+      <div class="planEmpty"><span>01</span><h2>先出方案，不先开机。</h2><p>需求与生产方式确认后，这里会展示配方、节点、报价和授权范围。</p></div>
+    </section>
+  </div>
+  <p class="orderTruth">流程预览：当前页面不会自动扣款或启动 Pod。真实生产与付款需要服务端确认，未接通的能力会明确标注。</p>
+</section>
+
+<main class="layout" id="runtime">
+  <!-- 运行详情：登录后可查看，不再放在客户下单之前 -->
   <aside class="rail">
     <section>
       <h2>产线 · 8 工位</h2>
@@ -143,13 +189,13 @@
   <!-- 右栏 -->
   <aside class="side">
     <div class="tabs" role="tablist">
-      <button class="tabBtn on" data-tab="assist" role="tab" aria-selected="true">小助手</button>
+      <button class="tabBtn" data-tab="assist" role="tab" aria-selected="false">配方诊断</button>
       <button class="tabBtn" data-tab="skin" role="tab" aria-selected="false">皮肤</button>
       <button class="tabBtn" data-tab="run" role="tab" aria-selected="false">运行</button>
     </div>
 
-    <div class="tab on" data-tab="assist">
-      <p class="note" style="margin-top:0">一句话 → 配方打分 + 命中词 + 证据。本地规则匹配，不调模型。</p>
+    <div class="tab" data-tab="assist">
+      <p class="note" style="margin-top:0">运行详情 · 本地配方匹配，不调模型。新客户请先用上方任务下单。</p>
       <textarea id="askInput" rows="3"></textarea>
       <div class="chips" style="display:flex;flex-wrap:wrap;gap:5px;margin:7px 0">
         <button class="btn sm" data-q="30 秒宣传短视频，配中英字幕和三个社媒尺寸">三尺寸短视频</button>

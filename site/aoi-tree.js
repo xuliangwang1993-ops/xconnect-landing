@@ -367,7 +367,7 @@
       return `<path d="${d}" stroke="${col}" stroke-width=".45" fill="none" opacity="${twOp}" stroke-linecap="round"/>` + (tailD ? `<path d="${tailD}" stroke="${col}" stroke-width="2.4" stroke-linecap="round" opacity="${twOp + 0.2}"/>` : '');
     }).join('');
 
-    const leaders = [...labs].map(([id, L]) => {
+    const leaders = [...labs].filter(([id]) => st.w > 900 || st.selected === id).map(([id, L]) => {
       const p = pr.points.get(id) || servicePt;
       const de = L.side === 'left' ? L.x - L.width : L.x + L.width;
       return `<polyline class="aoi-tree__leader" points="${p.x.toFixed(1)},${p.y.toFixed(1)} ${L.x.toFixed(1)},${L.y.toFixed(1)} ${de.toFixed(1)},${L.y.toFixed(1)}"/>`;
@@ -417,11 +417,12 @@
   }
 
   const nodeById = (id) => st.model.nodes.find((n) => n.id === id);
-  function selectNode(id) { if (!nodeById(id)) return; st.selected = id; st.tab = 'overview'; renderStage(); renderRail(); renderDetail(); }
+  function selectNode(id) { if (!nodeById(id)) return; st.selected = st.selected === id ? null : id; st.tab = 'overview'; renderStage(); renderRail(); renderDetail(); }
 
   function renderDetail() {
     const host = $('#aoiDetail'), t = TREES[st.key], isAoi = t.tree_kind === 'aoi';
     const n = st.selected ? nodeById(st.selected) : null;
+    host.classList.toggle('has-selection', Boolean(n));
     if (!n) {
       host.innerHTML = `
         <p class="aoi-muted">未选择节点。点树上、左栏或搜索里任意节点；三处同一个 stable ID。</p>

@@ -68,8 +68,9 @@ accent = max(colors, key=lambda c: rgb2hsl(c)[1] * (1 - abs(rgb2hsl(c)[2] - 0.55
 accent_hi = by_l[-1]
 
 # —— 从线上 CSS 里直接读令牌，不手抄 ——
-m11 = pathlib.Path("/var/minis/workspace/xc-factory/build/refs/m11.css").read_text()
-wb = pathlib.Path("/var/minis/workspace/xc-factory/build/refs/workbench.css").read_text()
+# Use the repository's pinned references, not a machine-specific workspace path.
+m11 = (ROOT / "build/refs/m11.css").read_text()
+wb = (ROOT / "build/refs/workbench.css").read_text()
 
 
 def cssvar(text, name, default=None):

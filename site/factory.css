@@ -245,3 +245,104 @@ button.pill { cursor: pointer; font-family: inherit; }
 .aoiList .md[hidden] { display: none; }
 .aoiList .md p { margin: 2px 0; }
 .aoiOpen { display: inline-block; margin-top: 6px; text-decoration: none; }
+/* ---------- Customer order flow / mobile layout ---------- */
+:root { --content-max: 1440px; }
+html, body { max-width: 100%; overflow-x: hidden; }
+body { min-width: 0; }
+button, a, input, textarea, select, summary { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible, summary:focus-visible, textarea:focus-visible, input:focus-visible { outline: 2px solid var(--accent2); outline-offset: 3px; }
+.mobileMore { display: none; position: relative; }
+.mobileMore > summary { list-style: none; cursor: pointer; }
+.mobileMore > summary::-webkit-details-marker { display: none; }
+.mobileMoreMenu { position: absolute; z-index: 50; right: 0; top: calc(100% + 10px); width: 180px; padding: 6px; border: 1px solid var(--line2); border-radius: 8px; background: #0F172A; box-shadow: 0 12px 30px #0008; }
+.mobileMoreMenu a { display: flex; align-items: center; min-height: 44px; padding: 8px 12px; color: #CBD5E1; text-decoration: none; }
+.order-flow { width: min(100% - 48px, 1120px); margin: 0 auto; padding: 52px 0 30px; }
+.orderHero { max-width: 660px; }
+.eyebrow { color: var(--accent2); font: 11px ui-monospace, monospace; letter-spacing: .13em; }
+.orderHero h1 { margin: 10px 0 12px; font-size: clamp(26px, 4vw, 42px); font-weight: 500; letter-spacing: -.035em; line-height: 1.18; }
+.orderHero p { color: var(--muted); font-size: 14px; line-height: 1.75; margin: 0; }
+.orderSteps { display: flex; gap: 4px; padding: 0; margin: 28px 0 20px; list-style: none; }
+.orderSteps li { display: flex; gap: 7px; align-items: center; flex: 1; color: var(--muted); font-size: 12px; }
+.orderSteps li:not(:last-child)::after { content: ''; height: 1px; flex: 1; margin: 0 6px; background: var(--line); }
+.orderSteps span { display: grid; place-items: center; width: 23px; height: 23px; border: 1px solid var(--line); border-radius: 50%; font: 11px ui-monospace, monospace; }
+.orderSteps li.on { color: var(--accent2); }
+.orderSteps li.on span { border-color: var(--accent2); }
+.orderWorkspace { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); border: 1px solid var(--line); border-radius: 8px; background: rgba(15,23,42,.4); overflow: hidden; }
+.orderBrief { padding: 24px; border-right: 1px solid var(--line); }
+.orderBrief > label { display: block; margin-bottom: 8px; font-weight: 500; }
+#orderAsk { min-height: 92px; font-size: 14px; line-height: 1.65; }
+.orderExamples { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 20px; }
+.orderExamples button { min-height: 32px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: none; color: var(--muted); cursor: pointer; font: inherit; font-size: 12px; }
+.taskKinds { display: grid; gap: 8px; padding: 0; border: 0; margin: 0 0 18px; }
+.taskKinds legend { margin-bottom: 9px; color: var(--muted); font-size: 12px; }
+.taskKinds label { display: flex; gap: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 7px; cursor: pointer; }
+.taskKinds label:has(input:checked) { border-color: var(--accent); background: rgba(124,58,237,.09); }
+.taskKinds input { margin-top: 3px; accent-color: var(--accent); }
+.taskKinds b, .taskKinds small { display: block; }
+.taskKinds b { font-weight: 500; font-size: 13px; }
+.taskKinds small { margin-top: 4px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.orderPrimary { width: 100%; min-height: 44px; }
+.orderPlan { padding: 24px; background: rgba(2,6,23,.35); min-width: 0; }
+.planEmpty { height: 100%; min-height: 280px; display: flex; flex-direction: column; justify-content: center; }
+.planEmpty > span { font: 38px ui-monospace, monospace; color: var(--line2); }
+.planEmpty h2 { margin: 12px 0 6px; font-size: 20px; font-weight: 500; }
+.planEmpty p, .orderTruth { color: var(--muted); font-size: 12px; line-height: 1.7; }
+.planTitle { margin: 0 0 4px; font-size: 20px; font-weight: 500; }
+.planMeta { color: var(--muted); font-size: 12px; }
+.planNodes { display: grid; gap: 8px; padding: 0; margin: 18px 0; list-style: none; }
+.planNodes li { padding: 12px; border: 1px solid var(--line); border-radius: 7px; }
+.planNodes b { display: block; font-size: 13px; font-weight: 500; }
+.planNodes p { margin: 5px 0 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+.planNodeState { color: var(--accent2); font: 10px ui-monospace, monospace; }
+.planTotal { padding: 12px 0; border-top: 1px solid var(--line); font-size: 13px; }
+.planAction { width: 100%; margin-top: 5px; min-height: 44px; }
+.planAction.secondary { background: none; border: 1px solid var(--line2); }
+.orderTruth { margin: 12px 0 0; }
+body[data-auth="in"] .gate { display: none; }
+body[data-auth="in"] .order-flow { padding-top: 26px; }
+body[data-auth="out"] .order-flow, body[data-auth="loading"] .order-flow,
+body:not([data-auth]) .order-flow { display: none; }
+@media (max-width: 760px) {
+  .bar { padding: 0 14px; gap: 8px; }
+  .brand { flex: none; gap: 6px; font-size: 17px; white-space: nowrap; }
+  .brand > span:nth-child(2), .brand .pipe { display: none; }
+  .brand .fac { font-size: 10px; letter-spacing: .12em; }
+  .bar .right { min-width: 0; gap: 6px; }
+  .bar .right > a, .bar .right > #podPill, .bar .right > #runPill { display: none !important; }
+  .mobileMore { display: block; }
+  .mobileMore > summary { display: flex; align-items: center; min-height: 36px; padding: 0 10px; white-space: nowrap; }
+  .langSw { height: 36px; }
+  .langSw button { min-width: 34px; }
+  .order-flow { width: calc(100% - 32px); padding: 32px 0 24px; }
+  .orderHero h1 { font-size: 29px; }
+  .orderHero p { font-size: 13px; }
+  .orderSteps { gap: 0; margin: 22px 0 16px; }
+  .orderSteps li { gap: 4px; font-size: 11px; }
+  .orderSteps li:not(:last-child)::after { margin: 0 3px; }
+  .orderSteps span { width: 20px; height: 20px; font-size: 10px; flex: none; }
+  .orderWorkspace { grid-template-columns: minmax(0, 1fr); }
+  .orderBrief { padding: 18px; border-right: 0; border-bottom: 1px solid var(--line); }
+  .orderPlan { padding: 18px; }
+  .planEmpty { min-height: 150px; }
+  .orderExamples button { min-height: 40px; }
+  .taskKinds label { min-height: 68px; }
+  .gate { padding: 36px 16px; }
+  .gateCard { padding: 22px 20px; }
+  .gTab, .gForm input, .gForm .btn { min-height: 44px; font-size: 16px; }
+  .center, .rail { padding-left: 16px; padding-right: 16px; }
+  .tabs { overflow-x: auto; }
+  .tabBtn { min-height: 44px; white-space: nowrap; }
+  .stList button, .aoiList > li > button { min-height: 44px; }
+  .kv { grid-template-columns: 72px minmax(0, 1fr); }
+  .kv > * { min-width: 0; overflow-wrap: anywhere; }
+  .ledger { display: block; overflow-x: auto; }
+}
+@media (max-width: 370px) {
+  .brand .fac { letter-spacing: .05em; }
+  .bar { padding: 0 10px; }
+  .orderSteps li { font-size: 10px; }
+  .orderSteps li:not(:last-child)::after { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

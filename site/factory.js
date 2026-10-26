@@ -296,6 +296,73 @@
     }, null, 2);
   }
 
+  /* ---------- 新客户任务流：本地预览，不创建真实订单 ---------- */
+  const orderDraft = { recipe: null, kind: 'simple', stage: 'brief' };
+  const orderInput = () => $('#orderAsk');
+  function orderStage(stage) {
+    orderDraft.stage = stage;
+    const active = { brief: 'brief', quote: 'quote', authorize: 'authorize', produce: 'produce', deliver: 'deliver' }[stage];
+    $$('.orderSteps li').forEach((li) => li.classList.toggle('on', li.dataset.orderStep === active));
+  }
+  function orderPlanNodes() {
+    const r = orderDraft.recipe;
+    const deliverables = (r.deliverables || []).map(esc).join('、') || '按需求确认交付物';
+    if (orderDraft.kind === 'simple') return [
+      ['免费代表样品', '先验证方向和格式；样品范围以服务端确认为准。', 'PREVIEW'],
+      ['完整成品 · 固定计件', deliverables + '。验收通过后才进入付款交付。', 'PIECE'],
+    ];
+    return [
+      ['节点快照 · 先校准', '小助手拆工序，提供一个代表节点和后续预算，不直接跑完整长链。', 'SNAPSHOT'],
+      ['节点生产 · 逐次预定', '每次只授权当前节点与最高预算；通过、修改或暂停后再走下一节点。', 'NODE'],
+      ['总装验收 · 独立核对', '交付：' + deliverables + '。生产完成不等于验收通过。', 'VERIFY'],
+    ];
+  }
+  function renderOrderPlan() {
+    const r = orderDraft.recipe;
+    if (!r) return;
+    const nodes = orderPlanNodes();
+    const isLong = orderDraft.kind === 'long';
+    $('#orderPlan').innerHTML = `
+      <h2 class="planTitle">${esc(r.name)}</h2>
+      <div class="planMeta">${esc(r.id)} · ${isLong ? '节点快照 + 逐节点预定' : '先试做 + 固定计件'} · 本地规则匹配，未调模型</div>
+      <ol class="planNodes">${nodes.map((n, i) => `<li><span class="planNodeState">${n[2]}</span><b>${i + 1}. ${esc(n[0])}</b><p>${esc(n[1])}</p></li>`).join('')}</ol>
+      <div class="planTotal"><b>${isLong ? '逐节点报价，设置预算上限' : '完整交付前确认固定价'}</b><p class="note">价格、预计耗时与可用资源需由服务端按需求返回；本页不虚构报价。</p></div>
+      <button class="btn planAction" id="orderAuthorizeBtn" type="button">${isLong ? '预定首个节点快照' : '申请免费代表样品'}</button>
+      <button class="btn planAction secondary" id="orderEditBtn" type="button">返回修改需求</button>`;
+    orderStage('quote');
+    $('#orderAuthorizeBtn').addEventListener('click', () => {
+      orderStage('authorize');
+      $('#orderPlan').innerHTML = `<h2 class="planTitle">${isLong ? '节点授权待确认' : '试做申请待提交'}</h2>
+        <div class="planTotal">${isLong ? '先确认节点、预算上限、可调用工具与验收条件，再启动生产。' : '先确认样品范围，再生成预览；完整成品不会自动扣费。'}</div>
+        <p class="note">当前为前端流程预览：尚未创建订单、扣款或启动 Pod。接入服务端后，这一步必须绑定 order_id、节点、报价版本和明确的用户确认。</p>
+        <a class="btn planAction" href="#authGate">登录以继续</a>
+        <button class="btn planAction secondary" id="orderBackPlan" type="button">返回方案</button>`;
+      $('#orderBackPlan').addEventListener('click', renderOrderPlan);
+    });
+    $('#orderEditBtn').addEventListener('click', () => { orderStage('brief'); orderInput().focus(); });
+  }
+  function initOrderFlow() {
+    const input = orderInput();
+    if (!input) return;
+    $$('[data-order-example]').forEach((b) => b.addEventListener('click', () => {
+      input.value = b.dataset.orderExample;
+      input.focus();
+    }));
+    $$('input[name="taskKind"]').forEach((r) => r.addEventListener('change', () => {
+      orderDraft.kind = r.value;
+      if (orderDraft.recipe) renderOrderPlan();
+    }));
+    $('#planOrderBtn').addEventListener('click', () => {
+      const text = input.value.trim();
+      if (!text) { input.setCustomValidity('请先写下想做的任务'); input.reportValidity(); return; }
+      input.setCustomValidity('');
+      orderDraft.recipe = matchRecipe(text)[0].r;
+      orderDraft.kind = $('input[name="taskKind"]:checked').value;
+      renderOrderPlan();
+    });
+    input.addEventListener('input', () => input.setCustomValidity(''));
+  }
+
   /* ---------- 右栏：皮肤 ---------- */
   function renderSkins() {
     $('#skinList').innerHTML = SKINS.map((sk) => {
@@ -395,11 +462,13 @@
     renderRun();
     const first = STATIONS.find((s) => (s.qa || {}).pass === false) || STATIONS[0];
     if (first) selectStation(first.id, 'flow');
-    setTab('assist');   // 右栏默认停在小助手
+    setTab('flow');   // 新订单流在首屏；原助手改为右侧配方诊断
     // 顶栏 pill：只数登录用户自己的 pod，且只数实况为 RUNNING 的
     const running = (POD.pods || []).filter((p) => podLive(p) === 'RUNNING').length;
     $('#podPill').textContent = `POD · ${running} RUNNING`;
     $('#runPill').textContent = `RUN · ${fmtDur(RUN.elapsed_s)}`;
+    $('#mobileRunLink').hidden = document.body.dataset.auth !== 'in';
+    $('#mobileRunStat').textContent = `${running} Pod · RUN ${fmtDur(RUN.elapsed_s)}`;
     $('#crumbRun').textContent = RUN.id || '—';
     $('#genAt').textContent = BUILD.at ? `生成 ${BUILD.at}` : '';
     // 小助手：默认填这位用户最近那句话；没有就用第一个示例
@@ -435,6 +504,7 @@
 
   /* ---------- 启动 ---------- */
   function boot() {
+    initOrderFlow();
     renderSkins();
     renderAoi();
     $$('.center .tabBtn, .side .tabBtn').forEach((b) => b.addEventListener('click', () => setTab(b.dataset.tab)));

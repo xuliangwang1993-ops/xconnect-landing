@@ -502,3 +502,34 @@ h1, h2, h3, h4, legend {
 }
 /* 品牌名 AoI 保持大小写（上方标题/节点标签有 text-transform: uppercase） */
 .aoi-name { text-transform: none; letter-spacing: inherit; }
+
+/* ---------- Mobile: keep the tree inside the viewport ---------- */
+html, body { max-width: 100%; overflow-x: hidden; }
+.aoi-root { min-width: 0; }
+@media (max-width: 900px) {
+  .aoi-root { height: 100dvh; min-height: 600px; grid-template-rows: auto minmax(0, 1fr); }
+  .aoi-topbar { min-height: 96px; padding: 10px 12px; gap: 8px; flex-wrap: wrap; align-content: center; }
+  .aoi-topbar > .vr, .aoi-topbar > .aoi-caps { display: none; }
+  .aoi-brand { flex: none; }
+  .aoi-topbar .spacer { display: block; }
+  .aoi-channels { order: 10; width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .aoi-channels button { min-height: 32px; padding: 4px 8px; font-size: 11px; }
+  .aoi-search { width: 36px; height: 36px; padding: 0; justify-content: center; font-size: 0; }
+  .aoi-search::before { content: '⌕'; font-size: 17px; }
+  .aoi-topbar .icon { width: 36px; height: 36px; }
+  .aoi-topbar .tag { height: 30px; display: inline-flex; align-items: center; }
+  .langSw { height: 30px; }
+  .aoi-body, .aoi-main { min-height: 0; }
+  .aoi-stage { min-height: 380px; }
+  .aoi-node__label { display: none; max-width: 145px; font-size: 10px; letter-spacing: .06em; }
+  .aoi-node.is-selected .aoi-node__label { display: block; }
+  .aoi-node::after { content: ''; position: absolute; width: 38px; height: 38px; left: -19px; top: -19px; }
+  .aoi-zoom button { width: 40px; height: 40px; }
+  .aoi-legendbar { left: 62px; right: 10px; gap: 3px 8px; font-size: 9px; }
+  .aoi-footer { min-height: 32px; padding: 5px 10px; gap: 8px; flex-wrap: wrap; }
+  .aoi-footer .aoi-muted { display: none; }
+  .aoi-detail { display: none; position: fixed; z-index: 30; left: 10px; right: 10px; bottom: 10px; max-height: 56dvh; padding: 16px; border: 1px solid var(--aoi-hairline-strong); border-radius: 8px; background: #080c14f5; box-shadow: 0 18px 60px #000; }
+  .aoi-detail.has-selection { display: block; }
+  .aoi-detail__head { padding-right: 32px; }
+  .aoi-detail__tabs button { min-height: 40px; }
+}
