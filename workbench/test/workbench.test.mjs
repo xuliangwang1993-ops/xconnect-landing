@@ -119,12 +119,17 @@ async function call(path, { method = 'GET', body, headers = {} } = {}) {
 test('static shell, manifest and service worker are served', async () => {
   const home = await call('/workbench') // 工厂：/ 是搭台首页，工作台在 /workbench;
   assert.equal(home.status, 200);
-  assert.match(home.data, /X-connect Workbench/);
+  assert.match(home.data, /X-Connect Workbench/);
   assert.match(home.data, /manifest\.webmanifest/);
   const mf = await call('/manifest.webmanifest');
   assert.equal(mf.status, 200);
-  assert.equal(mf.data.name, 'X-connect Workbench');
-  assert.equal(mf.data.scope, '/');
+  assert.equal(mf.data.name, 'X-Connect Workbench');
+  assert.equal(mf.data.id, '/workbench');
+  assert.equal(mf.data.scope, '/workbench/');
+  assert.equal(mf.data.start_url, '/workbench/?source=pwa');
+  assert.equal(mf.data.icons.length, 2);
+  assert.equal(mf.data.icons[0].src, '/icons/crystal-x-192.png');
+  assert.equal(mf.data.icons[1].src, '/icons/crystal-x-512.png');
   const sw = await call('/sw.js');
   assert.equal(sw.status, 200);
   assert.match(sw.data, /const BUILD = 'test-build'/);

@@ -5,14 +5,13 @@
 const BUILD = '__BUILD__';
 const CACHE = 'xcw-shell-' + BUILD;
 const PRECACHE = [
-  '/workbench',
+  '/workbench/',
   '/styles.css',
   '/app.js',
   '/project-delivery-view.js',
   '/manifest.webmanifest',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png',
-  '/icons/apple-touch-icon.png',
+  '/icons/crystal-x-192.png',
+  '/icons/crystal-x-512.png',
   '/assets/brand-x.png',
   '/assets/fonts/space-grotesk-400.woff2',
   '/assets/fonts/space-grotesk-500.woff2',
@@ -56,9 +55,9 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(req).then((res) => {
         const copy = res.clone();
-        caches.open(CACHE).then((c) => c.put('/', copy)).catch(() => {});
+        caches.open(CACHE).then((c) => c.put('/workbench/', copy)).catch(() => {});
         return res;
-      }).catch(() => caches.match('/').then((r) => r || new Response('离线', { status: 503, headers: { 'content-type': 'text/plain; charset=utf-8' } })))
+      }).catch(() => caches.match('/workbench/').then((r) => r || new Response('离线', { status: 503, headers: { 'content-type': 'text/plain; charset=utf-8' } })))
     );
     return;
   }

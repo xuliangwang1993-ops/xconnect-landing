@@ -1879,7 +1879,7 @@ function stopVoice(show = true) {
 async function registerSW() {
   if (!('serviceWorker' in navigator)) return;
   try {
-    const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+    const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/workbench/' });
     state.swReg = reg;
     if (reg.waiting) showUpdate(reg.waiting);
     reg.addEventListener('updatefound', () => {

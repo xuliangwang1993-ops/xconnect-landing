@@ -1484,9 +1484,13 @@ export function createWorkbench({ tasks, broadcast }) {
     }
     if (rel === '/manifest.webmanifest') {
       const mf = JSON.parse(fs.readFileSync(path.join(PUBLIC_DIR, 'manifest.webmanifest'), 'utf8'));
-      mf.name = 'X-connect Workbench';
-      mf.short_name = 'X-connect';
-      mf.start_url = '/workbench?source=pwa';
+      // Identity is path-scoped so this app does not collide with the factory
+      // PWA (id /factory, scope /factory/) on the same origin.
+      mf.id = '/workbench';
+      mf.name = 'X-Connect Workbench';
+      mf.short_name = 'Workbench';
+      mf.start_url = '/workbench/?source=pwa';
+      mf.scope = '/workbench/';
       res.writeHead(200, { 'content-type': 'application/manifest+json; charset=utf-8', 'cache-control': 'no-cache' });
       return res.end(JSON.stringify(mf));
     }
@@ -1540,6 +1544,12 @@ export function createWorkbench({ tasks, broadcast }) {
       }
       // Reserved server routes must not fall through to the SPA shell.
       if (pathname === '/healthz' || pathname === '/voice' || pathname.startsWith('/bridge/')) return false;
+      if ((req.method === 'GET' || req.method === 'HEAD') && (pathname === '/workbench' || pathname === '/workbench/index.html')) {
+        const target = '/workbench/' + (url.search || '');
+        res.writeHead(308, { Location: target, 'cache-control': 'no-store' });
+        res.end();
+        return true;
+      }
       if (req.method === 'GET' || req.method === 'HEAD') {
         if (serveStatic(req, res, pathname)) return true;
         // SPA fallback for client routes, but not for a missing asset.
