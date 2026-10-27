@@ -8,6 +8,7 @@
 // Render service keeps its "one dependency" shape.
 
 import { notifyCardComplete } from './integrations/event-to-card.mjs';
+import { createLinearService } from './linear/api.mjs';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -17,6 +18,8 @@ const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.join(ROOT, 'public');
 const BUILD = process.env.BUILD_ID || (process.env.RENDER_GIT_COMMIT || '').slice(0, 10) || 'dev';
 const STARTED_AT = new Date().toISOString();
+const linearMirror = createLinearService(process.env);
+linearMirror.start();
 
 const GATEWAY = (process.env.GATEWAY_BASE_URL || 'https://api.x-connect.ai').replace(/\/+$/, '');
 const SUBROUTER = (process.env.SUBROUTER_BASE || 'https://subrouter.ai').replace(/\/+$/, '');
@@ -1539,6 +1542,25 @@ export function createWorkbench({ tasks, broadcast }) {
         }
         if (pathname === '/api/version') return json(res, 200, { build: BUILD, startedAt: STARTED_AT });
         if (pathname === '/api/inbox') { await handleInbox(req, res); return true; }
+        if (pathname === '/api/linear/issues' || pathname === '/api/linear/sync') {
+          const session = getSession(req);
+          if (!session) return fail(res, 401, 'auth_required', '请先登录');
+          if (req.method === 'POST' && !sameOrigin(req)) return fail(res, 403, 'bad_origin', '来源校验失败');
+          try {
+            if (pathname === '/api/linear/issues' && req.method === 'GET') {
+              return json(res, 200, await linearMirror.snapshot());
+            }
+            if (pathname === '/api/linear/sync' && req.method === 'POST') {
+              const result = await linearMirror.syncNow();
+              return json(res, 200, { ok: true, source: 'linear_issues', ...result });
+            }
+          } catch (err) {
+            const code = err.code || 'linear_error';
+            const status = err.status || (code.endsWith('_missing') ? 503 : 502);
+            return fail(res, status, code, 'Linear 本地镜像不可用');
+          }
+          return fail(res, 405, 'method_not_allowed', '只读镜像不接受这个方法');
+        }
         await handleSession(req, res, pathname);
         return true;
       }

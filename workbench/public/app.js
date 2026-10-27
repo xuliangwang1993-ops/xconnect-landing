@@ -485,6 +485,7 @@ const VIEW_META = {
   cards: ['CARDS', '项目工作台', '项目、卡片、作品和任务状态是主体。控制按需收起，不挡内容。'],
   works: ['WORKS', '作品', '已执行完成的结果回卡；没有结果时不会显示成作品。'],
   tasks: ['TASKS', '任务', '批准后才入队。执行端可以是现有 PC bridge，也可以是预览内置执行器。'],
+  linear: ['LINEAR', 'Linear 只读镜像', 'Issues、团队和工作流状态都从本地 linear_issues 读。同步由服务端写入缓存，页面不直连 Linear。'],
 };
 
 function renderMain() {
@@ -498,6 +499,7 @@ function renderMain() {
   $('#cardsView').hidden = state.view !== 'cards';
   $('#worksView').hidden = state.view !== 'works';
   $('#tasksView').hidden = state.view !== 'tasks';
+  $('#linearView').hidden = state.view !== 'linear';
   $('#newCardBtn').style.display = state.view === 'chat' ? 'none' : '';
   $('#storageLabel').textContent = state.storage === 'supabase' ? 'Supabase 已连接' : (state.storage === 'local' ? '本机预览存储' : '存储未配置');
   $('#buildLabel').textContent = 'build ' + state.build;
@@ -947,6 +949,40 @@ function setView(view) {
   state.view = view;
   renderMain();
   if (view === 'tasks') refreshTasks().then(() => { renderTasks(); renderSidebar(); });
+  if (view === 'linear') loadLinear();
+}
+
+async function loadLinear() {
+  const list = $('#linearList');
+  const empty = $('#linearEmpty');
+  const meta = $('#linearMeta');
+  try {
+    const data = await api('/api/linear/issues');
+    state.linear = data;
+    const issues = data.issues || [];
+    $('#navLinearCount').textContent = String(issues.length);
+    const when = data.syncedAt ? new Date(data.syncedAt).toLocaleString() : '还没有同步';
+    meta.textContent = `${issues.length} 条 issue · ${data.teams?.length || 0} 个团队 · ${data.workflowStates?.length || 0} 个状态 · ${when}`;
+    if (!issues.length) {
+      list.innerHTML = '';
+      empty.hidden = false;
+      empty.innerHTML = '<h2>本地还没有 issue</h2><p>点「同步到本地」。服务端会把 Linear 写入 linear_issues，这个页面只读那张表。</p>';
+      return;
+    }
+    empty.hidden = true;
+    list.innerHTML = issues.map((row) => `<article class="linear-row">
+      <span class="linear-id">${esc(row.identifier || row.id)}</span>
+      <div>
+        <div class="linear-title">${esc(row.title || '未命名')}</div>
+        <div class="linear-sub">${esc(row.team_key || row.team_name || '—')} · ${esc(row.assignee_name || '未分配')}</div>
+      </div>
+      <span class="linear-state" style="${row.state_color ? `border-color:${esc(row.state_color)}` : ''}">${esc(row.state_name || '无状态')}</span>
+    </article>`).join('');
+  } catch (err) {
+    list.innerHTML = '';
+    empty.hidden = false;
+    empty.innerHTML = `<h2>镜像不可用</h2><p>${esc(err.message || '读取 linear_issues 失败')}</p>`;
+  }
 }
 
 function toggleTemp() {
@@ -1952,6 +1988,19 @@ function bindEvents() {
 
   $$('.nav-item').forEach((b) => b.addEventListener('click', () => { setView(b.dataset.view); closeDrawers(); }));
   $$('.tab[data-view]').forEach((b) => b.addEventListener('click', () => setView(b.dataset.view)));
+  $('#linearSyncBtn').addEventListener('click', async () => {
+    const btn = $('#linearSyncBtn');
+    btn.disabled = true;
+    try {
+      await api('/api/linear/sync', { method: 'POST', body: {} });
+      await loadLinear();
+      toast('已写入本地 linear_issues');
+    } catch (err) {
+      toast(err.message || '同步失败');
+    } finally {
+      btn.disabled = false;
+    }
+  });
   $('#searchInput').addEventListener('input', (e) => { state.search = e.target.value; renderCards(); });
 
   $('#cardsGrid').addEventListener('click', (e) => {

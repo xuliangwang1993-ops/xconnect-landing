@@ -78,6 +78,8 @@ before(async () => {
       AUTO_EXECUTE: '0',
       BUILD_ID: 'test-build',
       DOUBAO_API_KEY: '',
+      LINEAR_API_KEY: '',
+      DATABASE_URL: '',
     },
     stdio: ['ignore', 'pipe', 'pipe'],
   });

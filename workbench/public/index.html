@@ -129,6 +129,7 @@
         <button class="nav-item active" data-view="cards" type="button"><svg><use href="#i-card"></use></svg><span>卡片</span><span class="nav-count" id="navCardsCount">0</span></button>
         <button class="nav-item" data-view="works" type="button"><svg><use href="#i-spark"></use></svg><span>作品</span><span class="nav-count" id="navWorksCount">0</span></button>
         <button class="nav-item" data-view="tasks" type="button"><svg><use href="#i-clock"></use></svg><span>任务</span><span class="nav-count" id="navTasksCount">0</span></button>
+        <button class="nav-item" data-view="linear" type="button"><svg><use href="#i-grid"></use></svg><span>Linear</span><span class="nav-count" id="navLinearCount">0</span></button>
       </nav>
       <div class="side-section">
         <div class="side-label"><span>会话</span><button class="text-btn" id="newChatBtn2" type="button">新建</button></div>
@@ -172,6 +173,7 @@
           <button class="tab active" data-view="cards" type="button" role="tab">卡片</button>
           <button class="tab" data-view="works" type="button" role="tab">作品</button>
           <button class="tab" data-view="tasks" type="button" role="tab">任务</button>
+          <button class="tab" data-view="linear" type="button" role="tab">Linear</button>
         </div>
         <label class="search"><svg><use href="#i-search"></use></svg><input id="searchInput" type="search" placeholder="搜索卡片、来源、项目" autocomplete="off"></label>
       </div>
@@ -206,6 +208,15 @@
       <div id="tasksView" class="view" hidden>
         <div id="taskList" class="task-list"></div>
         <div id="tasksEmpty" class="empty" hidden></div>
+      </div>
+      <div id="linearView" class="view" hidden>
+        <div class="linear-bar">
+          <p>只读镜像。这张列表来自本地 <code>linear_issues</code>，页面不连接 Linear。</p>
+          <button class="btn ghost small" id="linearSyncBtn" type="button">同步到本地</button>
+        </div>
+        <div id="linearMeta" class="mini"></div>
+        <div id="linearList" class="linear-list"></div>
+        <div id="linearEmpty" class="empty" hidden></div>
       </div>
       <div class="main-foot">
         <span id="storageLabel">—</span>

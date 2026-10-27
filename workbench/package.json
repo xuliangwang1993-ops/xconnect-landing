@@ -8,6 +8,7 @@
     "test:workbench": "node --test test/workbench.test.mjs"
   },
   "dependencies": {
+    "pg": "^8.23.1",
     "ws": "^8.18.3"
   },
   "engines": {
