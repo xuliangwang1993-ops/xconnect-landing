@@ -22,12 +22,12 @@ VERIFIED_CLI=['ffmpeg','mlt','audiowaveform','rubberband','sox','ffmpeg-normaliz
 VERIFIED_GPU=['real-esrgan','whisperx','cosyvoice']
 INSTALLED=['yt-dlp','demucs','pyscenedetect','opencv','qpdf','ocrmypdf','pymupdf','openpyxl','python-pptx','zbar']
 DEPLOY_EVIDENCE={
-'ffmpeg':'RunPod 验收：7.0.2 static 命令可执行；持久卷 /workspace/bin',
-'mlt':'RunPod 验收：MLT 7.42.0，无界面最小模块编译并执行版本检查',
-'audiowaveform':'RunPod 验收：1.10.3 源码编译并执行版本检查',
-'rubberband':'RunPod 验收：2.0.0 命令可执行',
-'sox':'RunPod 验收：SoX 14.4.2 命令可执行',
-'ffmpeg-normalize':'RunPod 验收：1.43.0 命令可执行',
+'ffmpeg':'工厂验收：7.0.2 static 命令可执行；持久卷 /workspace/bin',
+'mlt':'工厂验收：MLT 7.42.0，无界面最小模块编译并执行版本检查',
+'audiowaveform':'工厂验收：1.10.3 源码编译并执行版本检查',
+'rubberband':'工厂验收：2.0.0 命令可执行',
+'sox':'工厂验收：SoX 14.4.2 命令可执行',
+'ffmpeg-normalize':'工厂验收：1.43.0 命令可执行',
 'real-esrgan':'GPU 小样 PASS：32×32×3 → 128×128×3',
 'whisperx':'GPU 小样 PASS：tiny 模型，1 秒静音返回 0 段',
 'cosyvoice':'CosyVoice2-0.5B 模型加载 PASS，24kHz；尚未生成中文语音；WeText 资源遇 403',
@@ -91,16 +91,16 @@ def main():
             status='deployed'
         else: status=None
         if status:
-            t['deployments'].append(deployment('RunPod 持久卷 · 已关机',status,DEPLOY_EVIDENCE[name]))
+            t['deployments'].append(deployment('工厂算力池 · 已关机',status,DEPLOY_EVIDENCE[name]))
         if name=='animatediff':
-            t['deployments'].append(deployment('RunPod 持久卷 · 已关机','deployed','发现原有 /workspace/venvs/animatediff；本次未运行视频生成；这是同一技能的部署资产，不另立工具'))
+            t['deployments'].append(deployment('工厂算力池 · 已关机','deployed','发现原有 /workspace/venvs/animatediff；本次未运行视频生成；这是同一技能的部署资产，不另立工具'))
         if t['layer']=='craft':
             t['deployments'].append(deployment('PC · 历史登记','reported','2026-10-16 历史记录：Craft CLI 位于 Program Files；本轮未重连 PC 复验；不等于已接入本站 MCP','2026-10-16'))
         relpath=t.get('source_relpath')
         t['source_url']='https://github.com/xuliangwang1993-ops/craft-skills/blob/main/'+relpath if relpath else None
         t['source_path']=relpath or t.get('source_path','')
     tools.extend([
-      {'id':'qwen3tts','name':'Qwen3-TTS','zh':'Qwen3-TTS 语音合成','layer':'asset','category':'audio','summary':'网络卷原有 TTS 环境；与 CosyVoice 同职责，下一次必须先比选再新增。','inputs':['text'],'outputs':['wav'],'install_command':'','license':'待核','source_path':'/workspace/venvs/qwen3tts（RunPod 持久卷）','source_url':None,'mcp_declared':False,'market_mentions':0,'market_industries':[],'deployments':[deployment('RunPod 持久卷 · 已关机','deployed','原有 venv 与约 4.3GB 模型；本次未验收生成语音，不得据此判定不可用') ]}
+      {'id':'qwen3tts','name':'Qwen3-TTS','zh':'Qwen3-TTS 语音合成','layer':'asset','category':'audio','summary':'网络卷原有 TTS 环境；与 CosyVoice 同职责，下一次必须先比选再新增。','inputs':['text'],'outputs':['wav'],'install_command':'','license':'待核','source_path':'/workspace/venvs/qwen3tts（工厂算力池）','source_url':None,'mcp_declared':False,'market_mentions':0,'market_industries':[],'deployments':[deployment('工厂算力池 · 已关机','deployed','原有 venv 与约 4.3GB 模型；本次未验收生成语音，不得据此判定不可用') ]}
     ])
     groups={
       'tts':['coqui-tts','cosyvoice','f5-tts','fish-speech','gpt-sovits','piper','sherpa-onnx','Qwen3-TTS'],

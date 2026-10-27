@@ -212,13 +212,13 @@
       ? `<span class="chip">还没有 Pod</span>`
       : pods.map((p) => `<span class="chip ${p.desiredStatus === 'RUNNING' ? 'ok' : 'warn'}">${esc(p.desiredStatus)} · ${esc(p.name)}</span>`).join('');
 
-    $('#podRows').innerHTML = !live ? '<p class="note">还没有 Pod。在电脑上 <code>RUNPOD_KEY=… python3 build/06_pod.py</code> 拉取后会出现在这里。</p>' : `
+    $('#podRows').innerHTML = !live ? '<p class="note">还没有派单。在电脑上 <code>python3 build/06_pod.py</code> 拉取后会出现在这里。</p>' : `
       <div class="kv">
         <span>型号</span><span class="mono">${esc(live.gpuCount)}×GPU · ${esc(live.vcpuCount)} vCPU · ${live.memoryInGb} GB RAM · ${esc(live.containerDiskInGb)} GB 盘</span>
         <span>镜像</span><span class="mono" title="${esc(live.imageName)}">${esc(short(live.imageName, 46))}</span>
         <span>地址</span><span class="mono">${esc(live.publicIp || '无公网 IP')} · ${esc((live.ports || []).join(' '))}</span>
         <span>开单</span><span class="mono">${esc((live.lastStatusChange || '').slice(0, 44))}</span>
-        <span>计费</span><span class="mono">$${live.costPerHr}/hr · RunPod 已记 $${live.billedTotal ?? (live.billing || []).reduce((n, b) => n + (b.amount || 0), 0)} · 我们估约 $${live.burnSinceCreated}</span>
+        <span>计费</span><span class="mono">$${live.costPerHr}/hr · 工厂已记 $${live.billedTotal ?? (live.billing || []).reduce((n, b) => n + (b.amount || 0), 0)} · 我们估约 $${live.burnSinceCreated}</span>
         ${live.volumeInGb ? `<span>卷</span><span class="mono">${esc(live.volumeMountPath)} · ${live.volumeInGb} GB</span>` : ''}
       </div>`;
 
@@ -242,7 +242,7 @@
     const target = o ? (pods.find((p) => p.id === o.pod_id) || pods[0]) : pods[0];
     btn.disabled = true;
     btn.textContent = '已记账 · 待关';
-    $('#closeHint').innerHTML = '发起人已申请关单；静态站不碰 RunPod key，真停机在电脑上跑：<code>RUNPOD_KEY=… python3 build/06_pod.py --do stop ' + esc(target ? target.id : '<podId>') + '</code>';
+    $('#closeHint').innerHTML = '发起人已申请关单；静态站不碰工厂密钥，真停机在电脑上跑：<code>python3 build/06_pod.py --do stop ' + esc(target ? target.id : '<podId>') + '</code>';
   }
 
   /* ---------- 右栏：小助手（配方匹配） ---------- */

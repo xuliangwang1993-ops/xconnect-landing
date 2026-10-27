@@ -37,7 +37,7 @@ window.XCF_ASSISTANT_TOOLS = {
   "tools": [
     {
       "name": "pod_info",
-      "description": "Show configured RunPod worker status. Read-only; never starts or stops a pod.",
+      "description": "Show configured factory worker status. Read-only; never starts or stops a pod.",
       "group": "probe",
       "verified": true,
       "read_only": true,
@@ -121,7 +121,7 @@ window.XCF_ASSISTANT_TOOLS = {
     "whisperx": "GPU job: transcription model and output contract",
     "cosyvoice2": "GPU job: isolated Python 3.10 environment and reference-audio contract",
     "real_esrgan": "GPU job: upscale model and output contract",
-    "craft": "separate Craft MCP gateways, not RunPod binaries by default"
+    "craft": "separate Craft MCP gateways, not factory binaries by default"
   },
   "boundaries": {
     "no_arbitrary_shell": true,

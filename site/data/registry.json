@@ -807,7 +807,7 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "deployed",
           "evidence": "发现原有 /workspace/venvs/animatediff；本次未运行视频生成；这是同一技能的部署资产，不另立工具",
           "date": "2026-10-26"
@@ -917,9 +917,9 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "verified",
-          "evidence": "RunPod 验收：1.10.3 源码编译并执行版本检查",
+          "evidence": "工厂验收：1.10.3 源码编译并执行版本检查",
           "date": "2026-10-26"
         }
       ],
@@ -1216,7 +1216,7 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "verified",
           "evidence": "CosyVoice2-0.5B 模型加载 PASS，24kHz；尚未生成中文语音；WeText 资源遇 403",
           "date": "2026-10-26"
@@ -1380,7 +1380,7 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "deployed",
           "evidence": "htdemucs 权重下载成功；未做人声分离小样",
           "date": "2026-10-26"
@@ -1653,9 +1653,9 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "verified",
-          "evidence": "RunPod 验收：7.0.2 static 命令可执行；持久卷 /workspace/bin",
+          "evidence": "工厂验收：7.0.2 static 命令可执行；持久卷 /workspace/bin",
           "date": "2026-10-26"
         }
       ],
@@ -1709,9 +1709,9 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "verified",
-          "evidence": "RunPod 验收：1.43.0 命令可执行",
+          "evidence": "工厂验收：1.43.0 命令可执行",
           "date": "2026-10-26"
         }
       ],
@@ -2844,9 +2844,9 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "verified",
-          "evidence": "RunPod 验收：MLT 7.42.0，无界面最小模块编译并执行版本检查",
+          "evidence": "工厂验收：MLT 7.42.0，无界面最小模块编译并执行版本检查",
           "date": "2026-10-26"
         }
       ],
@@ -3025,7 +3025,7 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "deployed",
           "evidence": "已安装；属于案例 C 预装，未做文档小样",
           "date": "2026-10-26"
@@ -3083,7 +3083,7 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "deployed",
           "evidence": "OpenCV 4.10 导入通过；未做完整画质验收",
           "date": "2026-10-26"
@@ -3142,7 +3142,7 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "deployed",
           "evidence": "openpyxl 3.1.5 导入通过；属于案例 C 预装，未做文档小样",
           "date": "2026-10-26"
@@ -3573,7 +3573,7 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "deployed",
           "evidence": "PyMuPDF 导入通过；属于案例 C 预装，未做文档小样",
           "date": "2026-10-26"
@@ -3628,7 +3628,7 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "deployed",
           "evidence": "scenedetect 0.7.2 导入通过；未做切镜小样",
           "date": "2026-10-26"
@@ -3732,7 +3732,7 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "deployed",
           "evidence": "python-pptx 1.0.2 导入通过；属于案例 C 预装，未做文档小样",
           "date": "2026-10-26"
@@ -3836,7 +3836,7 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "deployed",
           "evidence": "命令已安装；属于案例 C 预装，未做文档小样",
           "date": "2026-10-26"
@@ -3893,7 +3893,7 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "verified",
           "evidence": "GPU 小样 PASS：32×32×3 → 128×128×3",
           "date": "2026-10-26"
@@ -4221,9 +4221,9 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "verified",
-          "evidence": "RunPod 验收：2.0.0 命令可执行",
+          "evidence": "工厂验收：2.0.0 命令可执行",
           "date": "2026-10-26"
         }
       ],
@@ -4487,9 +4487,9 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "verified",
-          "evidence": "RunPod 验收：SoX 14.4.2 命令可执行",
+          "evidence": "工厂验收：SoX 14.4.2 命令可执行",
           "date": "2026-10-26"
         }
       ],
@@ -4850,7 +4850,7 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "verified",
           "evidence": "GPU 小样 PASS：tiny 模型，1 秒静音返回 0 段",
           "date": "2026-10-26"
@@ -4916,7 +4916,7 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "deployed",
           "evidence": "已安装 2026.10.21；未做真实下载验收",
           "date": "2026-10-26"
@@ -4975,7 +4975,7 @@
       "mcp_declared": false,
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "deployed",
           "evidence": "zbarimg 命令已安装；属于案例 C 预装，未做扫码小样",
           "date": "2026-10-26"
@@ -5002,14 +5002,14 @@
       ],
       "install_command": "",
       "license": "待核",
-      "source_path": "/workspace/venvs/qwen3tts（RunPod 持久卷）",
+      "source_path": "/workspace/venvs/qwen3tts（工厂算力池）",
       "source_url": null,
       "mcp_declared": false,
       "market_mentions": 0,
       "market_industries": [],
       "deployments": [
         {
-          "location": "RunPod 持久卷 · 已关机",
+          "location": "工厂算力池 · 已关机",
           "status": "deployed",
           "evidence": "原有 venv 与约 4.3GB 模型；本次未验收生成语音，不得据此判定不可用",
           "date": "2026-10-26"

@@ -15,7 +15,7 @@
     '小助手': 'Assistant',
     '皮肤': 'Skin',
     '运行': 'Run',
-    '数据源：craft-skills runs/ · build/refs · RunPod REST': 'Data sources: craft-skills runs/ · build/refs · RunPod REST',
+    '数据源：craft-skills runs/ · build/refs · 工厂算力接口': 'Data sources: craft-skills runs/ · build/refs · factory compute API',
 
     /* stations (name + note) */
     '需求解析': 'Brief parsing',
@@ -57,7 +57,7 @@
     '产线还有 QA 没过，先不许关单': 'Some QA checks on the line have not passed; closing the order is not allowed yet',
     '交付条件已满足；按 close_policy 由发起人关': 'Delivery conditions met; per close_policy the initiator closes the pod',
     '已记账 · 待关': 'Logged · pending close',
-    '发起人已申请关单；静态站不碰 RunPod key，真停机在电脑上跑：': 'The initiator has requested closing; the static site never touches the RunPod key — run the real stop on your computer: ',
+    '发起人已申请关单；静态站不持派单凭证，真停机在电脑上跑：': 'The initiator has requested closing; the static site never holds dispatch credentials — run the real stop on your computer: ',
     '订单 · 发起人负责关单': 'Order · initiator closes the order',
     '没有待派的单。': 'No orders waiting to be dispatched.',
     '单号': 'Order no.',
@@ -71,7 +71,7 @@
     '静态站不落库；真派单在电脑上 build/06_pod.py': 'The static site does not persist data; real dispatch runs on your computer via build/06_pod.py',
     '没拿到 pod 实况。在电脑上': "Couldn't get live pod status. On your computer, run",
     '订单是「工厂发起 → 派到 pod → 交付 → 发起人关 pod」这一段的凭证。关单条件写在': 'An order is the record for the "factory initiates → dispatch to pod → deliver → initiator closes pod" stretch. The close condition is written in',
-    '，账单以 RunPod 官方 billing 为准，我们自己只挂一个按 $/hr 估算的参考值。': ', and the bill follows RunPod\'s official billing; we only attach a reference value estimated per $/hr.',
+    '，账单以算力供应商官方 billing 为准，我们自己只挂一个按 $/hr 估算的参考值。': ', and the bill follows the compute vendor\'s official billing; we only attach a reference value estimated per $/hr.',
     '这段链怎么走': 'How this stretch of the chain works',
     '建单': 'Create order',
     '派单': 'Dispatch',
@@ -180,7 +180,7 @@
   rule(/^(\d+) 张未入账$/, function (m) { return m[1] + ' unrecorded'; });
   rule(/^缺 (.+)$/, function (m) { return 'Missing ' + m[1]; });
   rule(/^(\d+) GB 盘$/, function (m) { return m[1] + ' GB disk'; });
-  rule(/^RunPod 已记 (.+)$/, function (m) { return 'RunPod billed ' + m[1]; });
+  rule(/^工厂已记 (.+)$/, function (m) { return 'Factory billed ' + m[1]; });
   rule(/^我们估约 (.+)$/, function (m) { return 'we estimate ~' + m[1]; });
   rule(/^期望 (.+) \/ 实况 (.+)$/, function (m) { return 'expected ' + m[1] + ' / live ' + m[2]; });
   rule(/^命中 (.+)$/, function (m) {

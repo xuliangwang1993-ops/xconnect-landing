@@ -105,7 +105,7 @@
   <p class="orderTruth">流程预览：当前页面不会自动扣款或启动 Pod。真实生产与付款需要服务端确认，未接通的能力会明确标注。</p>
   <details class="assistantMcp">
     <summary>小助手执行链 · Grok Build CLI + MCP</summary>
-    <p class="note">Duck Lee 接单 → Grok Build CLI 编排 → 任务范围内的 MCP 工具 → 节点证据与成品。当前仅只读探针经过握手；RunPod 未启动，未执行真实生产订单。</p>
+    <p class="note">Duck Lee 接单 → Grok Build CLI 编排 → 任务范围内的 MCP 工具 → 节点证据与成品。当前仅只读探针经过握手；工厂算力未启动，未执行真实生产订单。</p>
     <div id="assistantTools"></div>
   </details>
 </section>
@@ -166,14 +166,14 @@
         <article class="card">
           <h3>订单 · 发起人负责关单</h3>
           <div id="orderRows"></div>
-          <p class="note">订单是「工厂发起 → 派到 pod → 交付 → 发起人关 pod」这一段的凭证。关单条件写在 <code>close_policy</code>，账单以 RunPod 官方 billing 为准，我们自己只挂一个按 $/hr 估算的参考值。</p>
+          <p class="note">订单是「工厂发起 → 派到 pod → 交付 → 发起人关 pod」这一段的凭证。关单条件写在 <code>close_policy</code>，账单以算力供应商官方 billing 为准，我们自己只挂一个按 $/hr 估算的参考值。</p>
         </article>
       </div>
       <div class="card chain-card">
         <h3>这段链怎么走</h3>
         <ol class="chain">
           <li><b>建单</b><span>小助手把配方 + 一句话写成 <code>build/private/orders.json</code></span></li>
-          <li><b>派单</b><span><code>build/06_pod.py</code> 读 <code>RUNPOD_KEY</code>（只读环境变量，不落盘）拉 pod 实况，与订单对账</span></li>
+          <li><b>派单</b><span><code>build/06_pod.py</code> 用只读环境变量（不落盘）拉工厂算力实况，与订单对账</span></li>
           <li><b>干活</b><span>03/05 两站的重活走 <code>ffmpeg + GPU</code>；iSH 这边只保留 06 验收</span></li>
           <li><b>交付</b><span>成片落 <code>runs/&lt;id&gt;/05_export/</code>，QA 全过才写 <code>delivered</code></span></li>
           <li><b>关单</b><span>按 <code>close_policy</code> 由发起人关 pod；<code>POST /pods/{id}/stop</code> 是只读 key 拒的那一步，界面上标成 pending，不假装已经关了</span></li>
@@ -234,7 +234,7 @@
 </main>
 
 <footer class="foot-bar">
-  <span>数据源：craft-skills runs/ · build/refs · RunPod REST</span>
+  <span>数据源：craft-skills runs/ · build/refs · 工厂算力接口</span>
   <span class="mono" id="genAt"></span>
 </footer>
 
