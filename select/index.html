@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X-Connect · 选角</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:#0d0d12;
+    color:#e8e8ec;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+  .logo { font-size:13px; letter-spacing:3px; color:#555; margin-bottom:48px; }
+  .logo span { color:#ff8c42; }
+  h1 { font-size:22px; font-weight:500; margin-bottom:8px; }
+  .sub { font-size:13px; color:#777; margin-bottom:48px; }
+  .grid { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; margin-bottom:48px; }
+  .slot {
+    width:110px; text-align:center; cursor:pointer;
+    padding:16px 8px; border-radius:14px;
+    border:1.5px solid transparent;
+    transition:all .25s;
+  }
+  .slot:hover { border-color:#333; background:#16161c; }
+  .slot.selected { border-color:#ff8c42; background:#1a140e; }
+  .slot.locked { opacity:.35; cursor:default; }
+  .slot.locked:hover { border-color:transparent; background:transparent; }
+  .avatar {
+    width:72px; height:72px; border-radius:50%;
+    margin:0 auto 10px; display:flex; align-items:center; justify-content:center;
+    font-size:30px; background:#1c1c24;
+  }
+  .slot.selected .avatar { box-shadow:0 0 0 3px #ff8c42; }
+  .name { font-size:13px; font-weight:500; }
+  .role { font-size:11px; color:#777; margin-top:2px; }
+  .slot.selected .role { color:#ff8c42; }
+  .btn {
+    background:#ff8c42; color:#0d0d12; border:none;
+    padding:12px 40px; border-radius:10px;
+    font-size:14px; font-weight:600; cursor:pointer;
+    opacity:.35; pointer-events:none; transition:opacity .25s;
+  }
+  .btn.on { opacity:1; pointer-events:auto; }
+  .btn.on:hover { background:#ff9f5c; }
+  .hint { font-size:11px; color:#444; margin-top:16px; }
+</style>
+</head>
+<body>
+  <div class="logo">X<span>−</span>CONNECT</div>
+  <h1>选一个带你进工厂的小助手</h1>
+  <div class="sub">他们都在那里工作。你只需要选。</div>
+  <div class="grid" id="grid"></div>
+  <button class="btn" id="btn" onclick="go()">确认选择</button>
+  <div class="hint">可以随时换。记忆和 token 跟角色走。</div>
+<script>
+const chars = [
+  { id:'fufu',   name:'扫扫',   role:'导览',   emoji:'🐵', avail:true },
+  { id:'sparta', name:'斯巴达', role:'裁辑',   emoji:'🐶', avail:true },
+  { id:'liheiya',name:'李黑鸭', role:'声音字幕', emoji:'🦆', avail:true },
+  { id:'simao',  name:'四毛',   role:'海报版式', emoji:'🐥', avail:true },
+  { id:'afa',    name:'阿法',   role:'待解锁', emoji:'🐾', avail:false }
+];
+let sel = null;
+const grid = document.getElementById('grid');
+const btn = document.getElementById('btn);
+chars.forEach(c => {
+  const d = document.createElement('div);
+  d.className = 'slot' + (c.avail ? '' : ' locked);
+  d.innerHTML = `<div class="avatar">${c.emoji}</div><div class="name">${c.name}</div><div class="role">${c.role}</div>`;
+  if (c.avail) d.onclick = () => {
+    document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+    d.classList.add('selected'); sel = c.id; btn.classList.add('on);
+  };
+  grid.appendChild(d);
+});
+function go(){ if(sel) location.href = 'https://factory.x-connect.ai?char=' + sel; }
+</script>
+</body>
+</html>
