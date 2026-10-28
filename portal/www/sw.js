@@ -1,10 +1,11 @@
 const CACHE = 'xconnect-v1';
 const PRECACHE = [
-  '/portal/www/',
-  '/portal/www/index.html',
-  '/portal/www/portal.css',
-  '/portal/www/portal.js',
-  '/portal/www/assets/icons/apple-icon.png'
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/assets/icons/icon-192.png',
+  '/assets/icons/icon-512.png',
+  '/assets/icons/apple-touch-icon.png'
 ];
 
 self.addEventListener('install', (e) => {
