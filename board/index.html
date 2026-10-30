@@ -2,7 +2,13 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#4f46e5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="XConnect 画布">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
 <title>XConnect 内部架构画布</title>
 <style>
   :root{
@@ -506,12 +512,21 @@ $('addNode').onclick=()=>{
   const n={id:'n'+Date.now(),title:'新节点',subtitle:'双击编辑',layer:'exec',x:Math.round((-S.viewport.x+200)/S.viewport.k),y:Math.round((-S.viewport.y+200)/S.viewport.k),w:W,h:H,status:'todo',agent:'',task:'',notes:'',meta:{}};
   S.nodes.push(n);sel={type:'node',id:n.id};switchTab('props');save();render();toast('已添加节点');
 };
-$('fullscreen').onclick=async()=>{
-  try{
-    if(!document.fullscreenElement)await document.documentElement.requestFullscreen();
-    else await document.exitFullscreen();
-  }catch(e){toast('浏览器未允许全屏，可按 F11 或先在独立标签页打开')}
-};
+const isIPhone=/iPad|iPhone|iPod/.test(navigator.userAgent);
+if(isIPhone&&!document.fullscreenEnabled){
+  if(navigator.standalone){$('fullscreen').style.display='none'}
+  else{
+    $('fullscreen').textContent='主屏全屏';
+    $('fullscreen').onclick=()=>alert('iPhone 全屏方法：\n\n1. 用 Safari 打开本页\n2. 点底部「分享」\n3. 选「添加到主屏幕」\n4. 从主屏幕的 XConnect 画布图标打开\n\n独立打开后即为全屏应用，iOS 顶部状态栏仍会保留。');
+  }
+}else{
+  $('fullscreen').onclick=async()=>{
+    try{
+      if(!document.fullscreenElement)await document.documentElement.requestFullscreen();
+      else await document.exitFullscreen();
+    }catch(e){toast('浏览器未允许全屏，可按 F11 或先在独立标签页打开')}
+  };
+}
 document.addEventListener('fullscreenchange',()=>{$('fullscreen').textContent=document.fullscreenElement?'退出全屏':'全屏'});
 $('fit').onclick=()=>{
   const x0=Math.min(...S.nodes.map(n=>n.x))-60,y0=Math.min(...S.nodes.map(n=>n.y))-50;
