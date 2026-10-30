@@ -36,7 +36,7 @@ function goHome(){location.hash='home';requestAnimationFrame(()=>{if(lastEntry)l
 $('#session')?.addEventListener('click',()=>{signedIn=!signedIn;syncSession();if(!destination.hidden)showRoute();0;});
 $('#back').addEventListener('click',goHome);$('#subscribe')?.addEventListener('click',()=>navigate('topup'));$('#start')?.addEventListener('click',()=>{const e=$('#login-email');e?e.focus({preventScroll:true}):document.getElementById('signup')?.scrollIntoView({behavior:'smooth'})});
 // 左转进入 App，右转进入委托页。
-const XC_APP='https://app.x-connect.ai',XC_WORKBENCH='https://xconnect-workbench-preview.onrender.com/',XC_STAGE='https://factory.x-connect.ai/';
+const XC_APP='https://app.x-connect.ai',XC_WORKBENCH='https://workbench.x-connect.ai/',XC_STAGE='https://factory.x-connect.ai/';
 let leaving=false;
 function leaveTo(url,lane){
   if(document.body.dataset.auth!=='in'){document.dispatchEvent(new CustomEvent('xc:needs-auth'));return}

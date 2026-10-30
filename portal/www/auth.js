@@ -222,21 +222,33 @@ document.addEventListener('xc:needs-auth', () => {
 // 跨子域登录：sso.js（经典脚本，先于本模块加载）；仅 *.x-connect.ai 生效，其他域 XCSSO.enabled=false
 const SSO = window.XCSSO;
 /* ---------- 首次登录先去选小助理 ----------
-   留空 = 关闭。等工作台挂到 *.x-connect.ai 子域再填上，例如
-   'https://workbench.x-connect.ai'。
-   必须同域：跨域的话 .x-connect.ai 的登录 cookie 带不过去，
-   到了工作台还是未登录状态，用户会卡在第二道登录页。 */
-const ONBOARD_URL = '';
+   用同源的 /select，不要跳到 workbench.x-connect.ai。
+   原因：工作台有自己一套会话（xcw_session，用 SESSION_SECRET 封的 AES-GCM），
+   只认 sk-xc- / sk- 的密钥登录，读不了门户的 Supabase 会话；
+   跨域跳过去等于把用户丢到第二道登录墙前。
+   放在门户同源下，登录态天然在，选完再跳回 next。 */
+const ONBOARD_URL = '/select';
 const ONBOARD_KEY = 'xc_onboard_done';
+
+/* 账号级判重：user_metadata.assistant_id 是唯一真相；
+   域 cookie 也认（用户可能刚在 /select 选过还没刷新回来）。 */
+function alreadyChose(user) {
+  if (!user) return false;
+  if (user.user_metadata && user.user_metadata.assistant_id) return true;
+  try { if (/(?:^|;\s*)xc_assistant=/.test(document.cookie)) return true; } catch {}
+  try { if (localStorage.getItem(ONBOARD_KEY + ':' + user.id)) return true; } catch {}
+  return false;
+}
 
 function maybeOnboard(user) {
   if (!ONBOARD_URL || !user) return;
+  if (alreadyChose(user)) return;
   try {
-    if (localStorage.getItem(ONBOARD_KEY)) return;
-    localStorage.setItem(ONBOARD_KEY, '1');
+    // 按用户 id 记账，换账号登录这台浏览器时还能再引导一次
+    localStorage.setItem(ONBOARD_KEY + ':' + user.id, '1');
   } catch { return; }
   const back = location.origin + '/';
-  location.href = ONBOARD_URL + '/?onboard=1&next=' + encodeURIComponent(back);
+  location.href = ONBOARD_URL + '/?next=' + encodeURIComponent(back);
 }
 
 if (SSO?.enabled) SSO.attach(supabase);
