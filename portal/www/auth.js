@@ -221,10 +221,31 @@ document.addEventListener('xc:needs-auth', () => {
 /* ---------- 会话 ---------- */
 // 跨子域登录：sso.js（经典脚本，先于本模块加载）；仅 *.x-connect.ai 生效，其他域 XCSSO.enabled=false
 const SSO = window.XCSSO;
+/* ---------- 首次登录先去选小助理 ----------
+   留空 = 关闭。等工作台挂到 *.x-connect.ai 子域再填上，例如
+   'https://workbench.x-connect.ai'。
+   必须同域：跨域的话 .x-connect.ai 的登录 cookie 带不过去，
+   到了工作台还是未登录状态，用户会卡在第二道登录页。 */
+const ONBOARD_URL = '';
+const ONBOARD_KEY = 'xc_onboard_done';
+
+function maybeOnboard(user) {
+  if (!ONBOARD_URL || !user) return;
+  try {
+    if (localStorage.getItem(ONBOARD_KEY)) return;
+    localStorage.setItem(ONBOARD_KEY, '1');
+  } catch { return; }
+  const back = location.origin + '/';
+  location.href = ONBOARD_URL + '/?onboard=1&next=' + encodeURIComponent(back);
+}
+
 if (SSO?.enabled) SSO.attach(supabase);
 (SSO?.enabled ? SSO.boot(supabase).catch(() => {}) : Promise.resolve())
   .then(() => supabase.auth.getSession())
   .then(({ data }) => render(data.session));
-supabase.auth.onAuthStateChange((_event, session) => render(session));
+supabase.auth.onAuthStateChange((event, session) => {
+  render(session);
+  if (event === 'SIGNED_IN') maybeOnboard(session?.user);
+});
 
 window.__xcAuth = supabase;
