@@ -191,7 +191,7 @@
 <div class="mask on" id="authMask">
   <div class="modal">
     <h3>登录 XConnect 内部画布</h3>
-    <div class="sub">仅限授权成员。输入邮箱获取一次性令牌，架构数据与故障单不对匿名访客开放。</div>
+    <div class="sub">仅限授权成员。一次性令牌仅用于登录；登录成功后，此设备 7 天内免登录。</div>
     <div class="field"><label>邮箱</label><input id="authEmail" type="email" value="ronglaiz@yahoo.com" autocomplete="email"></div>
     <div class="btns" style="justify-content:flex-start;margin-top:0;margin-bottom:12px"><button class="btn" id="sendCode">发送邮箱令牌</button><span id="authMsg" style="font-size:11.5px;color:var(--sub);align-self:center"></span></div>
     <div class="field"><label>邮件中的登录令牌</label><input id="authToken" inputmode="numeric" placeholder="收到邮件后填写；也可由管理员生成" autocomplete="one-time-code"></div>
@@ -207,7 +207,7 @@ const ISTATUS={open:'待认领',claimed:'已认领',fixing:'修理中',done:'待
 const W=252,H=84;
 let CFG={url:'https://elecldbgysdbymkyucwf.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsZWNsZGJneXNkYnlta3l1Y3dmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NDQ2ODksImV4cCI6MjEwNzIyMDY4OX0.yyMZB0b-FGi8R5o-79-Pv50n3zDRVICmwVNlPNZ3eYU',board:'main',who:'rongster'};
 try{Object.assign(CFG,JSON.parse(localStorage.getItem(LSCFG))||{})}catch(e){}
-let AUTH={access_token:'',refresh_token:'',user:null};
+let AUTH={access_token:'',refresh_token:'',user:null,expires_at:0};
 try{Object.assign(AUTH,JSON.parse(localStorage.getItem(LSAUTH))||{})}catch(e){}
 let ISSUES=[], filter='active', issueTarget=null, pushing=false, pullTimer=null;
 
@@ -224,7 +224,8 @@ const closeMask=id=>$(id).classList.remove('on');
 /* ───────────── Supabase ───────────── */
 const online=()=>CFG.url&&CFG.key;
 const authed=()=>!!AUTH.access_token;
-function storeAuth(a){AUTH={access_token:a.access_token||'',refresh_token:a.refresh_token||'',user:a.user||null};localStorage.setItem(LSAUTH,JSON.stringify(AUTH));$('logout').style.display=authed()?'':'none'}
+const AUTH_WEEK=7*24*60*60*1000;
+function storeAuth(a){AUTH={access_token:a.access_token||'',refresh_token:a.refresh_token||'',user:a.user||null,expires_at:Date.now()+AUTH_WEEK};localStorage.setItem(LSAUTH,JSON.stringify(AUTH));$('logout').style.display=authed()?'':'none'}
 function showAuth(msg){$('authMask').classList.add('on');connState('err','需要登录');if(msg)$('authMsg').textContent=msg}
 async function authRequest(path,body){
   const r=await fetch(CFG.url.replace(/\/$/,'')+'/auth/v1/'+path,{method:'POST',headers:{apikey:CFG.key,'Content-Type':'application/json'},body:JSON.stringify(body)});
@@ -580,6 +581,8 @@ python agent_client.py --name <你的Agent名> report <issue_id> --status done -
   else dl('agent-commands.sh',cmd,'text/plain');
 };
 render();
+if(AUTH.access_token&&AUTH.expires_at&&Date.now()>AUTH.expires_at){AUTH={access_token:'',refresh_token:'',user:null,expires_at:0};localStorage.removeItem(LSAUTH)}
+if(AUTH.access_token&&!AUTH.expires_at){AUTH.expires_at=Date.now()+AUTH_WEEK;localStorage.setItem(LSAUTH,JSON.stringify(AUTH))}
 $('logout').style.display=authed()?'':'none';
 if(online()&&authed()){connState('','连接中…');pullBoard().then(startPolling).catch(()=>showAuth('请重新登录'))}
 else{showAuth()}
