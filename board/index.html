@@ -604,7 +604,7 @@ render();
 if(AUTH.access_token&&AUTH.expires_at&&Date.now()>AUTH.expires_at){AUTH={access_token:'',refresh_token:'',user:null,expires_at:0};localStorage.removeItem(LSAUTH)}
 if(AUTH.access_token&&!AUTH.expires_at){AUTH.expires_at=Date.now()+AUTH_WEEK;localStorage.setItem(LSAUTH,JSON.stringify(AUTH))}
 $('logout').style.display=authed()?'':'none';
-if(online()&&authed()){connState('','连接中…');pullBoard().then(startPolling).catch(()=>showAuth('请重新登录'))}
+if(online()&&authed()){$('authMask').classList.remove('on');connState('','连接中…');pullBoard().then(startPolling).catch(()=>showAuth('请重新登录'))}
 else{showAuth()}
 </script>
 </body>
