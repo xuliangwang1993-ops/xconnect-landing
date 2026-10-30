@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#08080c">
+<title>X-Connect · 选小助理</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--accent:#ff8c42;--bg:#08080c;--fg:#e9e9ef;--dim:#7b7b88;--line:#1e1e26;--card:#111117}
+  html,body{height:100%}
+  body{
+    background:
+      radial-gradient(900px 520px at 50% -10%,rgba(255,140,66,.10),transparent 70%),
+      radial-gradient(700px 420px at 12% 108%,rgba(90,140,255,.07),transparent 70%),
+      var(--bg);
+    color:var(--fg);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;
+    padding:clamp(28px,6vh,72px) 20px 56px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .brand{font-size:11px;letter-spacing:.42em;color:#5a5a66;margin-bottom:clamp(28px,6vh,56px);user-select:none}
+  .brand b{color:var(--accent);font-weight:600}
+
+  header{text-align:center;margin-bottom:clamp(28px,5vh,44px)}
+  h1{font-size:clamp(20px,3.4vw,27px);font-weight:600;letter-spacing:.01em;margin-bottom:10px}
+  .sub{font-size:13.5px;color:var(--dim);line-height:1.65;max-width:46ch}
+
+  .grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+    gap:14px;width:100%;max-width:860px;margin-bottom:clamp(30px,5vh,44px);
+  }
+  .slot{
+    position:relative;text-align:center;cursor:pointer;
+    padding:22px 14px 18px;border-radius:18px;
+    background:var(--card);border:1.5px solid var(--line);
+    transition:transform .22s cubic-bezier(.22,.61,.36,1),border-color .22s,background .22s,box-shadow .22s;
+    outline:none;
+  }
+  .slot:hover,.slot:focus-visible{transform:translateY(-3px);border-color:#33333f;background:#15151c}
+  .slot.on{border-color:var(--accent);background:#1a1208;box-shadow:0 0 0 1px rgba(255,140,66,.35),0 14px 40px -18px rgba(255,140,66,.55)}
+  .slot.on .role{color:var(--accent)}
+  .slot .mark{
+    position:absolute;top:10px;right:11px;width:17px;height:17px;border-radius:50%;
+    border:1.5px solid #2c2c36;display:flex;align-items:center;justify-content:center;
+    font-size:10px;color:#08080c;transition:.2s;opacity:0
+  }
+  .slot.on .mark{opacity:1;background:var(--accent);border-color:var(--accent)}
+  .face{
+    width:60px;height:60px;border-radius:50%;margin:0 auto 12px;
+    display:flex;align-items:center;justify-content:center;font-size:27px;
+    background:radial-gradient(circle at 34% 30%,#23232d,#14141a 72%);
+    border:1px solid #23232d;transition:.22s;
+  }
+  .slot.on .face{border-color:rgba(255,140,66,.5);box-shadow:0 0 0 3px rgba(255,140,66,.13)}
+  .name{font-size:14px;font-weight:600;letter-spacing:.02em}
+  .role{font-size:11.5px;color:var(--dim);margin-top:4px;transition:.2s;letter-spacing:.03em}
+  .desc{font-size:11px;color:#55555f;margin-top:9px;line-height:1.5}
+
+  .bar{display:flex;flex-direction:column;align-items:center;gap:14px}
+  button.go{
+    appearance:none;border:none;border-radius:12px;
+    background:var(--accent);color:#0a0a0e;
+    font-size:14.5px;font-weight:650;letter-spacing:.04em;
+    padding:13px 46px;cursor:pointer;font-family:inherit;
+    transition:background .2s,transform .14s,opacity .2s,box-shadow .2s;
+    box-shadow:0 10px 30px -12px rgba(255,140,66,.7);
+  }
+  button.go:hover:not(:disabled){background:#ff9f5c;transform:translateY(-1px)}
+  button.go:active:not(:disabled){transform:translateY(0) scale(.99)}
+  button.go:disabled{opacity:.3;cursor:not-allowed;box-shadow:none}
+  .hint{font-size:11.5px;color:#4b4b55;text-align:center;line-height:1.6}
+  .msg{min-height:18px;font-size:12px;color:var(--accent);text-align:center}
+  .msg.err{color:#ff6b6b}
+
+  .gate{
+    display:none;text-align:center;max-width:400px;
+    background:var(--card);border:1px solid var(--line);
+    border-radius:16px;padding:34px 26px;
+  }
+  .gate h2{font-size:17px;font-weight:600;margin-bottom:10px}
+  .gate p{font-size:13px;color:var(--dim);line-height:1.7;margin-bottom:20px}
+  .gate a{
+    display:inline-block;text-decoration:none;color:#0a0a0e;background:var(--accent);
+    padding:11px 30px;border-radius:10px;font-size:13.5px;font-weight:600;
+  }
+  body.locked .grid,body.locked .bar{display:none}
+  body.locked .gate{display:block}
+
+  .who{font-size:11.5px;color:#4b4b55;margin-bottom:18px;letter-spacing:.02em}
+  .who b{color:#8a8a99;font-weight:500}
+
+  @media (max-width:520px){
+    .grid{grid-template-columns:repeat(2,1fr);gap:11px}
+    .slot{padding:18px 10px 15px}
+    .desc{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important}
+  }
+</style>
+</head>
+<body>
+  <div class="brand">X<b>−</b>CONNECT</div>
+
+  <header>
+    <h1>选一个带你进工厂的小助理</h1>
+    <div class="sub">他们都在那儿工作。你只需要选一个。<br>选完之后，主页、应用、工厂都是同一个他。</div>
+  </header>
+
+  <div class="who" id="who" hidden></div>
+
+  <div class="grid" id="grid" role="radiogroup" aria-label="小助理"></div>
+
+  <div class="bar">
+    <button class="go" id="go" disabled>确认选择</button>
+    <div class="msg" id="msg" role="status" aria-live="polite"></div>
+    <div class="hint">可以随时在工作台里换。记忆和用量跟着角色走。</div>
+  </div>
+
+  <div class="gate">
+    <h2>先登录，再选</h2>
+    <p>小助理是绑在账号上的，不是绑在这台设备上。<br>登录之后，换手机、换浏览器，还是他。</p>
+    <a href="/" id="back">回首页登录</a>
+  </div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SUPABASE_URL = 'https://elecldbgysdbymkyucwf.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_gxvVk-D31VRFKkRtoRwzCw_2Bql3_Fg';
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+});
+
+/* 角色 id 必须与 xconnect-bot/public/lounge.js 的 FALLBACK 完全一致，
+   否则工作台认不出这个 id，漫游形象和语音人格都会掉回默认。 */
+const CHARS = [
+  { id:'voice', name:'小豆', role:'语音助手', emoji:'🦆', desc:'你写什么，我就念什么，不加戏。' },
+  { id:'scribe',name:'小记', role:'速记助手', emoji:'⚡', desc:'你说，我记，标点我补。' },
+  { id:'brain', name:'小谋', role:'主脑助手', emoji:'🎤', desc:'把口语拆成能动手的几步。' },
+  { id:'deep',  name:'小深', role:'深度助手', emoji:'🌫️', desc:'长文、复核、硬骨头都给我。' },
+  { id:'admin', name:'小办', role:'行政助手', emoji:'🐱', desc:'清单、日程、表单，交给我排。' },
+];
+
+const $ = (s) => document.querySelector(s);
+const grid = $('#grid'), goBtn = $('#go'), msg = $('#msg'), who = $('#who');
+let sel = '';
+let busy = false;
+
+/* ---------- 域 cookie：让 app / 工厂 / 工作台 立刻读到 ---------- */
+function cookieDomain() {
+  const h = location.hostname;
+  return (h === 'x-connect.ai' || /\.x-connect\.ai$/.test(h)) ? '; Domain=.x-connect.ai' : '';
+}
+function setCookie(name, val) {
+  const secure = location.protocol === 'https:' ? '; Secure' : '';
+  document.cookie = name + '=' + encodeURIComponent(val) +
+    '; Path=/' + cookieDomain() + '; Max-Age=' + (60 * 60 * 24 * 365) +
+    '; SameSite=Lax' + secure;
+}
+function getCookie(name) {
+  const m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
+  if (!m) return '';
+  try { return decodeURIComponent(m[1]); } catch { return ''; }
+}
+
+/* ---------- next 只允许留在自家域，防止开放跳转 ---------- */
+function safeNext(raw) {
+  if (!raw) return '/';
+  try {
+    if (raw.startsWith('/') && !raw.startsWith('//')) return raw;
+    const u = new URL(raw);
+    if (u.hostname === 'x-connect.ai' || /\.x-connect\.ai$/.test(u.hostname)) return u.href;
+  } catch {}
+  return '/';
+}
+const NEXT = safeNext(new URLSearchParams(location.search).get('next'));
+
+/* ---------- 渲染 ---------- */
+function render() {
+  grid.innerHTML = '';
+  CHARS.forEach((c) => {
+    const d = document.createElement('div');
+    d.className = 'slot' + (c.id === sel ? ' on' : '');
+    d.tabIndex = 0;
+    d.setAttribute('role', 'radio');
+    d.setAttribute('aria-checked', String(c.id === sel));
+    d.dataset.id = c.id;
+    d.innerHTML =
+      '<div class="mark">✓</div>' +
+      '<div class="face">' + c.emoji + '</div>' +
+      '<div class="name">' + c.name + '</div>' +
+      '<div class="role">' + c.role + '</div>' +
+      '<div class="desc">' + c.desc + '</div>';
+    const pick = () => choose(c.id);
+    d.addEventListener('click', pick);
+    d.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); }
+    });
+    grid.appendChild(d);
+  });
+  goBtn.disabled = !sel;
+  goBtn.textContent = sel ? '确认选择' : '先选一个';
+}
+
+function choose(id) {
+  sel = id;
+  grid.querySelectorAll('.slot').forEach((n) => {
+    const on = n.dataset.id === id;
+    n.classList.toggle('on', on);
+    n.setAttribute('aria-checked', String(on));
+  });
+  goBtn.disabled = false;
+  goBtn.textContent = '确认选择';
+  msg.textContent = '';
+  msg.className = 'msg';
+}
+
+function say(text, kind) {
+  msg.textContent = text || '';
+  msg.className = 'msg' + (kind === 'err' ? ' err' : '');
+}
+
+/* ---------- 保存 ---------- */
+async function save(id) {
+  const c = CHARS.find((x) => x.id === id);
+  // 本地立刻生效，别等网络
+  setCookie('xc_assistant', id);
+  try { localStorage.setItem('xcw_assistant', id); } catch {}
+  try {
+    const { error } = await supabase.auth.updateUser({
+      data: { assistant_id: id, assistant_name: c ? c.name : id },
+    });
+    if (error) throw error;
+    return { ok: true };
+  } catch (e) {
+    // 账号级没写进去也不拦人：cookie + localStorage 已经能用了，
+    // 下次登录 auth.js 会把本地选择补写回账号。
+    return { ok: false, error: e };
+  }
+}
+
+goBtn.addEventListener('click', async () => {
+  if (!sel || busy) return;
+  busy = true;
+  goBtn.disabled = true;
+  goBtn.textContent = '正在安排…';
+  const r = await save(sel);
+  if (!r.ok) say('账号没记住，先存在这台设备上。', 'err');
+  location.replace(NEXT);
+});
+
+/* ---------- 启动 ---------- */
+(async function boot() {
+  let session = null;
+  try {
+    const { data } = await supabase.auth.getSession();
+    session = data && data.session;
+  } catch {}
+
+  if (!session) {
+    document.body.classList.add('locked');
+    return;
+  }
+
+  const u = session.user || {};
+  const meta = u.user_metadata || {};
+  const email = u.email || '';
+  if (email) {
+    who.hidden = false;
+    who.innerHTML = '登录为 <b>' + email.replace(/[<>&]/g, '') + '</b>';
+  }
+
+  // 账号级优先，其次域 cookie，最后本地
+  let cur = meta.assistant_id || getCookie('xc_assistant') || '';
+  if (!cur) { try { cur = localStorage.getItem('xcw_assistant') || ''; } catch {} }
+  if (cur && CHARS.some((c) => c.id === cur)) {
+    sel = cur;
+    goBtn.textContent = '确认选择';
+  }
+
+  // 账号里还没有，但本地/cookie 有 → 顺手补写回账号，实现「一次选定，处处一致」
+  if (!meta.assistant_id && sel) void save(sel);
+
+  render();
+})();
+</script>
+</body>
+</html>
