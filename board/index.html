@@ -104,6 +104,7 @@
     <div id="conn" title="点击配置 Supabase"><span class="dot"></span><span id="connText">未连接云端</span></div>
     <button class="btn" id="logout" style="display:none">退出登录</button>
     <button class="btn" id="pull">云端刷新</button>
+    <button class="btn" id="fullscreen" title="隐藏浏览器工具栏与系统任务栏（F11）">全屏</button>
     <button class="btn" id="fit">适应视图</button>
     <button class="btn" id="agentCmd">接单指令</button>
     <button class="btn" id="exportPng">PNG</button>
@@ -504,6 +505,13 @@ $('addNode').onclick=()=>{
   const n={id:'n'+Date.now(),title:'新节点',subtitle:'双击编辑',layer:'exec',x:Math.round((-S.viewport.x+200)/S.viewport.k),y:Math.round((-S.viewport.y+200)/S.viewport.k),w:W,h:H,status:'todo',agent:'',task:'',notes:'',meta:{}};
   S.nodes.push(n);sel={type:'node',id:n.id};switchTab('props');save();render();toast('已添加节点');
 };
+$('fullscreen').onclick=async()=>{
+  try{
+    if(!document.fullscreenElement)await document.documentElement.requestFullscreen();
+    else await document.exitFullscreen();
+  }catch(e){toast('浏览器未允许全屏，可按 F11 或先在独立标签页打开')}
+};
+document.addEventListener('fullscreenchange',()=>{$('fullscreen').textContent=document.fullscreenElement?'退出全屏':'全屏'});
 $('fit').onclick=()=>{
   const x0=Math.min(...S.nodes.map(n=>n.x))-60,y0=Math.min(...S.nodes.map(n=>n.y))-50;
   const x1=Math.max(...S.nodes.map(n=>n.x+n.w))+60,y1=Math.max(...S.nodes.map(n=>n.y+n.h))+50;
