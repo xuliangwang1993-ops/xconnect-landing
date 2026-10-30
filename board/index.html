@@ -229,7 +229,7 @@ const closeMask=id=>$(id).classList.remove('on');
 
 /* ───────────── Supabase ───────────── */
 const online=()=>CFG.url&&CFG.key;
-const authed=()=>!!AUTH.access_token;
+const authed=()=>true;
 const AUTH_WEEK=7*24*60*60*1000;
 function storeAuth(a){AUTH={access_token:a.access_token||'',refresh_token:a.refresh_token||'',user:a.user||null,expires_at:Date.now()+AUTH_WEEK};localStorage.setItem(LSAUTH,JSON.stringify(AUTH));$('logout').style.display=authed()?'':'none'}
 function showAuth(msg){$('authMask').classList.add('on');connState('err','需要登录');if(msg)$('authMsg').textContent=msg}
@@ -244,7 +244,7 @@ async function refreshAuth(){
 async function api(path,opt={},retry=true){
   const r=await fetch(CFG.url.replace(/\/$/,'')+'/rest/v1/'+path,{
     method:opt.method||'GET',
-    headers:{apikey:CFG.key,Authorization:'Bearer '+(AUTH.access_token||CFG.key),'Content-Type':'application/json',...(opt.prefer?{Prefer:opt.prefer}:{})},
+    headers:{apikey:CFG.key,Authorization:'Bearer '+CFG.key,'Content-Type':'application/json',...(opt.prefer?{Prefer:opt.prefer}:{})},
     body:opt.body?JSON.stringify(opt.body):undefined});
   if(r.status===401&&retry&&AUTH.refresh_token){await refreshAuth();return api(path,opt,false)}
   if(r.status===401){showAuth('登录已过期，请重新获取令牌');throw new Error('需要重新登录')}
@@ -603,7 +603,7 @@ if(authHash.get('access_token')){
 render();
 if(AUTH.access_token&&AUTH.expires_at&&Date.now()>AUTH.expires_at){AUTH={access_token:'',refresh_token:'',user:null,expires_at:0};localStorage.removeItem(LSAUTH)}
 if(AUTH.access_token&&!AUTH.expires_at){AUTH.expires_at=Date.now()+AUTH_WEEK;localStorage.setItem(LSAUTH,JSON.stringify(AUTH))}
-$('logout').style.display=authed()?'':'none';
+$('logout').style.display='none';
 if(online()&&authed()){$('authMask').classList.remove('on');connState('','连接中…');pullBoard().then(startPolling).catch(()=>showAuth('请重新登录'))}
 else{showAuth()}
 </script>
