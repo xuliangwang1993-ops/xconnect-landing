@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XConnect 内部架构画布</title>
+<style>
+  :root{
+    --bg:#f5f6fa; --panel:#fff; --line:#e3e6ee; --ink:#1c2333; --sub:#6b7280;
+    --accent:#4f46e5; --red:#dc2626; --green:#16a34a; --amber:#f59e0b;
+    --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
+  #app{display:flex;flex-direction:column;height:100%}
+  header{background:var(--panel);border-bottom:1px solid var(--line);padding:8px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;z-index:5}
+  h1{font-size:14.5px;margin:0;font-weight:650}
+  h1 span{color:var(--sub);font-weight:400;font-size:11.5px;margin-left:7px}
+  .modes{display:flex;gap:3px;background:var(--bg);padding:3px;border-radius:9px}
+  .modes button{border:0;background:transparent;padding:5px 10px;border-radius:6px;cursor:pointer;font-size:12px;color:var(--sub)}
+  .modes button.on{background:#fff;color:var(--accent);box-shadow:var(--shadow);font-weight:600}
+  .modes button[data-mode=issue].on{color:var(--red)}
+  .spacer{flex:1}
+  .btn{border:1px solid var(--line);background:#fff;padding:5px 10px;border-radius:7px;cursor:pointer;font-size:12px;color:var(--ink)}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn.tiny{padding:2px 7px;font-size:11px;border-radius:5px}
+  #conn{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--sub);cursor:pointer;border:1px solid var(--line);padding:5px 10px;border-radius:7px;background:#fff}
+  #conn .dot{width:7px;height:7px;border-radius:50%;background:#94a3b8;display:inline-block}
+  #conn.ok .dot{background:var(--green)}
+  #conn.err .dot{background:var(--red)}
+  #main{flex:1;display:flex;min-height:0}
+  #canvasWrap{flex:1;position:relative;overflow:hidden}
+  svg{width:100%;height:100%;display:block;touch-action:none}
+  svg.panning{cursor:grabbing} svg.linking,svg.issuing{cursor:crosshair}
+  #side{width:322px;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;flex-shrink:0;min-height:0}
+  .tabs{display:flex;border-bottom:1px solid var(--line)}
+  .tabs button{flex:1;border:0;background:none;padding:10px 4px;font-size:12.5px;cursor:pointer;color:var(--sub);border-bottom:2px solid transparent}
+  .tabs button.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+  #sideBody{overflow-y:auto;padding:14px;flex:1}
+  h2{font-size:11.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--sub);margin:0 0 11px;font-weight:600}
+  .field{margin-bottom:10px}
+  .field label{display:block;font-size:11.5px;color:var(--sub);margin-bottom:4px}
+  .field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:12.5px;font-family:inherit;background:#fff;color:var(--ink)}
+  .field textarea{resize:vertical;min-height:52px}
+  .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--accent)}
+  .empty{color:var(--sub);font-size:12.5px;line-height:1.8}
+  .meta{font-size:11.5px;color:var(--sub);background:var(--bg);border-radius:6px;padding:8px;line-height:1.7;word-break:break-all;margin-top:6px}
+  .row{display:flex;gap:8px} .row>*{flex:1}
+  hr{border:0;border-top:1px solid var(--line);margin:15px 0}
+  .todo{display:flex;gap:8px;align-items:flex-start;padding:7px 0;border-bottom:1px dashed var(--line);font-size:12.5px}
+  .todo input{margin-top:3px;cursor:pointer}
+  .todo .who{color:var(--accent);font-weight:600;font-size:11.5px}
+  .todo.done .tt{text-decoration:line-through;color:var(--sub)}
+  .issue{border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:8px;padding:9px 10px;margin-bottom:9px;font-size:12px;cursor:pointer;background:#fff}
+  .issue:hover{box-shadow:var(--shadow)}
+  .issue.critical{border-left-color:var(--red)}
+  .issue.minor{border-left-color:#eab308}
+  .issue.closed{opacity:.62;border-left-color:var(--green)}
+  .issue .t{font-weight:600;font-size:12.5px;margin-bottom:3px;line-height:1.4}
+  .issue .n{color:var(--sub);font-size:11.5px;margin-bottom:5px}
+  .issue .s{color:#7b8497;font-size:11.5px;line-height:1.55;margin-bottom:6px;white-space:pre-wrap}
+  .badge{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:20px;background:#eef0fe;color:var(--accent);margin-right:5px}
+  .badge.open{background:#fef2f2;color:var(--red)}
+  .badge.claimed,.badge.fixing{background:#fffbeb;color:#b45309}
+  .badge.done{background:#eff6ff;color:#2563eb}
+  .badge.verified{background:#f0fdf4;color:var(--green)}
+  .issue .ops{display:flex;gap:6px;margin-top:7px}
+  .issue .rp{background:var(--bg);border-radius:5px;padding:6px;font-size:11.5px;color:#525b6b;margin-top:6px;line-height:1.55}
+  .filters{display:flex;gap:5px;margin-bottom:11px;flex-wrap:wrap}
+  .filters button{border:1px solid var(--line);background:#fff;border-radius:20px;padding:3px 10px;font-size:11.5px;cursor:pointer;color:var(--sub)}
+  .filters button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  #statusbar{background:var(--panel);border-top:1px solid var(--line);padding:6px 14px;font-size:11.5px;color:var(--sub);display:flex;gap:16px;align-items:center}
+  .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px}
+  .node{cursor:grab} .node:active{cursor:grabbing}
+  .node.sel .box{stroke:var(--accent);stroke-width:2.4}
+  .node.broken .box{stroke:var(--red);stroke-width:2}
+  .edge-hit{stroke:transparent;stroke-width:16;fill:none;cursor:pointer}
+  .note{cursor:grab}
+  .hint{position:absolute;left:14px;bottom:12px;background:rgba(255,255,255,.93);border:1px solid var(--line);border-radius:8px;padding:7px 11px;font-size:11.5px;color:var(--sub);pointer-events:none;box-shadow:var(--shadow)}
+  #toast{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 16px;border-radius:8px;font-size:12.5px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9}
+  .mask{position:fixed;inset:0;background:rgba(16,24,40,.34);display:none;align-items:center;justify-content:center;z-index:20}
+  .mask.on{display:flex}
+  .modal{background:#fff;border-radius:13px;padding:20px;width:430px;max-width:92vw;box-shadow:0 20px 50px rgba(16,24,40,.25)}
+  .modal h3{margin:0 0 4px;font-size:15px}
+  .modal .sub{font-size:12px;color:var(--sub);margin-bottom:14px}
+  .modal .btns{display:flex;gap:9px;justify-content:flex-end;margin-top:14px}
+  .legend{font-size:11.5px;color:var(--sub);line-height:1.9;background:var(--bg);border-radius:8px;padding:10px;margin-bottom:12px}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>XConnect 架构画布<span>标故障 → Agent 领单 → 修理回报</span></h1>
+    <div class="modes">
+      <button data-mode="select" class="on">选择</button>
+      <button data-mode="issue">🔴 标故障</button>
+      <button data-mode="link">连线</button>
+      <button data-mode="note">便签</button>
+    </div>
+    <button class="btn" id="addNode">+ 节点</button>
+    <div class="spacer"></div>
+    <div id="conn" title="点击配置 Supabase"><span class="dot"></span><span id="connText">未连接云端</span></div>
+    <button class="btn" id="logout" style="display:none">退出登录</button>
+    <button class="btn" id="pull">云端刷新</button>
+    <button class="btn" id="fit">适应视图</button>
+    <button class="btn" id="agentCmd">接单指令</button>
+    <button class="btn" id="exportPng">PNG</button>
+    <button class="btn" id="exportJson">JSON</button>
+    <button class="btn" id="importJson">导入</button>
+    <input type="file" id="file" accept=".json" style="display:none">
+  </header>
+  <div id="main">
+    <div id="canvasWrap">
+      <svg id="svg">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#9aa3b5"></path>
+          </marker>
+          <pattern id="grid" width="26" height="26" patternUnits="userSpaceOnUse">
+            <path d="M26 0H0V26" fill="none" stroke="#e9ecf3" stroke-width="1"></path>
+          </pattern>
+        </defs>
+        <g id="viewport">
+          <rect id="gridRect" x="-6000" y="-6000" width="12000" height="12000" fill="url(#grid)"></rect>
+          <g id="layerLabels"></g><g id="edges"></g><g id="nodes"></g><g id="notes"></g>
+        </g>
+      </svg>
+      <div class="hint" id="hint">拖空白平移 · 滚轮缩放 · 双击节点编辑 · 选中后 Delete 删除</div>
+      <div id="toast"></div>
+    </div>
+    <aside id="side">
+      <div class="tabs">
+        <button id="tabProps" class="on">属性 / 派活</button>
+        <button id="tabIssues">故障看板 <span id="issueCount"></span></button>
+      </div>
+      <div id="sideBody">
+        <div id="paneProps">
+          <div id="props"></div>
+          <hr><h2>待办协调 <span id="todoCount"></span></h2><div id="todos"></div>
+        </div>
+        <div id="paneIssues" style="display:none">
+          <div class="legend">你在图上标「不工作」→ 落进 Supabase<br>Agent 用 CLI 领单修理 → 状态实时回到这里<br><b>done</b> 表示 Agent 自称修好，等你验收。</div>
+          <div class="filters">
+            <button data-f="active" class="on">待处理</button>
+            <button data-f="done">待验收</button>
+            <button data-f="all">全部</button>
+          </div>
+          <div id="issues"></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+  <div id="statusbar">
+    <span id="counts"></span>
+    <span><span class="dot" style="background:#dc2626"></span>有故障</span>
+    <span><span class="dot" style="background:#16a34a"></span>运行</span>
+    <span><span class="dot" style="background:#94a3b8"></span>停止/待命</span>
+    <div class="spacer"></div><span id="saved">本地已保存</span>
+  </div>
+</div>
+
+<div class="mask" id="issueMask">
+  <div class="modal">
+    <h3>标记不工作的 function</h3>
+    <div class="sub" id="issueNodeName"></div>
+    <div class="field"><label>哪个 function 不工作（一句话）</label><input id="fTitle" placeholder="如：Worker 领不到任务 / 签名 401"></div>
+    <div class="field"><label>症状与复现（Agent 靠这个定位，写具体）</label><textarea id="fSymptom" placeholder="报错原文、发生在哪一步、期望 vs 实际、相关文件路径"></textarea></div>
+    <div class="field"><label>严重度</label><select id="fSeverity">
+      <option value="critical">严重 · 阻塞主流程</option><option value="major" selected>主要 · 功能不可用</option><option value="minor">次要 · 体验问题</option>
+    </select></div>
+    <div class="btns"><button class="btn" onclick="closeMask('issueMask')">取消</button><button class="btn primary" id="submitIssue">标记并通知 Agent</button></div>
+  </div>
+</div>
+<div class="mask" id="cfgMask">
+  <div class="modal">
+    <h3>连接 Supabase</h3>
+    <div class="sub">先在 SQL Editor 执行 supabase/schema.sql 建表。配置只存在你自己的浏览器里。</div>
+    <div class="field"><label>Project URL</label><input id="cUrl" placeholder="https://xxxxxxxxxxxxxxxxxxxx.supabase.co"></div>
+    <div class="field"><label>anon public key</label><textarea id="cKey" placeholder="eyJhbGciOi..."></textarea></div>
+    <div class="row">
+      <div class="field"><label>画布 slug</label><input id="cBoard" value="main"></div>
+      <div class="field"><label>你的名字</label><input id="cWho" value="rongster"></div>
+    </div>
+    <div class="btns"><button class="btn" onclick="closeMask('cfgMask')">取消</button><button class="btn primary" id="saveCfg">保存并连接</button></div>
+  </div>
+</div>
+
+<div class="mask on" id="authMask">
+  <div class="modal">
+    <h3>登录 XConnect 内部画布</h3>
+    <div class="sub">仅限授权成员。输入邮箱获取一次性令牌，架构数据与故障单不对匿名访客开放。</div>
+    <div class="field"><label>邮箱</label><input id="authEmail" type="email" value="ronglaiz@yahoo.com" autocomplete="email"></div>
+    <div class="btns" style="justify-content:flex-start;margin-top:0;margin-bottom:12px"><button class="btn" id="sendCode">发送邮箱令牌</button><span id="authMsg" style="font-size:11.5px;color:var(--sub);align-self:center"></span></div>
+    <div class="field"><label>邮件中的登录令牌</label><input id="authToken" inputmode="numeric" placeholder="收到邮件后填写；也可由管理员生成" autocomplete="one-time-code"></div>
+    <div class="btns"><button class="btn primary" id="verifyCode">登录并加载画布</button></div>
+  </div>
+</div>
+
+<script>
+const LS='xconnect-board-v4', LSCFG='xconnect-board-cfg', LSAUTH='xconnect-board-auth';
+const LAYERS={access:{name:'协作终端',color:'#4f46e5'},hub:{name:'MCP 枢纽',color:'#db2777'},data:{name:'云端数据',color:'#059669'},product:{name:'平台主体',color:'#e11d48'},front:{name:'应用前端',color:'#0891b2'},control:{name:'调度层',color:'#7c3aed'},exec:{name:'执行层',color:'#0d9488'},pipe:{name:'流水线层',color:'#2563eb'},out:{name:'产物层',color:'#ea580c'},infra:{name:'资源层',color:'#64748b'}};
+const STATUS={running:{n:'运行',c:'#16a34a'},warn:{n:'注意',c:'#f59e0b'},stopped:{n:'停止',c:'#94a3b8'},idle:{n:'待命',c:'#94a3b8'},todo:{n:'待办',c:'#2563eb'}};
+const ISTATUS={open:'待认领',claimed:'已认领',fixing:'修理中',done:'待验收',verified:'已验收',reopened:'被打回'};
+const W=252,H=84;
+let CFG={url:'https://elecldbgysdbymkyucwf.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsZWNsZGJneXNkYnlta3l1Y3dmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NDQ2ODksImV4cCI6MjEwNzIyMDY4OX0.yyMZB0b-FGi8R5o-79-Pv50n3zDRVICmwVNlPNZ3eYU',board:'main',who:'rongster'};
+try{Object.assign(CFG,JSON.parse(localStorage.getItem(LSCFG))||{})}catch(e){}
+let AUTH={access_token:'',refresh_token:'',user:null};
+try{Object.assign(AUTH,JSON.parse(localStorage.getItem(LSAUTH))||{})}catch(e){}
+let ISSUES=[], filter='active', issueTarget=null, pushing=false, pullTimer=null;
+
+function seed(){return {nodes:[],edges:[],notes:[],viewport:{x:24,y:14,k:0.72}};}
+let S;try{S=JSON.parse(localStorage.getItem(LS))||seed()}catch(e){S=seed()}
+let mode='select',sel=null,linkFrom=null,drag=null,pan=null;
+const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg',svg=$('svg'),vp=$('viewport');
+const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e};
+const node=id=>S.nodes.find(n=>n.id===id),center=n=>({x:n.x+n.w/2,y:n.y+n.h/2});
+const toast=m=>{const t=$('toast');t.textContent=m;t.style.opacity=1;setTimeout(()=>t.style.opacity=0,2200)};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const closeMask=id=>$(id).classList.remove('on');
+
+/* ───────────── Supabase ───────────── */
+const online=()=>CFG.url&&CFG.key;
+const authed=()=>!!AUTH.access_token;
+function storeAuth(a){AUTH={access_token:a.access_token||'',refresh_token:a.refresh_token||'',user:a.user||null};localStorage.setItem(LSAUTH,JSON.stringify(AUTH));$('logout').style.display=authed()?'':'none'}
+function showAuth(msg){$('authMask').classList.add('on');connState('err','需要登录');if(msg)$('authMsg').textContent=msg}
+async function authRequest(path,body){
+  const r=await fetch(CFG.url.replace(/\/$/,'')+'/auth/v1/'+path,{method:'POST',headers:{apikey:CFG.key,'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const d=await r.json();if(!r.ok)throw new Error(d.error_description||d.msg||d.error||'认证失败');return d;
+}
+async function refreshAuth(){
+  if(!AUTH.refresh_token)throw new Error('登录已过期');
+  const d=await authRequest('token?grant_type=refresh_token',{refresh_token:AUTH.refresh_token});storeAuth(d);return d;
+}
+async function api(path,opt={},retry=true){
+  const r=await fetch(CFG.url.replace(/\/$/,'')+'/rest/v1/'+path,{
+    method:opt.method||'GET',
+    headers:{apikey:CFG.key,Authorization:'Bearer '+(AUTH.access_token||CFG.key),'Content-Type':'application/json',...(opt.prefer?{Prefer:opt.prefer}:{})},
+    body:opt.body?JSON.stringify(opt.body):undefined});
+  if(r.status===401&&retry&&AUTH.refresh_token){await refreshAuth();return api(path,opt,false)}
+  if(r.status===401){showAuth('登录已过期，请重新获取令牌');throw new Error('需要重新登录')}
+  if(!r.ok)throw new Error((await r.text()).slice(0,220));
+  const t=await r.text();return t?JSON.parse(t):null;
+}
+function connState(cls,txt){$('conn').className=cls;$('connText').textContent=txt}
+async function pullIssues(){
+  if(!online()||!authed())return;
+  try{
+    ISSUES=await api('xc_issues?board_slug=eq.'+encodeURIComponent(CFG.board)+'&order=created_at.desc');
+    connState('ok','云端已连接');renderIssues();renderBadges();
+  }catch(e){connState('err','云端异常');console.warn(e)}
+}
+let pushT=null;
+function pushBoard(){
+  if(!online()||!authed())return;
+  clearTimeout(pushT);
+  pushT=setTimeout(async()=>{
+    if(pushing)return;pushing=true;
+    try{
+      await api('xc_boards',{method:'POST',prefer:'resolution=merge-duplicates',
+        body:{slug:CFG.board,doc:S,updated_by:CFG.who}});
+      $('saved').textContent='已备案到 Supabase '+new Date().toLocaleTimeString('zh-CN');
+    }catch(e){$('saved').textContent='备案失败：'+e.message.slice(0,60)}
+    pushing=false;
+  },1200);
+}
+async function pullBoard(){
+  if(!online()){toast('请先配置 Supabase');return}
+  if(!authed()){showAuth();return}
+  try{
+    const rows=await api('xc_boards?slug=eq.'+encodeURIComponent(CFG.board)+'&select=doc,updated_by,updated_at');
+    const d=rows&&rows[0];
+    if(d&&d.doc&&Array.isArray(d.doc.nodes)&&d.doc.nodes.length){
+      if(S.nodes.length&&!confirm('云端布局由 '+(d.updated_by||'?')+' 更新，覆盖当前画布？（你的故障标记不受影响）'))return;
+      S=d.doc;sel=null;saveLocal();render();toast('已拉取云端布局');
+    }else{await pushBoard();toast('云端暂无布局，已把当前画布备案上去')}
+    await pullIssues();
+  }catch(e){toast('拉取失败：'+e.message.slice(0,80))}
+}
+function saveLocal(){localStorage.setItem(LS,JSON.stringify(S));$('saved').textContent='本地已保存 '+new Date().toLocaleTimeString('zh-CN');pushBoard()}
+const save=saveLocal;
+
+/* ───────────── 渲染 ───────────── */
+const applyVp=()=>vp.setAttribute('transform',`translate(${S.viewport.x},${S.viewport.y}) scale(${S.viewport.k})`);
+const toWorld=e=>{const r=svg.getBoundingClientRect();return{x:(e.clientX-r.left-S.viewport.x)/S.viewport.k,y:(e.clientY-r.top-S.viewport.y)/S.viewport.k}};
+const openIssues=nid=>ISSUES.filter(i=>i.node_id===nid&&!['verified'].includes(i.status));
+function render(){
+  applyVp();
+  const nl=$('layerLabels');nl.innerHTML='';
+  [['产品面 · 平台主体与应用前端',40,32],['协作面 · 你的四个终端（MCP）',940,32],
+   ['模型调用 · 网关统一收口',40,388],['共享执行层 · Factory / Worker',40,742],
+   ['流水线与技能库',40,1082],['产物与验收',40,1252]].forEach(([txt,x,y])=>{
+    const t=el('text',{x,y,'font-size':11,fill:'#9aa3b5','letter-spacing':2});t.textContent=txt;nl.appendChild(t)});
+  const eg=$('edges');eg.innerHTML='';
+  S.edges.forEach(e=>{
+    const a=node(e.from),b=node(e.to);if(!a||!b)return;
+    const p1=center(a),p2=center(b),my=(p1.y+p2.y)/2;
+    const d=`M${p1.x},${p1.y} C${p1.x},${my} ${p2.x},${my} ${p2.x},${p2.y}`;
+    const g=el('g',{});
+    const hit=el('path',{d,class:'edge-hit'});
+    hit.addEventListener('click',ev=>{ev.stopPropagation();sel={type:'edge',id:e.id};render()});
+    g.appendChild(hit);
+    g.appendChild(el('path',{d,fill:'none',stroke:(sel&&sel.type==='edge'&&sel.id===e.id)?'#4f46e5':'#9aa3b5','stroke-width':1.7,'marker-end':'url(#arrow)'}));
+    if(e.label){const t=el('text',{x:(p1.x+p2.x)/2,y:my-4,'font-size':10.5,fill:'#7b8497','text-anchor':'middle'});t.textContent=e.label;g.appendChild(t)}
+    eg.appendChild(g);
+  });
+  const ng=$('nodes');ng.innerHTML='';
+  S.nodes.forEach(n=>{
+    const c=LAYERS[n.layer].color,st=STATUS[n.status]||STATUS.idle,bad=openIssues(n.id).length;
+    const g=el('g',{class:'node'+((sel&&sel.type==='node'&&sel.id===n.id)?' sel':'')+(bad?' broken':''),transform:`translate(${n.x},${n.y})`});
+    g.appendChild(el('rect',{class:'box',width:n.w,height:n.h,rx:11,fill:'#fff',stroke:'#dfe3ec','stroke-width':1.2,filter:'drop-shadow(0 2px 5px rgba(16,24,40,.07))'}));
+    g.appendChild(el('rect',{width:5,height:n.h,rx:2.5,fill:c}));
+    const t1=el('text',{x:18,y:26,'font-size':13.5,'font-weight':600,fill:'#1c2333'});t1.textContent=n.title;g.appendChild(t1);
+    const t2=el('text',{x:18,y:45,'font-size':11,fill:'#6b7280'});t2.textContent=n.subtitle||'';g.appendChild(t2);
+    g.appendChild(el('circle',{cx:22,cy:64,r:4,fill:st.c}));
+    const t3=el('text',{x:32,y:68,'font-size':10.5,fill:'#6b7280'});t3.textContent=st.n+(n.agent?(' · '+n.agent):'');g.appendChild(t3);
+    if(n.task){g.appendChild(el('rect',{x:n.w-30,y:8,width:22,height:16,rx:8,fill:'#eef0fe'}));
+      const tb=el('text',{x:n.w-19,y:20,'font-size':10,fill:'#4f46e5','text-anchor':'middle','font-weight':700});tb.textContent='活';g.appendChild(tb)}
+    if(bad){
+      g.appendChild(el('circle',{cx:n.w-12,cy:n.h-12,r:12,fill:'#dc2626'}));
+      const bt=el('text',{x:n.w-12,y:n.h-8,'font-size':12,fill:'#fff','text-anchor':'middle','font-weight':700});bt.textContent=bad;g.appendChild(bt);
+    }
+    g.addEventListener('mousedown',ev=>onNodeDown(ev,n));
+    g.addEventListener('dblclick',ev=>{ev.stopPropagation();if(mode!=='issue'){sel={type:'node',id:n.id};switchTab('props');render()}});
+    ng.appendChild(g);
+  });
+  const nog=$('notes');nog.innerHTML='';
+  S.notes.forEach(nt=>{
+    const g=el('g',{class:'note',transform:`translate(${nt.x},${nt.y})`});
+    g.appendChild(el('rect',{width:nt.w,height:nt.h,rx:4,fill:nt.color,stroke:'rgba(0,0,0,.08)'}));
+    (nt.text||'').split('\n').slice(0,5).forEach((ln,i)=>{const t=el('text',{x:12,y:24+i*17,'font-size':11.5,fill:'#5b4a12'});t.textContent=ln;g.appendChild(t)});
+    g.addEventListener('mousedown',ev=>{ev.stopPropagation();const p=toWorld(ev);drag={kind:'note',o:nt,dx:p.x-nt.x,dy:p.y-nt.y};sel={type:'note',id:nt.id}});
+    g.addEventListener('dblclick',ev=>{ev.stopPropagation();const v=prompt('便签内容（换行用 \\n）',nt.text);if(v!==null){nt.text=v;save();render()}});
+    nog.appendChild(g);
+  });
+  renderProps();renderTodos();renderIssues();
+  $('counts').textContent=`节点 ${S.nodes.length} · 连线 ${S.edges.length} · 故障 ${ISSUES.filter(i=>i.status!=='verified').length}`;
+}
+const renderBadges=()=>render();
+function onNodeDown(ev,n){
+  ev.stopPropagation();
+  if(mode==='issue'){openIssueModal(n);return}
+  if(mode==='link'){
+    if(!linkFrom){linkFrom=n.id;toast('起点：'+n.title+'，再点目标节点')}
+    else{if(linkFrom!==n.id){const label=prompt('连线说明（可留空）','')||'';S.edges.push({id:'e'+Date.now(),from:linkFrom,to:n.id,label});save()}linkFrom=null;render()}
+    return;
+  }
+  const p=toWorld(ev);drag={kind:'node',o:n,dx:p.x-n.x,dy:p.y-n.y,moved:false};
+  sel={type:'node',id:n.id};render();
+}
+svg.addEventListener('mousedown',ev=>{
+  if(ev.target.closest('.node')||ev.target.closest('.note'))return;
+  if(mode==='note'){const p=toWorld(ev);S.notes.push({id:'n'+Date.now(),x:p.x,y:p.y,w:230,h:88,text:'双击编辑便签',color:'#fef3c7'});save();render();return}
+  pan={sx:ev.clientX,sy:ev.clientY,vx:S.viewport.x,vy:S.viewport.y};svg.classList.add('panning');sel=null;linkFrom=null;render();
+});
+window.addEventListener('mousemove',ev=>{
+  if(drag){const p=toWorld(ev);drag.o.x=Math.round((p.x-drag.dx)/6)*6;drag.o.y=Math.round((p.y-drag.dy)/6)*6;drag.moved=true;render()}
+  else if(pan){S.viewport.x=pan.vx+(ev.clientX-pan.sx);S.viewport.y=pan.vy+(ev.clientY-pan.sy);applyVp()}
+});
+window.addEventListener('mouseup',()=>{if(drag&&drag.moved)save();drag=null;pan=null;svg.classList.remove('panning')});
+svg.addEventListener('wheel',ev=>{
+  ev.preventDefault();const r=svg.getBoundingClientRect(),mx=ev.clientX-r.left,my=ev.clientY-r.top;
+  const k=Math.min(2.4,Math.max(.28,S.viewport.k*(ev.deltaY<0?1.09:.92)));
+  S.viewport.x=mx-(mx-S.viewport.x)*(k/S.viewport.k);S.viewport.y=my-(my-S.viewport.y)*(k/S.viewport.k);S.viewport.k=k;applyVp();
+},{passive:false});
+window.addEventListener('keydown',ev=>{
+  if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName))return;
+  if(ev.key==='Delete'&&sel){
+    if(sel.type==='node'){S.nodes=S.nodes.filter(n=>n.id!==sel.id);S.edges=S.edges.filter(e=>e.from!==sel.id&&e.to!==sel.id)}
+    if(sel.type==='edge')S.edges=S.edges.filter(e=>e.id!==sel.id);
+    if(sel.type==='note')S.notes=S.notes.filter(n=>n.id!==sel.id);
+    sel=null;save();render();
+  }
+  if(ev.key==='Escape'){sel=null;linkFrom=null;render()}
+});
+
+/* ───────────── 故障标记 ───────────── */
+function openIssueModal(n){
+  if(!online()){toast('先点右上角「未连接云端」配置 Supabase');$('cfgMask').classList.add('on');return}
+  issueTarget=n;$('issueNodeName').textContent='节点：'+n.title+'（'+n.id+'）';
+  $('fTitle').value='';$('fSymptom').value='';$('fSeverity').value='major';
+  $('issueMask').classList.add('on');setTimeout(()=>$('fTitle').focus(),80);
+}
+$('submitIssue').onclick=async()=>{
+  const title=$('fTitle').value.trim();
+  if(!title){toast('先写一句哪个 function 不工作');return}
+  const body={board_slug:CFG.board,node_id:issueTarget.id,node_title:issueTarget.title,
+    title,symptom:$('fSymptom').value.trim(),severity:$('fSeverity').value,created_by:CFG.who};
+  $('submitIssue').disabled=true;
+  try{
+    await api('xc_issues',{method:'POST',prefer:'return=representation',body});
+    closeMask('issueMask');toast('已标记，Agent 可以来领单了');
+    issueTarget.status='warn';save();await pullIssues();switchTab('issues');
+  }catch(e){toast('标记失败：'+e.message.slice(0,120))}
+  $('submitIssue').disabled=false;
+};
+function renderIssues(){
+  const active=ISSUES.filter(i=>['open','reopened','claimed','fixing'].includes(i.status)).length;
+  $('issueCount').textContent=active?`(${active})`:'';
+  const box=$('issues');if(!box)return;
+  let list=ISSUES;
+  if(filter==='active')list=ISSUES.filter(i=>i.status!=='verified'&&i.status!=='done');
+  if(filter==='done')list=ISSUES.filter(i=>i.status==='done');
+  if(!list.length){box.innerHTML='<div class="empty">暂无故障标记。<br><br>点顶部「🔴 标故障」，再点出问题的节点，写清症状，Agent 就能领单去修。</div>';return}
+  box.innerHTML=list.map(i=>{
+    const closed=i.status==='verified';
+    return `<div class="issue ${i.severity} ${closed?'closed':''}" data-node="${esc(i.node_id)}">
+      <div class="t">${esc(i.title)}</div>
+      <div class="n">${esc(i.node_title||i.node_id)} · ${esc(i.created_by||'')} · ${new Date(i.created_at).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})}</div>
+      <span class="badge ${i.status}">${ISTATUS[i.status]||i.status}</span>
+      ${i.claimed_by?`<span class="badge">@${esc(i.claimed_by)}</span>`:''}
+      ${i.symptom?`<div class="s">${esc(i.symptom)}</div>`:''}
+      ${i.report?`<div class="rp">修理回报：${esc(i.report)}</div>`:''}
+      ${i.status==='done'?`<div class="ops"><button class="btn tiny" data-verify="${i.id}">✓ 验收通过</button><button class="btn tiny" data-reopen="${i.id}">打回重修</button></div>`:''}
+    </div>`}).join('');
+  box.querySelectorAll('.issue').forEach(d=>d.onclick=ev=>{
+    if(ev.target.dataset.verify||ev.target.dataset.reopen)return;
+    const nid=d.dataset.node;if(node(nid)){sel={type:'node',id:nid};render();focusNode(nid)}
+  });
+  box.querySelectorAll('[data-verify]').forEach(b=>b.onclick=()=>moderate(b.dataset.verify,'verified'));
+  box.querySelectorAll('[data-reopen]').forEach(b=>b.onclick=()=>moderate(b.dataset.reopen,'reopened'));
+}
+async function moderate(id,st){
+  const note=st==='reopened'?(prompt('打回原因（会写给 Agent）','')||''):'验收通过';
+  try{
+    await api('rpc/xc_report_issue',{method:'POST',body:{p_issue:id,p_agent:CFG.who,p_status:st,p_report:note}});
+    toast(st==='verified'?'已验收':'已打回，Agent 可重新认领');await pullIssues();
+  }catch(e){toast('操作失败：'+e.message.slice(0,100))}
+}
+function focusNode(nid){
+  const n=node(nid);if(!n)return;const r=svg.getBoundingClientRect();
+  S.viewport.x=r.width/2-(n.x+n.w/2)*S.viewport.k;S.viewport.y=r.height/2-(n.y+n.h/2)*S.viewport.k;applyVp();
+}
+document.querySelectorAll('.filters button').forEach(b=>b.onclick=()=>{
+  filter=b.dataset.f;document.querySelectorAll('.filters button').forEach(x=>x.classList.toggle('on',x===b));renderIssues()});
+function switchTab(which){
+  const p=which==='props';
+  $('paneProps').style.display=p?'':'none';$('paneIssues').style.display=p?'none':'';
+  $('tabProps').classList.toggle('on',p);$('tabIssues').classList.toggle('on',!p);
+}
+$('tabProps').onclick=()=>switchTab('props');$('tabIssues').onclick=()=>switchTab('issues');
+
+/* ───────────── 属性与待办 ───────────── */
+function renderProps(){
+  const box=$('props');
+  if(!sel||sel.type!=='node'){
+    if(sel&&sel.type==='edge'){
+      const e=S.edges.find(x=>x.id===sel.id);box.innerHTML='';if(!e)return;
+      box.appendChild(labelWrap('连线说明',input(e.label||'',v=>{e.label=v;save();render()})));
+      const b=document.createElement('button');b.className='btn';b.textContent='删除连线';
+      b.onclick=()=>{S.edges=S.edges.filter(x=>x.id!==e.id);sel=null;save();render()};box.appendChild(b);return;
+    }
+    box.innerHTML='<div class="empty">选中节点可编辑名称、负责 Agent、状态、派活与备注。<br><br><b>标故障</b>：点顶部「🔴 标故障」再点节点。<br><b>连线</b>：依次点两个节点。<br><b>便签</b>：点画布空白，双击改字。</div>';return;
+  }
+  const n=node(sel.id);if(!n){box.innerHTML='';return}
+  box.innerHTML='';
+  box.appendChild(labelWrap('名称',input(n.title,v=>{n.title=v;save();render()})));
+  box.appendChild(labelWrap('说明',input(n.subtitle,v=>{n.subtitle=v;save();render()})));
+  const row=document.createElement('div');row.className='row';
+  row.appendChild(labelWrap('分层',select(Object.keys(LAYERS).map(k=>[k,LAYERS[k].name]),n.layer,v=>{n.layer=v;save();render()})));
+  row.appendChild(labelWrap('状态',select(Object.keys(STATUS).map(k=>[k,STATUS[k].n]),n.status,v=>{n.status=v;save();render()})));
+  box.appendChild(row);
+  box.appendChild(labelWrap('负责 Agent',input(n.agent,v=>{n.agent=v;save();render()},'如：大力 / worker-cz / 待指派')));
+  box.appendChild(labelWrap('派给它的活 task',area(n.task,v=>{n.task=v;save();render()},'写清做什么、做到什么程度算完')));
+  box.appendChild(labelWrap('备注 markup',area(n.notes,v=>{n.notes=v;save();render()})));
+  if(n.meta&&Object.keys(n.meta).length){const d=document.createElement('div');d.className='meta';
+    d.innerHTML=Object.entries(n.meta).map(([k,v])=>`<b>${esc(k)}</b>: ${esc(v)}`).join('<br>');box.appendChild(d)}
+  const b1=document.createElement('button');b1.className='btn';b1.style.cssText='margin-top:10px;margin-right:8px';b1.textContent='🔴 标故障';
+  b1.onclick=()=>openIssueModal(n);
+  const b2=document.createElement('button');b2.className='btn';b2.style.marginTop='10px';b2.textContent='删除节点';
+  b2.onclick=()=>{S.nodes=S.nodes.filter(x=>x.id!==n.id);S.edges=S.edges.filter(e=>e.from!==n.id&&e.to!==n.id);sel=null;save();render()};
+  box.appendChild(b1);box.appendChild(b2);
+}
+function labelWrap(t,c){const d=document.createElement('div');d.className='field';const l=document.createElement('label');l.textContent=t;d.appendChild(l);d.appendChild(c);return d}
+function input(v,fn,ph){const i=document.createElement('input');i.value=v||'';i.placeholder=ph||'';i.onchange=()=>fn(i.value);return i}
+function area(v,fn,ph){const i=document.createElement('textarea');i.value=v||'';i.placeholder=ph||'';i.onchange=()=>fn(i.value);return i}
+function select(opts,v,fn){const s=document.createElement('select');opts.forEach(([k,t])=>{const o=document.createElement('option');o.value=k;o.textContent=t;if(k===v)o.selected=true;s.appendChild(o)});s.onchange=()=>fn(s.value);return s}
+function renderTodos(){
+  const box=$('todos');box.innerHTML='';
+  const list=S.nodes.filter(n=>n.task&&n.task.trim());
+  $('todoCount').textContent=list.length?`(${list.length})`:'';
+  if(!list.length){box.innerHTML='<div class="empty">还没有派活。选中节点，在 task 里写下要它做的事。</div>';return}
+  list.forEach(n=>{
+    const d=document.createElement('div');d.className='todo'+(n.status==='running'?'':' done');
+    const c=document.createElement('input');c.type='checkbox';c.checked=!['running','todo'].includes(n.status);
+    c.onchange=()=>{n.status=c.checked?'idle':'todo';save();render()};
+    const w=document.createElement('div'),who=document.createElement('div'),tt=document.createElement('div');
+    who.className='who';who.textContent=(n.agent||'未指派')+' → '+n.title;
+    tt.className='tt';tt.textContent=n.task;w.appendChild(who);w.appendChild(tt);d.appendChild(c);d.appendChild(w);box.appendChild(d);
+  });
+}
+
+/* ───────────── 工具栏 ───────────── */
+document.querySelectorAll('.modes button').forEach(b=>b.onclick=()=>{
+  mode=b.dataset.mode;linkFrom=null;
+  document.querySelectorAll('.modes button').forEach(x=>x.classList.toggle('on',x===b));
+  svg.classList.toggle('linking',mode==='link');svg.classList.toggle('issuing',mode==='issue');
+  $('hint').textContent={select:'拖空白平移 · 滚轮缩放 · 双击节点编辑 · 选中后 Delete 删除',
+    issue:'点击出问题的节点，写清哪个 function 不工作和症状，Agent 会自动看到',
+    link:'依次点击两个节点建立连线，Esc 取消',note:'点击画布空白放便签，双击便签改文字'}[mode];
+});
+$('addNode').onclick=()=>{
+  const n={id:'n'+Date.now(),title:'新节点',subtitle:'双击编辑',layer:'exec',x:Math.round((-S.viewport.x+200)/S.viewport.k),y:Math.round((-S.viewport.y+200)/S.viewport.k),w:W,h:H,status:'todo',agent:'',task:'',notes:'',meta:{}};
+  S.nodes.push(n);sel={type:'node',id:n.id};switchTab('props');save();render();toast('已添加节点');
+};
+$('fit').onclick=()=>{
+  const x0=Math.min(...S.nodes.map(n=>n.x))-60,y0=Math.min(...S.nodes.map(n=>n.y))-50;
+  const x1=Math.max(...S.nodes.map(n=>n.x+n.w))+60,y1=Math.max(...S.nodes.map(n=>n.y+n.h))+50;
+  const r=svg.getBoundingClientRect(),k=Math.min(r.width/(x1-x0),r.height/(y1-y0),1.25);
+  S.viewport={k,x:(r.width-(x1-x0)*k)/2-x0*k,y:(r.height-(y1-y0)*k)/2-y0*k};save();render();
+};
+$('conn').onclick=()=>{$('cUrl').value=CFG.url;$('cKey').value=CFG.key;$('cBoard').value=CFG.board;$('cWho').value=CFG.who;$('cfgMask').classList.add('on')};
+function startPolling(){clearInterval(pullTimer);if(online()&&authed())pullTimer=setInterval(pullIssues,20000)}
+$('sendCode').onclick=async()=>{
+  const email=$('authEmail').value.trim();if(!email){$('authMsg').textContent='先填写邮箱';return}
+  $('authMsg').textContent='发送中…';
+  try{await authRequest('otp',{email,options:{shouldCreateUser:false}});$('authMsg').textContent='已发送，请查收邮件（含垃圾邮件）'}catch(e){$('authMsg').textContent=e.message}
+};
+$('verifyCode').onclick=async()=>{
+  const email=$('authEmail').value.trim(),token=$('authToken').value.trim();
+  if(!email||!token){$('authMsg').textContent='邮箱和令牌都要填写';return}
+  $('authMsg').textContent='登录中…';
+  try{
+    const d=await authRequest('verify',{type:'magiclink',email,token});storeAuth(d);
+    CFG.who=(d.user&&d.user.email)||CFG.who;$('authMask').classList.remove('on');connState('','连接中…');
+    await pullBoard();startPolling();toast('已登录，画布与故障单已连接');
+  }catch(e){$('authMsg').textContent=e.message}
+};
+$('authToken').addEventListener('keydown',e=>{if(e.key==='Enter')$('verifyCode').click()});
+$('logout').onclick=()=>{localStorage.removeItem(LSAUTH);location.reload()};
+$('saveCfg').onclick=async()=>{
+  CFG={url:$('cUrl').value.trim(),key:$('cKey').value.trim(),board:$('cBoard').value.trim()||'main',who:$('cWho').value.trim()||'rongster'};
+  localStorage.setItem(LSCFG,JSON.stringify(CFG));closeMask('cfgMask');
+  if(!online()){connState('','未连接云端');startPolling();return}
+  if(!authed()){showAuth();return}
+  connState('','连接中…');
+  try{await pullIssues();await pullBoard();startPolling();toast('Supabase 已连接，每 20 秒自动同步故障状态')}
+  catch(e){connState('err','连接失败');toast('连接失败：'+e.message.slice(0,100))}
+};
+$('pull').onclick=pullBoard;
+function dl(name,content,type){const b=new Blob([content],{type});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();URL.revokeObjectURL(a.href)}
+$('exportJson').onclick=()=>{dl('xconnect-board.json',JSON.stringify(S,null,2),'application/json');toast('JSON 已导出')};
+$('importJson').onclick=()=>$('file').click();
+$('file').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{S=JSON.parse(r.result);sel=null;save();render();toast('导入成功')}catch(err){alert('JSON 解析失败：'+err.message)}};r.readAsText(f);e.target.value=''};
+$('exportPng').onclick=()=>{
+  applyVp();const clone=svg.cloneNode(true);clone.setAttribute('xmlns',NS);
+  clone.setAttribute('width',svg.clientWidth);clone.setAttribute('height',svg.clientHeight);
+  clone.querySelector('#viewport').insertBefore(el('rect',{x:-6000,y:-6000,width:12000,height:12000,fill:'#f5f6fa'}),clone.querySelector('#gridRect'));
+  const img=new Image();
+  img.onload=()=>{const c=document.createElement('canvas');c.width=svg.clientWidth*2;c.height=svg.clientHeight*2;
+    const ctx=c.getContext('2d');ctx.scale(2,2);ctx.drawImage(img,0,0);
+    c.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='xconnect-board.png';a.click()});toast('PNG 已导出')};
+  img.onerror=()=>toast('PNG 导出失败，可用浏览器截图');
+  img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(clone));
+};
+$('agentCmd').onclick=()=>{
+  const cmd=`# Agent 接单四步（在任意能联网的机器上跑）
+export SUPABASE_URL="${CFG.url||'<你的 project url>'}"
+export SUPABASE_ANON_KEY="${CFG.key?'（已配置，见 .env）':'<anon key>'}"
+
+# 1. 看有哪些故障待修
+python agent_client.py --name <你的Agent名> list
+# 2. 领单（自动领最严重的；也可指定 issue id）
+python agent_client.py --name <你的Agent名> claim
+# 3. 修理过程中同步进展
+python agent_client.py --name <你的Agent名> report <issue_id> --status fixing --report "已定位到..."
+# 4. 修完交卷，等 rongster 验收
+python agent_client.py --name <你的Agent名> report <issue_id> --status done --report "改了什么、怎么自测的"`;
+  if(navigator.clipboard)navigator.clipboard.writeText(cmd).then(()=>toast('接单指令已复制，贴给 Agent 即可')).catch(()=>dl('agent-commands.sh',cmd,'text/plain'));
+  else dl('agent-commands.sh',cmd,'text/plain');
+};
+render();
+$('logout').style.display=authed()?'':'none';
+if(online()&&authed()){connState('','连接中…');pullBoard().then(startPolling).catch(()=>showAuth('请重新登录'))}
+else{showAuth()}
+</script>
+</body>
+</html>
