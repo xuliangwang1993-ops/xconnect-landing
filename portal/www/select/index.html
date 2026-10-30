@@ -253,12 +253,24 @@ goBtn.addEventListener('click', async () => {
 });
 
 /* ---------- 启动 ---------- */
-(async function boot() {
-  let session = null;
+/* 本域没有 Supabase 会话时，用门户 sso.js 写的域 cookie 接上。
+   xc_session / xc_refresh 是 Domain=.x-connect.ai 且非 HttpOnly，
+   所以这个页面挂在任何 x-connect.ai 子域都能自举登录态，不必依赖同源。 */
+async function bootSession() {
   try {
     const { data } = await supabase.auth.getSession();
-    session = data && data.session;
+    if (data && data.session) return data.session;
   } catch {}
+  const at = getCookie('xc_session'), rt = getCookie('xc_refresh');
+  if (!at || !rt) return null;
+  try {
+    const r = await supabase.auth.setSession({ access_token: at, refresh_token: rt });
+    return (r && r.data && r.data.session) || null;
+  } catch { return null; }
+}
+
+(async function boot() {
+  const session = await bootSession();
 
   if (!session) {
     document.body.classList.add('locked');
