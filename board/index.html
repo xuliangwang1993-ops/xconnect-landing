@@ -595,6 +595,11 @@ python agent_client.py --name <你的Agent名> report <issue_id> --status done -
   if(navigator.clipboard)navigator.clipboard.writeText(cmd).then(()=>toast('接单指令已复制，贴给 Agent 即可')).catch(()=>dl('agent-commands.sh',cmd,'text/plain'));
   else dl('agent-commands.sh',cmd,'text/plain');
 };
+const authHash=new URLSearchParams(location.hash.slice(1));
+if(authHash.get('access_token')){
+  storeAuth({access_token:authHash.get('access_token'),refresh_token:authHash.get('refresh_token')||'',user:null});
+  history.replaceState(null,'',location.pathname+location.search);
+}
 render();
 if(AUTH.access_token&&AUTH.expires_at&&Date.now()>AUTH.expires_at){AUTH={access_token:'',refresh_token:'',user:null,expires_at:0};localStorage.removeItem(LSAUTH)}
 if(AUTH.access_token&&!AUTH.expires_at){AUTH.expires_at=Date.now()+AUTH_WEEK;localStorage.setItem(LSAUTH,JSON.stringify(AUTH))}
