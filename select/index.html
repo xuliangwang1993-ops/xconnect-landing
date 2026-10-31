@@ -24,16 +24,68 @@
   .btn.on { opacity:1; pointer-events:auto; }
   .btn.on:hover { background:#ff9f5c; }
   .hint { font-size:11px; color:#444; margin-top:16px; }
+
+  /* 多语种切换（和主页拉齐） */
+  .lang-toggle { position:fixed; top:20px; right:20px; background:none; border:1px solid #333; color:#888; padding:6px 14px; border-radius:6px; font-size:12px; cursor:pointer; transition:all .2s; }
+  .lang-toggle:hover { border-color:#ff8c42; color:#ff8c42; }
+  .lang-toggle .lang-zh { display:none; }
+  .lang-toggle .lang-en { display:inline; }
+  body[data-lang="en"] .lang-toggle .lang-zh { display:inline; }
+  body[data-lang="en"] .lang-toggle .lang-en { display:none; }
+
+  /* 中文内容 */
+  .lang-zh { display:inline; }
+  .lang-en { display:none; }
+  body[data-lang="en"] .lang-zh { display:none; }
+  body[data-lang="en"] .lang-en { display:inline; }
 </style>
 </head>
-<body>
+<body data-lang="zh">
+  <button class="lang-toggle" id="langToggle" aria-label="Switch language">
+    <span class="lang-zh">EN</span>
+    <span class="lang-en">中文</span>
+  </button>
+
   <div class="logo">X<span>−</span>CONNECT</div>
-  <h1>选一个助手</h1>
-  <div class="sub">五个通用助手，性格不同，能力一样。选错的代价只是一句话，随时能换。</div>
+  <h1>
+    <span class="lang-zh">选一个助手</span>
+    <span class="lang-en">Pick your assistant</span>
+  </h1>
+  <div class="sub">
+    <span class="lang-zh">五个通用助手，性格不同，能力一样。选错的代价只是一句话，随时能换。</span>
+    <span class="lang-en">Five general assistants, same skills, different vibes. Pick wrong? Just say the word and switch.</span>
+  </div>
   <div class="grid" id="grid"></div>
-  <button class="btn" id="btn" onclick="go()">确认选择</button>
-  <div class="hint">选完自动跳转到 app.x-connect.ai</div>
+  <button class="btn" id="btn" onclick="go()">
+    <span class="lang-zh">确认选择</span>
+    <span class="lang-en">Confirm</span>
+  </button>
+  <div class="hint">
+    <span class="lang-zh">选完自动跳转到 app.x-connect.ai</span>
+    <span class="lang-en">Redirects to app.x-connect.ai after selection</span>
+  </div>
+
 <script>
+// 多语种管理（和主页拉齐）
+class LanguageManager {
+  constructor() {
+    this.currentLang = localStorage.getItem('xconnect-lang') || 'zh';
+    this.init();
+  }
+  init() {
+    document.body.setAttribute('data-lang', this.currentLang);
+    const toggle = document.getElementById('langToggle');
+    if (toggle) toggle.addEventListener('click', () => this.toggle());
+  }
+  toggle() {
+    this.currentLang = this.currentLang === 'zh' ? 'en' : 'zh';
+    document.body.setAttribute('data-lang', this.currentLang);
+    localStorage.setItem('xconnect-lang', this.currentLang);
+  }
+}
+new LanguageManager();
+
+// 五个通用助手（本命）
 const chars = [
   { id:'voice',  name:'李黑鸭', nameEn:'Duck Lee',    emoji:'🦆' },
   { id:'scribe', name:'斯巴达', nameEn:'Sparky',      emoji:'⚡' },
@@ -41,19 +93,34 @@ const chars = [
   { id:'deep',   name:'武天',   nameEn:'WuTian',      emoji:'🥋' },
   { id:'admin',  name:'狒狒',   nameEn:'Feifei',      emoji:'🐒' }
 ];
+
 let sel = null;
 const grid = document.getElementById('grid');
 const btn = document.getElementById('btn');
+
 chars.forEach(c => {
   const d = document.createElement('div');
   d.className = 'slot';
-  d.innerHTML = `<div class="avatar">${c.emoji}</div><div class="name">${c.name}</div><div class="name-en">${c.nameEn}</div>`;
+  d.innerHTML = `
+    <div class="avatar">${c.emoji}</div>
+    <div class="name">
+      <span class="lang-zh">${c.name}</span>
+      <span class="lang-en">${c.nameEn}</span>
+    </div>
+    <div class="name-en">
+      <span class="lang-zh">${c.nameEn}</span>
+      <span class="lang-en">${c.name}</span>
+    </div>
+  `;
   d.onclick = () => {
     document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
-    d.classList.add('selected'); sel = c.id; btn.classList.add('on');
+    d.classList.add('selected');
+    sel = c.id;
+    btn.classList.add('on');
   };
   grid.appendChild(d);
 });
+
 function go(){
   if(!sel) return;
   // 写域 cookie，让 app.x-connect.ai 立刻读到
