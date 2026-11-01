@@ -11,30 +11,60 @@ header a{color:#9fe870;text-decoration:none}main{padding:20px;display:grid;gap:1
 .fn{display:flex;justify-content:space-between;padding:6px 0;border-top:1px dashed #222}
 .st{font-size:12px;padding:1px 8px;border-radius:99px;background:#222}.st.unverified{background:#3a3a12;color:#ffe680}
 .muted{color:#8a9099}pre{white-space:pre-wrap;background:#111;padding:12px;border-radius:8px;max-height:300px;overflow:auto}
+.banner{padding:10px 20px;font-weight:600}.banner.live{background:#12331a;color:#9fe870}.banner.fixture{background:#4a2a00;color:#ffcf70}
+.fn{cursor:pointer}.fn:hover,.fn.sel{background:#161b22}.st.verified{background:#12331a;color:#9fe870}
+#ev{position:fixed;right:0;top:0;bottom:0;width:min(420px,90vw);background:#111418;border-left:1px solid #333;padding:16px;overflow:auto;display:none}#ev.open{display:block}
 </style>
 </head>
 <body>
 <header><strong>AoI 能力看板</strong><a href="/">← 搭台首页</a><a href="/workbench">工作台 →</a>
 <span class="muted" id="meta"></span></header>
+<div id="banner" class="banner fixture">加载中…</div>
+<aside id="ev"></aside>
 <main id="out"><p class="muted">加载中…（需要先在工作台登录）</p></main>
 <script type="module">
-import { cardsToSnapshot } from '/aoi/aoi-snapshot.js';
+import { cardsToSnapshot, linearRef } from '/aoi/aoi-snapshot.js';
 const out = document.getElementById('out');
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let SNAP = null;
+function banner(live, why) {
+  const b = document.getElementById('banner');
+  b.className = 'banner ' + (live ? 'live' : 'fixture');
+  b.textContent = live ? '● AoI 实时快照（live）' : '⚠ 降级：fixture 回退（非 AoI 实时数据，全部节点均为未验证）— 原因：' + why;
+}
+function showEv(id) {
+  const n = SNAP.nodes.find((x) => x.id === id); if (!n) return;
+  document.querySelectorAll('.fn').forEach((d) => d.classList.toggle('sel', d.dataset.id === id));
+  const ev = Array.isArray(n.evidence_refs) ? n.evidence_refs : [];
+  const ok = n.state === 'verified' && ev.length > 0;
+  const lr = n.linear_ref || linearRef(n.label);
+  const inEdges = SNAP.edges.filter((e) => e.to_id === id);
+  const p = document.getElementById('ev'); p.className = 'open';
+  p.innerHTML = `<button id="evx">关闭</button><h3>${esc(n.label)}</h3>
+   <p><span class="st ${ok ? 'verified' : 'unverified'}">${ok ? '✔ verified（有证据链）' : '✖ 未验证 — ' + (n.state === 'verified' ? '声称 verified 但无证据，已降级' : '无 AoI 证据链（state=' + esc(n.state) + '）')}</span></p>
+   <p class="muted">id: ${esc(n.id)} · layer: ${esc(n.layer || '')} · wb: ${esc(n.wb_status ?? '')}</p>
+   <p>Linear：${lr ? `<a href="${esc(lr.url)}" target="_blank" rel="noopener">${esc(lr.id)}</a>` : '<span class="muted">未关联</span>'}</p>
+   <h4>证据链 (${ev.length})</h4>${ev.length ? '<ol>' + ev.map((r) => `<li><pre>${esc(typeof r === 'string' ? r : JSON.stringify(r, null, 1))}</pre></li>`).join('') + '</ol>' : '<p class="muted">无证据</p>'}
+   <h4>上游边</h4>${inEdges.map((e) => `<div class="muted">${esc(e.from_id)} —${esc(e.relation)}→ · evidence_status=${esc(e.evidence_status)}</div>`).join('') || '<p class="muted">无</p>'}`;
+  document.getElementById('evx').onclick = () => { p.className = ''; };
+}
+out.addEventListener('click', (e) => { const d = e.target.closest('.fn'); if (d) showEv(d.dataset.id); });
 function render(snap, label) {
+  SNAP = snap;
   document.getElementById('meta').textContent = `${label} · mode=${snap.mode} · ${snap.nodes.length} 节点 · ${snap.edges.length} 边 · verified 仅凭 AoI 证据`;
   const goals = snap.nodes.filter((n) => n.kind === 'goal');
   out.innerHTML = goals.map((g) => {
     const fns = snap.edges.filter((e) => e.from_id === g.id).map((e) => snap.nodes.find((n) => n.id === e.to_id)).filter(Boolean);
     return `<section class="goal"><h3>${esc(g.label)} <span class="muted">(${fns.length})</span></h3>` +
-      fns.map((f) => `<div class="fn"><span>${esc(f.label)}</span><span class="st ${esc(f.state)}">${esc(f.state)} · ${esc(f.wb_status ?? '')}</span></div>`).join('') + '</section>';
+      fns.map((f) => `<div class="fn" data-id="${esc(f.id)}"><span>${esc(f.label)}</span><span class="st ${esc(f.state)}">${esc(f.state)} · ${esc(f.wb_status ?? '')}</span></div>`).join('') + '</section>';
   }).join('') + `<details><summary>CapabilitySnapshot JSON</summary><pre>${esc(JSON.stringify(snap, null, 1))}</pre></details>`;
 }
 try {
   let live = null;
   try { live = await (await fetch('/aoi/api/snapshot', { credentials: 'same-origin' })).json(); } catch {}
-  if (live && live.source === 'aoi' && live.snapshot) { render(live.snapshot, 'AoI 实时 ' + (live.endpoint || '')); throw 0; }
+  if (live && live.source === 'aoi' && live.snapshot) { banner(true); render(live.snapshot, 'AoI 实时 ' + (live.endpoint || '')); throw 0; }
   const why = (live && live.reason) ? live.reason : 'AoI 代理不可用';
+  banner(false, why);
   const r = await fetch('/api/cards', { credentials: 'same-origin' });
   if (r.status === 401) { out.innerHTML = '<p>未登录。请先打开 <a href="/workbench">工作台</a> 登录。</p><p class="muted">fixture：' + esc(why) + '</p>'; throw 0; }
   const d = await r.json();

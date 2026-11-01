@@ -1,0 +1,22 @@
+<!doctype html><meta charset="utf-8"><title>业务进树 · 工厂</title>
+<style>body{font:15px system-ui;max-width:760px;margin:2rem auto}li{margin:.3rem 0}.s{font-size:12px;padding:1px 6px;border-radius:8px;background:#eee;margin-left:6px}button{margin-left:6px}</style>
+<h1>业务进树（COO-19）</h1><p id="mode"></p>
+<form id="f"><select name="kind"><option>project</option><option>branch</option><option selected>ticket</option></select>
+<input name="title" placeholder="标题" required> <select name="parent_id" id="par"><option value="">（根）</option></select>
+<button>进树</button> <button type="button" id="demo">一键 Demo</button></form>
+<ul id="tree"></ul>
+<script>
+const NEXT={idea:'in_progress',in_progress:'evidence',evidence:'verified'};
+const api=(m,u,b)=>fetch(u,{method:m,headers:{'content-type':'application/json'},body:b&&JSON.stringify(b)}).then(r=>r.json());
+async function load(){const d=await api('GET','/tree/api/nodes');document.getElementById('mode').textContent='存储: '+d.mode;
+ const kids={};d.nodes.forEach(n=>(kids[n.parent_id||'']??=[]).push(n));const ids=new Set(d.nodes.map(n=>n.id));
+ const draw=(pid)=> (kids[pid]||[]).map(n=>`<li>[${n.kind}] ${n.title}<span class=s>${n.stage}</span>${NEXT[n.stage]?`<button data-id="${n.id}" data-to="${NEXT[n.stage]}">→${NEXT[n.stage]}</button>`:''}<ul>${draw(n.id)}</ul></li>`).join('');
+ const orphans=d.nodes.filter(n=>n.parent_id&&!ids.has(n.parent_id)).map(n=>n.parent_id);
+ document.getElementById('tree').innerHTML=draw('')+[...new Set(orphans)].map(draw).join('');
+ document.getElementById('par').innerHTML='<option value="">（根）</option>'+d.nodes.map(n=>`<option value="${n.id}">${n.title}</option>`).join('');}
+document.getElementById('tree').onclick=async e=>{const b=e.target.dataset;if(b.id){await api('PATCH','/tree/api/nodes/'+encodeURIComponent(b.id),{stage:b.to});load();}};
+document.getElementById('f').onsubmit=async e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target));if(!f.parent_id)delete f.parent_id;await api('POST','/tree/api/nodes',f);e.target.title.value='';load();};
+document.getElementById('demo').onclick=async()=>{const p=await api('POST','/tree/api/nodes',{kind:'project',title:'Demo 客户业务'});
+ await api('POST','/tree/api/nodes',{kind:'ticket',title:'Demo 首个任务',parent_id:p.id,stage:'in_progress'});load();};
+load();
+</script>

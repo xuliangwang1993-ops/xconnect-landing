@@ -43,7 +43,7 @@ export function pluginsToSnapshot(items, health) {
     const ev = Array.isArray(p.evidence_refs) ? p.evidence_refs : [];
     const state = vs === 'verified' && ev.length ? 'verified' : (vs === 'verified' ? 'unverified' : (vs || 'potential'));
     nodes.push({ id: 'aoi:' + p.id, kind: 'function', label: p.display_name || p.plugin_key || p.id, entity_ref: p.id,
-      state, layer: 'function', evidence_refs: ev, wb_status: (p.plugin_key || '') + (p.package_version ? '@' + p.package_version : '') });
+      state, layer: 'function', evidence_refs: ev, linear_ref: p.linear_ref || null, wb_status: (p.plugin_key || '') + (p.package_version ? '@' + p.package_version : '') });
     edges.push({ id: 'e:' + p.id, from_id: gid, to_id: 'aoi:' + p.id, relation: 'requires', evidence_status: 'documented', source_refs: [], evidence_refs: [] });
   }
   return { schema_version: '1.0.0', workspace_id: 'aoi', mode: 'live:' + (health?.mode || '?'), cursor: 0, capabilities: [], nodes, edges };

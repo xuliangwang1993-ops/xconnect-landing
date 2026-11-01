@@ -1,5 +1,9 @@
 // Workbench cards -> AoI CapabilitySnapshot (fixture mode).
 // Port of the read-only adapter (aoi-workbench-adapter/adapter.py).
+export function linearRef(x) {
+  const m = String(x || '').match(/\b([A-Z]{2,6}-\d+)\b/);
+  return m ? { id: m[1], url: 'https://linear.app/cooktop/issue/' + m[1] } : null;
+}
 // Never emits state "verified": a done card is at most "unverified" until AoI evidence exists.
 export function cardsToSnapshot(cards, { limit = 50, workspaceId = 'workbench' } = {}) {
   const list = (Array.isArray(cards) ? cards : []).slice(0, limit);
@@ -18,7 +22,8 @@ export function cardsToSnapshot(cards, { limit = 50, workspaceId = 'workbench' }
     const done = c.status === 'done' || c.status === 'completed';
     nodes.push({ id: nid, kind: 'function', label: c.title || '', entity_ref: null,
       state: done ? 'unverified' : 'potential', layer: 'function', evidence_refs: [],
-      wb_status: c.status || 'draft' });
+      wb_status: c.status || 'draft',
+      linear_ref: linearRef(c.linear || c.linear_id || c.title) });
     edges.push({ id: 'e:' + c.id, from_id: goals.get(p), to_id: nid, relation: 'requires',
       evidence_status: 'documented', source_refs: [], evidence_refs: [] });
   }
