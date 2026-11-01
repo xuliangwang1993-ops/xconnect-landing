@@ -1,0 +1,12 @@
+# X-Connect 门户路由
+# 部署目标：Cloudflare Pages 项目 xconnect-portal（发布目录 portal/www）
+
+# 旧选角页已废弃（角色名 小豆/小记/小谋/小深/小办 全错）。
+# 带不带尾斜杠都送回首页，别让老收藏和外部链接停在死胡同。
+/select        /  301
+/select/       /  301
+/select/*      /  301
+
+# 选小助手统一由 workbench 承担；旧入口也一并送回。
+/onboard       /  301
+/onboard/      /  301
