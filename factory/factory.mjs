@@ -4,6 +4,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { fetchAoiSnapshot } from './aoi/aoi-live.mjs';
+import { loadWorkNodes } from './graph/work-nodes.mjs';
+import { createTreeStore, handleTree } from './tree/tree.mjs';
 import { answer as guideAnswer, parseGuide } from './guide/guide.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -12,10 +14,11 @@ const STAGE_FILES = { 'index.html': 'text/html; charset=utf-8', 'styles.css': 't
   'app.js': 'text/javascript; charset=utf-8', 'icon.svg': 'image/svg+xml', 'brand-x.png': 'image/png' };
 const GUIDE_FILES = { 'guide-widget.js': 'text/javascript; charset=utf-8' };
 export const GUIDE_TAG = '<script src="/guide/guide-widget.js" defer></script>';
+const GRAPH_FILES = { 'graph-view.js': 'text/javascript; charset=utf-8' };
 const AOI_FILES = { 'index.html': 'text/html; charset=utf-8', 'aoi-snapshot.js': 'text/javascript; charset=utf-8' };
 
 export const ROUTES = {
-  stage: '/', stageAssets: '/stage/', workbench: '/workbench', aoi: '/aoi', manifest: '/factory.json', guide: '/guide',
+  stage: '/', stageAssets: '/stage/', workbench: '/workbench', aoi: '/aoi', manifest: '/factory.json', guide: '/guide', graph: '/graph',
 };
 
 // Stage HTML uses relative asset paths; at "/" those would collide with the
@@ -33,7 +36,12 @@ function send(res, req, type, body) {
 }
 
 export function createFactory({ env = process.env, fetchImpl = globalThis.fetch } = {}) {
+  const tree = createTreeStore({ env, fetchImpl });
   function handle(req, res) {
+    if (handleTree(req, res, tree)) return true;
+    { const tp = new URL(req.url, 'http://localhost').pathname;
+      if ((tp === '/tree' || tp === '/tree/') && (req.method === 'GET' || req.method === 'HEAD'))
+        return send(res, req, 'text/html; charset=utf-8', fs.readFileSync(path.join(HERE, 'tree/index.html'))); }
     if (req.method !== 'GET' && req.method !== 'HEAD') return false;
     const p = new URL(req.url, 'http://localhost').pathname;
     if (p === '/guide' || p === '/guide/') return send(res, req, 'text/html; charset=utf-8', fs.readFileSync(path.join(HERE, 'guide/index.html')));
@@ -49,6 +57,14 @@ export function createFactory({ env = process.env, fetchImpl = globalThis.fetch 
       const name = p.slice('/guide/'.length);
       if (!Object.hasOwn(GUIDE_FILES, name)) return false;
       return send(res, req, GUIDE_FILES[name], fs.readFileSync(path.join(HERE, 'guide', name)));
+    }
+    if (p === '/graph' || p === '/graph/') return send(res, req, 'text/html; charset=utf-8', fs.readFileSync(path.join(HERE, 'graph/index.html')));
+    if (p === '/graph/api/nodes') return loadWorkNodes({ store: tree })
+      .then((d) => send(res, req, 'application/json; charset=utf-8', JSON.stringify(d)));
+    if (p.startsWith('/graph/')) {
+      const name = p.slice('/graph/'.length);
+      if (!Object.hasOwn(GRAPH_FILES, name)) return false;
+      return send(res, req, GRAPH_FILES[name], fs.readFileSync(path.join(HERE, 'graph', name)));
     }
     if (p === '/aoi/api/snapshot') {
       return fetchAoiSnapshot({ env, fetchImpl })
@@ -75,6 +91,8 @@ export function createFactory({ env = process.env, fetchImpl = globalThis.fetch 
         aoi: { path: '/aoi', role: 'AoI 能力看板（只读：真实 AoI M11 API，不可用时回退 fixture）' },
         bridge: { path: '/bridge/*', role: 'PC 执行桥' }, voice: { path: '/voice', role: '实时语音 WebSocket' },
         slack: { path: '/slack/*', role: 'Slack 入口' },
+        graph: { path: '/graph', role: 'Tree|Graph 一键切换（同一 work_nodes 数据源，?view=&node= 深链）' },
+        tree: { path: '/tree', role: '业务进树：work_nodes 建/改（idea→in_progress→evidence→verified）' },
         guide: { path: '/guide', role: '图书馆管理员导览（只讲解带路，不写入不付款）' },
       } }));
     return false;
