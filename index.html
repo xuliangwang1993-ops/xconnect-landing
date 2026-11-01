@@ -1,109 +1,117 @@
 <!DOCTYPE html>
-<html lang="zh-Hans" data-lang="zh">
+<html lang="zh-Hans">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>X-connect Factory OS</title>
-  <meta name="description" content="空白画布上的工厂操作系统：助手带你一步步建起树、图与 AoI。">
+  <title>X-connect · Projects</title>
+  <meta name="description" content="Factory OS — projects and issues, Linear-style.">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css">
   <style>
-    /* Linear-like empty canvas home — keeps stage tokens where present */
-    html, body.factory-blank {
-      height: 100%;
-      margin: 0;
-      background: #0a0a0b;
-      color: #e8e8ed;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Segoe UI", sans-serif;
+    :root {
+      --bg: #0a0a0b; --panel: #101012; --line: rgba(255,255,255,.08);
+      --text: #ececef; --mute: #8a8f98; --accent: #5e6ad2; --ok: #3dd68c;
     }
-    body.factory-blank { min-height: 100vh; display: flex; flex-direction: column; }
-    .fb-top {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 22px; border-bottom: 1px solid rgba(255,255,255,.06);
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text);
+      font: 14px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "PingFang SC", sans-serif; }
+    a { color: inherit; text-decoration: none; }
+    header.app {
+      display: flex; align-items: center; gap: 14px; padding: 12px 18px;
+      border-bottom: 1px solid var(--line); position: sticky; top: 0; background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(10px); z-index: 5;
     }
-    .fb-brand { display: flex; gap: 10px; align-items: center; text-decoration: none; color: inherit; }
-    .fb-brand img { width: 22px; height: 22px; }
-    .fb-brand strong { font-weight: 600; letter-spacing: -0.02em; font-size: 14px; }
-    .fb-brand span { color: #8a8f98; font-size: 12px; margin-left: 2px; }
-    .fb-skip {
-      appearance: none; background: transparent; border: 0; color: #8a8f98;
-      font: 500 12px/1 inherit; cursor: pointer; padding: 6px 8px; border-radius: 6px;
+    .brand { display: flex; align-items: center; gap: 8px; font-weight: 600; letter-spacing: -.02em; }
+    .brand img { width: 18px; height: 18px; }
+    .brand span { color: var(--mute); font-weight: 500; font-size: 12px; }
+    nav.tabs { display: flex; gap: 4px; margin-left: 8px; }
+    nav.tabs a { padding: 6px 10px; border-radius: 6px; color: var(--mute); font-size: 13px; }
+    nav.tabs a.on, nav.tabs a:hover { background: rgba(255,255,255,.05); color: var(--text); }
+    .spacer { flex: 1; }
+    .mode { font-size: 11px; color: var(--mute); }
+    button, .btn {
+      appearance: none; border: 1px solid var(--line); background: rgba(255,255,255,.03);
+      color: var(--text); border-radius: 7px; padding: 7px 11px; font: inherit; cursor: pointer;
     }
-    .fb-skip:hover { color: #e8e8ed; background: rgba(255,255,255,.04); }
-    #xc-canvas {
-      flex: 1; display: grid; place-items: center; padding: 32px 20px 96px;
-      position: relative;
+    button.primary, .btn.primary { background: var(--accent); border-color: transparent; color: #fff; font-weight: 560; }
+    button.primary:hover, .btn.primary:hover { filter: brightness(1.06); }
+    button.ghost { background: transparent; }
+    main { max-width: 920px; margin: 0 auto; padding: 28px 18px 80px; }
+    .crumb { display: flex; gap: 8px; align-items: center; color: var(--mute); font-size: 13px; margin-bottom: 18px; }
+    .crumb strong { color: var(--text); font-weight: 560; }
+    h1 { margin: 0 0 6px; font-size: 22px; letter-spacing: -.03em; font-weight: 600; }
+    .sub { margin: 0 0 22px; color: var(--mute); font-size: 13px; }
+    .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; align-items: center; }
+    .toolbar input {
+      flex: 1; min-width: 180px; background: var(--panel); border: 1px solid var(--line);
+      color: var(--text); border-radius: 7px; padding: 8px 10px; font: inherit;
     }
-    #xc-canvas .fb-empty {
-      text-align: center; color: #63666f; font-size: 13px; letter-spacing: 0.01em;
-      max-width: 28ch; line-height: 1.5;
+    .list { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--panel); }
+    .row {
+      display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center;
+      padding: 12px 14px; border-top: 1px solid var(--line); cursor: pointer;
     }
-    #xc-canvas .fb-layer {
-      width: min(720px, 100%); display: none; flex-direction: column; gap: 18px;
-      animation: fb-in .35s ease both;
+    .row:first-child { border-top: 0; }
+    .row:hover { background: rgba(255,255,255,.03); }
+    .row .title { font-weight: 550; letter-spacing: -.01em; }
+    .row .meta { color: var(--mute); font-size: 12px; margin-top: 2px; }
+    .pill {
+      font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line);
+      color: var(--mute); white-space: nowrap;
     }
-    #xc-canvas .fb-layer.on { display: flex; }
-    @keyframes fb-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-    .fb-kicker { font-size: 11px; color: #8a8f98; letter-spacing: .06em; text-transform: uppercase; }
-    .fb-title { margin: 0; font-size: clamp(1.6rem, 3.5vw, 2.15rem); font-weight: 600; letter-spacing: -0.04em; line-height: 1.15; max-width: 16ch; }
-    .fb-lead { margin: 0; color: #9b9fa8; font-size: 15px; line-height: 1.55; max-width: 42ch; }
-    .fb-cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
-    .fb-card {
-      display: grid; gap: 6px; padding: 14px; border-radius: 12px; text-decoration: none; color: inherit;
-      border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.02);
-      transition: border-color .15s, background .15s, transform .15s;
+    .pill.idea { color: #9aa0a6; }
+    .pill.in_progress { color: #5e6ad2; border-color: rgba(94,106,210,.35); }
+    .pill.evidence { color: #f2c94c; border-color: rgba(242,201,76,.35); }
+    .pill.verified { color: var(--ok); border-color: rgba(61,214,140,.35); }
+    .empty {
+      border: 1px dashed var(--line); border-radius: 12px; padding: 48px 24px; text-align: center;
+      color: var(--mute);
     }
-    .fb-card:hover { border-color: rgba(94,106,210,.55); background: rgba(255,255,255,.04); transform: translateY(-1px); }
-    .fb-card code { font: 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; color: #8a8f98; }
-    .fb-card strong { font-size: 15px; letter-spacing: -0.02em; }
-    .fb-card span { font-size: 12.5px; color: #8a8f98; line-height: 1.4; }
-    .fb-actions { display: flex; flex-wrap: wrap; gap: 10px; }
-    .fb-btn {
-      display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 8px;
-      text-decoration: none; font-size: 13px; font-weight: 500; border: 1px solid rgba(255,255,255,.1);
-      color: #e8e8ed; background: rgba(255,255,255,.03);
+    .empty h2 { margin: 0 0 8px; color: var(--text); font-size: 16px; font-weight: 600; letter-spacing: -.02em; }
+    .empty p { margin: 0 auto 18px; max-width: 36ch; font-size: 13px; line-height: 1.5; }
+    .empty .actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    dialog {
+      border: 1px solid var(--line); border-radius: 12px; padding: 0; background: #121214; color: var(--text);
+      width: min(420px, calc(100vw - 24px));
     }
-    .fb-btn.primary { background: #5e6ad2; border-color: transparent; color: #fff; }
-    .fb-btn.primary:hover { filter: brightness(1.06); }
-    .fb-btn:hover { background: rgba(255,255,255,.06); }
-    @media (max-width: 720px) { .fb-cards { grid-template-columns: 1fr; } }
+    dialog::backdrop { background: rgba(0,0,0,.55); }
+    dialog form { display: grid; gap: 10px; padding: 16px; }
+    dialog h3 { margin: 0; font-size: 15px; }
+    dialog input, dialog select {
+      width: 100%; background: #0c0c0e; border: 1px solid var(--line); color: var(--text);
+      border-radius: 7px; padding: 8px 10px; font: inherit;
+    }
+    dialog .foot { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
+    .err { color: #ff7b72; font-size: 12px; min-height: 1em; }
   </style>
 </head>
-<body class="factory-blank">
-  <header class="fb-top">
-    <a class="fb-brand" href="/" aria-label="X-connect Factory OS">
-      <img src="icon.svg" alt="" width="22" height="22">
-      <strong>X-connect</strong>
-      <span>Factory OS</span>
-    </a>
-    <button type="button" class="fb-skip" id="fbSkip" hidden>跳过引导，显示全部</button>
+<body>
+  <header class="app">
+    <a class="brand" href="/"><img src="icon.svg" alt=""><b>X-connect</b><span>Factory OS</span></a>
+    <nav class="tabs" aria-label="Views">
+      <a href="/" class="on" id="tabProjects">Projects</a>
+      <a href="/graph">Graph</a>
+      <a href="/aoi">AoI</a>
+      <a href="/workbench">Workbench</a>
+      <a href="/portal">Portal</a>
+    </nav>
+    <div class="spacer"></div>
+    <span class="mode" id="mode"></span>
   </header>
 
-  <main id="xc-canvas" aria-live="polite">
-    <p class="fb-empty" id="fbEmpty">画布是空的。右下角助手会带你一步步搭起来。</p>
+  <main id="app"></main>
 
-    <section class="fb-layer" id="fbIntro" hidden>
-      <div class="fb-kicker">Factory OS</div>
-      <h1 class="fb-title">把想法放进一棵树，做到有据可查。</h1>
-      <p class="fb-lead">工厂操作系统：树管推进，图看关系，AoI 核对证据。我们先把骨架搭上。</p>
-    </section>
-
-    <section class="fb-layer" id="fbModules" hidden>
-      <div class="fb-cards" role="navigation" aria-label="Factory modules">
-        <a class="fb-card" href="/tree"><code>/tree</code><strong>树</strong><span>建节点、推进 idea → verified</span></a>
-        <a class="fb-card" href="/graph"><code>/graph</code><strong>图</strong><span>同一数据，一键 Tree | Graph</span></a>
-        <a class="fb-card" href="/aoi"><code>/aoi</code><strong>AoI</strong><span>看板与 verified 证据位</span></a>
+  <dialog id="dlg">
+    <form method="dialog" id="dlgForm">
+      <h3 id="dlgTitle">New project</h3>
+      <input name="title" id="dlgInput" placeholder="Name" required maxlength="120" autocomplete="off">
+      <div class="err" id="dlgErr"></div>
+      <div class="foot">
+        <button value="cancel" class="ghost" type="submit">Cancel</button>
+        <button value="ok" class="primary" id="dlgOk" type="submit">Create</button>
       </div>
-    </section>
+    </form>
+  </dialog>
 
-    <section class="fb-layer" id="fbNext" hidden>
-      <div class="fb-actions">
-        <a class="fb-btn primary" href="/workbench">打开工作台</a>
-        <a class="fb-btn" href="/portal">委托样品（完整门面）</a>
-        <a class="fb-btn" href="/tree">先建第一个节点</a>
-      </div>
-    </section>
-  </main>
-  <script src="factory-home.js" defer></script>
+  <script type="module" src="factory-home.js"></script>
 </body>
 </html>

@@ -46,11 +46,11 @@
     try { window.dispatchEvent(new CustomEvent('xc:factory-reveal', { detail: { step } })); } catch {}
   }
   const TOUR = onHome ? [
-    ['画布现在是空的。我是工厂助手，会像 Linear 一样，和你一起把 Factory OS 搭起来。', []],
-    ['先立住这一句话：把想法放进一棵树，做到有据可查。', []],
-    ['接下来放上三个入口：树管推进、图看关系、AoI 核对证据。', [{ label: '树', href: '/tree' }, { label: '图', href: '/graph' }, { label: 'AoI', href: '/aoi' }]],
-    ['骨架好了。你可以去工作台唱戏，或打开完整委托门面下样品单。', [{ label: '工作台', href: '/workbench' }, { label: '委托门面', href: '/portal' }]],
-    ['我只讲解和带路，不会替你下单、付款或改数据。有问题随时问我。', []],
+    ['这里按 Linear 的结构来：先有项目（工厂线），再在项目里开 Issue。', []],
+    ['画布空着就对了。第一步：创建一个项目。', []],
+    ['点「Create first project」，或让我帮你打开创建框。', []],
+    ['进到项目后，把工作拆成 Issue，按 idea → verified 往前推。', [{ label: 'Graph', href: '/graph' }, { label: 'AoI', href: '/aoi' }]],
+    ['我只带路和讲解；创建仍由你确认。', []],
   ] : [
     ['你好，我是工厂的图书馆管理员 📚 带你 30 秒逛一圈：这里分三块，门面「搭台」、工作台「唱戏」、AoI 看板。', [{ label: '门面首页', href: '/' }]],
     ['第一步，在门面「立即委托」说出想法。只要说清三件事：场景和不可改项、谁来用、怎样算验收合格。', [{ label: '委托门面', href: '/portal#commission' }, { label: '委托指南', href: '/portal#help' }]],
@@ -58,26 +58,25 @@
     ['第三步，在 AoI 看板看能力快照。只有 AoI 给出证据才算 verified。', [{ label: 'AoI 看板', href: '/aoi' }]],
     ['我只讲解和带路，不会替你下单、付款或改数据。有问题随时点右下角问我！', []],
   ];
-  const HOME_REVEAL = [null, 'intro', 'modules', 'next', 'all'];
   function tour(i = 0) {
     const [t, l] = TOUR[i];
     const last = i === TOUR.length - 1;
-    if (onHome && HOME_REVEAL[i]) reveal(HOME_REVEAL[i]);
+    if (onHome && i === 2) {
+      try { window.dispatchEvent(new CustomEvent('xc:factory-new-project')); } catch {}
+    }
     const d = say(t, l, `<div class="xcg-tour"><span>导览 ${i + 1}/${TOUR.length}</span><span>${last ? '' : '<button class="xcg-chip" data-n>下一步</button> '}<button class="xcg-chip" data-x>${last ? '好的' : '跳过'}</button></span></div>`);
     d.querySelector('[data-n]')?.addEventListener('click', (e) => { e.target.closest('.xcg-tour').remove(); tour(i + 1); });
     d.querySelector('[data-x]').addEventListener('click', (e) => {
       e.target.closest('.xcg-tour').remove();
-      if (onHome) reveal('all');
-      try { localStorage.setItem('xcGuideToured', '1'); localStorage.setItem('xcFactoryHomeBuilt', '1'); } catch {}
+      try { localStorage.setItem('xcGuideToured', '1'); } catch {}
       chips();
     });
     if (last) {
-      if (onHome) reveal('all');
-      try { localStorage.setItem('xcGuideToured', '1'); localStorage.setItem('xcFactoryHomeBuilt', '1'); } catch {}
+      try { localStorage.setItem('xcGuideToured', '1'); } catch {}
     }
   }
   function chips() {
-    const qs = ['工厂整体怎么用？', '怎么写好委托？', '怎么查询进展？', '卡片怎么批准？', 'AoI 看板是什么？'];
+    const qs = onHome ? ['怎么建第一个项目？', '项目和 Issue 什么关系？', 'AoI 证据怎么看？'] : ['工厂整体怎么用？', '怎么写好委托？', '怎么查询进展？', '卡片怎么批准？', 'AoI 看板是什么？'];
     const d = say('可以直接问我，或点这些常见问题：'); const w = document.createElement('div'); w.className = 'xcg-links';
     for (const q of qs) { const b = document.createElement('button'); b.type = 'button'; b.className = 'xcg-chip'; b.textContent = q; b.onclick = () => ask(q); w.appendChild(b); }
     d.appendChild(w);
