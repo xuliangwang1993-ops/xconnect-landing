@@ -296,6 +296,13 @@
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.body.setAttribute('data-lang', lang);
     current = lang;
+    // 同一份选择也写进 .x-connect.ai 的 cookie，好让 workbench / spark 等
+    // 其它子域读到。localStorage 是按 origin 隔离的，跨子域不共享。
+    try {
+      document.cookie = STORE + '=' + encodeURIComponent(lang) +
+        '; Path=/; Domain=.x-connect.ai; Max-Age=' + (60 * 60 * 24 * 365) +
+        '; SameSite=Lax; Secure';
+    } catch (e) {}
     repaintQuota();
   }
 
