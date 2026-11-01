@@ -221,8 +221,13 @@ document.addEventListener('xc:needs-auth', () => {
 /* ---------- 会话 ---------- */
 // 跨子域登录：sso.js（经典脚本，先于本模块加载）；仅 *.x-connect.ai 生效，其他域 XCSSO.enabled=false
 const SSO = window.XCSSO;
-/* ---------- 首次登录先去选小助理 ----------
-   直接跳到 https://workbench.x-connect.ai/ 的第 2、3 页选角室，选完跳回 app.x-connect.ai。 */
+/* ---------- 首次登录去选小助理 ----------
+   落到 workbench.x-connect.ai 的选角室（李黑鸭/斯巴达/四毛/武天/狒狒）。
+   选完不直接回 app：工作台默认把用户送到 www/spark/ 那颗闪光页，
+   由他自己挑 Chat 还是 Factory。所以这里不带 next=。
+
+   注意：这条只在「刚登录成功」时触发一次，不是「打开主站就跳」。
+   未登录访问首页不会跳任何地方——那条逻辑已经被删掉了。 */
 const ONBOARD_URL = 'https://workbench.x-connect.ai/';
 const ONBOARD_KEY = 'xc_onboard_done';
 
@@ -243,8 +248,7 @@ function maybeOnboard(user) {
     // 按用户 id 记账，换账号登录这台浏览器时还能再引导一次
     localStorage.setItem(ONBOARD_KEY + ':' + user.id, '1');
   } catch { return; }
-  const nextApp = 'https://app.x-connect.ai/';
-  location.href = ONBOARD_URL + '?pick=1&next=' + encodeURIComponent(nextApp);
+  location.href = ONBOARD_URL + '?pick=1';
 }
 
 if (SSO?.enabled) SSO.attach(supabase);
