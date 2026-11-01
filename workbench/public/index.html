@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0d0f12">
+  <meta name="theme-color" content="#070a0f">
   <meta name="color-scheme" content="dark">
   <meta name="description" content="X-connect Workbench — 卡片、字幕、语音与执行，一套账号两种布局。">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="X-Connect Workbench">
+  <meta name="apple-mobile-web-app-title" content="X-connect">
   <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="icon" href="/icons/crystal-x-192.png" sizes="192x192">
-  <link rel="apple-touch-icon" href="/icons/crystal-x-192.png">
+  <link rel="icon" href="/icons/icon-192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
   <link rel="stylesheet" href="/styles.css">
-  <title>X-Connect Workbench</title>
+  <title>X-connect Workbench</title>
 </head>
 <body data-layout="compact">
   <svg class="sprite" aria-hidden="true" focusable="false">
@@ -98,7 +98,7 @@
       <button class="bars" id="sidebarToggle" type="button" aria-label="展开侧边栏" aria-expanded="false">
         <svg><use href="#i-bars"></use></svg>
       </button>
-      <a class="brand" href="/workbench" aria-label="X-connect Workbench">
+      <a class="brand" href="/" aria-label="X-connect Workbench">
         <img src="/assets/brand-x.png" alt="" class="brand-x">
         <span class="brand-word">X-connect</span>
       </a>
@@ -107,6 +107,10 @@
         <span class="model-ver" id="modelVer">4.5</span>
         <svg class="chev"><use href="#i-chevron"></use></svg>
       </button>
+      <a class="factory-link" href="https://factory.x-connect.ai/" title="进入工厂页">
+        <span>进厂</span>
+        <svg class="chev"><use href="#i-chevron"></use></svg>
+      </a>
       <div class="top-spacer"></div>
       <span class="net-dot" id="netDot" title="在线"></span>
       <button class="temp-bubble" id="tempBtn" type="button" aria-pressed="false" title="临时会话">
@@ -129,8 +133,17 @@
         <button class="nav-item active" data-view="cards" type="button"><svg><use href="#i-card"></use></svg><span>卡片</span><span class="nav-count" id="navCardsCount">0</span></button>
         <button class="nav-item" data-view="works" type="button"><svg><use href="#i-spark"></use></svg><span>作品</span><span class="nav-count" id="navWorksCount">0</span></button>
         <button class="nav-item" data-view="tasks" type="button"><svg><use href="#i-clock"></use></svg><span>任务</span><span class="nav-count" id="navTasksCount">0</span></button>
-        <button class="nav-item" data-view="linear" type="button"><svg><use href="#i-grid"></use></svg><span>Linear</span><span class="nav-count" id="navLinearCount">0</span></button>
       </nav>
+      <div class="side-section">
+        <div class="side-label"><span>助手</span><button class="text-btn" id="changeAssistantBtn" type="button">更换</button></div>
+        <div id="assistantCard" class="assistant-card" hidden>
+          <img id="assistantAvatar" class="assistant-avatar" src="" alt="">
+          <div class="assistant-meta">
+            <div class="assistant-name" id="assistantName">—</div>
+            <div class="assistant-name-en" id="assistantNameEn">—</div>
+          </div>
+        </div>
+      </div>
       <div class="side-section">
         <div class="side-label"><span>会话</span><button class="text-btn" id="newChatBtn2" type="button">新建</button></div>
         <div id="convList" class="conv-list"></div>
@@ -173,7 +186,6 @@
           <button class="tab active" data-view="cards" type="button" role="tab">卡片</button>
           <button class="tab" data-view="works" type="button" role="tab">作品</button>
           <button class="tab" data-view="tasks" type="button" role="tab">任务</button>
-          <button class="tab" data-view="linear" type="button" role="tab">Linear</button>
         </div>
         <label class="search"><svg><use href="#i-search"></use></svg><input id="searchInput" type="search" placeholder="搜索卡片、来源、项目" autocomplete="off"></label>
       </div>
@@ -208,15 +220,6 @@
       <div id="tasksView" class="view" hidden>
         <div id="taskList" class="task-list"></div>
         <div id="tasksEmpty" class="empty" hidden></div>
-      </div>
-      <div id="linearView" class="view" hidden>
-        <div class="linear-bar">
-          <p>只读镜像。这张列表来自本地 <code>linear_issues</code>，页面不连接 Linear。</p>
-          <button class="btn ghost small" id="linearSyncBtn" type="button">同步到本地</button>
-        </div>
-        <div id="linearMeta" class="mini"></div>
-        <div id="linearList" class="linear-list"></div>
-        <div id="linearEmpty" class="empty" hidden></div>
       </div>
       <div class="main-foot">
         <span id="storageLabel">—</span>
@@ -328,10 +331,18 @@
       </div>
     </div>
 
+    
+    <div class="modal" id="voiceMapModal" hidden role="dialog" aria-modal="true" aria-labelledby="voiceMapTitle">
+      <div class="modal-card wide">
+        <div class="modal-head"><div><div class="eyebrow">VOICE MAP</div><h2 id="voiceMapTitle">对话记录</h2></div><button class="icon-btn" data-close="voiceMapModal" type="button"><svg><use href="#i-close"></use></svg></button></div>
+        <div id="voiceMapList" class="voice-map-list"></div>
+        <div class="modal-foot"><span class="mini">语音进行中点击小助手可打开；展示该角色的回合记录。</span></div>
+      </div>
+    </div>
+
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
   </div>
 
   <script type="module" src="/app.js"></script>
-<script src="/guide/guide-widget.js" defer></script>
 </body>
 </html>

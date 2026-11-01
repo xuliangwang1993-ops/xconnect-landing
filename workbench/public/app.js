@@ -1,8 +1,19 @@
+import { openLounge, pickedAssistant, rememberAssistant, avatarFor, nameFor, cookieAssistant } from './lounge.js';
+import { mountRoam, setRoamMood, unmountRoam, guideTo, parkDefault, setRoamClickHandler } from './roam.js';
+
+// 助手英文名对照（和 lounge.js FALLBACK 一致）
+const FALLBACK_NAME_EN = {
+  voice: 'Duck Lee',
+  scribe: 'Sparky',
+  brain: 'Forty Cents',
+  deep: 'WuTian',
+  admin: 'Feifei',
+};
+const ASSET = (typeof window !== 'undefined' && window.__XC_ASSET_BASE) || '';
 /* X-connect Workbench — client.
  * Vanilla ES module, no build step.  All privileged calls go through /api/*;
  * the gateway key never enters this file or localStorage.
  */
-import { renderDeliveryPanel, deliveryBadge, isDelivery } from './project-delivery-view.js';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
@@ -326,42 +337,36 @@ async function boot() {
   bindEvents();
   applyTheme();
   applyLayout();
+  const q = new URLSearchParams(location.search);
+  /* 选完小助手先过一闪光页（www.x-connect.ai/spark/），
+     那页上摆着首页同款的两颗水晶 X：蓝的往左去 Chat，玫瑰金往右去 Factory。
+     用户在那儿亲眼看见"我的人已经就位，然后选去哪边开工"。
+     ?next= 仍然优先，兼容老的直达链接。 */
+  const SPARK = 'https://www.x-connect.ai/spark/';
+  const nextUrl = q.get('next') || SPARK;
+  const returnToApp = () => {
+    // COO-21：专属角色页已就地开语音时，绝不跳 spark
+    if (window.__xcInPlaceVoice) return;
+    const target = /^https:\/\/([a-z0-9-]+\.)*x-connect\.ai(\/|$)/i.test(nextUrl)
+      ? nextUrl
+      : SPARK;
+    const picked = pickedAssistant();
+    const sep = target.includes('?') ? '&' : '?';
+    location.href = picked ? `${target}${sep}assistant=${encodeURIComponent(picked)}` : target;
+  };
+  // 跳过第一页（login/intro）与第四页（shell），直接进入第二页选小助手 + 第三页详情，选完跳回 app.x-connect.ai
   try {
     const data = await api('/api/bootstrap');
     await acceptBootstrap(data);
-    showShell();
-    showIntro();
-    renderAll();
-    registerSW();
-  } catch (e) {
-    if (e.status === 401) {
-      try {
-        const h = await api('/api/health');
-        renderLoginTiers(h.tiers || []);
-      } catch {}
-      showLogin();
-      return;
-    }
-    const cached = readCache();
-    if (cached?.user) {
-      state.user = cached.user;
-      state.cards = cached.cards || [];
-      state.conversations = cached.conversations || [];
-      state.settings = { ...DEFAULT_SETTINGS, ...(cached.settings || {}) };
-      state.balance = cached.balance;
-      state.build = cached.build || 'offline';
-      state.activeCardId = cached.activeCardId || null;
-      state.activeConversationId = cached.activeConversationId || null;
-      applyTheme(); applyLayout();
-      showShell();
-      setBanner('<svg width="14" height="14"><use href="#i-alert"></use></svg> 离线：显示本机缓存；新发送会失败并保留草稿。', 'off');
-      renderAll();
-      registerSW();
-      return;
-    }
-    showLogin('服务暂时连不上，请稍后再试。');
+  } catch {}
+  let picked = false;
+  try {
+    await openLounge();
+    picked = true;
+  } catch (err) {
+    console.warn('[lounge] open failed, staying in place', err);
   }
-  setupVisualViewport();
+  if (picked) returnToApp();
 }
 
 async function acceptBootstrap(data) {
@@ -377,6 +382,20 @@ async function acceptBootstrap(data) {
   state.cards = Array.isArray(data.cards) ? data.cards : [];
   state.conversations = Array.isArray(data.conversations) ? data.conversations : [];
   state.settings = { ...DEFAULT_SETTINGS, ...(data.settings || {}) };
+  // 助理是账号级的，不是这台设备的。服务端有值就以服务端为准，
+  // 这样换设备、换域名（app / 工厂）都是同一个助理。
+  if (state.settings.assistantId) {
+    rememberAssistant(state.settings.assistantId);
+  } else {
+    // 服务端还没有：门户 /select 刚写过域 cookie（或本机选过）就先采纳，
+    // 再补写回账号，避免「门户选了、工作台还问一遍」。
+    const adopted = cookieAssistant() || pickedAssistant();
+    if (adopted) {
+      state.settings.assistantId = adopted;
+      rememberAssistant(adopted);
+      setTimeout(() => { void saveSettings({ assistantId: adopted }, { quiet: true }); }, 0);
+    }
+  }
   state.tasks = [];
   state.storage = data.storage || 'none';
   state.build = data.build || 'dev';
@@ -457,6 +476,21 @@ function renderSidebar() {
   $('#sideAvatar').textContent = (state.user?.email || 'X')[0].toUpperCase();
   $('#avatarLetter').textContent = (state.user?.email || 'X')[0].toUpperCase();
 
+  // 助手卡片
+  const assistantId = pickedAssistant();
+  const assistantCard = $('#assistantCard');
+  if (assistantId) {
+    const avatar = avatarFor(assistantId);
+    const name = nameFor(assistantId);
+    const nameEn = FALLBACK_NAME_EN[assistantId] || '';
+    $('#assistantAvatar').src = avatar ? `${ASSET}/characters/${avatar}/thumb.webp` : '';
+    $('#assistantName').textContent = name || '—';
+    $('#assistantNameEn').textContent = nameEn;
+    assistantCard.hidden = false;
+  } else {
+    assistantCard.hidden = true;
+  }
+
   const convs = [...state.conversations].sort((a, b) => String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')));
   const list = $('#convList');
   if (!convs.length) {
@@ -485,7 +519,6 @@ const VIEW_META = {
   cards: ['CARDS', '项目工作台', '项目、卡片、作品和任务状态是主体。控制按需收起，不挡内容。'],
   works: ['WORKS', '作品', '已执行完成的结果回卡；没有结果时不会显示成作品。'],
   tasks: ['TASKS', '任务', '批准后才入队。执行端可以是现有 PC bridge，也可以是预览内置执行器。'],
-  linear: ['LINEAR', 'Linear 只读镜像', 'Issues、团队和工作流状态都从本地 linear_issues 读。同步由服务端写入缓存，页面不直连 Linear。'],
 };
 
 function renderMain() {
@@ -499,7 +532,6 @@ function renderMain() {
   $('#cardsView').hidden = state.view !== 'cards';
   $('#worksView').hidden = state.view !== 'works';
   $('#tasksView').hidden = state.view !== 'tasks';
-  $('#linearView').hidden = state.view !== 'linear';
   $('#newCardBtn').style.display = state.view === 'chat' ? 'none' : '';
   $('#storageLabel').textContent = state.storage === 'supabase' ? 'Supabase 已连接' : (state.storage === 'local' ? '本机预览存储' : '存储未配置');
   $('#buildLabel').textContent = 'build ' + state.build;
@@ -563,7 +595,6 @@ function renderCards() {
       <h3>${esc(c.title || '未命名卡片')}</h3>
       <div class="card-excerpt">${esc((c.working || c.original || '').slice(0, 240))}</div>
       <div class="card-foot">
-        ${deliveryBadge(c, esc)}
         ${c.assistant ? '<span class="tag"><svg><use href="#i-spark"></use></svg>已整理</span>' : ''}
         ${c.review ? `<span class="tag"><svg><use href="#i-check"></use></svg>${c.review.verdict === 'pass' ? '已审' : '需改'}</span>` : ''}
         <span class="right">v${c.version || 1} · ${esc(fmtTime(c.updatedAt))}</span>
@@ -672,7 +703,7 @@ function renderInspector() {
 
 function inspPane(card) {
   if (state.inspTab === 'content') {
-    return `${renderDeliveryPanel(card, esc)}<div class="insp-section">
+    return `<div class="insp-section">
       <div class="insp-label"><span>当前文本</span><span>${(card.working || '').length} 字</span></div>
       <textarea id="cardWorking" spellcheck="false">${esc(card.working || '')}</textarea>
       <div class="insp-actions"><button class="btn primary small" data-card-action="save" type="button">保存修改</button><button class="btn ghost small" data-card-action="copy" type="button">复制</button></div>
@@ -949,40 +980,6 @@ function setView(view) {
   state.view = view;
   renderMain();
   if (view === 'tasks') refreshTasks().then(() => { renderTasks(); renderSidebar(); });
-  if (view === 'linear') loadLinear();
-}
-
-async function loadLinear() {
-  const list = $('#linearList');
-  const empty = $('#linearEmpty');
-  const meta = $('#linearMeta');
-  try {
-    const data = await api('/api/linear/issues');
-    state.linear = data;
-    const issues = data.issues || [];
-    $('#navLinearCount').textContent = String(issues.length);
-    const when = data.syncedAt ? new Date(data.syncedAt).toLocaleString() : '还没有同步';
-    meta.textContent = `${issues.length} 条 issue · ${data.teams?.length || 0} 个团队 · ${data.workflowStates?.length || 0} 个状态 · ${when}`;
-    if (!issues.length) {
-      list.innerHTML = '';
-      empty.hidden = false;
-      empty.innerHTML = '<h2>本地还没有 issue</h2><p>点「同步到本地」。服务端会把 Linear 写入 linear_issues，这个页面只读那张表。</p>';
-      return;
-    }
-    empty.hidden = true;
-    list.innerHTML = issues.map((row) => `<article class="linear-row">
-      <span class="linear-id">${esc(row.identifier || row.id)}</span>
-      <div>
-        <div class="linear-title">${esc(row.title || '未命名')}</div>
-        <div class="linear-sub">${esc(row.team_key || row.team_name || '—')} · ${esc(row.assignee_name || '未分配')}</div>
-      </div>
-      <span class="linear-state" style="${row.state_color ? `border-color:${esc(row.state_color)}` : ''}">${esc(row.state_name || '无状态')}</span>
-    </article>`).join('');
-  } catch (err) {
-    list.innerHTML = '';
-    empty.hidden = false;
-    empty.innerHTML = `<h2>镜像不可用</h2><p>${esc(err.message || '读取 linear_issues 失败')}</p>`;
-  }
 }
 
 function toggleTemp() {
@@ -1144,8 +1141,6 @@ async function runCardAction(action) {
   try {
     if (action === 'save') return await saveCardText();
     if (action === 'copy') return await copyText(card.working || '');
-    if (action === 'delivery-retry') return toast(isDelivery(card) ? `请在流水线机器上重跑：RUN_ID=${card.delivery.run_id} make run` : '不是交付卡');
-    if (action === 'delivery-contact') return toast('已记下：这张交付卡需要人工处理，请联系 X-connect 客服。');
     if (action === 'copy-result') return await copyText(card.result || '');
     if (action === 'delete') {
       const ok = await askConfirm({ title: '删除卡片', text: `删除「${card.title}」？`, ok: '删除' });
@@ -1279,6 +1274,7 @@ async function sendChat() {
   try {
     const full = await streamChat({
       model: chosenModel,
+      assistantId: pickedAssistant() || 'brain',
       messages: conv.messages.filter((m) => m !== placeholder).map((m) => ({ role: m.role, content: m.content })),
       conversationId: state.temp ? 'temp' : conv.id,
       system: conv.system || '',
@@ -1510,7 +1506,7 @@ function renderSettings() {
         <option value="grok" ${theme === 'grok' ? 'selected' : ''}>Grok</option>
         <option value="hunyuan" ${theme === 'hunyuan' ? 'selected' : ''}>混元</option>
       </select></div>
-      <div class="field"><span>自定义强调色（可选）</span><div class="token-box"><input id="accentInput" type="color" value="${esc(state.settings.accent || '#f59e0b')}" style="width:52px;padding:3px"><span class="hint">只在打开自定义时覆盖主题色。</span></div></div>
+      <div class="field"><span>自定义强调色（可选）</span><div class="token-box"><input id="accentInput" type="color" value="${esc(state.settings.accent || '#4b8dff')}" style="width:52px;padding:3px"><span class="hint">只在打开自定义时覆盖主题色。</span></div></div>
       <div class="row-between"><div><div class="field"><span>减少动态效果</span></div><p class="hint">关闭水晶 X 过渡和大部分动画。</p></div><label class="switch ${state.settings.reducedMotion ? 'on' : ''}"><input id="reducedMotionToggle" type="checkbox" ${state.settings.reducedMotion ? 'checked' : ''} hidden></label></div>
       <p class="hint">主题 token 会切换配色、字体和组件视觉；布局和操作不变。完整模型名在顶栏模型选择器里。</p>
     </div>`;
@@ -1607,6 +1603,7 @@ async function testIngest() {
 }
 
 async function logoutAndClear() {
+  unmountRoam();
   try { await api('/api/logout', { method: 'POST', body: {} }); } catch {}
   clearPrivateLocal();
   if ('caches' in window) {
@@ -1772,16 +1769,98 @@ function playPcm(bytes) {
   v.at = at + buffer.duration;
 }
 
+/* ---------------- 语音速记：跟着助理走，存在账号里 ---------------- */
+// 不存设备本地：换手机、换域名都还是同一份。接口走 HTTP 会话，不走语音连接。
+let voiceTurns = [];
+let voiceSaveTimer = null;
+
+const voiceAssistantId = () => pickedAssistant() || 'brain';
+
+async function loadVoiceHistory() {
+  try {
+    const r = await api('/api/voice-history?assistant=' + encodeURIComponent(voiceAssistantId()));
+    voiceTurns = Array.isArray(r.turns) ? r.turns : [];
+  } catch {
+    voiceTurns = [];
+  }
+}
+
+function recordVoiceTurn(role, text) {
+  const t = String(text || '').trim();
+  if (!t) return;
+  const last = voiceTurns[voiceTurns.length - 1];
+  if (last && last.role === role && last.text === t) return;
+  voiceTurns.push({ role, text: t, at: new Date().toISOString() });
+  if (voiceTurns.length > 120) voiceTurns = voiceTurns.slice(-120);
+  clearTimeout(voiceSaveTimer);
+  voiceSaveTimer = setTimeout(saveVoiceHistory, 1200);
+}
+
+function saveVoiceHistory() {
+  if (!voiceTurns.length) return;
+  api('/api/voice-history', {
+    method: 'PUT',
+    body: { assistant: voiceAssistantId(), turns: voiceTurns.slice(-120) },
+  }).catch(() => {});
+}
+
+// 只带最近 12 轮，太长会把人格挤掉，反而让助理答非所问
+function voiceContext() {
+  const recent = voiceTurns.slice(-12);
+  if (!recent.length) return '';
+  return recent
+    .map((t) => (t.role === 'assistant' ? '助理：' : '用户：') + t.text)
+    .join('\n');
+}
+
+
+function openVoiceMap() {
+  const box = $('#voiceMapList');
+  const title = $('#voiceMapTitle');
+  if (!box) return;
+  const id = voiceAssistantId();
+  if (title) title.textContent = (nameFor(id) || id) + ' · 对话记录';
+  if (!voiceTurns.length) {
+    box.innerHTML = '<p class="mini">还没有语音回合。先开语音说几句。</p>';
+  } else {
+    box.innerHTML = voiceTurns.slice().reverse().map((turn) => {
+      const who = turn.role === 'assistant' ? (nameFor(id) || '助手') : '你';
+      const when = turn.at ? String(turn.at).replace('T', ' ').slice(0, 19) : '';
+      return `<div class="voice-map-row ${turn.role === 'assistant' ? 'asst' : 'user'}"><div class="voice-map-meta"><b>${esc(who)}</b><span>${esc(when)}</span></div><div class="voice-map-text">${esc(turn.text || '')}</div></div>`;
+    }).join('');
+  }
+  openModal('voiceMapModal');
+}
+
+function guideRoamToInput() {
+  const candidates = [
+    document.activeElement,
+    $('#composerInput'),
+    $('#voicePanel'),
+    $('#composer'),
+  ].filter((n) => n && n.getBoundingClientRect);
+  const el = candidates.find((n) => {
+    if (n === document.body || n === document.documentElement) return false;
+    if (n.tagName === 'INPUT' || n.tagName === 'TEXTAREA' || n.isContentEditable) return true;
+    if (n.id === 'voicePanel' || n.id === 'composer') return true;
+    return false;
+  }) || $('#composer') || $('#voicePanel');
+  if (el) guideTo(el);
+  else parkDefault();
+}
+
 async function startVoice() {
   const v = state.voice;
   if (v.active) return;
   if (!navigator.mediaDevices?.getUserMedia) return toast('这个浏览器没有麦克风接口', true);
   if (!window.isSecureContext) return toast('语音需要 HTTPS 或 localhost', true);
-  const speaker = $('#speakerSelect')?.value || localStorage.getItem('xcw_voice_speaker') || '';
+  const assistantId = pickedAssistant() || 'brain';
+  await loadVoiceHistory();
   try {
-    const tok = await api('/api/voice-token', { method: 'POST', body: {} });
+    guideRoamToInput();
+    const tok = await api('/api/voice-token', { method: 'POST', body: { assistantId } });
     const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const url = `${proto}//${location.host}${tok.wsPath}?token=${encodeURIComponent(tok.token)}${speaker ? '&speaker=' + encodeURIComponent(speaker) : ''}`;
+    const url = `${proto}//${location.host}${tok.wsPath}?token=${encodeURIComponent(tok.token)}&assistant=${encodeURIComponent(assistantId)}`;
     const stream = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     await ctx.resume().catch(() => {});
@@ -1797,7 +1876,7 @@ async function startVoice() {
     mute.connect(ctx.destination);
     const ws = new WebSocket(url, 'xc-voice');
     ws.binaryType = 'arraybuffer';
-    v.stream = stream; v.ctx = ctx; v.src = src; v.proc = proc; v.analyser = analyser; v.ws = ws; v.active = true; v.paused = false; v.at = 0; v.speaker = speaker;
+    v.stream = stream; v.ctx = ctx; v.src = src; v.proc = proc; v.analyser = analyser; v.ws = ws; v.active = true; v.paused = false; v.at = 0; v.speaker = tok.speaker || '';
     const meterBuf = new Uint8Array(analyser.frequencyBinCount);
     proc.onaudioprocess = (e) => {
       if (state.voice.paused || ws.readyState !== 1) return;
@@ -1822,6 +1901,8 @@ async function startVoice() {
       if (m) m.style.width = width + '%';
     };
     ws.onopen = () => {
+      // 先把历史摘要递过去，服务端会等它到了再开豆包会话
+      try { ws.send(JSON.stringify({ type: 'context', history: voiceContext() })); } catch {}
       renderVoicePanel();
       $('#voiceTranscript').textContent = '正在听。说话结束后，最终文字会追加到目标卡或输入区。';
       toast('语音已连接；收起面板不会挂断');
@@ -1834,7 +1915,13 @@ async function startVoice() {
         if (msg.type === 'asr') {
           $('#voiceState').textContent = msg.final ? '已识别' : '正在听';
           $('#voiceTranscript').textContent = msg.text || '';
-          if (msg.final && msg.text) appendVoiceText(msg.text);
+          if (msg.final && msg.text) {
+            appendVoiceText(msg.text);
+            recordVoiceTurn('user', msg.text);
+          }
+        } else if (msg.type === 'text') {
+          // 助理说的话也要记进速记，否则下次只有半段对话
+          recordVoiceTurn('assistant', msg.text);
         } else if (msg.type === 'task_queued' || msg.type === 'task_updated') {
           refreshTasks().then(() => { renderTasks(); renderSidebar(); });
         } else if (msg.type === 'confirmation_required') {
@@ -1843,6 +1930,8 @@ async function startVoice() {
           toast(msg.message || msg.code || '语音错误', true);
         }
       } else {
+        // 助理开口：漫游形象切到说话帧
+        setRoamMood('talk');
         playPcm(new Uint8Array(e.data));
       }
     };
@@ -1915,7 +2004,7 @@ function stopVoice(show = true) {
 async function registerSW() {
   if (!('serviceWorker' in navigator)) return;
   try {
-    const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/workbench/' });
+    const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
     state.swReg = reg;
     if (reg.waiting) showUpdate(reg.waiting);
     reg.addEventListener('updatefound', () => {
@@ -1981,6 +2070,8 @@ function bindEvents() {
   $('#accountBtn').addEventListener('click', () => openSettings('about'));
   $('#avatarBtn').addEventListener('click', () => openSettings('about'));
   $('#installBtn').addEventListener('click', promptInstall);
+  $('#changeAssistantBtn')?.addEventListener('click', () => openLounge());
+  $('#assistantCard')?.addEventListener('click', () => openLounge());
   $('#logoutBtn').addEventListener('click', async () => {
     const ok = await askConfirm({ title: '退出登录', text: '退出会清理本机会话、草稿和私有缓存。', ok: '退出' });
     if (ok) await logoutAndClear();
@@ -1988,19 +2079,6 @@ function bindEvents() {
 
   $$('.nav-item').forEach((b) => b.addEventListener('click', () => { setView(b.dataset.view); closeDrawers(); }));
   $$('.tab[data-view]').forEach((b) => b.addEventListener('click', () => setView(b.dataset.view)));
-  $('#linearSyncBtn').addEventListener('click', async () => {
-    const btn = $('#linearSyncBtn');
-    btn.disabled = true;
-    try {
-      await api('/api/linear/sync', { method: 'POST', body: {} });
-      await loadLinear();
-      toast('已写入本地 linear_issues');
-    } catch (err) {
-      toast(err.message || '同步失败');
-    } finally {
-      btn.disabled = false;
-    }
-  });
   $('#searchInput').addEventListener('input', (e) => { state.search = e.target.value; renderCards(); });
 
   $('#cardsGrid').addEventListener('click', (e) => {
@@ -2068,6 +2146,31 @@ function bindEvents() {
   $('#voiceOrb').addEventListener('click', () => {}); // handled by pointerup
   $('#voiceClose').addEventListener('click', () => toggleVoicePanel(false));
   $('#voiceStart').addEventListener('click', startVoice);
+  setRoamClickHandler(() => {
+    if (state.voice?.active || (state.voice && !$('#voicePanel')?.hidden)) {
+      openVoiceMap();
+      return true;
+    }
+    return false;
+  });
+  document.addEventListener('focusin', (e) => {
+    const n = e.target;
+    if (!n) return;
+    if (n.tagName === 'INPUT' || n.tagName === 'TEXTAREA' || n.isContentEditable) guideRoamToInput();
+  });
+  $('#voiceMapList')?.addEventListener?.('click', () => {});
+
+  window.addEventListener('xc:lounge-start-voice', async (e) => {
+    const id = e.detail && e.detail.assistantId;
+    if (id) rememberAssistant(id);
+    try { toggleVoicePanel(true); } catch {}
+    try { guideRoamToInput(); } catch {}
+    try {
+      if (!state.voice?.active) await startVoice();
+    } catch (err) {
+      toast((err && err.message) || '语音启动失败', true);
+    }
+  });
   $('#voicePause').addEventListener('click', pauseVoice);
   $('#voiceStop').addEventListener('click', () => stopVoice(true));
   $('#speakerSelect').addEventListener('change', (e) => {
