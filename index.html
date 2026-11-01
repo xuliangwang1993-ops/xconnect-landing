@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>X-connect · 我搭台，你唱戏 — Your idea. We make it happen.</title>
-  <meta name="description" content="零负担创业，让好创意先落地。你带来想法，我们提供工具、算力和生产环境，从第一件样品到批量交付，陪你把产品做出来。">
+  <title>X-connect Factory OS</title>
+  <meta name="description" content="工厂操作系统：用树管理业务，用图看全局，用 AoI 核对证据。">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -16,18 +16,16 @@
         <img src="icon.svg" alt="" class="brand-mark" width="28" height="28">
         <div class="brand-text">
           <span class="brand-name">X-connect</span>
-          <span class="brand-tag" data-zh="委托生产与交付服务" data-en="Commissioned Production & Delivery">委托生产与交付服务</span>
+          <span class="brand-tag" data-zh="工厂操作系统" data-en="Factory OS">工厂操作系统</span>
         </div>
       </a>
 
       <nav class="topnav" aria-label="Primary Navigation">
-        <a href="#commission" class="nav-link" data-zh="立即委托" data-en="Start Now">立即委托</a>
-        <a href="#stage-map" class="nav-link" data-zh="生产关系图" data-en="Production Topology">生产关系图</a>
-        <a href="#catalog" class="nav-link" data-zh="样品与服务" data-en="Samples & Services">样品与服务</a>
-        <a href="#help" class="nav-link" data-zh="委托指南" data-en="Commission Guide">委托指南</a>
-        <a href="#about" class="nav-link" data-zh="关于与连通账" data-en="About & Live Ledger">关于与连通账</a>
-        <a href="/workbench" class="nav-link" data-zh="进入工作台" data-en="Workbench">进入工作台</a>
-        <a href="/aoi" class="nav-link" data-zh="AoI 看板" data-en="AoI Board">AoI 看板</a>
+        <a href="/tree" class="nav-link" data-zh="树" data-en="Tree">树</a>
+        <a href="/graph" class="nav-link" data-zh="图" data-en="Graph">图</a>
+        <a href="/aoi" class="nav-link" data-zh="AoI" data-en="AoI">AoI</a>
+        <a href="/workbench" class="nav-link" data-zh="工作台" data-en="Workbench">工作台</a>
+        <a href="#commission" class="nav-link" data-zh="委托" data-en="Commission">委托</a>
       </nav>
 
       <div class="topbar-actions">
@@ -49,24 +47,47 @@
     <section class="hero-stage" id="commission">
       <div class="hero-grid">
         <!-- 左侧：价值主张与快捷填入 -->
-        <div class="hero-copy">
+        <div class="hero-copy factory-os-hero">
           <div class="eyebrow-badge">
             <span class="eyebrow-dot"></span>
-            <span data-zh="零负担创业，让好创意先落地" data-en="Start creating, without the setup.">零负担创业，让好创意先落地</span>
+            <span data-zh="Factory OS" data-en="Factory OS">Factory OS</span>
           </div>
 
           <h1 class="hero-title">
-            <span class="title-primary" data-zh="我搭台，你唱戏。" data-en="Your idea. We make it happen.">我搭台，你唱戏。</span>
+            <span class="title-primary" data-zh="把想法放进一棵树，做到有据可查。" data-en="Put work on a tree. Keep every claim evidenced.">把想法放进一棵树，做到有据可查。</span>
           </h1>
 
-          <p class="hero-lead" data-zh="你带来想法，我们提供工具、算力和生产环境，从第一件样品到批量交付，陪你把产品做出来。无需自建设备、环境与复杂工具学习负担。" data-en="You bring the idea and direction; we provide the tools, compute, and production environment—from your first sample to batch delivery, without upfront hardware or tool-learning overhead.">
-            你带来想法，我们提供工具、算力和生产环境，从第一件样品到批量交付，陪你把产品做出来。无需自建设备、环境与复杂工具学习负担。
+          <p class="hero-lead" data-zh="这是工厂操作系统：树管业务推进，图看全局关系，AoI 核对 verified / unverified 证据。" data-en="A factory operating system: Tree for progress, Graph for structure, AoI for verified vs unverified evidence.">
+            这是工厂操作系统：树管业务推进，图看全局关系，AoI 核对 verified / unverified 证据。
           </p>
+
+          <div class="factory-os-links" role="navigation" aria-label="Factory modules">
+            <a class="factory-os-card" href="/tree">
+              <span class="fos-kicker">/tree</span>
+              <strong data-zh="树" data-en="Tree">树</strong>
+              <span data-zh="建节点、推进阶段：idea → verified" data-en="Create nodes and advance idea → verified">建节点、推进阶段：idea → verified</span>
+            </a>
+            <a class="factory-os-card" href="/graph">
+              <span class="fos-kicker">/graph</span>
+              <strong data-zh="图" data-en="Graph">图</strong>
+              <span data-zh="同一数据源，一键切 Tree | Graph" data-en="Same data; one-click Tree | Graph">同一数据源，一键切 Tree | Graph</span>
+            </a>
+            <a class="factory-os-card" href="/aoi">
+              <span class="fos-kicker">/aoi</span>
+              <strong data-zh="AoI" data-en="AoI">AoI</strong>
+              <span data-zh="看板与证据位，看得见交付依据" data-en="Board and evidence slots you can audit">看板与证据位，看得见交付依据</span>
+            </a>
+          </div>
+
+          <div class="factory-os-secondary">
+            <a href="#commission" class="fos-text-link" data-zh="继续委托样品 →" data-en="Continue to commission →">继续委托样品 →</a>
+            <a href="/workbench" class="fos-text-link" data-zh="进入工作台 →" data-en="Open Workbench →">进入工作台 →</a>
+          </div>
 
           <!-- 快速试样胶囊：点击直接填入右侧工作台 -->
           <div class="quick-prompts">
             <div class="quick-header">
-              <span class="quick-title" data-zh="现在就试一试（点击填入样品委托）：" data-en="Try right now (click to prefill a sample commission):">现在就试一试（点击填入样品委托）：</span>
+              <span class="quick-title" data-zh="快速试样（点一下填入右侧委托台）：" data-en="Quick samples (click to fill the commission desk):">快速试样（点一下填入右侧委托台）：</span>
             </div>
             <div class="quick-chips">
               <button type="button" class="prompt-chip" data-preset="menu">
@@ -85,18 +106,6 @@
                 <span class="chip-tag f-tag" data-zh="F·定制工单" data-en="F·Custom Brief">F·定制工单</span>
                 <span data-zh="200 张门店菜品图统一调色与多尺寸导出" data-en="Batch Color-Grade & Resize 200 Dish Photos">200 张门店菜品图统一调色与多尺寸导出</span>
               </button>
-            </div>
-          </div>
-
-          <!-- 诚实边界说明条：零负担 ≠ 免费 -->
-          <div class="honesty-strip">
-            <div class="honesty-item">
-              <strong data-zh="先样品，后批量" data-en="Sample First, Batch Later">先样品，后批量</strong>
-              <span data-zh="先做第一件可检验样品与小订单，验收通过再按配方批量放大。" data-en="Start with a verifiable single sample; scale to batches once accepted.">先做第一件可检验样品与小订单，验收通过再按配方批量放大。</span>
-            </div>
-            <div class="honesty-item">
-              <strong data-zh="零负担 ≠ 免费或包成功" data-en="Zero-Setup ≠ Free or Guaranteed">零负担 ≠ 免费或包成功</strong>
-              <span data-zh="免去前期设备与软件折腾；开工前透明确认费用与交付条件。" data-en="No upfront equipment or software hassle; fees and terms confirmed before work begins.">免去前期设备与软件折腾；开工前透明确认费用与交付条件。</span>
             </div>
           </div>
         </div>
