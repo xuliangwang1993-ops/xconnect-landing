@@ -10,21 +10,26 @@ import { answer as guideAnswer, parseGuide } from './guide/guide.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, '..');
-const STAGE_FILES = { 'index.html': 'text/html; charset=utf-8', 'styles.css': 'text/css; charset=utf-8',
-  'app.js': 'text/javascript; charset=utf-8', 'icon.svg': 'image/svg+xml', 'brand-x.png': 'image/png' };
+const STAGE_FILES = { 'index.html': 'text/html; charset=utf-8', 'portal.html': 'text/html; charset=utf-8', 'styles.css': 'text/css; charset=utf-8',
+  'app.js': 'text/javascript; charset=utf-8', 'factory-home.js': 'text/javascript; charset=utf-8', 'icon.svg': 'image/svg+xml', 'brand-x.png': 'image/png' };
 const GUIDE_FILES = { 'guide-widget.js': 'text/javascript; charset=utf-8' };
 export const GUIDE_TAG = '<script src="/guide/guide-widget.js" defer></script>';
 const GRAPH_FILES = { 'graph-view.js': 'text/javascript; charset=utf-8' };
 const AOI_FILES = { 'index.html': 'text/html; charset=utf-8', 'aoi-snapshot.js': 'text/javascript; charset=utf-8' };
 
 export const ROUTES = {
-  stage: '/', stageAssets: '/stage/', workbench: '/workbench', aoi: '/aoi', manifest: '/factory.json', guide: '/guide', graph: '/graph',
+  stage: '/', portal: '/portal', stageAssets: '/stage/', workbench: '/workbench', aoi: '/aoi', manifest: '/factory.json', guide: '/guide', graph: '/graph',
 };
 
 // Stage HTML uses relative asset paths; at "/" those would collide with the
 // Workbench's own /styles.css and /app.js, so rewrite them to /stage/.
 export function stageHtml() {
   const html = fs.readFileSync(path.join(REPO, 'index.html'), 'utf8');
+  return html.replace(/(href|src)="(styles\.css|app\.js(\?[^"]*)?|factory-home\.js|icon\.svg|brand-x\.png)"/g, '$1="/stage/$2"')
+    .replace('</body>', GUIDE_TAG + '\n</body>');
+}
+export function portalHtml() {
+  const html = fs.readFileSync(path.join(REPO, 'portal.html'), 'utf8');
   return html.replace(/(href|src)="(styles\.css|app\.js(\?[^"]*)?|icon\.svg|brand-x\.png)"/g, '$1="/stage/$2"')
     .replace('</body>', GUIDE_TAG + '\n</body>');
 }
@@ -72,10 +77,13 @@ export function createFactory({ env = process.env, fetchImpl = globalThis.fetch 
         .then((d) => send(res, req, 'application/json; charset=utf-8', JSON.stringify(d)));
     }
     if (p === '/' || p === '/index.html') return send(res, req, STAGE_FILES['index.html'], stageHtml());
+    if (p === '/portal' || p === '/portal/' || p === '/portal.html') return send(res, req, STAGE_FILES['portal.html'], portalHtml());
     if (p.startsWith('/stage/')) {
       const name = p.slice('/stage/'.length);
       if (!Object.hasOwn(STAGE_FILES, name)) return false;
       if (name === 'index.html') return send(res, req, STAGE_FILES[name], stageHtml());
+      if (name === 'portal.html') return send(res, req, STAGE_FILES[name], portalHtml());
+      if (name === 'factory-home.js') return send(res, req, STAGE_FILES[name], fs.readFileSync(path.join(REPO, 'factory-home.js')));
       return send(res, req, STAGE_FILES[name], fs.readFileSync(path.join(REPO, name)));
     }
     if (p === '/aoi' || p === '/aoi/') return send(res, req, AOI_FILES['index.html'], fs.readFileSync(path.join(HERE, 'aoi/index.html')));

@@ -21,9 +21,10 @@
 #xcg-form button{background:${C.amber};color:#16181d;border:0;border-radius:10px;padding:0 14px;font-weight:600;cursor:pointer}`;
   const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
   const full = location.pathname.replace(/\/$/, '') === '/guide';
-  const btn = document.createElement('button'); btn.id = 'xcg-btn'; btn.type = 'button'; btn.innerHTML = '📚 导览员';
+  const onHome = location.pathname.replace(/\/$/, '') === '' || location.pathname === '/';
+  const btn = document.createElement('button'); btn.id = 'xcg-btn'; btn.type = 'button'; btn.innerHTML = onHome ? '助手' : '📚 导览员';
   const panel = document.createElement('section'); panel.id = 'xcg-panel'; panel.setAttribute('aria-label', '工厂导览员');
-  panel.innerHTML = `<div id="xcg-head"><span>📚 <b>图书馆管理员</b> · 工厂导览</span><button type="button" aria-label="关闭">×</button></div>
+  panel.innerHTML = `<div id="xcg-head"><span>${onHome ? '<b>助手</b> · 一起搭 Factory OS' : '📚 <b>图书馆管理员</b> · 工厂导览'}</span><button type="button" aria-label="关闭">×</button></div>
 <div id="xcg-log"></div><form id="xcg-form"><input id="xcg-q" placeholder="问我：怎么发起委托？卡片怎么批准？" maxlength="200" autocomplete="off"><button>问</button></form>`;
   const mount = full ? (document.getElementById('guide-root') || document.body) : document.body;
   if (full) panel.classList.add('full', 'open'); else document.body.appendChild(btn);
@@ -41,20 +42,39 @@
     try { const r = await fetch('/guide/api/ask?q=' + encodeURIComponent(q)); const d = await r.json(); say(d.text, d.links || []); }
     catch { say('导览暂时连不上，请稍后再试。'); }
   }
-  const TOUR = [
+  function reveal(step) {
+    try { window.dispatchEvent(new CustomEvent('xc:factory-reveal', { detail: { step } })); } catch {}
+  }
+  const TOUR = onHome ? [
+    ['画布现在是空的。我是工厂助手，会像 Linear 一样，和你一起把 Factory OS 搭起来。', []],
+    ['先立住这一句话：把想法放进一棵树，做到有据可查。', []],
+    ['接下来放上三个入口：树管推进、图看关系、AoI 核对证据。', [{ label: '树', href: '/tree' }, { label: '图', href: '/graph' }, { label: 'AoI', href: '/aoi' }]],
+    ['骨架好了。你可以去工作台唱戏，或打开完整委托门面下样品单。', [{ label: '工作台', href: '/workbench' }, { label: '委托门面', href: '/portal' }]],
+    ['我只讲解和带路，不会替你下单、付款或改数据。有问题随时问我。', []],
+  ] : [
     ['你好，我是工厂的图书馆管理员 📚 带你 30 秒逛一圈：这里分三块，门面「搭台」、工作台「唱戏」、AoI 看板。', [{ label: '门面首页', href: '/' }]],
-    ['第一步，在门面「立即委托」说出想法。只要说清三件事：场景和不可改项、谁来用、怎样算验收合格。', [{ label: '立即委托', href: '/#commission' }, { label: '委托指南', href: '/#help' }]],
+    ['第一步，在门面「立即委托」说出想法。只要说清三件事：场景和不可改项、谁来用、怎样算验收合格。', [{ label: '委托门面', href: '/portal#commission' }, { label: '委托指南', href: '/portal#help' }]],
     ['第二步，进工作台：把想法整理成卡片，经过独立审阅，再由你亲手批准，然后执行。', [{ label: '工作台', href: '/workbench' }]],
     ['第三步，在 AoI 看板看能力快照。只有 AoI 给出证据才算 verified。', [{ label: 'AoI 看板', href: '/aoi' }]],
     ['我只讲解和带路，不会替你下单、付款或改数据。有问题随时点右下角问我！', []],
   ];
+  const HOME_REVEAL = [null, 'intro', 'modules', 'next', 'all'];
   function tour(i = 0) {
     const [t, l] = TOUR[i];
     const last = i === TOUR.length - 1;
+    if (onHome && HOME_REVEAL[i]) reveal(HOME_REVEAL[i]);
     const d = say(t, l, `<div class="xcg-tour"><span>导览 ${i + 1}/${TOUR.length}</span><span>${last ? '' : '<button class="xcg-chip" data-n>下一步</button> '}<button class="xcg-chip" data-x>${last ? '好的' : '跳过'}</button></span></div>`);
     d.querySelector('[data-n]')?.addEventListener('click', (e) => { e.target.closest('.xcg-tour').remove(); tour(i + 1); });
-    d.querySelector('[data-x]').addEventListener('click', (e) => { e.target.closest('.xcg-tour').remove(); try { localStorage.setItem('xcGuideToured', '1'); } catch {} chips(); });
-    if (last) try { localStorage.setItem('xcGuideToured', '1'); } catch {}
+    d.querySelector('[data-x]').addEventListener('click', (e) => {
+      e.target.closest('.xcg-tour').remove();
+      if (onHome) reveal('all');
+      try { localStorage.setItem('xcGuideToured', '1'); localStorage.setItem('xcFactoryHomeBuilt', '1'); } catch {}
+      chips();
+    });
+    if (last) {
+      if (onHome) reveal('all');
+      try { localStorage.setItem('xcGuideToured', '1'); localStorage.setItem('xcFactoryHomeBuilt', '1'); } catch {}
+    }
   }
   function chips() {
     const qs = ['工厂整体怎么用？', '怎么写好委托？', '怎么查询进展？', '卡片怎么批准？', 'AoI 看板是什么？'];
