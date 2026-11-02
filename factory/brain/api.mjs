@@ -156,6 +156,7 @@ export function createBrainApi({ brain, store, tree, getSession = () => null }) 
             timeoutMs: brain.timeoutMs,
             strongTimeoutMs: brain.strongTimeoutMs,
             contextChars: brain.contextChars,
+            memoryLayers: !!brain.memoryLayers, // 三层记忆是否开启（BRAIN_MEMORY_LAYERS=on）
             proactiveTimeoutMs: brain.proactiveTimeoutMs,
             stats: brain.stats,
             missing: brain.configured ? [] : ['BRAIN_MODEL_API_BASE', 'BRAIN_MODEL_API_KEY'],
