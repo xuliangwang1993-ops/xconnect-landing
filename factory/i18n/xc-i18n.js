@@ -15,7 +15,7 @@
     'home.empty': '还没有项目', 'home.notFound': '找不到这个项目', 'home.back': '返回项目', 'home.loadFail': '项目加载失败',
     'set.title': '设置', 'set.balance': '账户与余额', 'set.model': '助手与模型', 'set.voice': '语音', 'set.assistants': '小助手设定',
     'set.build': '制作你的小助手', 'set.keys': '语音克隆 · 流式语音 API Key（自带密钥）', 'set.imgkeys': '图像生成 API Key（文生图 / 图生图，自带密钥）', 'img.hint': '小助手输入区点 🎨 生图：输入描述即文生图，拖入/上传图片即图生图。费用由你直接付给服务商，我们只提供链接；密钥加密存于服务端。', 'set.other': '其他参数', 'set.lang': '语言', 'set.skin': 'Agentic 皮肤', 'skin.auto': '跟随聊天模型（自动）', 'skin.hint': '聊天里选的模型决定界面配色；也可以手动固定。同步到工厂所有页面和其他标签页。', 'skin.now': '当前',
-    'call.label': '呼叫', 'call.greet': '嗨，我是{name}！找我有什么事？', 'call.hint': '在左侧导航栏里找我聊，或去工作台开语音。',
+    'call.label': '呼叫', 'call.greet': '嗨，我是{name}！找我有什么事？', 'call.hint': '在导航栏里找我聊，或去工作台开语音。',
     'lounge.mine': '我的小助手', 'lounge.make': '制作你的小助手', 'lounge.slot': '槽位 {n} · 去设置导入素材',
   });
   addDict('en', 'English', {
