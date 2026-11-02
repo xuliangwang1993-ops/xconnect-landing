@@ -13,7 +13,24 @@
     ['settings', '/settings', '设置', 'Settings', () => /^\/(settings|account|assistants)/.test(p)],
   ];
   const html = () => S.map(([id, h, z, e, on]) => `<a href="${h}" data-nav="${id}"${on() ? ' class="on" aria-current="page"' : ''}>${zh() ? z : e}</a>`).join('');
+  // Top-left logo animation: rose-gold light sweep over the X-connect mark on load and hover,
+  // plus a soft breathing glow. Pure CSS mask on the existing PNG; off under prefers-reduced-motion.
+  function logoFx() {
+    if (document.getElementById('xc-logo-fx')) return;
+    const st = document.createElement('style'); st.id = 'xc-logo-fx';
+    st.textContent = `.brand{position:relative;display:inline-block;isolation:isolate}
+.brand::after{content:"";position:absolute;inset:0;pointer-events:none;-webkit-mask:url(/stage/brand-logo.png) left center/contain no-repeat;mask:url(/stage/brand-logo.png) left center/contain no-repeat;
+background:linear-gradient(105deg,transparent 30%,rgba(255,226,214,.95) 48%,rgba(255,255,255,.9) 50%,transparent 66%) -150% 0/250% 100% no-repeat;animation:xcSweep 1.6s .3s ease-out 1 both}
+.brand:hover::after{animation:xcSweep2 1.1s ease-out 1 both}
+.brand img{animation:xcGlow 5s ease-in-out 2s infinite}
+@keyframes xcSweep{to{background-position:150% 0}}
+@keyframes xcSweep2{from{background-position:-150% 0}to{background-position:150% 0}}
+@keyframes xcGlow{0%,100%{filter:drop-shadow(0 0 0 rgba(232,170,150,0))}50%{filter:drop-shadow(0 0 6px rgba(232,170,150,.45))}}
+@media (prefers-reduced-motion:reduce){.brand::after,.brand:hover::after,.brand img{animation:none!important}}`;
+    document.head.appendChild(st);
+  }
   function mount() {
+    logoFx();
     let nav = document.querySelector('header.app nav.tabs');
     if (!nav) {
       const bar = document.createElement('header');

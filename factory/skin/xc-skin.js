@@ -47,7 +47,27 @@
     apply(s); try { bc && bc.postMessage(s); } catch {}
     return s;
   }
-  window.XC_SKIN = { SKINS, fromModel, set, get: () => cur, onChange: (f) => listeners.add(f), norm };
+  // Theme extras (Settings › 主题 / Theme): light/dark + accent override. Factory pages only;
+  // accent is also saved to cloud settings (customPalette+accent) so the workbench follows.
+  const XKEY = 'xc_theme_extra_v1';
+  const xread = () => { try { return JSON.parse(localStorage.getItem(XKEY) || 'null') || {}; } catch { return {}; } };
+  const xst = document.createElement('style'); xst.textContent = 'html[data-xc-light]{--bg:#f6f6f7;--panel:#ffffff;--text:#16171a;--mute:#5d636e;--line:rgba(0,0,0,.10)}html[data-xc-light] body{background:var(--bg)!important;color:var(--text)!important}html[data-xc-light] .xc-navbar,html[data-xc-light] header.app{background:rgba(246,246,247,.92)!important}html[data-xc-light] select,html[data-xc-light] textarea,html[data-xc-light] input{background:#fff!important;color:#16171a!important}';
+  document.head.appendChild(xst);
+  function applyExtra(x) {
+    const host = document.querySelector('meta[name="xc-skin-host"]');
+    if (!host) { if (x.light) document.documentElement.dataset.xcLight = '1'; else delete document.documentElement.dataset.xcLight; }
+    if (!host && x.accent) document.documentElement.style.setProperty('--accent', x.accent); else if (!host) document.documentElement.style.removeProperty('--accent');
+  }
+  function setExtra(patch) {
+    const x = { ...xread(), ...patch }; try { localStorage.setItem(XKEY, JSON.stringify(x)); } catch {}
+    applyExtra(x); try { bc && bc.postMessage({ extra: x }); } catch {}
+    if ('accent' in patch) fetch('/api/settings', { method: 'PUT', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ customPalette: Boolean(x.accent), accent: x.accent || '' }) }).catch(() => {});
+    return x;
+  }
+  addEventListener('storage', (e) => { if (e.key === XKEY) applyExtra(xread()); });
+  if (bc) { const prev = bc.onmessage; bc.onmessage = (e) => { if (e.data && e.data.extra) applyExtra(e.data.extra); else prev && prev(e); }; }
+  applyExtra(xread());
+  window.XC_SKIN = { SKINS, fromModel, set, get: () => cur, onChange: (f) => listeners.add(f), norm, getExtra: xread, setExtra };
   apply(cur);
   // Signed in: the cloud settings (theme + model) win over the local copy.
   fetch('/api/settings', { credentials: 'same-origin' }).then((r) => (r.ok ? r.json() : null)).then((d) => {
