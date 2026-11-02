@@ -515,8 +515,10 @@ function writeCookieAssistant(id) {
    跨域（app / 工厂）跨设备靠这条，不靠 localStorage。 */
 export function rememberAssistant(id) {
   if (!id) return;
-  try { localStorage.setItem(LS_KEY, String(id)); } catch {}
+  let prev = '';
+  try { prev = localStorage.getItem(LS_KEY) || ''; localStorage.setItem(LS_KEY, String(id)); } catch {}
   writeCookieAssistant(id);
+  if (prev !== String(id)) { try { window.dispatchEvent(new CustomEvent('xc:assistant-changed', { detail: { assistantId: String(id) } })); } catch {} }
 }
 
 /* 供漫游角色取形象与名字，避免各处重复查表 */

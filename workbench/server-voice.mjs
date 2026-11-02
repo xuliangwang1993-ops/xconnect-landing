@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 8789;
 const UPSTREAM = process.env.DOUBAO_WS_URL || 'wss://openspeech.bytedance.com/api/v3/realtime/dialogue';
 const RESOURCE = process.env.DOUBAO_RESOURCE_ID || 'volc.speech.dialog';
 const BRIDGE_PATH = process.env.BOT_BRIDGE_PATH || 'voice-bridge-9c1e7a42-20261008';
-import { PERSONA_VOICES, isPersonaVoice, resolveVoice } from './persona-voices.mjs';
+import { PERSONA_VOICES, isPersonaVoice, resolveVoice, personaVoice } from './persona-voices.mjs';
 const BRIDGE_ROOT = '/bridge/' + BRIDGE_PATH;
 const tasks = [];
 const sessions = new Set();
@@ -279,7 +279,10 @@ api.on('upgrade', (req, sock, head) => {
     c.voiceClaims = a.claims;
     c.voiceSpeaker = u.searchParams.get('speaker') || '';
     c.voiceAssistant = u.searchParams.get('assistant') || '';
-    c.voiceResolved = '';
+    // 先用真相表里该角色的音色兜底：Supabase 查询是异步的，豆包会话可能先开，
+    // 以前这里是 '' → 落到 DOUBAO_SPEAKER/四毛，换人后第一句还是旧声音。
+    c.voiceResolved = personaVoice(c.voiceAssistant);
+    try { const q = new URL(req.url, 'http://x').searchParams; c.voiceGreet = String(q.get('greet') || '').slice(0, 80); } catch { c.voiceGreet = ''; }
     resolveVoice(c.voiceAssistant).then((v) => { c.voiceResolved = v; }).catch(() => {});
     wss.emit('connection', c);
   });
@@ -311,6 +314,11 @@ wss.on('connection', (client) => {
   up.on('message', (data) => {
     const p = parsePacket(data);
     if (!p) return;
+    if (p.event === 150 && client.voiceGreet && !client.voiceGreeted) {
+      // 换人后立刻用新角色的声音打招呼（SayHello）
+      client.voiceGreeted = true;
+      send(control(300, sid, { content: client.voiceGreet }));
+    }
     if (p.type === 15) {
       sendClient(client, { type: 'error', code: p.code, message: p.payload.toString() });
       return;

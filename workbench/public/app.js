@@ -1778,6 +1778,14 @@ function pcm16ToFloat(pcm) {
   return out;
 }
 
+// 换人：旧角色的声音当场停掉——停掉所有已排队的音源、清空排程，旧连接迟到的音频一律丢弃。
+function flushVoiceAudio() {
+  const v = state.voice;
+  for (const s of v.sources || []) { try { s.stop(); } catch {} try { s.disconnect(); } catch {} }
+  v.sources = [];
+  v.at = 0;
+}
+
 function playPcm(bytes) {
   const v = state.voice;
   if (!v.ctx) return;
@@ -1791,6 +1799,20 @@ function playPcm(bytes) {
   const at = Math.max(v.ctx.currentTime + 0.02, v.at || 0);
   src.start(at);
   v.at = at + buffer.duration;
+  (v.sources ||= []).push(src);
+  src.onended = () => { const i = v.sources.indexOf(src); if (i >= 0) v.sources.splice(i, 1); };
+}
+
+// 语音进行中换了助理：立刻停旧声音、断旧会话，用新角色的音色重开并打招呼。
+async function switchVoiceAssistant(id) {
+  const v = state.voice;
+  if (!id || !v.active || v.assistantId === id || v.switching) return;
+  v.switching = true;
+  try {
+    flushVoiceAudio();
+    stopVoice(false);
+    await startVoice({ greet: true });
+  } finally { v.switching = false; }
 }
 
 /* ---------------- 语音速记：跟着助理走，存在账号里 ---------------- */
@@ -1873,7 +1895,7 @@ function guideRoamToInput() {
   else parkDefault();
 }
 
-async function startVoice() {
+async function startVoice(opts = {}) {
   const v = state.voice;
   if (v.active) return;
   if (!navigator.mediaDevices?.getUserMedia) return toast('这个浏览器没有麦克风接口', true);
@@ -1884,7 +1906,7 @@ async function startVoice() {
     guideRoamToInput();
     const tok = await api('/api/voice-token', { method: 'POST', body: { assistantId } });
     const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const url = `${proto}//${location.host}${tok.wsPath}?token=${encodeURIComponent(tok.token)}&assistant=${encodeURIComponent(assistantId)}`;
+    const url = `${proto}//${location.host}${tok.wsPath}?token=${encodeURIComponent(tok.token)}&assistant=${encodeURIComponent(assistantId)}${opts.greet ? '&greet=' + encodeURIComponent((/^zh/.test(navigator.language || 'zh') ? '我是' + (nameFor(assistantId) || '') + '，换我来了。' : 'Hi, ' + (nameFor(assistantId) || 'I') + ' here.')) : ''}`;
     const stream = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     await ctx.resume().catch(() => {});
@@ -1900,7 +1922,7 @@ async function startVoice() {
     mute.connect(ctx.destination);
     const ws = new WebSocket(url, 'xc-voice');
     ws.binaryType = 'arraybuffer';
-    v.stream = stream; v.ctx = ctx; v.src = src; v.proc = proc; v.analyser = analyser; v.ws = ws; v.active = true; v.paused = false; v.at = 0; v.speaker = tok.speaker || '';
+    v.stream = stream; v.ctx = ctx; v.src = src; v.proc = proc; v.analyser = analyser; v.ws = ws; v.active = true; v.paused = false; v.at = 0; v.sources = []; v.assistantId = assistantId; v.speaker = tok.speaker || '';
     const meterBuf = new Uint8Array(analyser.frequencyBinCount);
     proc.onaudioprocess = (e) => {
       if (state.voice.paused || ws.readyState !== 1) return;
@@ -1955,13 +1977,14 @@ async function startVoice() {
         }
       } else {
         // 助理开口：漫游形象切到说话帧
+        if (v.ws !== ws) return; // 旧会话迟到的音频：丢弃
         setRoamMood('talk');
         playPcm(new Uint8Array(e.data));
       }
     };
     ws.onerror = () => toast('语音连接出错；请检查令牌和网络', true);
     ws.onclose = () => {
-      if (v.active) {
+      if (v.active && v.ws === ws) {
         stopVoice(false);
         $('#voiceState').textContent = '已断开';
       }
@@ -2014,6 +2037,7 @@ function stopVoice(show = true) {
   try { v.proc?.disconnect(); } catch {}
   try { v.src?.disconnect(); } catch {}
   try { v.stream?.getTracks().forEach((t) => t.stop()); } catch {}
+  flushVoiceAudio();
   try { v.ctx?.close(); } catch {}
   v.ws = null; v.proc = null; v.src = null; v.stream = null; v.ctx = null; v.analyser = null;
   v.at = 0;
@@ -2184,9 +2208,11 @@ function bindEvents() {
   });
   $('#voiceMapList')?.addEventListener?.('click', () => {});
 
+  window.addEventListener('xc:assistant-changed', (e) => { switchVoiceAssistant(e.detail && e.detail.assistantId); });
   window.addEventListener('xc:lounge-start-voice', async (e) => {
     const id = e.detail && e.detail.assistantId;
     if (id) rememberAssistant(id);
+    if (id && state.voice?.active && state.voice.assistantId !== id) { await switchVoiceAssistant(id); return; }
     try { toggleVoicePanel(true); } catch {}
     try { guideRoamToInput(); } catch {}
     try {
