@@ -16,6 +16,7 @@ import { fileURLToPath } from 'node:url';
 
 import { VOICE_LIST } from './persona-voices.mjs';
 import { handleImageRoutes } from './image-gen.mjs';
+import { promoAppendix } from './promo.mjs';
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.join(ROOT, 'public');
 const BUILD = process.env.BUILD_ID || (process.env.RENDER_GIT_COMMIT || '').slice(0, 10) || 'dev';
@@ -1168,7 +1169,8 @@ export function createWorkbench({ tasks, broadcast }) {
         .slice(-40)
         .map((m) => ({ role: m.role, content: clampText(m.content, 12000) }));
       if (!messages.some((m) => m.role === 'user')) return fail(res, 400, 'message_required', '没有要发送的内容');
-      const system = [persona && persona.system_prompt, clampText(body.system || '', 6000), clampText(body.handoff || '', 4000), langLine(body.lang)].filter(Boolean).join('\n\n');
+      let promo = ''; try { promo = promoAppendix((persona && persona.id) || String(body.assistantId || ''), body.lang); } catch {}
+      const system = [persona && persona.system_prompt, clampText(body.system || '', 6000), clampText(body.handoff || '', 4000), langLine(body.lang), promo].filter(Boolean).join('\n\n');
       const temporary = Boolean(body.temporary);
       const convId = clampText(body.conversationId || '', 40);
       const upstreamMessages = [

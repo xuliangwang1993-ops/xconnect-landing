@@ -1,4 +1,5 @@
 import http from 'node:http';
+import { promoAppendix } from './promo.mjs';
 import { randomUUID, createPublicKey, verify as verifySignature } from 'node:crypto';
 import { gzipSync, gunzipSync } from 'node:zlib';
 import WebSocket, { WebSocketServer } from 'ws';
@@ -61,7 +62,9 @@ function parsePacket(input) {
   return { type, serial, event, sid, payload };
 }
 
-function sessionConfig(speaker, resolved, lang = '') {
+function voicePromo(id, lang) { try { return promoAppendix(id, lang, { voice: true }); } catch { return ''; } }
+
+function sessionConfig(speaker, resolved, lang = '', assistantId = '') {
   // 角色音色优先（Supabase/真相表），其次客户端传的白名单音色，再其次 env，最后四毛默认。
   const chosen = (isPersonaVoice(resolved) && resolved)
     || (SPEAKER_IDS.has(speaker) && speaker)
@@ -72,7 +75,7 @@ function sessionConfig(speaker, resolved, lang = '') {
     audio: { format: 'pcm', sample_rate: 16000, channels: 1, codec: 'raw' },
     dialog: {
       bot_name: process.env.DOUBAO_BOT_NAME || '助手',
-      system_role: [process.env.DOUBAO_SYSTEM_ROLE || '你是一个简洁、友好的中文语音助手。用户明确要求查数据、跑分析、检查项目或查看状态时派给后台电脑。改代码、写文件、删除、付款、发消息、生产部署等操作必须先确认。', langLine(lang)].filter(Boolean).join('\n\n'),
+      system_role: [process.env.DOUBAO_SYSTEM_ROLE || '你是一个简洁、友好的中文语音助手。用户明确要求查数据、跑分析、检查项目或查看状态时派给后台电脑。改代码、写文件、删除、付款、发消息、生产部署等操作必须先确认。', langLine(lang), voicePromo(assistantId, lang)].filter(Boolean).join('\n\n'),
       speaking_style: '自然简洁',
       extra: {},
     },
@@ -321,7 +324,7 @@ wss.on('connection', (client) => {
       return;
     }
     if (!started && p.event === 50) {
-      send(control(100, sid, sessionConfig(client.voiceSpeaker, client.voiceResolved, client.voiceLang)));
+      send(control(100, sid, sessionConfig(client.voiceSpeaker, client.voiceResolved, client.voiceLang, client.voiceAssistant)));
       started = true;
       return;
     }

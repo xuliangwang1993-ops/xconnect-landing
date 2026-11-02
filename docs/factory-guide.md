@@ -68,6 +68,11 @@
 链接: 工作台=/workbench
 `/slack/*` 可以把 Slack 消息变成卡片，需要服务端配置 Slack 密钥后才能用。
 
+## AoI 是什么意思（企业文化）
+关键词: aoi 含义 意思 合 和 文化 connect 名字 为什么叫
+链接: AoI 看板=/aoi
+AoI 永远写作 A-o-I。上面一个 A，下面一个 o，长得就像中文的「合」字——上面「人」像 A，下面「口」像 o（不是装东西的「盒」）。它的意思是「和」：不是 merge 那种硬凑，是人与机器终于在同一个视角上，把一件事从想法做到交付，全程看得见、有证据。X-Connect 的 connect，connect 的就是这个。
+
 ## AoI 能力看板
 关键词: aoi 看板 能力 快照 snapshot verified 验证 证据 m11 节点
 链接: AoI 看板=/aoi

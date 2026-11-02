@@ -28,7 +28,7 @@
     const beats = KB.intro.beats.map((b) => L(b) + (capStatus(b.cap) === 'soon' ? U('soon') : '')).join(lang() === 'en' ? ' ' : '');
     return L(p.opener) + (lang() === 'en' ? ' ' : '') + beats;
   }
-  const fill = (s) => String(s).replace(/\{name\}/g, persona().nameText);
+  const fill = (s) => String(s).replace(/\{name\}/g, persona().nameText).replace(/\{aoi\}/g, KB.aoi ? L(KB.aoi.text) : '');
   function css() {
     if (document.getElementById('xct-css')) return;
     const st = document.createElement('style'); st.id = 'xct-css';
