@@ -72,7 +72,7 @@ export function createFactory({ env = process.env, fetchImpl = globalThis.fetch,
     if (handleTree(req, res, tree)) return true;
     { const tp = new URL(req.url, 'http://localhost').pathname;
       if ((tp === '/tree' || tp === '/tree/') && (req.method === 'GET' || req.method === 'HEAD'))
-        return send(res, req, 'text/html; charset=utf-8', fs.readFileSync(path.join(HERE, 'tree/index.html'), 'utf8').replace('</body>', GUIDE_TAG + '\n</body>')); }
+        return send(res, req, 'text/html; charset=utf-8', fs.readFileSync(path.join(HERE, 'tree/index.html'), 'utf8') + '\n' + GUIDE_TAG); }
     if (req.method !== 'GET' && req.method !== 'HEAD') return false;
     const p = new URL(req.url, 'http://localhost').pathname;
     if (p === '/guide' || p === '/guide/') return send(res, req, 'text/html; charset=utf-8', fs.readFileSync(path.join(HERE, 'guide/index.html')));
