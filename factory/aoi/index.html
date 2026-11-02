@@ -15,13 +15,17 @@ header a{color:#9fe870;text-decoration:none}main{padding:20px;display:grid;gap:1
 .fn{cursor:pointer}.fn:hover,.fn.sel{background:#161b22}.st.verified{background:#12331a;color:#9fe870}
 #tabs button{background:#161b22;color:#e8eaed;border:1px solid #2a2f36;border-radius:8px;padding:6px 14px;cursor:pointer}#tabs button.on{border-color:#9fe870;color:#9fe870}
 #ev{position:fixed;right:0;top:0;bottom:0;width:min(420px,90vw);background:#111418;border-left:1px solid #333;padding:16px;overflow:auto;display:none}#ev.open{display:block}
+details.tn{margin-left:16px}details.tn>summary{cursor:pointer;padding:3px 0;list-style:none}details.tn>summary::before{content:'▸ ';color:#8a9099}details.tn[open]>summary::before{content:'▾ '}
+.leaf{margin-left:16px;padding:3px 0 3px 14px;cursor:pointer}.nl{cursor:pointer}.nl.sel,.leaf.sel{background:#1d2a1a;outline:1px solid #9fe870;border-radius:4px}
+#gsvg{width:100%;height:auto;background:#0f1216;border:1px solid #222;border-radius:12px}#gsvg line{stroke:#2f3640}#gsvg g{cursor:pointer}#gsvg text{fill:#c9ced6;font-size:11px}#gsvg circle.sel{stroke:#9fe870;stroke-width:3}
+#ev .acts a{display:inline-block;margin:4px 8px 4px 0;padding:4px 10px;border:1px solid #2a2f36;border-radius:8px;color:#9fe870;text-decoration:none}
 </style>
 </head>
 <body>
-<header><strong>AoI 能力看板</strong><a href="/">← 搭台首页</a><a href="/workbench">工作台 →</a>
+<header><strong>AoI 能力看板</strong><a href="/" id="backHome" style="border:1px solid #2a2f36;border-radius:8px;padding:4px 10px">← 返回主菜单</a><a href="/aoi?view=tree">Tree</a><a href="/aoi?view=graph">Graph</a><a href="/workbench">工作台 →</a>
 <span class="muted" id="meta"></span></header>
 <div id="banner" class="banner fixture">加载中…</div>
-<nav id="tabs" style="display:flex;gap:8px;padding:10px 20px 0"><button data-t="struct">结构</button><button data-t="live">实时快照</button></nav>
+<nav id="tabs" style="display:flex;gap:8px;padding:10px 20px 0"><button data-t="tree">Tree 大树</button><button data-t="graph">Graph 气泡</button><button data-t="live">实时快照</button></nav>
 <aside id="ev"></aside>
 <main id="out"><p class="muted">加载中…</p></main>
 <script type="module">
@@ -50,7 +54,7 @@ function showEv(id) {
    <h4>上游边</h4>${inEdges.map((e) => `<div class="muted">${esc(e.from_id)} —${esc(e.relation)}→ · evidence_status=${esc(e.evidence_status)}</div>`).join('') || '<p class="muted">无</p>'}`;
   document.getElementById('evx').onclick = () => { p.className = ''; };
 }
-out.addEventListener('click', (e) => { const d = e.target.closest('.fn'); if (d) showEv(d.dataset.id); });
+out.addEventListener('click', (e) => { const d = e.target.closest('.fn'); if (d && st.view === 'live') showEv(d.dataset.id); });
 function render(snap, label) {
   SNAP = snap;
   document.getElementById('meta').textContent = `${label} · mode=${snap.mode} · ${snap.nodes.length} 节点 · ${snap.edges.length} 边 · verified 仅凭 AoI 证据`;
@@ -61,30 +65,73 @@ function render(snap, label) {
       fns.map((f) => `<div class="fn" data-id="${esc(f.id)}"><span>${esc(f.label)}</span><span class="st ${esc(f.state)}">${esc(f.state)} · ${esc(f.wb_status ?? '')}</span></div>`).join('') + '</section>';
   }).join('') + `<details><summary>CapabilitySnapshot JSON</summary><pre>${esc(JSON.stringify(snap, null, 1))}</pre></details>`;
 }
-let LIVE = null, STRUCT = null, TREE = null, WHY = '';
-function renderTree(t) {
-  const kids = new Map(); const ids = new Set(t.nodes.map((n) => n.id));
-  for (const n of t.nodes) { const k = n.parent_id && ids.has(n.parent_id) ? n.parent_id : ''; if (!kids.has(k)) kids.set(k, []); kids.get(k).push(n); }
-  const li = (n, d) => `<div class="fn" style="padding-left:${d * 18}px;cursor:default"><span>${d ? '└ ' : ''}${esc(n.title || n.id)} <span class="muted">${esc(n.kind || '')}</span></span><span class="st">${esc(n.status || 'idea')}</span></div>` + (d < 8 ? (kids.get(n.id) || []).map((c) => li(c, d + 1)).join('') : '');
-  document.getElementById('meta').textContent = `结构 · work_nodes (${esc(t.source || '')}) · ${t.nodes.length} 节点`;
-  out.innerHTML = '<section class="goal"><h3>工厂结构树 <a href="/graph" style="font-size:12px">Graph 视图 →</a></h3>' + (kids.get('') || []).map((n) => li(n, 0)).join('') + '</section>';
+let LIVE = null, TREE = { nodes: [], edges: [] }, WHY = '';
+const Q = new URLSearchParams(location.search);
+const st = { view: Q.get('view'), node: Q.get('node') };
+const byId = () => new Map(TREE.nodes.map((n) => [n.id, n]));
+const kidsOf = (id) => TREE.nodes.filter((n) => (n.parent_id || null) === id);
+function project(n) { const m = byId(); let c = n, g = 0; while (c && g++ < 20) { if (c.kind === 'project') return c; c = m.get(c.parent_id); } return null; }
+function wbUrl(n) { const p = project(n); return p ? '/workbench/?project=' + encodeURIComponent(p.title || p.id) + '&node=' + encodeURIComponent(n.id) : null; }
+function sync() { const u = new URL(location.href); u.searchParams.set('view', st.view); st.node ? u.searchParams.set('node', st.node) : u.searchParams.delete('node'); history.replaceState(null, '', u); }
+const COLOR = { project: '#9fe870', branch: '#70b8ff', ticket: '#ffcf70' };
+function nodePanel(n) {
+  const p = document.getElementById('ev'); if (!n) { p.className = ''; return; }
+  const other = st.view === 'graph' ? 'tree' : 'graph', wb = wbUrl(n);
+  p.className = 'open';
+  p.innerHTML = `<button id="evx">关闭</button><h3>${esc(n.title || n.id)}</h3><p class="muted">id: ${esc(n.id)} · ${esc(n.kind || '')} · ${esc(n.status || '')}</p>
+   <p><span class="st unverified">✖ 未验证 — 结构节点无 AoI 证据链</span></p>
+   <div class="acts"><a id="jump" href="/aoi?view=${other}&node=${encodeURIComponent(n.id)}">在 ${other === 'graph' ? 'Graph' : 'Tree'} 中查看</a>${wb ? `<a id="towb" href="${esc(wb)}">打开 Workbench（${esc(project(n).title)}）</a>` : '<span class="muted">无对应 Workbench 项目</span>'}</div>
+   <h4>子节点 (${kidsOf(n.id).length})</h4>${kidsOf(n.id).map((c) => `<div class="leaf" data-id="${esc(c.id)}">${esc(c.title)}</div>`).join('') || '<p class="muted">无</p>'}`;
+  document.getElementById('evx').onclick = () => { st.node = null; sync(); show(st.view); };
+  document.getElementById('jump').onclick = (e) => { e.preventDefault(); show(other); };
+}
+function renderTreeView() {
+  const sel = st.node, m = byId(), open = new Set(); let c = m.get(sel); while (c) { open.add(c.id); c = m.get(c.parent_id); }
+  const roots = TREE.nodes.filter((n) => !n.parent_id || !m.has(n.parent_id));
+  const li = (n, d) => { const k = kidsOf(n.id), lab = `<span class="nl ${n.id === sel ? 'sel' : ''}" data-id="${esc(n.id)}" style="color:${COLOR[n.kind] || '#e8eaed'}">${esc(n.title || n.id)}</span> <span class="muted">${esc(n.kind || '')} · ${esc(n.status || '')}</span>`;
+    return k.length && d < 10 ? `<details class="tn" ${open.has(n.id) || d === 0 ? 'open' : ''}><summary>${lab}</summary>${k.map((x) => li(x, d + 1)).join('')}</details>` : `<div class="leaf ${n.id === sel ? 'sel' : ''}" data-id="${esc(n.id)}">${lab}</div>`; };
+  document.getElementById('meta').textContent = `Tree · work_nodes (${TREE.source || ''}) · ${TREE.nodes.length} 节点 · 与 Graph 同一节点 id`;
+  out.innerHTML = '<section class="goal"><h3>AoI 大树（可折叠）</h3>' + roots.map((n) => li(n, 0)).join('') + '</section>';
+  const e = out.querySelector('.sel'); if (e) e.scrollIntoView({ block: 'center' });
+}
+function renderGraphView() {
+  const m = byId(), depth = (n) => { let d = 0, c = n; while (c && c.parent_id && m.has(c.parent_id) && d < 10) { d++; c = m.get(c.parent_id); } return d; };
+  const W = 900, H = 640, pos = {}, rings = {};
+  TREE.nodes.forEach((n) => { const d = depth(n); (rings[d] = rings[d] || []).push(n); });
+  Object.entries(rings).forEach(([d, arr]) => arr.forEach((n, i) => { const r = 70 + d * 120, a = 2 * Math.PI * i / arr.length + d * 0.4; pos[n.id] = [W / 2 + r * Math.cos(a), H / 2 + r * Math.sin(a) * 0.8]; }));
+  const R = { project: 22, branch: 15, ticket: 10 };
+  const edges = (TREE.edges || []).filter((e) => pos[e.from] && pos[e.to]);
+  document.getElementById('meta').textContent = `Graph · 气泡视图 · ${TREE.nodes.length} 节点 · ${edges.length} 边 · 与 Tree 同一节点 id`;
+  out.innerHTML = `<svg id="gsvg" viewBox="0 0 ${W} ${H}">` + edges.map((e) => `<line x1="${pos[e.from][0]}" y1="${pos[e.from][1]}" x2="${pos[e.to][0]}" y2="${pos[e.to][1]}"${e.type === 'blocks' ? ' stroke-dasharray="4"' : ''}/>`).join('') +
+    TREE.nodes.map((n) => `<g data-id="${esc(n.id)}"><circle cx="${pos[n.id][0]}" cy="${pos[n.id][1]}" r="${R[n.kind] || 10}" fill="${COLOR[n.kind] || '#888'}" fill-opacity=".55" class="${n.id === st.node ? 'sel' : ''}"/><text x="${pos[n.id][0] + (R[n.kind] || 10) + 3}" y="${pos[n.id][1] + 4}">${esc((n.title || n.id).slice(0, 14))}</text></g>`).join('') + '</svg>';
 }
 function show(t) {
+  st.view = t; sync();
   document.querySelectorAll('#tabs button').forEach((b) => b.classList.toggle('on', b.dataset.t === t));
+  const b = document.getElementById('banner');
   if (t === 'live') {
-    if (LIVE) { banner(true); render(LIVE.snapshot, 'AoI 实时 ' + (LIVE.endpoint || '')); if (!LIVE.snapshot.edges.length) out.insertAdjacentHTML('afterbegin', '<p class="muted">实时快照暂无能力/边数据（AoI staging 当前只有 ' + LIVE.snapshot.nodes.length + ' 个节点）。切到「结构」看工作台结构。</p>'); }
+    nodePanel(null);
+    if (LIVE) { banner(true); render(LIVE.snapshot, 'AoI 实时 ' + (LIVE.endpoint || '')); if (!LIVE.snapshot.edges.length) out.insertAdjacentHTML('afterbegin', '<p class="muted">实时快照暂无能力/边数据（AoI staging 当前只有 ' + LIVE.snapshot.nodes.length + ' 个节点）。切到 Tree / Graph 看结构。</p>'); }
     else { banner(false, WHY); out.innerHTML = '<p class="muted">AoI 实时快照不可用：' + esc(WHY) + '</p>'; }
-  } else {
-    const b = document.getElementById('banner'); b.className = 'banner fixture'; b.textContent = '结构展示（未经 AoI 证据验证，全部为 unverified/potential）';
-    if (STRUCT && STRUCT.nodes.length) render(STRUCT, '结构'); else if (TREE && TREE.nodes && TREE.nodes.length) renderTree(TREE); else out.innerHTML = '<p class="muted">暂无结构数据：工作台里还没有卡片。去 <a href="/workbench">工作台</a> 新建卡片，或看 <a href="/graph">Graph</a>。</p>';
+    return;
   }
+  b.className = 'banner fixture'; b.textContent = '结构展示 · Tree 与 Graph 为同一 AoI（同一节点 id，点节点可互跳 / 进 Workbench）· 未经 AoI 证据验证';
+  if (!TREE.nodes.length) { out.innerHTML = '<p class="muted">暂无结构数据（work_nodes 为空）。</p>'; return; }
+  t === 'graph' ? renderGraphView() : renderTreeView();
+  nodePanel(byId().get(st.node));
 }
 document.getElementById('tabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) show(b.dataset.t); });
+document.addEventListener('click', (e) => {
+  if (st.view === 'live') return;
+  const d = e.target.closest('[data-id]'); if (!d || e.target.closest('summary') && !e.target.closest('.nl')) return;
+  if (e.target.closest('.nl')) e.preventDefault();
+  st.node = d.dataset.id; show(st.view);
+});
 try {
   try { const l = await (await fetch('/aoi/api/snapshot', { credentials: 'same-origin' })).json(); if (l && l.source === 'aoi' && l.snapshot) LIVE = l; else WHY = (l && l.reason) || 'AoI 代理不可用'; } catch { WHY = 'AoI 代理不可用'; }
-  try { const r = await fetch('/api/cards', { credentials: 'same-origin' }); if (r.ok) STRUCT = cardsToSnapshot((await r.json()).cards || []); } catch {}
-  if (!STRUCT || !STRUCT.nodes.length) { try { TREE = await (await fetch('/graph/api/nodes')).json(); } catch {} }
-  show(LIVE && LIVE.snapshot.edges.length ? 'live' : 'struct');
+  try { TREE = await (await fetch('/graph/api/nodes')).json(); } catch {}
+  if (!['tree', 'graph', 'live'].includes(st.view)) st.view = LIVE && LIVE.snapshot.edges.length ? 'live' : 'tree';
+  show(st.view);
 } catch (e) { out.innerHTML = '<p>加载失败：' + esc(e.message || e) + '</p>'; }
 </script>
 </body>
