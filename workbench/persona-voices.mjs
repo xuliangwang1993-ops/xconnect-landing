@@ -4,18 +4,18 @@
 
 export const PERSONA_VOICES = Object.freeze({
   voice: 'zh_female_peiqi_uranus_bigtts', // 李黑鸭 Duck Lee
-  scribe: 'id_male_han_uranus_bigtts', // 斯巴达 Sparky
+  scribe: 'zh_male_qingcang_uranus_bigtts', // 斯巴达 Sparky
   brain: 'zh_male_lanyinmianbao_uranus_bigtts', // 四毛 Forty Cents
   deep: 'zh_male_sunwukong_uranus_bigtts', // 武天 WuTian
-  admin: 'en_male_father-christmas_uranus_bigtts', // 狒狒 Feifei
+  admin: 'zh_male_xionger_uranus_bigtts', // 狒狒 Feifei
 });
 
 export const VOICE_LIST = Object.freeze([
   { id: PERSONA_VOICES.voice, label: '佩奇 · 李黑鸭的声音', note: 'voice' },
-  { id: PERSONA_VOICES.scribe, label: 'Han · 斯巴达的声音', note: 'scribe' },
+  { id: PERSONA_VOICES.scribe, label: '擎苍 · 斯巴达的声音', note: 'scribe' },
   { id: PERSONA_VOICES.brain, label: '懒音绵宝 · 四毛的声音', note: 'brain' },
   { id: PERSONA_VOICES.deep, label: '孙悟空 · 武天的声音', note: 'deep' },
-  { id: PERSONA_VOICES.admin, label: 'Father Christmas · 狒狒的声音', note: 'admin' },
+  { id: PERSONA_VOICES.admin, label: '熊二 · 狒狒的声音', note: 'admin' },
 ]);
 
 export const PERSONA_IDS = Object.freeze(Object.keys(PERSONA_VOICES));
