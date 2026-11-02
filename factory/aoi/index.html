@@ -25,7 +25,7 @@ details.tn{margin-left:16px}details.tn>summary{cursor:pointer;padding:3px 0;list
 <header><strong>AoI 能力看板</strong>
 <span class="muted" id="meta"></span></header>
 <div id="banner" class="banner fixture">加载中…</div>
-<nav id="tabs" style="display:flex;gap:8px;padding:10px 20px 0"><button data-t="tree">Tree 大树</button><button data-t="graph">Graph 气泡</button><button data-t="live">实时快照</button></nav>
+<nav id="tabs" style="display:flex;gap:8px;padding:10px 20px 0"><button data-t="tree">树</button><button data-t="graph">气泡图</button><button data-t="live">实时快照</button></nav>
 <aside id="ev"></aside>
 <main id="out"><p class="muted">加载中…</p></main>
 <script type="module">
@@ -81,7 +81,7 @@ function nodePanel(n) {
   p.className = 'open';
   p.innerHTML = `<button id="evx">关闭</button><h3>${esc(n.title || n.id)}</h3><p class="muted">id: ${esc(n.id)} · ${esc(n.kind || '')} · ${esc(n.status || '')}</p>
    <p><span class="st unverified">✖ 未验证 — 结构节点无 AoI 证据链</span></p>
-   <div class="acts"><a id="jump" href="/aoi?view=${other}&node=${encodeURIComponent(n.id)}">在 ${other === 'graph' ? 'Graph' : 'Tree'} 中查看</a>${wb ? `<a id="towb" href="${esc(wb)}">打开 Workbench（${esc(project(n).title)}）</a>` : '<span class="muted">无对应 Workbench 项目</span>'}${project(n) ? `<a id="toproj" href="/?project=${encodeURIComponent(project(n).id)}">项目页</a>` : ''}</div>
+   <div class="acts"><a id="jump" href="/aoi?view=${other}&node=${encodeURIComponent(n.id)}">在 ${other === 'graph' ? 'Graph' : 'Tree'} 中查看</a>${wb ? `<a id="towb" href="${esc(wb)}">打开工作台（${esc(project(n).title)}）</a>` : '<span class="muted">无对应工作台项目</span>'}${project(n) ? `<a id="toproj" href="/?project=${encodeURIComponent(project(n).id)}">项目页</a>` : ''}</div>
    <h4>子节点 (${kidsOf(n.id).length})</h4>${kidsOf(n.id).map((c) => `<div class="leaf" data-id="${esc(c.id)}">${esc(c.title)}</div>`).join('') || '<p class="muted">无</p>'}`;
   document.getElementById('evx').onclick = () => { st.node = null; sync(); show(st.view); };
   document.getElementById('jump').onclick = (e) => { e.preventDefault(); show(other); };

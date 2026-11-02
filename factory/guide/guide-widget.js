@@ -98,8 +98,10 @@
   function callPet() {
     document.querySelectorAll('.xcg-pet,.xcg-bubble').forEach((n) => n.remove());
     const [av, name] = AV[picked()];
-    const img = document.createElement('img'); img.className = 'xcg-pet'; img.alt = name; img.src = `/characters/${av}/idle.webp`;
-    img.style.cssText = 'position:fixed;right:24px;bottom:72px;width:96px;height:96px;object-fit:contain;z-index:9998;cursor:pointer';
+    const img = document.createElement('img'); img.className = 'xcg-pet'; img.alt = (window.XC_I18N && window.XC_I18N.lang === 'en') ? ({ duck: 'Duck Lee', sparky: 'Sparky', rapper: 'Forty Cents', wutian: 'WuTian', feifei: 'Feifei' }[av] || name) : name; img.src = `/characters/${av}/idle.webp`;
+    // Same size/shadow/breakpoint as the Workbench roam pet (styles.css .roam-pet) so left and right assistants match.
+    const sz = matchMedia('(max-width: 640px)').matches ? 72 : 96;
+    img.style.cssText = `position:fixed;right:24px;bottom:72px;width:${sz}px;height:${sz}px;object-fit:contain;z-index:9998;cursor:pointer;filter:drop-shadow(0 10px 22px rgba(0,0,0,.35))`;
     img.onclick = () => { img.remove(); bub.remove(); };
     document.body.appendChild(img);
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -112,7 +114,7 @@
     const en = window.XC_I18N && window.XC_I18N.lang === 'en';
     bub.textContent = window.XC_TOUR && window.XC_TOUR.greetText() ? '' : tt('call.greet', { name: en ? ({ duck: 'Duck Lee', sparky: 'Sparky', rapper: 'Forty Cents', wutian: 'WuTian', feifei: 'Feifei' }[av]) : name }, `嗨，我是${name}！`);
     const viaTour = !!(window.XC_TOUR && window.XC_TOUR.greet()); // silent text greeting + Yes/No (no audio)
-    bub.style.cssText = `position:fixed;right:128px;bottom:140px;max-width:min(320px,calc(100vw - 150px));z-index:9999;background:${C.panel || '#16181d'};color:#ececef;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 12px;font:13px/1.4 system-ui,"PingFang SC",sans-serif`;
+    bub.style.cssText = `position:fixed;right:128px;bottom:140px;max-width:min(320px,calc(100vw - 150px));z-index:9999;background:${C.panel || '#16181d'};color:#ececef;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 12px;font:13px/1.4 var(--xc-font,system-ui,"PingFang SC",sans-serif);box-shadow:0 10px 22px rgba(0,0,0,.35)`;
     if (!viaTour) setTimeout(() => document.body.appendChild(bub), reduce ? 0 : 700);
     setTimeout(() => bub.remove(), window.XC_TOUR ? 16000 : 7000);
   }

@@ -22,9 +22,9 @@ details summary{cursor:pointer;color:var(--mute);font-size:12px}pre{white-space:
 <header class="app"><a class="brand" href="/" aria-label="X-connect 首页"><img src="/stage/brand-logo.png" alt="X-connect"></a>
 <nav class="tabs"><a href="/" data-nav="projects">项目</a><a href="/aoi?view=tree" data-nav="tree">项目树</a><a href="/aoi?view=live" data-nav="aoi">AoI</a><a href="/workbench/" data-nav="workbench">工作台</a><a href="/settings" data-nav="settings">设置</a></nav></header>
 <nav class="subtabs" style="display:flex;gap:6px;max-width:860px;margin:14px auto 0;padding:0 18px;font-size:13px"><a href="/settings" style="color:var(--mute)">设置 ›</a><a href="/account" style="padding:4px 10px;border-radius:6px;color:var(--mute)" data-i18n="acc.title">账户</a><a href="/assistants" style="padding:4px 10px;border-radius:6px;background:rgba(255,255,255,.08);color:var(--text)" data-i18n="asst.title">小助手</a><a href="/account#sPrefs" style="padding:4px 10px;border-radius:6px;color:var(--mute)" data-i18n="acc.prefs">偏好设置</a></nav>
-<main><h1 data-i18n="asst.title">小助手</h1><div class="sub">小助手设定、模型与语音、制作你的小助手、自带密钥（BYOK）。余额与充值在 <a href="/account" style="color:var(--accent)">账户</a> 页。数据来自 Workbench 登录会话（/api/bootstrap）与 Supabase 助手表；标「仅本机」的项只存在这台浏览器。</div>
+<main><h1 data-i18n="asst.title">小助手</h1><div class="sub">小助手设定、模型与语音、制作你的小助手、自带密钥（BYOK）。余额与充值在 <a href="/account" style="color:var(--accent)">账户</a> 页。数据来自工作台登录会话（/api/bootstrap）与 Supabase 助手表；标「仅本机」的项只存在这台浏览器。</div>
 <section id="sModel"><h2 data-i18n="set.model">助手与模型</h2><div id="model" class="k">加载中…</div></section>
-<section id="sSkin"><h2 data-i18n="set.skin">Agentic 皮肤</h2><div class="k">皮肤、明暗、强调色已统一到 <a href="/settings#theme" style="color:var(--accent)">设置 › 主题 Theme →</a></div><div id="skin" hidden></div></section>
+<section id="sSkin"><h2 data-i18n="set.skin">Agentic 皮肤</h2><div class="k">皮肤、明暗、强调色已统一到 <a href="/settings#theme" style="color:var(--accent)">设置 › 主题 →</a></div><div id="skin" hidden></div></section>
 <section id="sVoice"><h2 data-i18n="set.voice">语音</h2><div id="voice" class="k">加载中…</div></section>
 <section id="sAsst"><h2 data-i18n="set.assistants">小助手设定</h2><div id="asst" class="k">加载中…</div></section>
 <section id="build"><h2 data-i18n="set.build">制作你的小助手</h2><div id="make" class="k">加载中…</div></section>
@@ -43,8 +43,8 @@ async function putSettings(patch,el){try{const r=await fetch('/api/settings',{me
  if(!r.ok)throw 0;settings=(await r.json()).settings||settings;el&&(el.textContent='已保存');}catch{el&&(el.textContent='保存失败');}}
 async function load(){
  try{const r=await fetch('/api/bootstrap',{credentials:'same-origin'});if(r.status===401)throw 'login';if(!r.ok)throw 'http_'+r.status;boot=await r.json();}catch(e){boot=null;
-  const msg=e==='login'?'未登录 Workbench，余额与云端设置不可用。<a href="/workbench" style="color:var(--accent)">去登录 →</a>':'余额接口暂不可用（'+esc(e)+'）';
-  $('model').innerHTML=`<div class="na">需要登录 Workbench 后才能读取模型列表。</div>`;}
+  const msg=e==='login'?'未登录工作台，余额与云端设置不可用。<a href="/workbench" style="color:var(--accent)">去登录 →</a>':'余额接口暂不可用（'+esc(e)+'）';
+  $('model').innerHTML=`<div class="na">需要登录工作台 后才能读取模型列表。</div>`;}
  if(boot){settings=boot.settings||{};const b=boot.balance||{};
     const ms=(boot.models||[]).map((m)=>typeof m==='string'?m:(m.id||m.name));const cur=settings.model||boot.defaultModel||'';
   $('model').innerHTML=row('默认模型',`<select id="selM">${ms.map((m)=>`<option ${m===cur?'selected':''}>${esc(m)}</option>`).join('')}</select> <span class="k" id="mOk"></span>`)
@@ -61,7 +61,7 @@ async function load(){
 async function loadAsst(){let d;try{d=await (await fetch('/settings/api/assistants',{credentials:'same-origin'})).json();}catch{d={ok:false,error:'network'};}
  if(!d.ok){$('asst').innerHTML=`<div class="na">助手表暂不可用（${esc(d.error)}）</div>`;return;}
  const can=d.editable||[];const def=settings.assistantId||'';
- $('asst').innerHTML=(d.signedIn?'':'<div class="na" style="margin-bottom:8px">未登录：只读。登录 Workbench 后可改简介和发音人；当前助手只能在选人页更换。</div>')+d.assistants.map((a)=>`<div class="asst" data-id="${esc(a.id)}">
+ $('asst').innerHTML=(d.signedIn?'':'<div class="na" style="margin-bottom:8px">未登录：只读。登录工作台 后可改简介和发音人；当前助手只能在选人页更换。</div>')+d.assistants.map((a)=>`<div class="asst" data-id="${esc(a.id)}">
   <img src="${esc(/^https?:/.test(a.avatar||'')?a.avatar:'/characters/'+(a.avatar||'')+'/thumb.webp')}" alt="" onerror="this.style.visibility='hidden'">
   <div><div class="nm">${esc(a.name)} <span class="tag">${esc(a.id)}</span>${a.id===def?'<span class="tag" style="color:var(--ok)">默认</span>':''}</div>
   <div class="meta">${esc(a.role||'')}${a.model?' · 模型 '+esc(a.model):''}${a.memoryCount!=null?' · 记忆 '+a.memoryCount+' 条':''}</div>
@@ -78,7 +78,7 @@ async function loadAsst(){let d;try{d=await (await fetch('/settings/api/assistan
 const PROV=[{id:'doubao',name:'豆包 / 火山引擎 语音',links:[['控制台 · 创建应用拿 Key','https://console.volcengine.com/speech/app'],['声音复刻产品页','https://www.volcengine.com/product/voicecloning'],['声音复刻 API 文档','https://www.volcengine.com/docs/6561/1305191']],app:true},
  {id:'elevenlabs',name:'ElevenLabs',links:[['注册','https://elevenlabs.io/app/sign-up'],['Voice Lab（克隆）','https://elevenlabs.io/app/voice-lab'],['API Keys','https://elevenlabs.io/app/settings/api-keys']]}];
 let slots=[];
-async function loadMake(){if(!boot){$('make').innerHTML='<div class="na">登录 Workbench 后可制作自己的小助手（1 个专属槽位，和 5 个内置助手并列）。</div>';$('keys').innerHTML='<div class="na">登录后可添加密钥。</div>';return;}
+async function loadMake(){if(!boot){$('make').innerHTML='<div class="na">登录工作台 后可制作自己的小助手（1 个专属槽位，和 5 个内置助手并列）。</div>';$('keys').innerHTML='<div class="na">登录后可添加密钥。</div>';return;}
  try{slots=(await (await fetch('/api/custom-assistants',{credentials:'same-origin'})).json()).slots||[];}catch{slots=[];}
  slots=slots.slice(0,1);while(slots.length<1)slots.push({name:'',intro:'',persona:'',voice:'',materials:[]});
  const spk=(boot.voice&&boot.voice.speakers)||[];
@@ -93,7 +93,7 @@ async function loadMake(){if(!boot){$('make').innerHTML='<div class="na">登录 
    const r=await fetch('/api/custom-assistants',{method:'PUT',headers:{'content-type':'application/json'},credentials:'same-origin',body:JSON.stringify({slots:slots.slice(0,1)})});el.querySelector('.okmsg').textContent=r.ok?'已保存':'保存失败';};});
  loadKeys();loadImgKeys();if(/^#build/.test(location.hash)){const b=$('build');b&&b.scrollIntoView({block:'start'});const n=document.querySelector('#make .nm2');n&&n.focus({preventScroll:true});}}
 async function loadImgKeys(){let d={};try{d=await (await fetch('/api/image/providers',{credentials:'same-origin'})).json();}catch{}
- const ps=d.providers||[];if(!ps.length){$('imgk').textContent='登录 Workbench 后可管理图像密钥';return;}
+ const ps=d.providers||[];if(!ps.length){$('imgk').textContent='登录工作台 后可管理图像密钥';return;}
  $('imgk').innerHTML=ps.map((p)=>`<div class="asst" data-p="${p.id}"><div class="tag" style="height:fit-content">${p.user?'已存':p.server?'服务器':'未接'}</div><div><div class="nm">${esc(p.name)} ${p.i2i?'· 文生图+图生图':'· 仅文生图'}</div>
  <div class="meta">${p.links.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener" style="color:var(--accent)">${esc(t)} ↗</a>`).join(' · ')}</div>
  <div class="ctl"><input class="key" type="password" placeholder="API Key" autocomplete="off"><button class="primary sk">保存</button>${p.user?'<button class="dk">删除</button>':''}<span class="okmsg"></span></div></div></div>`).join('');

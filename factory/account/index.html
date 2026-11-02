@@ -30,7 +30,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;p
 <section id="sLedger"><h2 data-i18n="acc.ledger">余额变动记录（记账）</h2><div id="ledger" class="k">加载中…</div></section>
 <section id="sUsage"><h2 data-i18n="acc.usage">用量</h2><div id="usage" class="k">加载中…</div></section>
 <section id="topup"><h2 data-i18n="acc.topup">充值</h2><div id="top" class="k">加载中…</div></section>
-<section id="sPrefs"><h2 data-i18n="acc.prefs">偏好设置</h2><div id="prefs" class="k"><div class="row"><span class="k">语言 / Language</span><span class="v" data-xc-lang-slot></span></div>
+<section id="sPrefs"><h2 data-i18n="acc.prefs">偏好设置</h2><div id="prefs" class="k"><div class="row"><span class="k">语言</span><span class="v" data-xc-lang-slot></span></div>
 <div class="row"><span class="k">Agentic 皮肤 · 默认模型 · 语音 · 小助手设定 · 制作你的小助手 · 自带密钥（BYOK）</span><span class="v"><a href="/assistants" style="color:var(--accent)">去小助手页 →</a></span></div></div></section>
 </main>
 <script>
@@ -43,7 +43,7 @@ async function j(u){try{const r=await fetch(u,{credentials:'same-origin'});retur
 async function load(){
  const [acc,boot,vk,ik]=await Promise.all([j('/account/api/summary'),j('/api/bootstrap'),j('/api/voice-keys'),j('/api/image/providers')]);
  const a=acc.data;
- if(!a||!a.signedIn){const m='<div class="na">未登录 Workbench，账户数据不可用。<a href="/workbench" style="color:var(--accent)">去登录 →</a></div>';
+ if(!a||!a.signedIn){const m='<div class="na">未登录工作台，账户数据不可用。<a href="/workbench" style="color:var(--accent)">去登录 →</a></div>';
   ['info','bal','quota','ledger','usage'].forEach((id)=>$(id).innerHTML=m);
   $('top').innerHTML=row('SubRouter',`<a class="tbtn" href="https://subrouter.ai/console/topup" target="_blank" rel="noopener"><button class="primary">去 SubRouter 充值 ↗</button></a>`);return;}
  if(a.guest){const g='<div class="k">访客模式：无需登录即可使用聊天、语音、生图和制作小助手（访客有频率限制）。平台额度不对访客展示；想用自己的额度和记账，请在工作台用自己的 SubRouter / 网关密钥登录。</div>';
