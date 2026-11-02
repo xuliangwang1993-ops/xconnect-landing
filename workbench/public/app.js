@@ -1277,6 +1277,7 @@ async function sendChat() {
   const input = $('#composerInput');
   const text = input.value.trim();
   if (!text) return;
+  if (window.XC_TOUR?.pending && window.XC_TOUR.answer(text)) { input.value = ''; clearDraft(); return; }
   const chosenModel = activeModel()?.id || '';
   if (!chosenModel) {
     saveDraft(text);
@@ -1829,7 +1830,7 @@ document.addEventListener('xc:lang', async () => {
   const v = state.voice;
   if (!v || !v.active || v.switching) return;
   v.switching = true;
-  try { flushVoiceAudio(); stopVoice(false); await startVoice({ greet: true }); } finally { v.switching = false; }
+  try { flushVoiceAudio(); stopVoice(false); await startVoice(); /* silent reconnect: no SayHello until the user speaks */ } finally { v.switching = false; }
 });
 
 async function switchVoiceAssistant(id) {
@@ -1839,7 +1840,7 @@ async function switchVoiceAssistant(id) {
   try {
     flushVoiceAudio();
     stopVoice(false);
-    await startVoice({ greet: true });
+    await startVoice(); /* silent reconnect: no SayHello until the user speaks */
   } finally { v.switching = false; }
 }
 
@@ -1992,6 +1993,7 @@ async function startVoice(opts = {}) {
           if (msg.final && msg.text) {
             appendVoiceText(msg.text);
             recordVoiceTurn('user', msg.text);
+            try { window.XC_TOUR?.answer(msg.text); } catch {}
           }
         } else if (msg.type === 'text') {
           // 助理说的话也要记进速记，否则下次只有半段对话
@@ -2418,7 +2420,8 @@ boot();
     const avatar = avatarFor(id);
     if (avatar) { try { mountRoam(avatar, name); } catch {} }
     const zh = /^zh/.test(localStorage.getItem('xc_lang_v1') || navigator.language || '');
-    dropIn(zh ? `嗨，我是${name}！找我有什么事？` : `Hi, I’m ${name}! What can I do for you?`);
+    // Silent appear: text greeting bubble with Yes/No (xc-tour), no audio.
+    if (window.XC_TOUR && window.XC_TOUR.greet()) dropIn(''); else dropIn(zh ? `嗨，我来了。我是你的助手，我是${name}。要不要我现在带你看看？` : `Hi, I'm here. I'm your assistant, I'm ${name}. Want me to walk you through things now?`);
     if (state.voiceInfo?.available && !state.voice?.active) {
       try { toggleVoicePanel(true); await startVoice(); } catch (err) { toast((err && err.message) || '语音启动失败，先用文字聊', true); }
     }

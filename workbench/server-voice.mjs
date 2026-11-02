@@ -315,11 +315,7 @@ wss.on('connection', (client) => {
   up.on('message', (data) => {
     const p = parsePacket(data);
     if (!p) return;
-    if (p.event === 150 && client.voiceGreet && !client.voiceGreeted) {
-      // 换人后立刻用新角色的声音打招呼（SayHello）
-      client.voiceGreeted = true;
-      send(control(300, sid, { content: client.voiceGreet }));
-    }
+    // Silent on appear: no SayHello at session start; the assistant speaks only after the user does.
     if (p.type === 15) {
       sendClient(client, { type: 'error', code: p.code, message: p.payload.toString() });
       return;

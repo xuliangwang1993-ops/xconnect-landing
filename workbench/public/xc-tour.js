@@ -151,10 +151,46 @@
     if (/[?&]tour=([\w-]+)/.test(location.search)) return setTimeout(() => start(RegExp.$1), 900);
     if (t && s.active && s.active.id === t.id) return setTimeout(() => start(t.id, s.active.i), 900);
     const lounge = () => document.body.classList.contains('lounge-open');
-    const auto = () => { if (cur) return; if (lounge()) return setTimeout(auto, 1000); start(t.id); };
+    // First visit: silent text greeting (no audio); the tour starts only if the user says yes.
+    const auto = () => { if (cur || greetEl) return; if (lounge()) return setTimeout(auto, 1000); greet(); };
     if (t && t.trigger === 'first-visit' && !(s.done && s.done[t.id])) setTimeout(auto, 1500);
     setTimeout(launcher, 1200);
   }
-  window.XC_TOUR = { start, stop, openDesk, introText: () => (KB ? introText() : ''), get kb() { return KB; }, get active() { return cur && { id: cur.tour.id, i: cur.i }; }, reset: () => save({}) };
+  let greetEl = null, pending = false;
+  function greetText() { return fill(L(KB.greeting.text)); }
+  function bubble(html) {
+    css(); greetEl?.remove();
+    const b = document.createElement('div'); b.id = 'xct-greet'; b.setAttribute('role', 'status');
+    b.style.cssText = 'position:fixed;right:20px;bottom:150px;z-index:2147483150;width:min(320px,calc(100vw - 40px));background:#12151c;color:#ececef;border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:12px 14px;font:13.5px/1.6 -apple-system,"PingFang SC",sans-serif;box-shadow:0 16px 40px rgba(0,0,0,.45)';
+    b.innerHTML = html; document.body.appendChild(b); greetEl = b; return b;
+  }
+  // Text-only greeting bubble. Never plays audio; never posts into chat.
+  function greet() {
+    if (!KB || !KB.greeting) return false;
+    const p = persona(); const G = KB.greeting;
+    const b = bubble(`<div style="display:flex;gap:10px;align-items:flex-start"><img alt="" src="/characters/${esc(p.avatar)}/still.webp" style="width:36px;height:36px;border-radius:50%;object-fit:cover;background:#222"><div style="flex:1"><div style="font-size:11px;color:#9aa0aa">${esc(p.nameText)}</div><div data-g>${esc(greetText())}</div>
+<div style="display:flex;gap:6px;margin-top:8px"><button class="xct-btn pri" data-y>${esc(L(G.yes))}</button><button class="xct-btn" data-n>${esc(L(G.no))}</button></div></div></div>`);
+    b.querySelector('[data-y]').onclick = () => answer('yes');
+    b.querySelector('[data-n]').onclick = () => answer('no');
+    pending = true; const s = load(); s.greeted = Date.now(); save(s);
+    return true;
+  }
+  function decline() {
+    pending = false;
+    const t = pick(); const s = load(); s.done = s.done || {}; if (t) s.done[t.id] = Date.now(); s.declined = Date.now(); save(s);
+    const b = bubble(`<div>${esc(L(KB.greeting.decline))}</div>`);
+    setTimeout(() => { if (greetEl === b) { b.remove(); greetEl = null; } }, 6000);
+  }
+  // User reply (button, typed text, or voice transcript). Returns true if consumed.
+  function answer(text) {
+    if (!pending || !KB) return false;
+    const G = KB.greeting; const t = String(text || '');
+    const yes = t === 'yes' || new RegExp(G.yesWords, 'i').test(t);
+    const no = t === 'no' || new RegExp(G.noWords, 'i').test(t);
+    if (no) { decline(); return true; }
+    if (yes) { pending = false; greetEl?.remove(); greetEl = null; start(); return true; }
+    pending = false; greetEl?.remove(); greetEl = null; return false; // anything else: hand back to normal chat
+  }
+  window.XC_TOUR = { greet, answer, greetText: () => (KB ? greetText() : ''), get pending() { return pending; }, start, stop, openDesk, introText: () => (KB ? introText() : ''), get kb() { return KB; }, get active() { return cur && { id: cur.tour.id, i: cur.i }; }, reset: () => save({}) };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

@@ -85,7 +85,7 @@
   function open() { panel.classList.add('open'); if (!started) { started = true; let toured = false; try { toured = !!localStorage.getItem('xcGuideToured'); } catch {} toured ? chips() : tour(); } }
   btn.onclick = () => (panel.classList.contains('open') && !full ? panel.classList.remove('open') : open());
   panel.querySelector('#xcg-close').onclick = () => { if (full) location.href = '/'; else panel.classList.remove('open'); try { localStorage.setItem('xcGuideToured', '1'); } catch {} };
-  panel.querySelector('#xcg-form').onsubmit = (e) => { e.preventDefault(); const i = panel.querySelector('#xcg-q'); const q = i.value.trim(); if (q) { i.value = ''; ask(q); } };
+  panel.querySelector('#xcg-form').onsubmit = (e) => { e.preventDefault(); const i = panel.querySelector('#xcg-q'); const q = i.value.trim(); if (q) { i.value = ''; if (window.XC_TOUR && window.XC_TOUR.pending && window.XC_TOUR.answer(q)) return; ask(q); } };
 
   // 呼叫：小助手从顶部落下，停在右下角并主动问候（工厂页无语音会话 → 只用文字；不跳页）
   const AV = { voice: ['duck', '李黑鸭'], scribe: ['sparky', '斯巴达'], brain: ['rapper', '四毛'], deep: ['wutian', '武天'], admin: ['feifei', '狒狒'] };
@@ -110,9 +110,10 @@
     const bub = document.createElement('div'); bub.className = 'xcg-bubble';
     const tt = (k, v, fb) => (window.XC_I18N ? window.XC_I18N.t(k, v) : fb);
     const en = window.XC_I18N && window.XC_I18N.lang === 'en';
-    bub.textContent = tt('call.greet', { name: en ? ({ duck: 'Duck Lee', sparky: 'Sparky', rapper: 'Forty Cents', wutian: 'WuTian', feifei: 'Feifei' }[av]) : name }, `嗨，我是${name}！`) + ' ' + (window.XC_TOUR && window.XC_TOUR.introText() ? window.XC_TOUR.introText() : tt('call.hint', {}, ''));
+    bub.textContent = window.XC_TOUR && window.XC_TOUR.greetText() ? '' : tt('call.greet', { name: en ? ({ duck: 'Duck Lee', sparky: 'Sparky', rapper: 'Forty Cents', wutian: 'WuTian', feifei: 'Feifei' }[av]) : name }, `嗨，我是${name}！`);
+    const viaTour = !!(window.XC_TOUR && window.XC_TOUR.greet()); // silent text greeting + Yes/No (no audio)
     bub.style.cssText = `position:fixed;right:128px;bottom:140px;max-width:min(320px,calc(100vw - 150px));z-index:9999;background:${C.panel || '#16181d'};color:#ececef;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 12px;font:13px/1.4 system-ui,"PingFang SC",sans-serif`;
-    setTimeout(() => document.body.appendChild(bub), reduce ? 0 : 700);
+    if (!viaTour) setTimeout(() => document.body.appendChild(bub), reduce ? 0 : 700);
     setTimeout(() => bub.remove(), window.XC_TOUR ? 16000 : 7000);
   }
   { // 呼叫按钮只在导航员窗口内（打开面板后可见），不再有右下角并列入口

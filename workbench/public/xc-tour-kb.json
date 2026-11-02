@@ -666,5 +666,26 @@
     "done": false
    }
   ]
+ },
+ "greeting": {
+  "_doc": "Silent text greeting bubble shown when the assistant appears (first visit or 呼叫). No audio. Yes → start tour; No → decline line, stay idle.",
+  "text": {
+   "zh": "嗨，我来了。我是你的助手，我是{name}。我是你的管家，也是你的导游，我来给你介绍这里的东西。要不要我现在带你看看？",
+   "en": "Hi, I'm here. I'm your assistant, I'm {name}. I'm your butler and your tour guide, here to introduce things to you. Want me to walk you through them now?"
+  },
+  "yes": {
+   "zh": "好呀，带我看看",
+   "en": "Yes, show me"
+  },
+  "no": {
+   "zh": "不用了",
+   "en": "No thanks"
+  },
+  "decline": {
+   "zh": "没问题，以后有什么不懂的随时问我。",
+   "en": "No problem. If anything's unclear later, just ask me."
+  },
+  "yesWords": "^\\s*(要|好|好的|好呀|好啊|可以|行|嗯|带我|看看|现在|yes|yeah|yep|sure|ok|okay|please|let'?s go)",
+  "noWords": "(不用|不要|不需要|算了|下次|以后再|^\\s*no\\b|nope|not now|no thanks|later)"
  }
 }
