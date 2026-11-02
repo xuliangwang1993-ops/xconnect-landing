@@ -1,0 +1,9 @@
+{"nodes":[
+{"id":"factory","parent_id":null,"title":"X-Connect 工厂","kind":"root"},
+{"id":"coo-23","parent_id":"factory","title":"获客过程","kind":"stage"},
+{"id":"coo-18","parent_id":"factory","title":"工厂结构","kind":"stage"},
+{"id":"coo-19","parent_id":"coo-18","title":"业务进树","kind":"stage"},
+{"id":"coo-20","parent_id":"coo-18","title":"Graph 一键切换","kind":"stage"},
+{"id":"coo-21","parent_id":"coo-18","title":"Workbench 即 OS","kind":"stage"},
+{"id":"coo-22","parent_id":"coo-18","title":"AoI 树状图","kind":"stage"}
+],"edges":[{"from":"coo-23","to":"coo-18","type":"blocks"},{"from":"coo-19","to":"coo-20","type":"blocks"},{"from":"coo-20","to":"coo-22","type":"blocks"}]}

@@ -1,0 +1,839 @@
+{
+ "version": 1,
+ "_doc": "Knowledge base for the onboarding tour (xc-tour.js). Add a tour: append to tours[] with id, match (regex on location.pathname), trigger ('first-visit' auto-starts once, 'manual' only from the 带我入门 button), steps[] {selector, title{zh,en}, body{zh,en}, placement?, action?, cap?}. A step whose selector is missing is skipped. Text may use {name} (the picked assistant). cap: real | demo | soon — 'soon' beats are spoken as coming soon.",
+ "capabilities": {
+  "tour": {
+   "status": "real",
+   "note": "This guided tour"
+  },
+  "factory": {
+   "status": "real",
+   "note": "Projects / Issues / Tree / Graph / AoI pages"
+  },
+  "chat": {
+   "status": "real",
+   "note": "Workbench chat with model switcher"
+  },
+  "imagegen": {
+   "status": "real",
+   "note": "🎨 text-to-image / image-to-image in the composer"
+  },
+  "keys": {
+   "status": "real",
+   "note": "BYOK voice + image keys stored encrypted via /settings"
+  },
+  "qa": {
+   "status": "real",
+   "note": "Navigator answers questions from docs"
+  },
+  "organize": {
+   "status": "demo",
+   "note": "Periodic conversation organizing — demo panel; real today: manual 生成卡片 from a chat"
+  },
+  "reports": {
+   "status": "demo",
+   "note": "Daily/weekly reports — demo panel"
+  },
+  "reminders": {
+   "status": "demo",
+   "note": "Reminders — demo panel"
+  },
+  "tasks": {
+   "status": "demo",
+   "note": "Secretary task handling — demo panel; real today: 任务 tab + card approve/execute"
+  },
+  "aoi": {
+   "status": "real",
+   "note": "AoI board (Tree / Graph / live snapshot) with evidence-first verification"
+  },
+  "voice": {
+   "status": "real",
+   "note": "Voice chat with per-assistant Doubao voice (Workbench)"
+  }
+ },
+ "personas": {
+  "voice": {
+   "name": {
+    "zh": "李黑鸭",
+    "en": "Duck Lee"
+   },
+   "avatar": "duck",
+   "opener": {
+    "zh": "嘎，我是李黑鸭，废话少说。",
+    "en": "Quack. Duck Lee here — I'll keep it short."
+   },
+   "promo": {
+    "mechanism": "dare",
+    "trigger": {
+     "zh": "用户在手动做一件 X-connect 能代劳的事（手打、反复改、一张张找）",
+     "en": "User is grinding through something manually that a feature could do"
+    },
+    "form": {
+     "zh": "一句话激将，带刺但不贬人，≤25 字，以问句结尾",
+     "en": "One blunt dare, prickly but never insulting, ≤25 words, ends in a question"
+    },
+    "example": {
+     "zh": "还在一张张找图？敢不敢让我十秒生一张给你看。",
+     "en": "Still hunting images one by one? Dare me to make one in ten seconds?"
+    }
+   }
+  },
+  "scribe": {
+   "name": {
+    "zh": "斯巴达",
+    "en": "Sparky"
+   },
+   "avatar": "sparky",
+   "opener": {
+    "zh": "嗨！我是斯巴达，笔记本已经打开啦～",
+    "en": "Hi! Sparky here, notebook already open~"
+   },
+   "promo": {
+    "mechanism": "war story",
+    "trigger": {
+     "zh": "用户刚打完一个小仗（问题解决/里程碑）或卡在排兵布阵",
+     "en": "User just won a small battle (fixed something / hit a milestone) or is stuck planning"
+    },
+    "form": {
+     "zh": "两句战报式小故事：上回谁在什么地形用了哪个功能打赢，然后一句「这仗你也能这么打」",
+     "en": "A two-sentence battle story: last time someone used feature X on similar ground and won; then “you can fight this one the same way”"
+    },
+    "example": {
+     "zh": "上周有人被 AoI 证据卡住，三张卡全是 unverified；他把节点挂进大树，一晚上全转 verified。这仗你也能这么打。",
+     "en": "Last week someone was stuck with three unverified cards; he hung the nodes on the AoI tree and they all went verified overnight. You can fight this one the same way."
+    }
+   }
+  },
+  "brain": {
+   "name": {
+    "zh": "四毛",
+    "en": "Forty Cents"
+   },
+   "avatar": "rapper",
+   "opener": {
+    "zh": "Yo，我是四毛，节奏跟上。",
+    "en": "Yo, Forty Cents on the mic — keep up."
+   },
+   "promo": {
+    "mechanism": "rhyme punchline",
+    "trigger": {
+     "zh": "一段正事刚交付完、气氛轻松的时候",
+     "en": "Right after delivering a real answer, when the mood is light"
+    },
+    "form": {
+     "zh": "两句押韵的 punchline，点名一个功能，正事说完才押",
+     "en": "A two-line rhyming punchline naming one feature, only after the real work is done"
+    },
+    "example": {
+     "zh": "活儿交了别着急走，🎨 一点图就有；钥匙交给我保管，四毛办事你放宽。",
+     "en": "Job’s done, don’t dash — hit 🎨 and get art in a flash; keys with me stay tight, Forty Cents keeps it right."
+    }
+   }
+  },
+  "deep": {
+   "name": {
+    "zh": "武天",
+    "en": "WuTian"
+   },
+   "avatar": "wutian",
+   "opener": {
+    "zh": "在下武天，静心听我道来。",
+    "en": "I am WuTian. Listen calmly."
+   },
+   "promo": {
+    "mechanism": "probing question",
+    "trigger": {
+     "zh": "用户陈述目标时带着一个没说出的前提（比如以为只能手工做、以为看不到进度）",
+     "en": "User states a goal resting on an unspoken assumption (e.g. that it must be manual, or progress can’t be seen)"
+    },
+    "form": {
+     "zh": "只问一个追问，点破前提；用户答了再说出对应功能，不主动推销",
+     "en": "Ask exactly one probing question that exposes the assumption; name the feature only after they answer"
+    },
+    "example": {
+     "zh": "你说要每天汇报进度——这些进度，你希望别人看到的是你的转述，还是 AoI 上的证据本身？",
+     "en": "You want to report progress daily — should people see your retelling of it, or the evidence itself on AoI?"
+    }
+   }
+  },
+  "admin": {
+   "name": {
+    "zh": "狒狒",
+    "en": "Feifei"
+   },
+   "avatar": "feifei",
+   "opener": {
+    "zh": "哈喽，我是狒狒，事情交给我稳稳的。",
+    "en": "Hello, Feifei here — leave it to me, nice and steady."
+   },
+   "promo": {
+    "mechanism": "do it unasked",
+    "trigger": {
+     "zh": "用户描述了一个可视化或繁琐的需求，而且可以安全地先做个样",
+     "en": "User describes something visual or tedious that can safely be sampled first"
+    },
+    "form": {
+     "zh": "先动手给一个小样（如一条可直接用的生图提示词、一张卡片草稿、导览入口），再说「要的话我用 XX 功能做完整版」；绝不做删除/付款/外发等不可逆操作",
+     "en": "Make a small sample right away (a ready image prompt, a card draft, a tour link), then say “want the full version via feature X?”; never do irreversible actions (delete/pay/send)"
+    },
+    "example": {
+     "zh": "我先给你写好了生图提示词：「玫瑰金 3D X 标志，深色背景」——点 🎨 粘进去就出图，要我直接生成吗？",
+     "en": "I already drafted the image prompt: “rose-gold 3D X logo, dark background” — paste it into 🎨, or want me to generate it now?"
+    }
+   }
+  }
+ },
+ "intro": {
+  "title": {
+   "zh": "我是你的导游，也是你的助手",
+   "en": "Your guide, and your assistant"
+  },
+  "beats": [
+   {
+    "cap": "factory",
+    "zh": "我可以带你逛工厂、教你怎么聊天、给你看我们所有的特色功能。",
+    "en": "I can walk you around the factory, teach you how to chat, and show you all our special features."
+   },
+   {
+    "cap": "tour",
+    "zh": "我是你的导游，也是你的助手。",
+    "en": "I'm your tour guide, and your assistant too."
+   },
+   {
+    "cap": "keys",
+    "zh": "我是你的管家，你的钥匙也都可以放在我这儿——API Key 在 Setting 里加密保管。",
+    "en": "I'm your butler — you can keep your keys with me; API keys are stored encrypted in Setting."
+   },
+   {
+    "cap": "organize",
+    "zh": "你只管跟我聊，秘书的活我来做：定期整理你和我的所有对话，",
+    "en": "You just talk to me — I'll do the secretary work: I regularly organize all our conversations,"
+   },
+   {
+    "cap": "reports",
+    "zh": "给你出报告，",
+    "en": "write you reports,"
+   },
+   {
+    "cap": "reminders",
+    "zh": "到点提醒你，",
+    "en": "send you reminders,"
+   },
+   {
+    "cap": "tasks",
+    "zh": "帮你把任务办掉。",
+    "en": "and get your tasks done."
+   },
+   {
+    "cap": "qa",
+    "zh": "有什么不懂的你都可以来问我。",
+    "en": "If anything's unclear, just ask me."
+   }
+  ]
+ },
+ "tours": [
+  {
+   "id": "factory-home",
+   "match": "^/$",
+   "trigger": "first-visit",
+   "intro": true,
+   "title": {
+    "zh": "工厂首页",
+    "en": "Factory home"
+   },
+   "next": {
+    "href": "/workbench/",
+    "label": {
+     "zh": "下一站：Workbench",
+     "en": "Next: Workbench"
+    }
+   },
+   "steps": [
+    {
+     "selector": "a.brand",
+     "title": {
+      "zh": "这是 X-connect 工厂",
+      "en": "This is the X-connect factory"
+     },
+     "body": {
+      "zh": "左上角的 Logo 随时带你回到首页。",
+      "en": "The logo always brings you back home."
+     }
+    },
+    {
+     "selector": "#tabProjects",
+     "title": {
+      "zh": "项目",
+      "en": "Projects"
+     },
+     "body": {
+      "zh": "工厂按 Linear 的结构组织：先有项目，再有 Issue。",
+      "en": "Organized like Linear: projects first, then issues."
+     }
+    },
+    {
+     "selector": "button.primary",
+     "title": {
+      "zh": "新建项目",
+      "en": "New project"
+     },
+     "body": {
+      "zh": "点这里建你的第一个项目，我会帮你拆成 Issue。",
+      "en": "Create your first project here; I'll help split it into issues."
+     }
+    },
+    {
+     "selector": "#list",
+     "title": {
+      "zh": "项目列表",
+      "en": "Project list"
+     },
+     "body": {
+      "zh": "每行都能看 Issues，也能跳到 Graph 看关系。",
+      "en": "Each row opens its Issues or jumps to the Graph."
+     }
+    },
+    {
+     "selector": "a[href*='aoi']",
+     "title": {
+      "zh": "AoI 看板",
+      "en": "AoI board"
+     },
+     "body": {
+      "zh": "AoI 用证据说话：每个节点的进度和验证都在这里。",
+      "en": "AoI is evidence-first: progress and verification for every node."
+     }
+    },
+    {
+     "selector": "a[href*='settings']",
+     "title": {
+      "zh": "Setting",
+      "en": "Setting"
+     },
+     "body": {
+      "zh": "余额、模型、皮肤、语音和你的钥匙都在这里。",
+      "en": "Balance, model, skin, voice and your keys live here."
+     }
+    },
+    {
+     "selector": "#xcg-btn",
+     "title": {
+      "zh": "随时找我",
+      "en": "Find me anytime"
+     },
+     "body": {
+      "zh": "我在这里。点开就能问我，或者再带你走一遍。",
+      "en": "I'm right here — open me to ask, or take this tour again."
+     }
+    },
+    {
+     "selector": null,
+     "action": "open-secretary",
+     "cap": "organize",
+     "title": {
+      "zh": "秘书台",
+      "en": "Secretary desk"
+     },
+     "body": {
+      "zh": "整理、报告、提醒、任务——秘书的活都在这张台子上，点开看看。",
+      "en": "Organizing, reports, reminders, tasks — the secretary desk. Have a look."
+     }
+    }
+   ],
+   "site": "factory",
+   "path": "/",
+   "keywords": "首页|主页|项目|project|home"
+  },
+  {
+   "id": "workbench",
+   "match": ".",
+   "trigger": "first-visit",
+   "intro": true,
+   "site": "workbench",
+   "title": {
+    "zh": "Workbench 与聊天",
+    "en": "Workbench & chat"
+   },
+   "steps": [
+    {
+     "selector": ".lounge-row, #assistantCard",
+     "title": {
+      "zh": "选你的小助手",
+      "en": "Pick your assistant"
+     },
+     "body": {
+      "zh": "每位小助手有自己的性格和声音，随时可以「更换」。",
+      "en": "Each assistant has its own personality and voice; switch anytime."
+     }
+    },
+    {
+     "selector": "#modelChip",
+     "title": {
+      "zh": "模型",
+      "en": "Model"
+     },
+     "body": {
+      "zh": "这里换聊天模型，界面皮肤也会跟着变。",
+      "en": "Switch chat models here; the skin follows."
+     }
+    },
+    {
+     "selector": "#newChatBtn2, #newChatBtn",
+     "title": {
+      "zh": "新建会话",
+      "en": "New chat"
+     },
+     "body": {
+      "zh": "开一个新会话，跟我聊就行。",
+      "en": "Start a new chat and just talk to me."
+     }
+    },
+    {
+     "selector": "#composerPill",
+     "action": "open-composer",
+     "title": {
+      "zh": "输入区",
+      "en": "Composer"
+     },
+     "body": {
+      "zh": "写字、粘贴、加附件都在这里，⌘↵ 发送。",
+      "en": "Type, paste or attach here; ⌘↵ to send."
+     }
+    },
+    {
+     "selector": "#imgGenToggle",
+     "cap": "imagegen",
+     "title": {
+      "zh": "🎨 生图",
+      "en": "🎨 Image"
+     },
+     "body": {
+      "zh": "打开生图：输入描述就是文生图，拖一张图进来就是图生图。",
+      "en": "Image mode: type for text-to-image, drop a picture for image-to-image."
+     }
+    },
+    {
+     "selector": "button.nav-item",
+     "title": {
+      "zh": "卡片 / 作品 / 任务",
+      "en": "Cards / Works / Tasks"
+     },
+     "body": {
+      "zh": "聊完可以一键生成卡片，审批后我去执行。",
+      "en": "Turn a chat into a card; once approved, I execute it."
+     }
+    },
+    {
+     "selector": "#settingsBtn",
+     "cap": "keys",
+     "title": {
+      "zh": "设置与钥匙",
+      "en": "Settings & keys"
+     },
+     "body": {
+      "zh": "你的 API Key 交给我保管，加密存放。",
+      "en": "Leave your API keys with me — stored encrypted."
+     }
+    },
+    {
+     "selector": null,
+     "action": "open-secretary",
+     "cap": "organize",
+     "title": {
+      "zh": "秘书台",
+      "en": "Secretary desk"
+     },
+     "body": {
+      "zh": "我会定期整理对话、出报告、提醒你、办任务，都在这里。",
+      "en": "I regularly organize chats, write reports, remind you and handle tasks — all here."
+     }
+    }
+   ],
+   "path": "/workbench/",
+   "keywords": "工作台|workbench|聊天|chat|生图|图像|image|对话|卡片|card"
+  },
+  {
+   "id": "aoi",
+   "match": "^/aoi/?$",
+   "trigger": "first-visit",
+   "title": {
+    "zh": "AoI 看板",
+    "en": "AoI board"
+   },
+   "steps": [
+    {
+     "selector": "#tabs, #out",
+     "cap": "aoi",
+     "title": {
+      "zh": "AoI 是什么",
+      "en": "What AoI means"
+     },
+     "body": {
+      "zh": "{aoi}",
+      "en": "{aoi}"
+     }
+    },
+    {
+     "selector": "#tabs",
+     "title": {
+      "zh": "三种视图",
+      "en": "Three views"
+     },
+     "body": {
+      "zh": "Tree 大树、Graph 气泡、实时快照，同一份数据三种看法。",
+      "en": "Tree, Graph bubbles and live snapshot — one dataset, three views."
+     }
+    },
+    {
+     "selector": "#out",
+     "title": {
+      "zh": "证据",
+      "en": "Evidence"
+     },
+     "body": {
+      "zh": "节点要有证据才算 verified，点开能看来源。",
+      "en": "A node is verified only with evidence; open it to see sources."
+     }
+    }
+   ],
+   "site": "factory",
+   "path": "/aoi",
+   "keywords": "aoi|证据|evidence|看板"
+  },
+  {
+   "id": "graph",
+   "match": "^/graph/?$",
+   "trigger": "first-visit",
+   "title": {
+    "zh": "Graph / Tree",
+    "en": "Graph / Tree"
+   },
+   "steps": [
+    {
+     "selector": "#btnTree",
+     "title": {
+      "zh": "Tree",
+      "en": "Tree"
+     },
+     "body": {
+      "zh": "按层级看工作节点。",
+      "en": "See work nodes as a hierarchy."
+     }
+    },
+    {
+     "selector": "#btnGraph",
+     "title": {
+      "zh": "Graph",
+      "en": "Graph"
+     },
+     "body": {
+      "zh": "按关系看，谁依赖谁一目了然。",
+      "en": "See relationships and dependencies at a glance."
+     }
+    }
+   ],
+   "site": "factory",
+   "path": "/graph",
+   "keywords": "graph|关系|气泡|图谱"
+  },
+  {
+   "id": "tree",
+   "match": "^/tree/?$",
+   "trigger": "first-visit",
+   "title": {
+    "zh": "进树",
+    "en": "Tree intake"
+   },
+   "steps": [
+    {
+     "selector": "#f",
+     "title": {
+      "zh": "进树表单",
+      "en": "Intake form"
+     },
+     "body": {
+      "zh": "选类型和父节点，把工作挂进大树。",
+      "en": "Pick a type and parent to add work to the tree."
+     }
+    },
+    {
+     "selector": "#demo",
+     "title": {
+      "zh": "一键 Demo",
+      "en": "One-click demo"
+     },
+     "body": {
+      "zh": "不知道填什么？先跑个 Demo 看看。",
+      "en": "Not sure what to enter? Run the demo first."
+     }
+    }
+   ],
+   "site": "factory",
+   "path": "/tree",
+   "keywords": "进树|大树|tree"
+  },
+  {
+   "id": "settings",
+   "match": "^/settings/?$",
+   "trigger": "first-visit",
+   "site": "factory",
+   "title": {
+    "zh": "Setting",
+    "en": "Setting"
+   },
+   "steps": [
+    {
+     "selector": "a[href='/account']",
+     "title": {
+      "zh": "账户",
+      "en": "Account"
+     },
+     "body": {
+      "zh": "账户信息、余额、额度、用量和充值。",
+      "en": "Account info, balance, quota, usage and top-up."
+     }
+    },
+    {
+     "selector": "a[href='/assistants']",
+     "title": {
+      "zh": "小助手",
+      "en": "Assistants"
+     },
+     "body": {
+      "zh": "小助手设定、模型、语音，还能制作你自己的小助手。",
+      "en": "Assistant personas, model, voice — and build your own."
+     }
+    },
+    {
+     "selector": "a[href='/assistants#imgkeys'], a[href='/assistants#sKeys']",
+     "cap": "keys",
+     "title": {
+      "zh": "你的钥匙",
+      "en": "Your keys"
+     },
+     "body": {
+      "zh": "语音和生图的 API Key 放我这儿，加密保管；费用你直接付给服务商。",
+      "en": "Voice and image API keys live with me, encrypted; you pay providers directly."
+     }
+    }
+   ],
+   "path": "/settings",
+   "keywords": "设置|setting|钥匙|key|密钥"
+  },
+  {
+   "id": "account",
+   "match": "^/account/?$",
+   "trigger": "first-visit",
+   "site": "factory",
+   "title": {
+    "zh": "账户",
+    "en": "Account"
+   },
+   "steps": [
+    {
+     "selector": "#sBal, #sInfo",
+     "title": {
+      "zh": "余额",
+      "en": "Balance"
+     },
+     "body": {
+      "zh": "账户和余额一眼看清。",
+      "en": "Account and balance at a glance."
+     }
+    },
+    {
+     "selector": "#topup",
+     "title": {
+      "zh": "充值",
+      "en": "Top up"
+     },
+     "body": {
+      "zh": "额度不够了在这里充值。",
+      "en": "Top up here when credit runs low."
+     }
+    }
+   ],
+   "path": "/account",
+   "keywords": "账户|余额|充值|account|balance"
+  },
+  {
+   "id": "assistants",
+   "match": "^/assistants/?$",
+   "trigger": "first-visit",
+   "site": "factory",
+   "title": {
+    "zh": "小助手设置",
+    "en": "Assistant settings"
+   },
+   "steps": [
+    {
+     "selector": "#sAsst",
+     "title": {
+      "zh": "小助手设定",
+      "en": "Assistant personas"
+     },
+     "body": {
+      "zh": "每位小助手的开场白和声音都能改。",
+      "en": "Edit each assistant’s opening line and voice."
+     }
+    },
+    {
+     "selector": "#build",
+     "title": {
+      "zh": "制作你的小助手",
+      "en": "Build your own"
+     },
+     "body": {
+      "zh": "导入素材，造一个你专属的小助手。",
+      "en": "Import materials and build your own assistant."
+     }
+    },
+    {
+     "selector": "#sKeys, #imgkeys",
+     "cap": "keys",
+     "title": {
+      "zh": "你的钥匙",
+      "en": "Your keys"
+     },
+     "body": {
+      "zh": "语音和生图的 API Key 放我这儿，加密保管；费用你直接付给服务商。",
+      "en": "Voice and image API keys live with me, encrypted; you pay providers directly."
+     }
+    }
+   ],
+   "path": "/assistants",
+   "keywords": "小助手设置|声音|语音|voice|persona|制作"
+  }
+ ],
+ "secretary": {
+  "organize": [
+   {
+    "when": {
+     "zh": "今天 09:00",
+     "en": "Today 09:00"
+    },
+    "zh": "整理了 3 段对话 → 生成卡片「工厂首页改版」",
+    "en": "Organized 3 chats → card “Factory home redesign”"
+   },
+   {
+    "when": {
+     "zh": "昨天 21:00",
+     "en": "Yesterday 21:00"
+    },
+    "zh": "归档 5 段闲聊，提炼 2 条待办",
+    "en": "Archived 5 small talks, extracted 2 todos"
+   }
+  ],
+  "reports": [
+   {
+    "title": {
+     "zh": "日报 · 今天",
+     "en": "Daily · today"
+    },
+    "zh": "完成：生图上线、滚动修复。进行中：新手引导。风险：无。",
+    "en": "Done: image gen, scroll fix. In progress: onboarding. Risks: none."
+   },
+   {
+    "title": {
+     "zh": "周报 · 本周",
+     "en": "Weekly · this week"
+    },
+    "zh": "上线 6 项功能，2 个 Bug 修复，余额消耗 $4.8。",
+    "en": "6 features shipped, 2 bugs fixed, $4.80 spent."
+   }
+  ],
+  "reminders": [
+   {
+    "at": {
+     "zh": "今天 15:00",
+     "en": "Today 15:00"
+    },
+    "zh": "看一下 AoI 新证据",
+    "en": "Review new AoI evidence"
+   },
+   {
+    "at": {
+     "zh": "明天 10:00",
+     "en": "Tomorrow 10:00"
+    },
+    "zh": "续费 Ark API Key 额度",
+    "en": "Top up Ark API key credit"
+   }
+  ],
+  "tasks": [
+   {
+    "zh": "把今天的对话整理成卡片",
+    "en": "Turn today's chats into cards",
+    "done": true
+   },
+   {
+    "zh": "生成 3 张产品图",
+    "en": "Generate 3 product images",
+    "done": false
+   },
+   {
+    "zh": "给项目 A 写周报",
+    "en": "Write weekly report for project A",
+    "done": false
+   }
+  ]
+ },
+ "greeting": {
+  "_doc": "Proactive spoken greeting when the assistant pops up (first visit, 呼叫, voice session start, assistant switch). Spoken via persona Doubao voice (/api/tts or the live voice session), text bubble always. Branches: first time → full tour; already know → feature chips → that tour; named feature → matching tour; decline → decline line.",
+  "text": {
+   "zh": "嗨，我来了。我是你的助手，我是{name}。我是你的管家，也是你的导游，我来给你介绍这里的东西。你是第一次来，还是都已经熟了？想让我给你介绍哪个功能吗？",
+   "en": "Hi, I'm here. I'm your assistant, I'm {name}. I'm your butler and your tour guide, here to introduce things to you. Is this your first time, or do you already know your way around? Want me to introduce a particular feature?"
+  },
+  "no": {
+   "zh": "不用了",
+   "en": "No thanks"
+  },
+  "decline": {
+   "zh": "没问题，以后有什么不懂的随时问我。",
+   "en": "No problem. If anything's unclear later, just ask me."
+  },
+  "noWords": "(不用|不要|不需要|算了|下次|以后再|^\\s*no\\b|nope|not now|no thanks|later)",
+  "first": {
+   "zh": "第一次来",
+   "en": "First time"
+  },
+  "know": {
+   "zh": "已经熟了",
+   "en": "I know my way"
+  },
+  "pick": {
+   "zh": "想看哪个功能？",
+   "en": "Which feature?"
+  },
+  "firstWords": "(第一次|头一次|新来|刚来|没来过|不熟|first|new here|never been)",
+  "knowWords": "(熟了|很熟|来过|知道|用过|老用户|know|familiar|been here|regular)"
+ },
+ "aoi": {
+  "_doc": "AoI culture. Always written A-o-I. Looks like 合 (NOT 盒/box); means 和 (harmony).",
+  "spelling": "AoI",
+  "text": {
+   "zh": "我们造了一个字，叫 AoI。上面一个 A，下面一个 o，长得就像中文的「合」字——上面「人」像 A，下面「口」像 o（不是装东西的「盒」）。它的意思是「和」：不是 merge 那种硬凑，是人与机器终于在同一个视角上，把一件事从想法做到交付，全程看得见、有证据。X-Connect 的 connect，connect 的就是这个。",
+   "en": "We made up a character: AoI. An A on top, an o below — it looks like the Chinese character 合 (人 on top like the A, 口 below like the o), not 盒 (a box). It means 和, harmony: not a forced merge, but people and machines finally sharing one view, taking a piece of work from idea to deliverable with every step visible and backed by evidence. The 'connect' in X-Connect is exactly this."
+  }
+ },
+ "promoDefault": {
+  "mechanism": "light tip",
+  "trigger": {
+   "zh": "话题自然碰到某个功能时",
+   "en": "When the topic naturally touches a feature"
+  },
+  "form": {
+   "zh": "一句轻提示，点出功能和入口",
+   "en": "One light tip naming the feature and where it is"
+  },
+  "example": {
+   "zh": "顺便说一句，输入区的 🎨 可以直接生图。",
+   "en": "By the way, the 🎨 in the composer makes images directly."
+  }
+ },
+ "promoRules": {
+  "zh": "自我推荐规则：大约每 3–4 轮用户发言最多一次，必须和当前话题相关，绝不每条都推、不连续两轮推；先把用户的问题答完再推；用户拒绝或表示不感兴趣后，本次会话不再推荐；只推下面列出的功能，标「演示」的功能照常介绍；语音里推荐要更短。",
+  "en": "Self-promotion rules: at most once every 3–4 user turns, always tied to the current topic, never every reply and never two turns in a row; answer the user first, then nudge; after the user declines or shows no interest, stop for the rest of the conversation; only promote the features listed below; demo features may be presented normally; keep voice nudges shorter."
+ },
+ "factoryOrigin": "https://xconnect-factory.onrender.com"
+}

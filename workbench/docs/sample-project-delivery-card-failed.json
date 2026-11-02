@@ -1,0 +1,77 @@
+{
+  "id": "pd_faultnolicense",
+  "type": "project_delivery",
+  "project": "宣传视频试生产",
+  "title": "交付：给悉尼小锅米线（Slurp Slurp Noodle）做一支 30 秒宣传短视频，配中英字幕和三个社媒尺寸",
+  "status": "failed",
+  "original": "给悉尼小锅米线（Slurp Slurp Noodle）做一支 30 秒宣传短视频，配中英字幕和三个社媒尺寸",
+  "working": "停在 01_ingest：素材缺许可，停止（下游不得使用无许可素材）",
+  "source": {
+    "kind": "manual",
+    "label": "流水线导入",
+    "app": "craft-skills",
+    "batch": "fault-nolicense",
+    "index": null,
+    "at": "2026-10-23T02:16:07.290Z",
+    "externalAssistant": false
+  },
+  "assistant": null,
+  "review": null,
+  "approval": null,
+  "result": null,
+  "messages": [],
+  "delivery": {
+    "sentence": "给悉尼小锅米线（Slurp Slurp Noodle）做一支 30 秒宣传短视频，配中英字幕和三个社媒尺寸",
+    "run_id": "fault-nolicense",
+    "scorecard": 4.1,
+    "stations": [
+      {
+        "name": "00_brief",
+        "status": "pass",
+        "score": 4.1,
+        "elapsed_s": 0.01
+      },
+      {
+        "name": "01_ingest",
+        "status": "failed",
+        "score": null,
+        "elapsed_s": 2.07,
+        "explain": "有素材没有登记来源或许可，为了不侵权，流水线停在这里。请补上许可或换素材后重试。",
+        "actions": [
+          "retry",
+          "contact_human"
+        ]
+      }
+    ],
+    "artifacts": [],
+    "gaps": [
+      "1 素材：无客户实拍素材（0 段），只能用官网 2 张图（500×500、680×510）做占位",
+      "3 音频：无已验证自动配乐工具；垫乐为 sox 合成和弦",
+      "3 音频：无口播，demucs 本次 skipped（无人声可分离）",
+      "4 字幕：无已验证 TTS 配音（cosyvoice ⛔，第 2 批未合并）",
+      "4 字幕：CER 无对象可测（无口播）；funasr/whisper 未在本片发挥作用",
+      "4 字幕：argos-translate 中→英质量弱（店名被译成\"面条\"），6 行中仅 1 行直接采纳",
+      "0 需求：需求解析是自写规则，对句式敏感",
+      "5 合成：MLT/effectcraft 模板化动效未接入，仅 ffmpeg/libass",
+      "7 客服：15 问测试用本地检索桩，不是线上小X；无向量检索",
+      "全链：无 Git LFS（box 未装 git-lfs）；仓库只提交三尺寸成片+封面+小文件，中间大文件（wav、clips、_nosub、work_master）未入库，可用 make run 重现",
+      "成本：token / 额度用量在 box 上无法测量",
+      "工具：librosa、playwright、yt-dlp 本链路未用到，未验证",
+      "工具：pyscenedetect SKILL.md 的 `[opencv]` extra 在 0.7.2 已不存在"
+    ],
+    "pending_customer": [
+      "name_zh（unverified）：客户口头说法，书面中文店名待提供",
+      "address（unverified）：官网未写，待客户确认",
+      "cuisine（unverified）",
+      "signature_dishes（unverified）",
+      "hours（conflict）：视频不写时间",
+      "menu_prices（pending）：官网无菜单",
+      "social（pending）",
+      "rating（unverified）：第三方、会变，不入片",
+      "logo_content（conflict）：与店名不符，不入片",
+      "brand_font（pending）：用 Noto Sans CJK（OFL）替代"
+    ]
+  },
+  "createdAt": "2026-10-23T02:16:07.290Z",
+  "updatedAt": "2026-10-23T02:16:07.290Z"
+}
