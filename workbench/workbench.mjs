@@ -1759,13 +1759,15 @@ export function createWorkbench({ tasks, broadcast }) {
     const noCache = ['.html', '.css', '.js', '.webmanifest'].includes(ext);
     const headers = {
       'content-type': type,
-      'cache-control': noCache ? 'no-cache, no-store, must-revalidate' : 'public, max-age=31536000, immutable',
+      'cache-control': noCache ? 'no-cache' : 'public, max-age=31536000, immutable',
+      etag: 'W/"' + stat.size.toString(36) + '-' + Math.floor(stat.mtimeMs).toString(36) + '"',
       'x-content-type-options': 'nosniff',
     };
     if (ext === '.html') {
       headers['referrer-policy'] = 'no-referrer';
       headers['permissions-policy'] = 'microphone=(self)';
     }
+    if (req.headers['if-none-match'] === headers.etag) { res.writeHead(304, { etag: headers.etag, 'cache-control': headers['cache-control'] }); return res.end(), true; }
     res.writeHead(200, headers);
     if (req.method === 'HEAD') return res.end();
     fs.createReadStream(full).pipe(res);

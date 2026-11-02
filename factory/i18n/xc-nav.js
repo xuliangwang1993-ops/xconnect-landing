@@ -3,7 +3,6 @@
 // Hidden (routes kept, just not linked): /portal (old Factory OS portal), /graph (old Tree|Graph page), /tree (进树 editor).
 (() => {
   const p = location.pathname, v = new URLSearchParams(location.search).get('view') || '';
-  if (p.startsWith('/workbench')) return; // workbench has its own top bar with the same links
   const zh = () => !window.XC_I18N || /^zh/.test(window.XC_I18N.lang);
   const S = [
     ['projects', '/', '项目', 'Project', () => p === '/' || p === '/index.html' || p.startsWith('/tree') || p.startsWith('/guide')],
@@ -26,11 +25,28 @@ background:linear-gradient(105deg,transparent 30%,rgba(255,226,214,.95) 48%,rgba
 @keyframes xcSweep{to{background-position:150% 0}}
 @keyframes xcSweep2{from{background-position:-150% 0}to{background-position:150% 0}}
 @keyframes xcGlow{0%,100%{filter:drop-shadow(0 0 0 rgba(232,170,150,0))}50%{filter:drop-shadow(0 0 6px rgba(232,170,150,.45))}}
-@media (prefers-reduced-motion:reduce){.brand::after,.brand:hover::after,.brand img{animation:none!important}}`;
+${document.querySelector('.brand-x') ? '.brand::after{display:none}\n' : ''}@media (prefers-reduced-motion:reduce){.brand::after,.brand:hover::after,.brand img{animation:none!important}}`;
     document.head.appendChild(st);
+  }
+  // Shared design tokens so every factory page (home, Tree, AoI, Settings, Account, Assistants, guide, portal) reads the same.
+  function baseCss() {
+    if (document.getElementById('xc-base')) return;
+    const st = document.createElement('style'); st.id = 'xc-base';
+    st.textContent = `:root{--xc-font:Inter,"Space Grotesk",system-ui,-apple-system,"PingFang SC","Noto Sans SC",sans-serif;--xc-accent:#e8aa96;--xc-radius:10px;--xc-gap:12px}
+body{font-family:var(--xc-font)}
+nav.tabs a{padding:6px 12px;border-radius:999px;text-decoration:none;color:inherit;opacity:.78;font-weight:500}
+nav.tabs a:hover{opacity:1;background:rgba(255,255,255,.06)}
+nav.tabs a.on{opacity:1;background:rgba(232,170,150,.16);color:var(--xc-accent)}
+.xc-back,#backHome,a.back{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);text-decoration:none;color:inherit;font-size:13px}
+.xc-back:hover,a.back:hover{border-color:var(--xc-accent);color:var(--xc-accent)}
+button,.btn{border-radius:var(--xc-radius);font-family:inherit}
+:focus-visible{outline:2px solid var(--xc-accent);outline-offset:2px}`;
+    document.head.insertBefore(st, document.head.firstChild);
   }
   function mount() {
     logoFx();
+    if (p.startsWith('/workbench') || document.querySelector('.workbench, #app')) return; // workbench keeps its own top bar (same links), gets logo fx only
+    baseCss();
     let nav = document.querySelector('header.app nav.tabs');
     if (!nav) {
       const bar = document.createElement('header');

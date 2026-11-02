@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 // Factory front router: mounts the 搭台你唱戏 stage page and the AoI board
 // in front of the Workbench server. Serves a fixed whitelist only.
 import fs from 'node:fs';
@@ -15,7 +16,7 @@ const REPO = path.resolve(HERE, '..');
 const STAGE_FILES = { 'index.html': 'text/html; charset=utf-8', 'portal.html': 'text/html; charset=utf-8', 'styles.css': 'text/css; charset=utf-8',
   'app.js': 'text/javascript; charset=utf-8', 'factory-home.js': 'text/javascript; charset=utf-8', 'icon.svg': 'image/svg+xml', 'brand-x.png': 'image/png', 'brand-logo.png': 'image/png' };
 const GUIDE_FILES = { 'guide-widget.js': 'text/javascript; charset=utf-8' };
-export const GUIDE_TAG = '<script src="/i18n/xc-i18n.js"></script>\n<script src="/i18n/xc-i18n-account.js"></script>\n<script src="/i18n/xc-nav.js"></script>\n<script src="/skin/xc-skin.js"></script>\n<script src="/guide/guide-widget.js" defer></script>';
+export const GUIDE_TAG = '<script src="/i18n/xc-i18n.js"></script>\n<script src="/i18n/xc-i18n-account.js"></script>\n<script src="/i18n/xc-nav.js" defer></script>\n<script src="/skin/xc-skin.js"></script>\n<script src="/guide/guide-widget.js" defer></script>';
 const GRAPH_FILES = { 'graph-view.js': 'text/javascript; charset=utf-8' };
 const AOI_FILES = { 'index.html': 'text/html; charset=utf-8', 'aoi-snapshot.js': 'text/javascript; charset=utf-8' };
 
@@ -37,7 +38,10 @@ export function portalHtml() {
 }
 
 function send(res, req, type, body) {
-  res.writeHead(200, { 'content-type': type, 'cache-control': 'no-cache', 'x-content-type-options': 'nosniff' });
+  // Weak ETag + no-cache: browsers revalidate and get 304 instead of re-downloading unchanged pages/scripts.
+  const tag = 'W/"' + crypto.createHash('sha1').update(body || '').digest('base64url').slice(0, 16) + '"';
+  if (req.headers['if-none-match'] === tag) { res.writeHead(304, { etag: tag, 'cache-control': 'no-cache' }); res.end(); return true; }
+  res.writeHead(200, { 'content-type': type, 'cache-control': 'no-cache', etag: tag, 'x-content-type-options': 'nosniff' });
   res.end(req.method === 'HEAD' ? undefined : body);
   return true;
 }
