@@ -245,14 +245,14 @@ function renderMine(ul) {
   const head = el('li', 'lounge-mine-head', zh ? '我的小助手' : 'My assistants');
   head.style.cssText = 'list-style:none;margin:18px 4px 6px;font-size:12px;opacity:.7;letter-spacing:.08em';
   ul.appendChild(head);
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 1; i++) {
     const s = customSlots[i];
     if (s && s.name) continue; // 已填的槽位在 personas 里按内置助手同样渲染
     const li = el('li', 'lounge-row lounge-row-empty');
     li.style.cssText = 'opacity:.75;border-style:dashed';
     li.innerHTML = `<a href="${BUILD_URL}" target="_blank" rel="noopener" style="display:flex;width:100%;align-items:center;gap:12px;color:inherit;text-decoration:none">
       <span class="lounge-row-orb" style="display:grid;place-items:center;font-size:22px">+</span>
-      <span class="lounge-row-main"><span class="lounge-row-name">${zh ? '制作你的小助手' : 'Build your own assistant'}</span><span class="lounge-row-desc">${zh ? `槽位 ${i + 1} · 去小助手页导入素材` : `Slot ${i + 1} · import materials on the Assistants page`}</span></span></a>`;
+      <span class="lounge-row-main"><span class="lounge-row-name">${zh ? '制作你的小助手' : 'Build your own assistant'}</span><span class="lounge-row-desc">${zh ? '专属槽位 · 点击直接进入制作' : 'Your slot · tap to build it'}</span></span></a>`;
     ul.appendChild(li);
   }
 }
@@ -267,7 +267,7 @@ async function loadCustom() {
 
 const clean = (v) => String(v || '').replace(/[<>&"]/g, '');
 function withCustom(list) {
-  const mine = customSlots.filter((s) => s && s.name).map((s) => ({
+  const mine = customSlots.slice(0, 1).filter((s) => s && s.name).map((s) => ({
     id: s.id, avatar: '', name: clean(s.name), nameEn: '', role: '我的小助手', model: 'custom', voice: s.voice || '', intro: clean(s.intro), desc: clean(s.intro) || '我的小助手',
   }));
   return list.filter((p) => !/^custom/.test(p.id)).concat(mine);

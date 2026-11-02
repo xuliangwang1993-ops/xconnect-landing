@@ -58,7 +58,7 @@ const SESSION_TTL_MS = 30 * 24 * 3600 * 1000;
 const USER_AGENT = 'X-Connect-Workbench/1.0 (+https://x-connect.ai)';
 
 const SPEAKERS = VOICE_LIST.map((v) => ({ ...v }));
-const CUSTOM_SLOTS = 3;
+const CUSTOM_SLOTS = 1;
 const VOICE_PROVIDERS = ['doubao', 'elevenlabs'];
 const SPEAKER_IDS = new Set(SPEAKERS.map((s) => s.id));
 
@@ -1397,7 +1397,7 @@ export function createWorkbench({ tasks, broadcast }) {
     if (pathname === '/api/custom-assistants') {
       const load = async () => rowData(await loadRow(session, '__custom_assistants__'), 'custom-assistants') || { slots: [] };
       if (req.method === 'GET') {
-        try { return json(res, 200, await load()); } catch { return fail(res, 502, 'storage_unavailable', '自定义助手暂不可用'); }
+        try { const d = await load(); return json(res, 200, { ...d, slots: (d.slots || []).slice(0, CUSTOM_SLOTS), maxSlots: CUSTOM_SLOTS }); } catch { return fail(res, 502, 'storage_unavailable', '自定义助手暂不可用'); }
       }
       if (req.method === 'PUT') {
         const body = await readJson(req, 400_000);

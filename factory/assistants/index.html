@@ -77,11 +77,11 @@ async function loadAsst(){let d;try{d=await (await fetch('/settings/api/assistan
 const PROV=[{id:'doubao',name:'豆包 / 火山引擎 语音',links:[['控制台 · 创建应用拿 Key','https://console.volcengine.com/speech/app'],['声音复刻产品页','https://www.volcengine.com/product/voicecloning'],['声音复刻 API 文档','https://www.volcengine.com/docs/6561/1305191']],app:true},
  {id:'elevenlabs',name:'ElevenLabs',links:[['注册','https://elevenlabs.io/app/sign-up'],['Voice Lab（克隆）','https://elevenlabs.io/app/voice-lab'],['API Keys','https://elevenlabs.io/app/settings/api-keys']]}];
 let slots=[];
-async function loadMake(){if(!boot){$('make').innerHTML='<div class="na">登录 Workbench 后可制作自己的小助手（最多 3 个槽位，和 5 个内置助手并列）。</div>';$('keys').innerHTML='<div class="na">登录后可添加密钥。</div>';return;}
+async function loadMake(){if(!boot){$('make').innerHTML='<div class="na">登录 Workbench 后可制作自己的小助手（1 个专属槽位，和 5 个内置助手并列）。</div>';$('keys').innerHTML='<div class="na">登录后可添加密钥。</div>';return;}
  try{slots=(await (await fetch('/api/custom-assistants',{credentials:'same-origin'})).json()).slots||[];}catch{slots=[];}
- while(slots.length<3)slots.push({name:'',intro:'',persona:'',voice:'',materials:[]});
+ slots=slots.slice(0,1);while(slots.length<1)slots.push({name:'',intro:'',persona:'',voice:'',materials:[]});
  const spk=(boot.voice&&boot.voice.speakers)||[];
- $('make').innerHTML='<div class="k" style="font-size:12px">导入素材（图片/视频/文字）后工厂据此合成助手。<b>目前</b>：文字素材内容会保存；图片/视频只记录文件名与大小，自动合成尚未上线（占位）。</div>'+slots.map((s,i)=>`<div class="asst" data-i="${i}"><div class="tag" style="height:fit-content">槽 ${i+1}</div><div>
+ $('make').innerHTML='<div class="k" style="font-size:12px">导入素材（图片/视频/文字）后工厂据此合成助手。<b>目前</b>：文字素材内容会保存；图片/视频只记录文件名与大小，自动合成尚未上线（占位）。</div>'+slots.map((s,i)=>`<div class="asst" data-i="${i}"><div class="tag" style="height:fit-content">我的小助手</div><div>
  <input class="nm2" placeholder="助手名字" value="${esc(s.name)}" style="width:40%"> 发音人 <select class="vo2"><option value="">默认</option>${spk.map((x)=>`<option value="${esc(x.id)}" ${x.id===s.voice?'selected':''}>${esc(x.label)}</option>`).join('')}</select>
  <textarea class="in2" placeholder="一句话简介">${esc(s.intro)}</textarea><textarea class="pe2" placeholder="人设 / 说话风格（system prompt）">${esc(s.persona)}</textarea>
  <div class="ctl"><input type="file" class="up" multiple accept="image/*,video/*,text/*,.md,.txt"><span class="meta">素材 ${s.materials.length} 个${s.materials.length?'：'+s.materials.map((m)=>esc(m.name)).join('、'):''}</span></div>
@@ -89,8 +89,8 @@ async function loadMake(){if(!boot){$('make').innerHTML='<div class="na">登录 
  document.querySelectorAll('#make .asst').forEach((el)=>{const i=+el.dataset.i;
   el.querySelector('.up').onchange=async(e)=>{for(const f of e.target.files){const m={name:f.name,type:f.type,size:f.size,at:new Date().toISOString(),text:''};if(/^text\/|\.(md|txt)$/.test(f.type||f.name))m.text=(await f.text()).slice(0,20000);slots[i].materials.push(m);}el.querySelector('.okmsg').textContent='已添加，点保存';};
   el.querySelector('.sv2').onclick=async()=>{Object.assign(slots[i],{name:el.querySelector('.nm2').value,intro:el.querySelector('.in2').value,persona:el.querySelector('.pe2').value,voice:el.querySelector('.vo2').value});
-   const r=await fetch('/api/custom-assistants',{method:'PUT',headers:{'content-type':'application/json'},credentials:'same-origin',body:JSON.stringify({slots})});el.querySelector('.okmsg').textContent=r.ok?'已保存':'保存失败';};});
- loadKeys();loadImgKeys();}
+   const r=await fetch('/api/custom-assistants',{method:'PUT',headers:{'content-type':'application/json'},credentials:'same-origin',body:JSON.stringify({slots:slots.slice(0,1)})});el.querySelector('.okmsg').textContent=r.ok?'已保存':'保存失败';};});
+ loadKeys();loadImgKeys();if(/^#build/.test(location.hash)){const b=$('build');b&&b.scrollIntoView({block:'start'});const n=document.querySelector('#make .nm2');n&&n.focus({preventScroll:true});}}
 async function loadImgKeys(){let d={};try{d=await (await fetch('/api/image/providers',{credentials:'same-origin'})).json();}catch{}
  const ps=d.providers||[];if(!ps.length){$('imgk').textContent='登录 Workbench 后可管理图像密钥';return;}
  $('imgk').innerHTML=ps.map((p)=>`<div class="asst" data-p="${p.id}"><div class="tag" style="height:fit-content">${p.user?'已存':p.server?'服务器':'未接'}</div><div><div class="nm">${esc(p.name)} ${p.i2i?'· 文生图+图生图':'· 仅文生图'}</div>
