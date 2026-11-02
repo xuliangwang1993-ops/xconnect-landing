@@ -20,17 +20,17 @@ button.primary{background:var(--accent);border-color:transparent;color:#fff}.na{
 details summary{cursor:pointer;color:var(--mute);font-size:12px}pre{white-space:pre-wrap;font-size:12px;color:var(--mute);max-height:200px;overflow:auto}
 </style></head><body>
 <header class="app"><a class="brand" href="/" aria-label="X-connect 首页"><img src="/stage/brand-logo.png" alt="X-connect"></a>
-<nav class="tabs"><a href="/">Projects</a><a href="/graph">Graph</a><a href="/aoi">AoI</a><a href="/workbench">Workbench</a><a href="/settings" class="on">Setting</a></nav></header>
-<main><h1>Setting</h1><div class="sub">参数设置与余额查询。数据来自 Workbench 登录会话（/api/bootstrap）与 Supabase 助手表；标「仅本机」的项只存在这台浏览器。</div>
-<section id="sBal"><h2>账户与余额</h2><div id="bal" class="k">加载中…</div></section>
-<section id="sModel"><h2>助手与模型</h2><div id="model" class="k">加载中…</div></section>
-<section id="sVoice"><h2>语音</h2><div id="voice" class="k">加载中…</div></section>
-<section id="sAsst"><h2>小助手设定</h2><div id="asst" class="k">加载中…</div></section>
-<section id="build"><h2>制作你的小助手</h2><div id="make" class="k">加载中…</div></section>
-<section id="sKeys"><h2>语音克隆 · 流式语音 API Key（自带密钥）</h2>
+<nav class="tabs"><a href="/" data-i18n="nav.projects">Projects</a><a href="/graph" data-i18n="nav.graph">Graph</a><a href="/aoi" data-i18n="nav.aoi">AoI</a><a href="/workbench" data-i18n="nav.workbench">Workbench</a><a href="/settings" class="on" data-i18n="nav.setting">Setting</a></nav></header>
+<main><h1 data-i18n="set.title">Setting</h1><div class="sub">参数设置与余额查询。数据来自 Workbench 登录会话（/api/bootstrap）与 Supabase 助手表；标「仅本机」的项只存在这台浏览器。</div>
+<section id="sBal"><h2 data-i18n="set.balance">账户与余额</h2><div id="bal" class="k">加载中…</div></section>
+<section id="sModel"><h2 data-i18n="set.model">助手与模型</h2><div id="model" class="k">加载中…</div></section>
+<section id="sVoice"><h2 data-i18n="set.voice">语音</h2><div id="voice" class="k">加载中…</div></section>
+<section id="sAsst"><h2 data-i18n="set.assistants">小助手设定</h2><div id="asst" class="k">加载中…</div></section>
+<section id="build"><h2 data-i18n="set.build">制作你的小助手</h2><div id="make" class="k">加载中…</div></section>
+<section id="sKeys"><h2 data-i18n="set.keys">语音克隆 · 流式语音 API Key（自带密钥）</h2>
 <div class="k" style="font-size:12px;margin-bottom:8px">费用由你直接付给服务商；密钥只存服务器（AES-GCM 加密），页面只显示掩码。克隆/流式调用尚未接通：填好密钥后显示「待接入」。</div>
 <div id="keys" class="k">加载中…</div></section>
-<section id="sOther"><h2>其他参数</h2><div id="other" class="k">加载中…</div></section>
+<section id="sOther"><h2 data-i18n="set.other">其他参数</h2><div id="other" class="k">加载中…</div></section>
 </main>
 <script>
 const $=(id)=>document.getElementById(id);const esc=(s)=>String(s??'').replace(/[&<>"]/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));

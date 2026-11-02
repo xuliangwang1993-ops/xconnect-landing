@@ -2322,7 +2322,8 @@ boot();
     const name = nameFor(id) || '小助手';
     const avatar = avatarFor(id);
     if (avatar) { try { mountRoam(avatar, name); } catch {} }
-    dropIn(`嗨，我是${name}！找我有什么事？`);
+    const zh = /^zh/.test(localStorage.getItem('xc_lang_v1') || navigator.language || '');
+    dropIn(zh ? `嗨，我是${name}！找我有什么事？` : `Hi, I’m ${name}! What can I do for you?`);
     if (state.voiceInfo?.available && !state.voice?.active) {
       try { toggleVoicePanel(true); await startVoice(); } catch (err) { toast((err && err.message) || '语音启动失败，先用文字聊', true); }
     }

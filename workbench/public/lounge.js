@@ -241,7 +241,8 @@ function renderList() {
 }
 
 function renderMine(ul) {
-  const head = el('li', 'lounge-mine-head', '我的小助手');
+  const zh = /^zh/.test(getLang());
+  const head = el('li', 'lounge-mine-head', zh ? '我的小助手' : 'My assistants');
   head.style.cssText = 'list-style:none;margin:18px 4px 6px;font-size:12px;opacity:.7;letter-spacing:.08em';
   ul.appendChild(head);
   for (let i = 0; i < 3; i++) {
@@ -251,7 +252,7 @@ function renderMine(ul) {
     li.style.cssText = 'opacity:.75;border-style:dashed';
     li.innerHTML = `<a href="${BUILD_URL}" target="_blank" rel="noopener" style="display:flex;width:100%;align-items:center;gap:12px;color:inherit;text-decoration:none">
       <span class="lounge-row-orb" style="display:grid;place-items:center;font-size:22px">+</span>
-      <span class="lounge-row-main"><span class="lounge-row-name">制作你的小助手</span><span class="lounge-row-desc">槽位 ${i + 1} · 去 Setting 导入素材</span></span></a>`;
+      <span class="lounge-row-main"><span class="lounge-row-name">${zh ? '制作你的小助手' : 'Build your own assistant'}</span><span class="lounge-row-desc">${zh ? `槽位 ${i + 1} · 去设置导入素材` : `Slot ${i + 1} · import materials in Setting`}</span></span></a>`;
     ul.appendChild(li);
   }
 }

@@ -50,7 +50,7 @@ function pill(stage) {
 
 function emptyProjects() {
   return `<div class="empty">
-    <h2>No projects yet</h2>
+    <h2>${(window.XC_I18N?window.XC_I18N.t('home.empty'):'No projects yet')}</h2>
     <p>A project is a factory line. Issues live inside it — same shape as Linear.</p>
     <div class="actions">
       <button class="primary" data-act="new-project">Create first project</button>
@@ -98,7 +98,7 @@ function renderProjects() {
 function renderProject(pid) {
   const p = cache.nodes.find((n) => n.id === pid && n.kind === 'project');
   if (!p) {
-    app.innerHTML = `<div class="empty"><h2>Project not found</h2><div class="actions"><a class="btn" href="/">Back to projects</a></div></div>`;
+    app.innerHTML = `<div class="empty"><h2>${(window.XC_I18N?window.XC_I18N.t('home.notFound'):'Project not found')}</h2><div class="actions"><a class="btn" href="/">${(window.XC_I18N?window.XC_I18N.t('home.back'):'Back to projects')}</a></div></div>`;
     return;
   }
   const issues = issuesOf(cache.nodes, pid);
@@ -193,6 +193,6 @@ window.addEventListener('popstate', render);
 window.addEventListener('xc:factory-new-project', () => openDialog({ type: 'project' }));
 
 load().catch((err) => {
-  app.innerHTML = `<div class="empty"><h2>Couldn’t load projects</h2><p>${esc(err.message || err)}</p>
+  app.innerHTML = `<div class="empty"><h2>${(window.XC_I18N?window.XC_I18N.t('home.loadFail'):'Couldn’t load projects')}</h2><p>${esc(err.message || err)}</p>
     <div class="actions"><button class="primary" onclick="location.reload()">Retry</button></div></div>`;
 });

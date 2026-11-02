@@ -108,14 +108,17 @@
       { transform: 'translateY(-28px)', offset: 0.75, easing: 'ease-in' }, { transform: 'translateY(0)', offset: 0.88, easing: 'ease-out' },
       { transform: 'translateY(-8px)', offset: 0.94 }, { transform: 'translateY(0)', offset: 1 }], { duration: 900 });
     const bub = document.createElement('div'); bub.className = 'xcg-bubble';
-    bub.textContent = `嗨，我是${name}！找我有什么事？点「${onHome ? '助手' : '导览员'}」跟我聊，或去 Workbench 开语音。`;
+    const tt = (k, v, fb) => (window.XC_I18N ? window.XC_I18N.t(k, v) : fb);
+    const en = window.XC_I18N && window.XC_I18N.lang === 'en';
+    bub.textContent = tt('call.greet', { name: en ? ({ duck: 'Duck Lee', sparky: 'Sparky', rapper: 'Forty Cents', wutian: 'WuTian', feifei: 'Feifei' }[av]) : name }, `嗨，我是${name}！`) + ' ' + tt('call.hint', {}, '');
     bub.style.cssText = `position:fixed;right:128px;bottom:140px;max-width:240px;z-index:9999;background:${C.panel || '#16181d'};color:#ececef;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 12px;font:13px/1.4 system-ui,"PingFang SC",sans-serif`;
     setTimeout(() => document.body.appendChild(bub), reduce ? 0 : 700);
     setTimeout(() => bub.remove(), 7000);
   }
   if (!full) {
     const call = document.createElement('button'); call.id = 'xcg-call'; call.type = 'button'; call.setAttribute('aria-label', '呼叫');
-    call.innerHTML = PHONE + ' 呼叫'; call.onclick = callPet;
+    const T = (k, v, fb) => (window.XC_I18N ? window.XC_I18N.t(k, v) : fb);
+    call.innerHTML = PHONE + ' ' + T('call.label', {}, '呼叫'); window.XC_I18N?.onChange(() => { call.innerHTML = PHONE + ' ' + T('call.label', {}, '呼叫'); }); call.onclick = callPet;
     call.style.cssText = 'position:fixed;right:18px;bottom:66px;z-index:9998;padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:#16181d;color:#ececef;font:13px system-ui,"PingFang SC",sans-serif;cursor:pointer';
     document.body.appendChild(call);
   }
