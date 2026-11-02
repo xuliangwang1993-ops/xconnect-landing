@@ -78,7 +78,7 @@ export async function generateImage({ prompt, image, n = 1, size, provider, user
   const auth = { authorization: `Bearer ${p.key}` };
   let j, model;
   if (p.id === 'ark') {
-    model = env.ARK_IMAGE_MODEL || 'doubao-seedream-4-0-250828';
+    model = env.ARK_IMAGE_MODEL || 'doubao-seedream-4-5-251128';
     const body = { model, prompt, size: size || '2K', response_format: 'b64_json', watermark: false };
     if (src) body.image = src.dataUrl;
     if (n > 1) { body.sequential_image_generation = 'auto'; body.sequential_image_generation_options = { max_images: n }; }

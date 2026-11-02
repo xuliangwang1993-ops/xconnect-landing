@@ -15,7 +15,7 @@
     'home.empty': '还没有项目', 'home.notFound': '找不到这个项目', 'home.back': '返回项目', 'home.loadFail': '项目加载失败',
     'set.title': '设置', 'set.balance': '账户与余额', 'set.model': '助手与模型', 'set.voice': '语音', 'set.assistants': '小助手设定',
     'set.build': '制作你的小助手', 'set.keys': '语音克隆 · 流式语音 API Key（自带密钥）', 'set.imgkeys': '图像生成 API Key（文生图 / 图生图，自带密钥）', 'img.hint': '小助手输入区点 🎨 生图：输入描述即文生图，拖入/上传图片即图生图。费用由你直接付给服务商，我们只提供链接；密钥加密存于服务端。', 'set.other': '其他参数', 'set.lang': '语言', 'set.skin': 'Agentic 皮肤', 'skin.auto': '跟随聊天模型（自动）', 'skin.hint': '聊天里选的模型决定界面配色；也可以手动固定。同步到工厂所有页面和其他标签页。', 'skin.now': '当前',
-    'call.label': '呼叫', 'call.greet': '嗨，我是{name}！找我有什么事？', 'call.hint': '点右下角跟我聊，或去工作台开语音。',
+    'call.label': '呼叫', 'call.greet': '嗨，我是{name}！找我有什么事？', 'call.hint': '在左侧导航栏里找我聊，或去工作台开语音。',
     'lounge.mine': '我的小助手', 'lounge.make': '制作你的小助手', 'lounge.slot': '槽位 {n} · 去设置导入素材',
   });
   addDict('en', 'English', {
@@ -23,7 +23,7 @@
     'home.empty': 'No projects yet', 'home.notFound': 'Project not found', 'home.back': 'Back to projects', 'home.loadFail': 'Couldn’t load projects',
     'set.title': 'Setting', 'set.balance': 'Account & balance', 'set.model': 'Assistant & model', 'set.voice': 'Voice', 'set.assistants': 'Assistants',
     'set.build': 'Build your own assistant', 'set.keys': 'Voice clone · streaming voice API keys (BYOK)', 'set.imgkeys': 'Image generation API keys (text-to-image / image-to-image, BYOK)', 'img.hint': 'In the assistant composer tap 🎨 Image: type a prompt for text-to-image, or drop/upload a picture for image-to-image. You pay the provider directly; we only link to it. Keys are stored encrypted on the server.', 'set.other': 'Other', 'set.lang': 'Language', 'set.skin': 'Agentic skin', 'skin.auto': 'Follow chat model (auto)', 'skin.hint': 'The model you chat with sets the UI palette; or pin one manually. Syncs to every factory page and other tabs.', 'skin.now': 'Now',
-    'call.label': 'Call', 'call.greet': 'Hi, I’m {name}! What can I do for you?', 'call.hint': 'Chat with me bottom-right, or open voice in the Workbench.',
+    'call.label': 'Call', 'call.greet': 'Hi, I’m {name}! What can I do for you?', 'call.hint': 'Chat with me in the navigator panel, or open voice in the Workbench.',
     'lounge.mine': 'My assistants', 'lounge.make': 'Build your own assistant', 'lounge.slot': 'Slot {n} · import materials in Setting',
   });
   function detect() {
