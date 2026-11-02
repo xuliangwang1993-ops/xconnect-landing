@@ -20,11 +20,19 @@ function readJson(req, limit = 100_000) {
 }
 
 export function createBrainApi({ brain, store, tree, getSession = () => null }) {
+  // 待送达队列：服务端算完的强档结论，等前端来取。按会话分桶，取走即删。
+  const outbox = new Map(); // sessionId -> [payload]
   const json = (res, code, body) => {
     res.writeHead(code, { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' });
     res.end(JSON.stringify(body));
     return true;
   };
+
+  brain.useDeliver?.((payload) => {
+    const list = outbox.get(payload.sessionId) || [];
+    list.push(payload);
+    outbox.set(payload.sessionId, list.slice(-5));
+  });
 
   const nodeForTask = (task, sessionId) => tree.upsert({
     kind: 'ticket',
@@ -59,6 +67,21 @@ export function createBrainApi({ brain, store, tree, getSession = () => null }) 
           if (!sessionId) return json(res, 400, { error: 'sessionId required' });
           const out = await brain.forTurn({ sessionId, turns: Array.isArray(b.turns) ? b.turns.slice(-24) : [], assistantId: b.assistantId, lang: b.lang || 'zh' });
           return json(res, 200, { ok: out.ok, reply: out.reply, tasks: out.tasks, questions: out.questions, needs: out.needs, reason: out.reason, latencyMs: out.latencyMs, budgetMs: out.budgetMs, model: out.model });
+        }
+
+        // ---- 智库：慢而强的总脑。立刻回 pending，结论稍后从 /api/brain/pending 取走 ----
+        if (p === '/api/brain/strong' && req.method === 'POST') {
+          const b = await readJson(req);
+          const sessionId = String(b.sessionId || '').slice(0, 80);
+          if (!sessionId) return json(res, 400, { error: 'sessionId required' });
+          const out = await brain.askStrong({ sessionId, turns: Array.isArray(b.turns) ? b.turns : [], assistantId: b.assistantId, lang: b.lang || 'zh' });
+          return json(res, 202, out);
+        }
+        if (p === '/api/brain/pending' && req.method === 'GET') {
+          const sessionId = String(u.searchParams.get('sessionId') || '').slice(0, 80);
+          const list = outbox.get(sessionId) || [];
+          outbox.delete(sessionId);
+          return json(res, 200, { items: list });
         }
 
         // ---- 第 4 步：主动模式 ----
@@ -131,6 +154,8 @@ export function createBrainApi({ brain, store, tree, getSession = () => null }) 
             tree: tree.mode,
             model: brain.model,
             timeoutMs: brain.timeoutMs,
+            strongTimeoutMs: brain.strongTimeoutMs,
+            contextChars: brain.contextChars,
             proactiveTimeoutMs: brain.proactiveTimeoutMs,
             stats: brain.stats,
             missing: brain.configured ? [] : ['BRAIN_MODEL_API_BASE', 'BRAIN_MODEL_API_KEY'],

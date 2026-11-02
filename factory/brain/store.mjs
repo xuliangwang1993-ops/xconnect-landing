@@ -9,7 +9,7 @@ export function createBrainStore({ env = process.env, fetchImpl = globalThis.fet
   const url = (env.SUPABASE_URL || env.SUPA_URL || '').replace(/\/+$/, '');
   const key = env.SUPABASE_SERVICE_ROLE_KEY || '';
   const live = !!(url && key);
-  const mem = { turns: [], needs: [], replies: [], settings: new Map() };
+  const mem = { turns: [], needs: [], replies: [], settings: new Map(), deliveries: [] };
   let seq = 0;
   const id = (p) => `${p}-${(++seq).toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
 
@@ -124,6 +124,13 @@ export function createBrainStore({ env = process.env, fetchImpl = globalThis.fet
       }
       const q = `brain_needs?select=*&order=confidence.desc,updated_at.desc&limit=${limit}` + (status ? `&status=eq.${status}` : '');
       return rest(q);
+    },
+
+    /** 强档结论的送达箱：服务端算完先落这里，前端轮询取走（跨实例也不丢）。 */
+    async addDelivery(d) {
+      const row = { session_id: clamp(d.sessionId, 80), kind: 'strong', payload: d.payload, created_at: new Date().toISOString() };
+      if (!live) { mem.deliveries.push({ id: 'dl-' + mem.deliveries.length, taken: false, ...row }); return row; }
+      try { return (await rest('brain_replies', { method: 'POST', body: JSON.stringify({ session_id: row.session_id, kind: 'strong', reply: String(d.payload?.reply || '').slice(0, 1000), latency_ms: Number(d.payload?.latencyMs) || 0, used: 'brain', reason: 'deliver' }) }))[0]; } catch { return row; }
     },
 
     async logReply(r) {

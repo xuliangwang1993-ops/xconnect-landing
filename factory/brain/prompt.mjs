@@ -29,10 +29,11 @@ export const SYSTEM_PROMPT = `你是 X-connect 的「总脑」，一位冷静的
 }
 各数组最多 3 条，没有就给 []。`;
 
-export function buildMessages({ turns = [], assistants = {}, lang = 'zh', intent = 'turn' } = {}) {
+export function buildMessages({ turns = [], assistants = {}, lang = 'zh', intent = 'turn', omittedNote = '' } = {}) {
+  // 不再逐条截 800 字：长度由调用方按模型窗口打包（见 context.mjs）。
   const lines = turns.map((t) => {
     const who = t.role === 'user' ? '客户' : `小助手${t.assistant ? `(${t.assistant})` : ''}`;
-    return `${who}：${String(t.text || '').slice(0, 800)}`;
+    return `${who}：${String(t.text || '')}`;
   }).join('\n');
   const names = Object.entries(assistants || {}).map(([id, name]) => `${id}=${name}`).join('，');
   const head = intent === 'proactive'
@@ -42,7 +43,7 @@ export function buildMessages({ turns = [], assistants = {}, lang = 'zh', intent
     { role: 'system', content: SYSTEM_PROMPT },
     {
       role: 'user',
-      content: `${head}\n界面语言：${lang}${names ? `\n在场小助手：${names}` : ''}\n\n对话记录（从早到晚）：\n${lines || '（空）'}`,
+      content: `${head}\n界面语言：${lang}${names ? `\n在场小助手：${names}` : ''}\n\n对话记录（从早到晚）${omittedNote ? `，${omittedNote}` : ''}：\n${lines || '（空）'}`,
     },
   ];
 }

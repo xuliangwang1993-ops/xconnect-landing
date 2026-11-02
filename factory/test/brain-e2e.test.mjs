@@ -153,3 +153,26 @@ test('健康检查只说"缺什么"，不吐密钥', async () => {
   assert.deepEqual(r.json.missing, ['BRAIN_MODEL_API_BASE', 'BRAIN_MODEL_API_KEY']);
   assert.doesNotMatch(JSON.stringify(r.json), /sk-|Bearer /);
 });
+
+test('端到端：智库（强档）——发起立刻 202，结论稍后能取走', async () => {
+  const store = createBrainStore({ env: {} });
+  const tree = createTreeStore({ env: {} });
+  const brain = createBrain({
+    env: { BRAIN_MODEL_API_BASE: 'https://brain.test/v1', BRAIN_MODEL_API_KEY: 'k' }, store,
+    fetchImpl: fakeModel([]), timeoutMs: 10, strongTimeoutMs: 600,
+  });
+  const api = createBrainApi({ brain, store, tree, getSession: () => ({ user: { id: 'u' } }) });
+  const t0 = Date.now();
+  const r = await call(api, { method: 'POST', url: '/api/brain/strong', body: { sessionId: 'conv-9', turns: DIALOGUE } });
+  assert.equal(r.code, 202);
+  assert.ok(Date.now() - t0 < 200, '发起不能等模型');
+  let items = [];
+  for (let i = 0; i < 30 && !items.length; i++) {
+    await new Promise((x) => setTimeout(x, 20));
+    items = (await call(api, { method: 'GET', url: '/api/brain/pending?sessionId=conv-9' })).json.items;
+  }
+  assert.equal(items.length, 1, '结论要能从送达箱取到');
+  assert.match(items[0].reply, /53 004 085 616/);
+  const again = (await call(api, { method: 'GET', url: '/api/brain/pending?sessionId=conv-9' })).json.items;
+  assert.equal(again.length, 0, '取走即删，不重复送达');
+});

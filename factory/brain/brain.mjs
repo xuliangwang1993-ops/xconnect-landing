@@ -8,9 +8,13 @@
 
 import { buildMessages, parseBrainText, fingerprint, SYSTEM_PROMPT } from './prompt.mjs';
 import { guardResult } from './guard.mjs';
+import { packContext, DEFAULT_CONTEXT_CHARS } from './context.mjs';
 
+// 快档：只用来"别让界面等"。慢的强模型交给强档 + 稍后送达。
 const DEFAULT_TURN_TIMEOUT_MS = 3000;
 const DEFAULT_PROACTIVE_TIMEOUT_MS = 9000;
+// 强档（总脑主力）默认给 45 秒：它慢，但它是那个拿主意的人。
+const DEFAULT_STRONG_TIMEOUT_MS = 45_000;
 const DEFAULT_MIN_GAP_MS = 2 * 60_000;
 const DEFAULT_ASK_COOLDOWN_MS = 10 * 60_000;
 const BREAKER_BREAK_MS = 90_000;
@@ -22,6 +26,10 @@ export function createBrain({
   now = Date.now,
   timeoutMs = Number(env.BRAIN_TIMEOUT_MS) || DEFAULT_TURN_TIMEOUT_MS,
   proactiveTimeoutMs = Number(env.BRAIN_PROACTIVE_TIMEOUT_MS) || DEFAULT_PROACTIVE_TIMEOUT_MS,
+  strongTimeoutMs = Number(env.BRAIN_STRONG_TIMEOUT_MS) || DEFAULT_STRONG_TIMEOUT_MS,
+  onDeliver = null, // 强档算完后的送达回调（见 useDeliver）
+  contextChars = DEFAULT_CONTEXT_CHARS,
+  historyLimit = Number(env.BRAIN_HISTORY_LIMIT) || 2000,
   model = env.BRAIN_MODEL || 'kimi-k3',
   base = env.BRAIN_MODEL_API_BASE || env.DEEPSEEK_BASE_URL || env.OPENAI_BASE_URL || '',
   apiKey = env.BRAIN_MODEL_API_KEY || env.DEEPSEEK_API_KEY || env.OPENAI_API_KEY || '',
@@ -38,7 +46,7 @@ export function createBrain({
 
   const url = () => (/\/chat\/completions$/.test(root) ? root : `${root}/chat/completions`);
 
-  async function callModel({ turns, assistants, lang, intent }, ms, noFormat = false) {
+  async function callModel({ turns, assistants, lang, intent, omittedNote = '' }, ms, noFormat = false) {
     const ctrl = new AbortController();
     let late = false;
     let attempt_ = noFormat ? 1 : 0;
@@ -56,7 +64,7 @@ export function createBrain({
           max_tokens: 2400, // 推理型模型（kimi-k3）会先花思考 token，给窄了正文就是空的
           messages: [
             { role: 'system', content: SYSTEM_PROMPT + '\n\n只输出一个 JSON 对象本身，键名用双引号。' },
-            ...buildMessages({ turns, assistants, lang, intent }).slice(1),
+            ...buildMessages({ turns, assistants, lang, intent, omittedNote }).slice(1),
           ],
           // 上游支持就从解码层强制 JSON；不支持会返回 400，由下面降级重试兜住。
           ...(noFormat ? {} : { response_format: { type: 'json_object' } }),
@@ -82,7 +90,9 @@ export function createBrain({
   }
 
   // 缓存键按"意图档位"而不是具体预算：3 秒预算算出的结论，和 9 秒预算算出的同一份，可以共用。
-  const profile = (args) => (args.intent === 'proactive' ? 'proactive' : 'turn');
+  // 档位：turn=3 秒内说完；proactive=停顿回看；strong=强模型，慢但够深
+  const profile = (args) => (args.intent === 'proactive' ? 'proactive' : args.intent === 'strong' ? 'strong' : 'turn');
+  const budgetOf = (args) => (profile(args) === 'strong' ? strongTimeoutMs : profile(args) === 'proactive' ? proactiveTimeoutMs : timeoutMs);
   const keyOf = (args) => `${profile(args)}|${fingerprint(args.turns.map((t) => t.role + ':' + t.text).join('\n'))}`;
 
   /**
@@ -111,7 +121,7 @@ export function createBrain({
       const k = keyOf(args);
       let attempt = inflight.get(k);
       if (!attempt) {
-        attempt = callModel(args, proactiveTimeoutMs)
+        attempt = callModel(args, Math.max(1000, budget))
           .then((text) => {
             const result = parseBrainText(text);
             if (result.reply_suggestion || result.follow_up_questions.length || result.needs.length) cache.set(`k:${k}`, { at: now(), result, text });
@@ -150,14 +160,16 @@ export function createBrain({
 
   return {
     configured, mode: store.mode, model, stats,
-    timeoutMs, proactiveTimeoutMs,
+    timeoutMs, proactiveTimeoutMs, strongTimeoutMs, contextChars, historyLimit,
 
     /** 第 3 步：小助手回复前先问总脑。永不 throw。 */
     async forTurn({ sessionId, turns = [], assistantId, lang = 'zh' }) {
       if (!sessionId) return { ok: false, reply: null, tasks: [], questions: [], needs: [], reason: 'no_session', latencyMs: 0 };
-      const list = turns.length ? turns
-        : (await store.history(sessionId, 24).catch(() => [])).map((t) => ({ role: t.role, text: t.text, assistant: t.assistant_id }));
-      const out = await ask({ turns: list, assistants: assistantId ? { [assistantId]: assistantId } : {}, lang, intent: 'turn' }, timeoutMs);
+      const packed = packContext(turns.length ? turns
+        : (await store.history(sessionId, historyLimit).catch(() => [])).map((t) => ({ role: t.role, text: t.text, assistant: t.assistant_id })),
+        { budgetChars: contextChars });
+      const list = packed.turns;
+      const out = await ask({ turns: list, assistants: assistantId ? { [assistantId]: assistantId } : {}, lang, intent: 'turn', omittedNote: packed.omittedNote }, timeoutMs);
       const latencyMs = out.latencyMs;
       const hit = out.result && out.result.reply_suggestion ? out.result : null;
       let savedNeeds = [];
@@ -177,6 +189,39 @@ export function createBrain({
         budgetMs: timeoutMs,
         model: hit ? model : null,
       };
+    },
+
+    /**
+     * 智库模式：把这一轮交给强模型慢慢想（默认 45 秒）。
+     * 立刻返回 { pending:true } 让界面先走；结论好了走 onDeliver，由小助手把它送到对话里。
+     * 绝不阻塞对话，也绝不因为慢就丢掉结论。
+     */
+    async askStrong({ sessionId, turns = [], assistantId, lang = 'zh' }) {
+      if (!sessionId) return { pending: false, reason: 'no_session' };
+      // 强档才真正吃长上下文：整段历史装进窗口，装不下才明说省略了多少轮。
+      const packed = packContext(turns.length ? turns
+        : (await store.history(sessionId, historyLimit).catch(() => [])).map((t) => ({ role: t.role, text: t.text, assistant: t.assistant_id })),
+        { budgetChars: contextChars });
+      const args = { turns: packed.turns, assistants: assistantId ? { [assistantId]: assistantId } : {}, lang, intent: 'strong', omittedNote: packed.omittedNote };
+      const run = ask(args, strongTimeoutMs).then(async (out) => {
+        const hit = out.result && (out.result.reply_suggestion || out.result.follow_up_questions?.length);
+        if (!hit) { stats.strongMiss = (stats.strongMiss || 0) + 1; return { ok: false, reason: out.reason }; }
+        stats.strongHits = (stats.strongHits || 0) + 1;
+        const saved = await persistNeeds(sessionId, out.result.needs);
+        const payload = {
+          ok: true, sessionId, model,
+          reply: out.result.reply_suggestion || '',
+          questions: out.result.follow_up_questions || [],
+          tasks: out.result.tasks || [],
+          needs: saved.length ? saved.map((n) => ({ need: n.need, evidence: n.evidence, confidence: Number(n.confidence), id: n.id })) : [],
+          latencyMs: out.latencyMs,
+        };
+        store.logReply({ sessionId, kind: 'strong', reply: payload.reply, latencyMs: out.latencyMs, used: true }).catch(() => {});
+        if (typeof onDeliver === 'function') { try { await onDeliver(payload); } catch {} }
+        return payload;
+      });
+      inflight.set(`strong:${sessionId}:${keyOf(args)}`, run);
+      return { pending: true, budgetMs: strongTimeoutMs, model };
     },
 
     /** 只给诊断/自检用：用指定预算问一次（不影响 forTurn 的 3 秒契约）。 */
@@ -212,6 +257,8 @@ export function createBrain({
       return { question: null, reason: 'nothing_new' };
     },
 
+    /** 让接口层把"送达"接到自己的队列上（引擎不关心前面是 WebSocket 还是轮询）。 */
+    useDeliver(fn) { onDeliver = typeof fn === 'function' ? fn : null; },
     needs: (opts) => store.listNeeds(opts),
     settings: () => store.settings(),
     async setProactive(on) { await store.setSetting('proactive', !!on); return store.settings(); },
