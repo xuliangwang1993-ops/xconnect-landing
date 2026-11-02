@@ -1,5 +1,5 @@
 // xc-nav.js — the one factory nav (6 sections). Injected on every factory page via GUIDE_TAG.
-// 开始 /guide · 项目 / · Tree·Graph /aoi?view=tree · AoI /aoi?view=live · 工作台 /workbench/ · 设置 /settings
+// 开始 /guide · 项目 / · 项目树(Tree/Graph) /aoi?view=tree · AoI /aoi?view=live · 工作台 /workbench/ · 设置 /settings
 // Hidden (routes kept, just not linked): /portal (old Factory OS portal), /graph (old Tree|Graph page), /tree (进树 editor).
 (() => {
   const p = location.pathname, v = new URLSearchParams(location.search).get('view') || '';
@@ -8,7 +8,7 @@
   const S = [
     ['start', '/guide', '开始', 'Start', () => p.startsWith('/guide')],
     ['projects', '/', '项目', 'Projects', () => p === '/' || p === '/index.html' || p.startsWith('/tree')],
-    ['treegraph', '/aoi?view=tree', 'Tree · Graph', 'Tree · Graph', () => (p.startsWith('/aoi') && v !== 'live') || p.startsWith('/graph')],
+    ['treegraph', '/aoi?view=tree', '项目树', 'Project Tree', () => (p.startsWith('/aoi') && v !== 'live') || p.startsWith('/graph')],
     ['aoi', '/aoi?view=live', 'AoI', 'AoI', () => p.startsWith('/aoi') && v === 'live'],
     ['workbench', '/workbench/', '工作台', 'Workbench', () => false],
     ['settings', '/settings', '⚙ 设置', '⚙ Settings', () => /^\/(settings|account|assistants)/.test(p)],
