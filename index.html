@@ -87,14 +87,7 @@
 <body>
   <header class="app">
     <a class="brand" href="/" aria-label="X-connect 首页"><img class="brand-logo" src="brand-logo.png" alt="X-connect"></a>
-    <nav class="tabs" aria-label="Views">
-      <a href="/" class="on" id="tabProjects" data-i18n="nav.projects">Projects</a>
-      <a href="/aoi?view=tree">Tree</a>
-      <a href="/aoi?view=graph" data-i18n="nav.graph">Graph</a>
-      <a href="/aoi" data-i18n="nav.aoi">AoI</a>
-      <a href="/workbench" data-i18n="nav.workbench">Workbench</a>
-      <a href="/settings">⚙ <span data-i18n="nav.setting">设置</span></a>
-    </nav>
+    <nav class="tabs" aria-label="Views"><a href="/" class="on" id="tabProjects" data-nav="projects">项目</a><a href="/aoi?view=tree" data-nav="tree">项目树</a><a href="/aoi?view=live" data-nav="aoi">AoI</a><a href="/workbench/" data-nav="workbench">工作台</a><a href="/settings" data-nav="settings">设置</a></nav>
     <div class="spacer"></div>
     <span class="mode" id="mode"></span>
   </header>
