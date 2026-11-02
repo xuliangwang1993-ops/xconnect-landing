@@ -2118,6 +2118,23 @@ function bindEvents() {
   $('#accountBtn').addEventListener('click', () => openSettings('about'));
   $('#avatarBtn').addEventListener('click', () => openSettings('about'));
   $('#installBtn').addEventListener('click', promptInstall);
+  {
+    // 返回主菜单：有通话先干净挂断（停声音、断连接），再回到选人大厅
+    const back = $('#backToMenu');
+    const label = () => {
+      if (!back) return;
+      const zh = /^zh/.test(localStorage.getItem('xc_lang_v1') || navigator.language || '');
+      const t = zh ? '返回' : 'Back';
+      const full = zh ? '返回主菜单' : 'Back to main menu';
+      back.querySelector('.back-menu-lab').textContent = t;
+      back.title = full; back.setAttribute('aria-label', full);
+    };
+    label(); window.addEventListener('storage', label); document.addEventListener('xc:lang', label);
+    back?.addEventListener('click', async () => {
+      try { if (state.voice?.active) stopVoice(false); } catch {}
+      try { await openLounge(); } catch (e) { console.warn('[back] lounge failed', e); }
+    });
+  }
   $('#changeAssistantBtn')?.addEventListener('click', () => openLounge());
   $('#assistantCard')?.addEventListener('click', () => openLounge());
   $('#logoutBtn').addEventListener('click', async () => {

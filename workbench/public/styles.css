@@ -940,3 +940,8 @@ body.lounge-open .voice-panel { z-index: 70; }
 .voice-map-meta { display: flex; justify-content: space-between; gap: 10px; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
 .voice-map-text { white-space: pre-wrap; font-size: 13px; line-height: 1.45; }
 .roam-pet { pointer-events: auto; cursor: grab; }
+
+/* 返回主菜单（选人大厅） */
+.back-menu { display: inline-flex; align-items: center; gap: 4px; min-height: 36px; padding: 0 10px 0 6px; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--text); font: inherit; font-size: 13px; cursor: pointer; flex: none; }
+.back-menu:hover { background: color-mix(in srgb, var(--text) 8%, transparent); }
+@media (max-width: 560px) { .back-menu { min-width: 40px; min-height: 40px; padding: 0 8px; justify-content: center; } .back-menu-lab { display: none; } }
