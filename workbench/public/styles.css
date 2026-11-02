@@ -945,3 +945,10 @@ body.lounge-open .voice-panel { z-index: 70; }
 .back-menu { display: inline-flex; align-items: center; gap: 4px; min-height: 36px; padding: 0 10px 0 6px; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--text); font: inherit; font-size: 13px; cursor: pointer; flex: none; }
 .back-menu:hover { background: color-mix(in srgb, var(--text) 8%, transparent); }
 @media (max-width: 560px) { .back-menu { min-width: 40px; min-height: 40px; padding: 0 8px; justify-content: center; } .back-menu-lab { display: none; } }
+
+/* Scroll fix: the lounge list and the detail sheet must scroll when content
+   is taller than the viewport (short laptops, iOS Safari with toolbars). */
+.lounge { height: 100vh; height: 100dvh; }
+.lounge-body { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; align-items: safe center; }
+.lounge-sheet { overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; max-height: min(88vh, 760px); max-height: min(88dvh, 760px); }
+.lounge-detail { align-items: safe center; -webkit-overflow-scrolling: touch; }
