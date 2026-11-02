@@ -24,7 +24,7 @@
   const onHome = location.pathname.replace(/\/$/, '') === '' || location.pathname === '/';
   const btn = document.createElement('button'); btn.id = 'xcg-btn'; btn.type = 'button'; btn.innerHTML = onHome ? '助手' : '📚 导览员';
   const panel = document.createElement('section'); panel.id = 'xcg-panel'; panel.setAttribute('aria-label', '工厂导览员');
-  panel.innerHTML = `<div id="xcg-head"><span>${onHome ? '<b>助手</b> · 一起搭 Factory OS' : '📚 <b>图书馆管理员</b> · 工厂导览'}</span><button type="button" aria-label="关闭">×</button></div>
+  panel.innerHTML = `<div id="xcg-head"><span>${onHome ? '<b>助手</b> · 一起搭 Factory OS' : '📚 <b>图书馆管理员</b> · 工厂导览'}</span><span style="display:flex;gap:6px;align-items:center"><button type="button" id="xcg-nav-call" aria-label="呼叫" style="font-size:13px;color:#ececef;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:3px 10px"></button><button type="button" id="xcg-close" aria-label="关闭">×</button></span></div>
 <div id="xcg-log"></div><form id="xcg-form"><input id="xcg-q" placeholder="问我：怎么发起委托？卡片怎么批准？" maxlength="200" autocomplete="off"><button>问</button></form>`;
   const mount = full ? (document.getElementById('guide-root') || document.body) : document.body;
   if (full) panel.classList.add('full', 'open'); else document.body.appendChild(btn);
@@ -84,7 +84,7 @@
   let started = false;
   function open() { panel.classList.add('open'); if (!started) { started = true; let toured = false; try { toured = !!localStorage.getItem('xcGuideToured'); } catch {} toured ? chips() : tour(); } }
   btn.onclick = () => (panel.classList.contains('open') && !full ? panel.classList.remove('open') : open());
-  panel.querySelector('#xcg-head button').onclick = () => { if (full) location.href = '/'; else panel.classList.remove('open'); try { localStorage.setItem('xcGuideToured', '1'); } catch {} };
+  panel.querySelector('#xcg-close').onclick = () => { if (full) location.href = '/'; else panel.classList.remove('open'); try { localStorage.setItem('xcGuideToured', '1'); } catch {} };
   panel.querySelector('#xcg-form').onsubmit = (e) => { e.preventDefault(); const i = panel.querySelector('#xcg-q'); const q = i.value.trim(); if (q) { i.value = ''; ask(q); } };
 
   // 呼叫：小助手从顶部落下，停在右下角并主动问候（工厂页无语音会话 → 只用文字；不跳页）
@@ -115,12 +115,11 @@
     setTimeout(() => document.body.appendChild(bub), reduce ? 0 : 700);
     setTimeout(() => bub.remove(), 7000);
   }
-  if (!full) {
-    const call = document.createElement('button'); call.id = 'xcg-call'; call.type = 'button'; call.setAttribute('aria-label', '呼叫');
+  { // 呼叫按钮只在导航员窗口内（打开面板后可见），不再有右下角并列入口
+    const call = panel.querySelector('#xcg-nav-call');
     const T = (k, v, fb) => (window.XC_I18N ? window.XC_I18N.t(k, v) : fb);
-    call.innerHTML = PHONE + ' ' + T('call.label', {}, '呼叫'); window.XC_I18N?.onChange(() => { call.innerHTML = PHONE + ' ' + T('call.label', {}, '呼叫'); }); call.onclick = callPet;
-    call.style.cssText = 'position:fixed;right:18px;bottom:66px;z-index:9998;padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:#16181d;color:#ececef;font:13px system-ui,"PingFang SC",sans-serif;cursor:pointer';
-    document.body.appendChild(call);
+    const lab = () => { call.innerHTML = PHONE + ' ' + T('call.label', {}, '呼叫'); call.setAttribute('aria-label', T('call.label', {}, '呼叫')); };
+    lab(); window.XC_I18N?.onChange(lab); call.onclick = callPet;
   }
   let first = false; try { first = !localStorage.getItem('xcGuideToured'); } catch {}
   if (full || first || /[?&]guide=1/.test(location.search)) open();
