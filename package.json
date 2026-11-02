@@ -1,12 +1,16 @@
 {
-  "name": "xconnect-factory-site",
-  "version": "1.0.0",
+  "name": "xconnect-factory",
   "private": true,
-  "description": "X-Connect Factory static site (right door of www.x-connect.ai)",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "X-connect 工厂：搭台你唱戏门面 + Workbench + AoI 看板，一个 Node 服务",
   "scripts": {
-    "ci": "node -e \"require('fs').accessSync('site/index.html'); console.log('site ready:', require('fs').readdirSync('site').length + ' files')\"",
-    "build": "node -e \"require('fs').accessSync('site/index.html'); console.log('site ready:', require('fs').readdirSync('site').length + ' files')\"",
-    "start": "node render-serve.js"
+    "start": "node workbench/server-voice.mjs",
+    "test": "node --test --test-concurrency=1 factory/test/aoi-live.test.mjs factory/test/brain-e2e.test.mjs factory/test/brain-prompt.test.mjs factory/test/brain-timeout.test.mjs factory/test/factory.test.mjs factory/test/graph.test.mjs factory/test/guide.test.mjs factory/test/settings.test.mjs factory/test/tree.test.mjs workbench/test/greeting-silent.test.mjs workbench/test/image-gen.test.mjs workbench/test/lane.test.mjs workbench/test/linear.test.mjs workbench/test/project-delivery.test.mjs workbench/test/promo.test.mjs workbench/test/slack.test.mjs workbench/test/voice-auth.test.mjs workbench/test/workbench.test.mjs workbench/test/xc-tour-kb.test.mjs",
+    "envshow": "node /tmp/envshow.mjs"
+  },
+  "dependencies": {
+    "ws": "^8.18.3"
   },
   "engines": {
     "node": ">=18"
