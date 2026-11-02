@@ -8,7 +8,7 @@
 
 import { buildMessages, parseBrainText, fingerprint, SYSTEM_PROMPT } from './prompt.mjs';
 import { guardResult } from './guard.mjs';
-import { packContext, DEFAULT_CONTEXT_CHARS } from './context.mjs';
+import { packContext, packWithLayers, DEFAULT_CONTEXT_CHARS } from './context.mjs';
 
 // 快档：只用来"别让界面等"。慢的强模型交给强档 + 稍后送达。
 const DEFAULT_TURN_TIMEOUT_MS = 3000;
@@ -30,6 +30,8 @@ export function createBrain({
   onDeliver = null, // 强档算完后的送达回调（见 useDeliver）
   contextChars = DEFAULT_CONTEXT_CHARS,
   historyLimit = Number(env.BRAIN_HISTORY_LIMIT) || 2000,
+  // 三层记忆开关：关着时行为与之前完全一致。打开后话题切分/实体记忆/摘要一起生效。
+  memoryLayers = String(env.BRAIN_MEMORY_LAYERS || 'off').toLowerCase() === 'on',
   model = env.BRAIN_MODEL || 'kimi-k3',
   base = env.BRAIN_MODEL_API_BASE || env.DEEPSEEK_BASE_URL || env.OPENAI_BASE_URL || '',
   apiKey = env.BRAIN_MODEL_API_KEY || env.DEEPSEEK_API_KEY || env.OPENAI_API_KEY || '',
@@ -46,7 +48,7 @@ export function createBrain({
 
   const url = () => (/\/chat\/completions$/.test(root) ? root : `${root}/chat/completions`);
 
-  async function callModel({ turns, assistants, lang, intent, omittedNote = '' }, ms, noFormat = false) {
+  async function callModel({ turns, assistants, lang, intent, omittedNote = '', extra = '' }, ms, noFormat = false) {
     const ctrl = new AbortController();
     let late = false;
     let attempt_ = noFormat ? 1 : 0;
@@ -63,7 +65,7 @@ export function createBrain({
           temperature: 0.2,
           max_tokens: 2400, // 推理型模型（kimi-k3）会先花思考 token，给窄了正文就是空的
           messages: [
-            { role: 'system', content: SYSTEM_PROMPT + '\n\n只输出一个 JSON 对象本身，键名用双引号。' },
+            { role: 'system', content: SYSTEM_PROMPT + '\n\n只输出一个 JSON 对象本身，键名用双引号。' + (extra ? `\n\n${extra}` : '') },
             ...buildMessages({ turns, assistants, lang, intent, omittedNote }).slice(1),
           ],
           // 上游支持就从解码层强制 JSON；不支持会返回 400，由下面降级重试兜住。
@@ -160,7 +162,7 @@ export function createBrain({
 
   return {
     configured, mode: store.mode, model, stats,
-    timeoutMs, proactiveTimeoutMs, strongTimeoutMs, contextChars, historyLimit,
+    timeoutMs, proactiveTimeoutMs, strongTimeoutMs, contextChars, historyLimit, memoryLayers,
 
     /** 第 3 步：小助手回复前先问总脑。永不 throw。 */
     async forTurn({ sessionId, turns = [], assistantId, lang = 'zh' }) {
@@ -199,10 +201,13 @@ export function createBrain({
     async askStrong({ sessionId, turns = [], assistantId, lang = 'zh' }) {
       if (!sessionId) return { pending: false, reason: 'no_session' };
       // 强档才真正吃长上下文：整段历史装进窗口，装不下才明说省略了多少轮。
-      const packed = packContext(turns.length ? turns
-        : (await store.history(sessionId, historyLimit).catch(() => [])).map((t) => ({ role: t.role, text: t.text, assistant: t.assistant_id })),
-        { budgetChars: contextChars });
-      const args = { turns: packed.turns, assistants: assistantId ? { [assistantId]: assistantId } : {}, lang, intent: 'strong', omittedNote: packed.omittedNote };
+      const history = turns.length ? turns
+        : (await store.history(sessionId, historyLimit).catch(() => [])).map((t) => ({ role: t.role, text: t.text, assistant: t.assistant_id }));
+      // 强档才用得到长上下文：开着三层就按话题装、补记忆与摘要；关着就是原来的整段装。
+      const packed = memoryLayers
+        ? await packWithLayers(history, { budgetChars: contextChars, query: history.slice(-2).map((t) => t.text || '').join(' '), layers: { topics: true, entities: true } })
+        : packContext(history, { budgetChars: contextChars });
+      const args = { turns: packed.turns, assistants: assistantId ? { [assistantId]: assistantId } : {}, lang, intent: 'strong', omittedNote: packed.omittedNote, extra: packed.extra || '' };
       const run = ask(args, strongTimeoutMs).then(async (out) => {
         const hit = out.result && (out.result.reply_suggestion || out.result.follow_up_questions?.length);
         if (!hit) { stats.strongMiss = (stats.strongMiss || 0) + 1; return { ok: false, reason: out.reason }; }
