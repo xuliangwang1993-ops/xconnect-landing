@@ -3,7 +3,7 @@ import { randomUUID, createPublicKey, verify as verifySignature } from 'node:cry
 import { gzipSync, gunzipSync } from 'node:zlib';
 import WebSocket, { WebSocketServer } from 'ws';
 import { createVoiceAuthorizer } from './voice-auth.mjs';
-import { createWorkbench, wbStore, wbGetSession, WB_SPEAKERS } from './workbench.mjs';
+import { createWorkbench, wbStore, wbGetSession, WB_SPEAKERS, wbGuestMiddleware } from './workbench.mjs';
 import { createSlackHandler } from './integrations/slack.mjs';
 import { createFactory } from '../factory/factory.mjs';
 
@@ -205,6 +205,7 @@ const wb = createWorkbench({ tasks, broadcast });
 const slack = createSlackHandler({ store: wbStore });
 const factory = createFactory({ getSession: wbGetSession, speakers: WB_SPEAKERS, store: wbStore });
 const api = http.createServer(async (req, res) => {
+  if (wbGuestMiddleware(req, res)) return; // guest session + guest rate limits
   if (req.url.startsWith('/slack/') && await slack.handle(req, res)) return;
   if (factory.handle(req, res)) return; // 搭台首页 / AoI 看板
   if (await wb.handle(req, res)) return;

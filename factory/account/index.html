@@ -45,6 +45,10 @@ async function load(){
  if(!a||!a.signedIn){const m='<div class="na">未登录 Workbench，账户数据不可用。<a href="/workbench" style="color:var(--accent)">去登录 →</a></div>';
   ['info','bal','quota','ledger','usage'].forEach((id)=>$(id).innerHTML=m);
   $('top').innerHTML=row('SubRouter',`<a class="tbtn" href="https://subrouter.ai/console/topup" target="_blank" rel="noopener"><button class="primary">去 SubRouter 充值 ↗</button></a>`);return;}
+ if(a.guest){const g='<div class="k">访客模式：无需登录即可使用聊天、语音、生图和制作小助手（访客有频率限制）。平台额度不对访客展示；想用自己的额度和记账，请在工作台用自己的 SubRouter / 网关密钥登录。</div>';
+  $('info').innerHTML=row('账号','访客 Guest <span class="tag">'+esc(a.tier||'')+' 档</span>')+row('访客 ID','<code>'+esc(a.user.id)+'</code>')+g;
+  ['bal','quota','ledger','usage'].forEach((id)=>$(id).innerHTML='<div class="empty">访客模式不显示余额与账单。</div>');
+  $('top').innerHTML=row('SubRouter',`<a href="${esc(a.topup.url)}" target="_blank" rel="noopener"><button class="primary">去 SubRouter 充值 ↗</button></a>`);return;}
  const u=a.unit;
  $('info').innerHTML=row('账号',esc(a.user.email||a.user.name||'—'))+row('用户 ID','<code>'+esc(a.user.id??'—')+'</code>')+row('通道',esc(a.provider==='subrouter'?'SubRouter':'X-connect 网关')+(a.tier?' <span class="tag">'+esc(a.tier)+' 档</span>':''))
   +(a.token?row('API 令牌',esc(a.token.name||'—')+(a.token.expiresAt?' · 到期 '+when(a.token.expiresAt*1000):' · 不过期')):'')

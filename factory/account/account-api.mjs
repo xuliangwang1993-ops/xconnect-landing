@@ -43,6 +43,10 @@ export async function accountSummary({ session, fetchImpl = globalThis.fetch, en
     limit: null, totalUsage: null, token: null, categories: [], ledger: [], snapshots: 0,
     topup: TOPUP[provider] || TOPUP.gateway, sources: [], notes: [],
   };
+  if (session.guest || session.user?.guest) {
+    // Guests run on the platform's shared tier key: never expose that account's balance.
+    return { ...out, guest: true, notes: ['guest_session'], categories: [], topup: out.topup };
+  }
   if (provider === 'subrouter') {
     const base = String(env.SUBROUTER_BASE || 'https://subrouter.ai').replace(/\/+$/, '');
     const [sub, use, tok] = await Promise.all([

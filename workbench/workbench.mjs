@@ -816,6 +816,78 @@ function readIngestToken(token) {
 // Router
 
 // Shared storage surface for integrations (Slack now, Linear later).
+// ── Guest mode: no sign-in step. A visitor without a valid session gets an
+// anonymous session on the default SubRouter tier (GUEST_TIER) plus a stable
+// anonymous id cookie (xc_guest) so their cards/settings/custom assistant live
+// in their own namespace. Paid endpoints are rate-limited per IP and per guest.
+const GUEST_COOKIE = 'xc_guest';
+const GUEST_ON = String(process.env.GUEST_MODE || 'on').toLowerCase() !== 'off';
+const envInt = (k, d) => { const n = Number(process.env[k]); return Number.isFinite(n) && n > 0 ? n : d; };
+const GUEST_LIMITS = {
+  chat: { max: envInt('GUEST_CHAT_PER_MIN', 12), win: 60_000 },
+  chatHour: { max: envInt('GUEST_CHAT_PER_HOUR', 120), win: 3_600_000 },
+  image: { max: envInt('GUEST_IMAGE_PER_HOUR', 10), win: 3_600_000 },
+  voice: { max: envInt('GUEST_VOICE_PER_HOUR', 20), win: 3_600_000 },
+  newGuest: { max: envInt('GUEST_NEW_PER_HOUR', 30), win: 3_600_000 },
+};
+const guestLimiter = rateMap();
+function guestTier() {
+  const want = process.env.GUEST_TIER || '';
+  if (want && SUB_KEYS[want]) return want;
+  if (SUB_KEYS['1X']) return '1X';
+  return TIERS.find((t) => SUB_KEYS[t]) || null;
+}
+function guestSession(gid, tier) {
+  const userId = 'guest_' + gid;
+  return { v: 1, key: SUB_KEYS[tier], provider: 'subrouter', tier, base: SUBROUTER + '/v1', guest: true,
+    user: { id: userId, email: '访客 Guest', plan: tier, status: 'guest', guest: true },
+    ns: nsFor(userId), exp: Date.now() + SESSION_TTL_MS, iat: Date.now() };
+}
+const GUEST_PATHS = [
+  [/^\/api\/chat$/, ['chat', 'chatHour']],
+  [/^\/api\/image\/generate$/, ['image']],
+  [/^\/api\/(voice-token|ingest-token)$/, ['voice']],
+];
+// Returns true when it already answered (429). Call before any other handler.
+export function wbGuestMiddleware(req, res) {
+  if (!GUEST_ON || !String(req.url || '').startsWith('/')) return false;
+  let session = getSession(req);
+  const cookies = parseCookies(req);
+  if (!session) {
+    const tier = guestTier();
+    if (!tier) return false;
+    let gid = /^[a-f0-9]{24}$/.test(cookies[GUEST_COOKIE] || '') ? cookies[GUEST_COOKIE] : '';
+    const ip = clientIp(req);
+    if (!gid) {
+      if (!guestLimiter.hit('new:' + ip, GUEST_LIMITS.newGuest.max, GUEST_LIMITS.newGuest.win)) gid = sha256('ip|' + ip).slice(0, 24);
+      else gid = crypto.randomBytes(12).toString('hex');
+    }
+    session = guestSession(gid, tier);
+    const sealed = seal(session);
+    const secure = isSecure(req);
+    res.setHeader('set-cookie', [
+      cookieHeader(SESSION_COOKIE, sealed, { maxAge: Math.floor(SESSION_TTL_MS / 1000), secure }),
+      cookieHeader(GUEST_COOKIE, gid, { maxAge: 365 * 24 * 3600, secure }),
+    ]);
+    req.headers.cookie = (req.headers.cookie ? req.headers.cookie + '; ' : '') + `${SESSION_COOKIE}=${encodeURIComponent(sealed)}`;
+  }
+  if (!session.guest || req.method !== 'POST') return false;
+  const p = new URL(req.url, 'http://x').pathname;
+  for (const [re, kinds] of GUEST_PATHS) {
+    if (!re.test(p)) continue;
+    for (const k of kinds) {
+      const L = GUEST_LIMITS[k];
+      if (!guestLimiter.hit(`${k}:ip:${clientIp(req)}`, L.max, L.win) || !guestLimiter.hit(`${k}:g:${session.user.id}`, L.max, L.win)) {
+        res.writeHead(429, { 'content-type': 'application/json; charset=utf-8', 'retry-after': String(Math.ceil(L.win / 1000)) });
+        res.end(JSON.stringify({ error: 'rate_limited', message: '访客额度用得太快，请稍后再试', limit: { kind: k, max: L.max, windowSec: L.win / 1000 } }));
+        return true;
+      }
+    }
+  }
+  return false;
+}
+export const WB_GUEST_LIMITS = GUEST_LIMITS;
+
 export { getSession as wbGetSession, SPEAKERS as WB_SPEAKERS };
 export const wbStore = { nsFor, saveCard, loadRow, cardFromRow, saveRow, seal, unseal, nowIso, supaConfigured: () => Boolean(SUPA_URL) };
 
