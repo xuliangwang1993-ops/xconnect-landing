@@ -59,7 +59,7 @@ async function upstream(fetchImpl, url, init) {
 }
 
 function collect(j) {
-  return (j.data || []).map((d) => d.b64_json ? { dataUrl: 'data:image/png;base64,' + d.b64_json } : d.url ? { url: d.url } : null).filter(Boolean);
+  return (j.data || []).map((d) => d.b64_json ? { dataUrl: `data:image/${d.b64_json.startsWith('/9j/') ? 'jpeg' : d.b64_json.startsWith('UklGR') ? 'webp' : 'png'};base64,` + d.b64_json } : d.url ? { url: d.url } : null).filter(Boolean);
 }
 
 export async function generateImage({ prompt, image, n = 1, size, provider, userKeys, env, fetchImpl = fetch }) {

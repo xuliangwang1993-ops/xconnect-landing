@@ -105,7 +105,7 @@ export function mountImageGen(doc = document) {
       j.images.forEach((im, i) => {
         const src = im.dataUrl || im.url;
         const fig = doc.createElement('figure');
-        fig.innerHTML = `<img alt="${esc(prompt)}" src="${esc(src)}"><a href="${esc(src)}" download="xconnect-image-${Date.now()}-${i + 1}.png" target="_blank" rel="noopener">⬇ ${esc(T('dl'))}</a>`;
+        fig.innerHTML = `<img alt="${esc(prompt)}" src="${esc(src)}"><a href="${esc(src)}" download="xconnect-image-${Date.now()}-${i + 1}.${/^data:image\/jpeg/.test(src) ? "jpg" : "png"}" target="_blank" rel="noopener">⬇ ${esc(T('dl'))}</a>`;
         grid.appendChild(fig);
       });
       card.appendChild(grid);
