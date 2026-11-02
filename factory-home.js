@@ -90,6 +90,7 @@ function renderProjects() {
         ${pill(p.stage)}
         <span class="meta">${esc((p.updated_at || '').slice(0, 10))}</span>
         <button data-issues="${esc(p.id)}" title="Issues">Issues</button>
+        <button data-graph="${esc(p.id)}" title="在 AoI Graph 中查看">Graph</button>
       </div>`;
     }).join('')}</div>`;
   }
@@ -162,8 +163,9 @@ dlgForm.addEventListener('submit', async (e) => {
 });
 
 app.addEventListener('click', async (e) => {
-  const t = e.target.closest('[data-act],[data-issues],[data-open],[data-advance]');
+  const t = e.target.closest('[data-act],[data-issues],[data-graph],[data-open],[data-advance]');
   if (!t) return;
+  if (t.dataset.graph) { location.href = '/aoi?view=graph&node=' + encodeURIComponent(t.dataset.graph); return; }
   if (t.dataset.issues) { setProject(t.dataset.issues); return; }
   if (t.dataset.open) { // project → its own Workbench page (no assistant picker)
     const p = cache.nodes.find((n) => n.id === t.dataset.open);
