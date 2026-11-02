@@ -11,16 +11,12 @@ const PORT = process.env.PORT || 8789;
 const UPSTREAM = process.env.DOUBAO_WS_URL || 'wss://openspeech.bytedance.com/api/v3/realtime/dialogue';
 const RESOURCE = process.env.DOUBAO_RESOURCE_ID || 'volc.speech.dialog';
 const BRIDGE_PATH = process.env.BOT_BRIDGE_PATH || 'voice-bridge-9c1e7a42-20261008';
+import { PERSONA_VOICES, isPersonaVoice, resolveVoice } from './persona-voices.mjs';
 const BRIDGE_ROOT = '/bridge/' + BRIDGE_PATH;
 const tasks = [];
 const sessions = new Set();
 
-const SPEAKER_IDS = new Set([
-  'zh_female_vv_jupiter_bigtts',
-  'zh_male_xiaohe_jupiter_bigtts',
-  'zh_male_yunzhou_jupiter_bigtts',
-  'zh_male_xiaotian_jupiter_bigtts',
-]);
+const SPEAKER_IDS = new Set(Object.values(PERSONA_VOICES));
 
 const u32 = (n) => Buffer.from([(n >>> 24) & 255, (n >>> 16) & 255, (n >>> 8) & 255, n & 255]);
 const header = (t, f, s = 1, c = 1) => Buffer.from([17, (t << 4) | f, (s << 4) | c, 0]);
@@ -65,10 +61,12 @@ function parsePacket(input) {
   return { type, serial, event, sid, payload };
 }
 
-function sessionConfig(speaker) {
-  const chosen = SPEAKER_IDS.has(speaker)
-    ? speaker
-    : (process.env.DOUBAO_SPEAKER || 'zh_female_vv_jupiter_bigtts');
+function sessionConfig(speaker, resolved) {
+  // 角色音色优先（Supabase/真相表），其次客户端传的白名单音色，再其次 env，最后四毛默认。
+  const chosen = (isPersonaVoice(resolved) && resolved)
+    || (SPEAKER_IDS.has(speaker) && speaker)
+    || (isPersonaVoice(process.env.DOUBAO_SPEAKER) && process.env.DOUBAO_SPEAKER)
+    || PERSONA_VOICES.brain;
   return {
     user: { uid: randomUUID() },
     audio: { format: 'pcm', sample_rate: 16000, channels: 1, codec: 'raw' },
@@ -280,6 +278,9 @@ api.on('upgrade', (req, sock, head) => {
   wss.handleUpgrade(req, sock, head, (c) => {
     c.voiceClaims = a.claims;
     c.voiceSpeaker = u.searchParams.get('speaker') || '';
+    c.voiceAssistant = u.searchParams.get('assistant') || '';
+    c.voiceResolved = '';
+    resolveVoice(c.voiceAssistant).then((v) => { c.voiceResolved = v; }).catch(() => {});
     wss.emit('connection', c);
   });
 });
@@ -315,7 +316,7 @@ wss.on('connection', (client) => {
       return;
     }
     if (!started && p.event === 50) {
-      send(control(100, sid, sessionConfig(client.voiceSpeaker)));
+      send(control(100, sid, sessionConfig(client.voiceSpeaker, client.voiceResolved)));
       started = true;
       return;
     }

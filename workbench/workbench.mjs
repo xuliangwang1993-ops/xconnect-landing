@@ -14,6 +14,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { VOICE_LIST } from './persona-voices.mjs';
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.join(ROOT, 'public');
 const BUILD = process.env.BUILD_ID || (process.env.RENDER_GIT_COMMIT || '').slice(0, 10) || 'dev';
@@ -55,12 +56,7 @@ const SESSION_COOKIE = 'xcw_session';
 const SESSION_TTL_MS = 30 * 24 * 3600 * 1000;
 const USER_AGENT = 'X-Connect-Workbench/1.0 (+https://x-connect.ai)';
 
-const SPEAKERS = [
-  { id: 'zh_female_vv_jupiter_bigtts', label: 'VV · 女声', note: '默认，清晰' },
-  { id: 'zh_male_xiaohe_jupiter_bigtts', label: '小何 · 男声', note: '温和' },
-  { id: 'zh_male_yunzhou_jupiter_bigtts', label: '云舟 · 男声', note: '沉稳' },
-  { id: 'zh_male_xiaotian_jupiter_bigtts', label: '小天 · 男声', note: '轻快' },
-];
+const SPEAKERS = VOICE_LIST.map((v) => ({ ...v }));
 const CUSTOM_SLOTS = 3;
 const VOICE_PROVIDERS = ['doubao', 'elevenlabs'];
 const SPEAKER_IDS = new Set(SPEAKERS.map((s) => s.id));

@@ -11,11 +11,11 @@ const LS_KEY = 'xcw_assistant';
 const ASSET = (typeof window !== 'undefined' && window.__XC_ASSET_BASE) || '';
 
 const FALLBACK = [
-  { id: 'voice', avatar: 'duck', intro: '我是李黑鸭。少废话，说事。', name: '李黑鸭', nameEn: 'Duck Lee', role: '通用助手', model: 'doubao-tts', voice: 'zh_female_vv_jupiter_bigtts', desc: '嘴上不饶人，活儿一件不落。' },
-  { id: 'scribe', avatar: 'sparky', intro: '我是斯巴达。阵型我来摆，你只管往前。', name: '斯巴达', nameEn: 'Sparky', role: '通用助手', model: 'whisper', voice: '', desc: '三千勇士的口气，一个人也敢冲。' },
-  { id: 'brain', avatar: 'rapper', intro: '我是四毛。四毛钱的活儿，给你办成四块。', name: '四毛', nameEn: 'Forty Cents', role: '通用助手', model: 'deepseek-v4.1-flash', voice: '', desc: '押韵不押韵另说，节奏先跟上。' },
-  { id: 'deep', avatar: 'wutian', intro: '我是武天。想清楚再说，说了就做。', name: '武天', nameEn: 'WuTian', role: '通用助手', model: 'kimi-k3', voice: '', desc: '慢热，但一旦开口就是结论。' },
-  { id: 'admin', avatar: 'feifei', intro: '我是狒狒。先干起来，边干边修。', name: '狒狒', nameEn: 'Feifei', role: '通用助手', model: 'qwen3.8-flash', voice: '', desc: '灵光多，手脚快，偶尔跑偏。' },
+  { id: 'voice', avatar: 'duck', intro: '我是李黑鸭。少废话，说事。', name: '李黑鸭', nameEn: 'Duck Lee', role: '通用助手', model: 'doubao-tts', voice: 'zh_female_peiqi_uranus_bigtts', desc: '嘴上不饶人，活儿一件不落。' },
+  { id: 'scribe', avatar: 'sparky', intro: '我是斯巴达。阵型我来摆，你只管往前。', name: '斯巴达', nameEn: 'Sparky', role: '通用助手', model: 'whisper', voice: 'id_male_han_uranus_bigtts', desc: '三千勇士的口气，一个人也敢冲。' },
+  { id: 'brain', avatar: 'rapper', intro: '我是四毛。四毛钱的活儿，给你办成四块。', name: '四毛', nameEn: 'Forty Cents', role: '通用助手', model: 'deepseek-v4.1-flash', voice: 'zh_male_lanyinmianbao_uranus_bigtts', desc: '押韵不押韵另说，节奏先跟上。' },
+  { id: 'deep', avatar: 'wutian', intro: '我是武天。想清楚再说，说了就做。', name: '武天', nameEn: 'WuTian', role: '通用助手', model: 'kimi-k3', voice: 'zh_male_sunwukong_uranus_bigtts', desc: '慢热，但一旦开口就是结论。' },
+  { id: 'admin', avatar: 'feifei', intro: '我是狒狒。先干起来，边干边修。', name: '狒狒', nameEn: 'Feifei', role: '通用助手', model: 'qwen3.8-flash', voice: 'en_male_father-christmas_uranus_bigtts', desc: '灵光多，手脚快，偶尔跑偏。' },
 ];
 
 const HUES = { voice: 22, scribe: 190, brain: 264, deep: 320, admin: 148 };
