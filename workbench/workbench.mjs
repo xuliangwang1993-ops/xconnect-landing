@@ -433,6 +433,25 @@ async function deleteRow(session, id) {
   await supaRequest('DELETE', `work_checkpoints?project_id=eq.${pid}`, undefined, 'return=minimal');
 }
 
+async function assistantPersona(id, session) {
+  if (!id) return null;
+  if (/^custom1$/.test(id)) {
+    if (!session) return null;
+    try {
+      const d = rowData(await loadRow(session, '__custom_assistants__'), 'custom-assistants');
+      const s = (d?.slots || []).find((x) => x.id === id && x.name);
+      if (!s) return null;
+      const notes = (s.materials || []).filter((m) => m.text).map((m) => m.text).join('\n\n').slice(0, 6000);
+      return { id, name: s.name, intro: s.intro, voice: s.voice || '', role: '我的小助手',
+        system_prompt: [`你是「${s.name}」。${s.intro || ''}`, s.persona || '', notes ? '参考素材：\n' + notes : ''].filter(Boolean).join('\n\n') };
+    } catch { return null; }
+  }
+  try {
+    const rows = await supaRequest('GET', `assistant_persona?id=eq.${encodeURIComponent(id)}&select=*&limit=1`);
+    return (rows && rows[0]) || null;
+  } catch { return null; }
+}
+
 function rowData(row, kind) {
   const sources = Array.isArray(row?.sources) ? row.sources : [];
   const hit = sources.find((s) => s && s.kind === kind);
@@ -1133,8 +1152,15 @@ export function createWorkbench({ tasks, broadcast }) {
       if (!limiter.hit('chat:' + session.user.id, 40, 60_000)) return fail(res, 429, 'rate_limited', '发送太快，稍后再试');
       const body = await readJson(req, 800_000);
       let model = clampText(body.model || '', 120);
+      // Picked assistant's own config wins (model + persona prompt) unless the user chose「保留旧设置」.
+      const assistantId = clampText(body.assistantId || 'brain', 40);
+      const persona = await assistantPersona(assistantId, session);
+      let ids = null;
+      try { ids = new Set((await getModels(session)).map((m) => m.id)); } catch {}
+      const reach = (m) => !ids || !ids.size || ids.has(m);
+      if (persona && persona.model && !['doubao-tts', 'whisper'].includes(persona.model) && reach(persona.model) && !(body.keepModel && model && reach(model))) model = persona.model;
       // Unreachable model for this key/tier would 403: fall back to the tier's assist model.
-      try { const ids = new Set((await getModels(session)).map((m) => m.id)); if (ids.size && (!model || !ids.has(model))) model = (await assistModelFor(session)) || model; } catch {}
+      if (ids && ids.size && (!model || !ids.has(model))) model = (await assistModelFor(session)) || model;
       if (!model) return fail(res, 400, 'model_required', '先选择模型');
       const raw = Array.isArray(body.messages) ? body.messages : [];
       const messages = raw
@@ -1142,7 +1168,7 @@ export function createWorkbench({ tasks, broadcast }) {
         .slice(-40)
         .map((m) => ({ role: m.role, content: clampText(m.content, 12000) }));
       if (!messages.some((m) => m.role === 'user')) return fail(res, 400, 'message_required', '没有要发送的内容');
-      const system = [clampText(body.system || '', 6000), langLine(body.lang)].filter(Boolean).join('\n\n');
+      const system = [persona && persona.system_prompt, clampText(body.system || '', 6000), clampText(body.handoff || '', 4000), langLine(body.lang)].filter(Boolean).join('\n\n');
       const temporary = Boolean(body.temporary);
       const convId = clampText(body.conversationId || '', 40);
       const upstreamMessages = [
@@ -1175,6 +1201,7 @@ export function createWorkbench({ tasks, broadcast }) {
         return fail(res, 502, 'chat_failed', '模型调用失败（HTTP ' + up.status + '），内容已留在输入区');
       }
       res.writeHead(200, {
+        'x-xc-model': model, 'x-xc-assistant': assistantId,
         'content-type': 'text/event-stream; charset=utf-8',
         'cache-control': 'no-cache, no-transform',
         connection: 'keep-alive',

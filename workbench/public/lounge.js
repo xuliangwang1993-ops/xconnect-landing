@@ -518,7 +518,10 @@ export function rememberAssistant(id) {
   let prev = '';
   try { prev = localStorage.getItem(LS_KEY) || ''; localStorage.setItem(LS_KEY, String(id)); } catch {}
   writeCookieAssistant(id);
-  if (prev !== String(id)) { try { window.dispatchEvent(new CustomEvent('xc:assistant-changed', { detail: { assistantId: String(id) } })); } catch {} }
+  if (prev !== String(id)) {
+    try { window.dispatchEvent(new CustomEvent('xc:assistant-changed', { detail: { assistantId: String(id), prev } })); } catch {}
+    try { new BroadcastChannel('xc-assistant').postMessage({ assistantId: String(id) }); } catch {}
+  }
 }
 
 /* 供漫游角色取形象与名字，避免各处重复查表 */

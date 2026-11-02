@@ -369,6 +369,8 @@ async function boot() {
   const SPARK = 'https://www.x-connect.ai/spark/';
   const nextUrl = q.get('next') || SPARK;
   const returnToApp = () => {
+    // ?lounge=1（来自设置页/工厂的「去选助手」）：选完回工作台本身，不跳 spark。
+    if (q.has('lounge')) { location.href = location.pathname; return; }
     // COO-21：专属角色页已就地开语音时，绝不跳 spark
     if (window.__xcInPlaceVoice) return;
     const target = /^https:\/\/([a-z0-9-]+\.)*x-connect\.ai(\/|$)/i.test(nextUrl)
@@ -385,6 +387,8 @@ async function boot() {
   } catch {}
   // 选人页只在用户显式要求时出现（?pick / ?lounge / 门户带 ?next），
   // 其他入口（根地址、项目链接、进厂回来）直接进工作台；没选过小助手就静默用默认助手。
+  // 跨站（工厂 ↔ 预览）带过来的选择：?assistant=<id>，写进本站账号设置。
+  { const ca = q.get('assistant'); if (ca && /^[a-z0-9_-]{1,40}$/i.test(ca) && ca !== pickedAssistant()) { rememberAssistant(ca); void saveSettings({ assistantId: ca }, { quiet: true }); } }
   const explicitPick = q.has('pick') || q.has('lounge') || (q.has('next') && !q.has('project'));
   if (!explicitPick) {
     if (!pickedAssistant()) rememberAssistant(state.settings?.assistantId || 'brain');
@@ -1278,6 +1282,11 @@ async function sendChat() {
   const text = input.value.trim();
   if (!text) return;
   if (window.XC_TOUR?.pending && window.XC_TOUR.answer(text)) { input.value = ''; clearDraft(); return; }
+  if (document.getElementById('handoffAsk') && /^(保留|留着|新|用新|keep|new|fresh)/i.test(text)) {
+    window.dispatchEvent(new CustomEvent('xc:handoff-answer', { detail: text }));
+    input.value = '';
+    return;
+  }
   const chosenModel = activeModel()?.id || '';
   if (!chosenModel) {
     saveDraft(text);
@@ -1316,6 +1325,8 @@ async function sendChat() {
     const full = await streamChat({
       model: chosenModel,
       assistantId: pickedAssistant() || 'brain',
+      keepModel: state.settings.assistantKeep === true,
+      handoff: state.settings.assistantKeep === true ? (state.handoff || '') : '',
       messages: conv.messages.filter((m) => m !== placeholder).map((m) => ({ role: m.role, content: m.content })),
       conversationId: state.temp ? 'temp' : conv.id,
       system: conv.system || '',
@@ -1833,6 +1844,41 @@ document.addEventListener('xc:lang', async () => {
   try { flushVoiceAudio(); stopVoice(false); await startVoice(); /* silent reconnect: no SayHello until the user speaks */ } finally { v.switching = false; }
 });
 
+/* 换助手：写账号设置（跨设备/跨标签生效），有旧助手时问一句交接。
+   语音与人格永远跟新助手；「保留」= 保留模型等可调偏好 + 交接最近对话；「新的」= 用新助手默认。 */
+function handoffSummary() {
+  const conv = activeConversation();
+  const msgs = (conv && conv.messages || []).filter((m) => !m.streaming && m.content).slice(-8);
+  if (!msgs.length) return '';
+  return '【交接：上一位助手和用户最近的对话，接着做，不要复述】\n' + msgs.map((m) => (m.role === 'user' ? '用户：' : '助手：') + String(m.content).slice(0, 400)).join('\n');
+}
+function onAssistantPicked(id, prev) {
+  if (!id) return;
+  void saveSettings({ assistantId: id }, { quiet: true });
+  try { renderAll(); } catch {}
+  if (!prev || prev === id) return;
+  const zh = /^zh/.test(uiLang());
+  const name = nameFor(id) || id;
+  document.getElementById('handoffAsk')?.remove();
+  const box = document.createElement('div');
+  box.id = 'handoffAsk';
+  box.setAttribute('role', 'dialog');
+  box.style.cssText = 'position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:9999;max-width:min(520px,92vw);background:var(--panel,#15161a);color:var(--text,#eee);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:14px 16px;box-shadow:0 12px 40px rgba(0,0,0,.45);font:14px/1.5 inherit';
+  box.innerHTML = `<div style="font-weight:600;margin-bottom:6px">${name}</div><div>${zh ? '要保留之前的设置，还是我给你来一套新的？要不要我把之前的事交接过来？' : 'Keep your previous settings, or shall I set you up fresh? Want me to take over what you were doing before?'}</div>
+    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button type="button" data-h="keep" class="primary-btn" style="border-radius:999px;padding:6px 14px;cursor:pointer">${zh ? '保留旧设置（并交接）' : 'Keep previous settings (+ hand over)'}</button><button type="button" data-h="new" style="border-radius:999px;padding:6px 14px;cursor:pointer">${zh ? '用新设置' : 'Use new settings'}</button></div>`;
+  const decide = (keep) => {
+    state.handoff = keep ? handoffSummary() : '';
+    void saveSettings({ assistantKeep: keep }, { quiet: true });
+    box.remove();
+    toast(keep ? (zh ? '已保留旧设置，之前的事已交接' : 'Kept your settings; context handed over') : (zh ? `已切换到${name}的默认设置` : `Using ${name}'s own defaults`));
+  };
+  box.addEventListener('click', (e) => { const h = e.target.closest('[data-h]'); if (h) decide(h.dataset.h === 'keep'); });
+  // 文字回答：在输入框里回「保留/新的/keep/new」也算。
+  const onType = (e) => { const t = String(e.detail || '').trim(); if (/^(保留|留着|keep)/i.test(t)) decide(true); else if (/^(新|用新|new|fresh)/i.test(t)) decide(false); };
+  window.addEventListener('xc:handoff-answer', onType, { once: true });
+  document.body.appendChild(box);
+}
+
 async function switchVoiceAssistant(id) {
   const v = state.voice;
   if (!id || !v.active || v.assistantId === id || v.switching) return;
@@ -2255,7 +2301,20 @@ function bindEvents() {
   });
   $('#voiceMapList')?.addEventListener?.('click', () => {});
 
-  window.addEventListener('xc:assistant-changed', (e) => { switchVoiceAssistant(e.detail && e.detail.assistantId); });
+  window.addEventListener('xc:assistant-changed', (e) => {
+    const id = e.detail && e.detail.assistantId; const prev = e.detail && e.detail.prev;
+    switchVoiceAssistant(id);
+    onAssistantPicked(id, prev);
+  });
+  // 其他标签页换了助手：本页立刻跟上（storage 事件 + BroadcastChannel 双通道）。
+  const followOtherTab = (id) => { if (!id || id === state.settings.assistantId) return; state.settings.assistantId = id; try { renderAll(); } catch {} switchVoiceAssistant(id); };
+  window.addEventListener('storage', (e) => { if (e.key === 'xcw_assistant' && e.newValue) followOtherTab(e.newValue); });
+  try { new BroadcastChannel('xc-assistant').onmessage = (e) => followOtherTab(e.data && e.data.assistantId); } catch {}
+  // 跨站链接（工厂 ↔ 预览，onrender 不共享 cookie）带上当前助手。
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest && e.target.closest('a[href]'); if (!link) return;
+    try { const u = new URL(link.href, location.href); if (u.host !== location.host && /(onrender\.com|x-connect\.ai)$/.test(u.hostname) && pickedAssistant() && !u.searchParams.has('assistant')) { u.searchParams.set('assistant', pickedAssistant()); link.href = u.toString(); } } catch {}
+  }, true);
   window.addEventListener('xc:lounge-start-voice', async (e) => {
     const id = e.detail && e.detail.assistantId;
     if (id) rememberAssistant(id);

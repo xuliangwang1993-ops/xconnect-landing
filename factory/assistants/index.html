@@ -61,13 +61,13 @@ async function load(){
 async function loadAsst(){let d;try{d=await (await fetch('/settings/api/assistants',{credentials:'same-origin'})).json();}catch{d={ok:false,error:'network'};}
  if(!d.ok){$('asst').innerHTML=`<div class="na">助手表暂不可用（${esc(d.error)}）</div>`;return;}
  const can=d.editable||[];const def=settings.assistantId||'';
- $('asst').innerHTML=(d.signedIn?'':'<div class="na" style="margin-bottom:8px">未登录：只读。登录 Workbench 后可改简介、发音人和默认助手。</div>')+d.assistants.map((a)=>`<div class="asst" data-id="${esc(a.id)}">
+ $('asst').innerHTML=(d.signedIn?'':'<div class="na" style="margin-bottom:8px">未登录：只读。登录 Workbench 后可改简介和发音人；当前助手只能在选人页更换。</div>')+d.assistants.map((a)=>`<div class="asst" data-id="${esc(a.id)}">
   <img src="${esc(/^https?:/.test(a.avatar||'')?a.avatar:'/characters/'+(a.avatar||'')+'/thumb.webp')}" alt="" onerror="this.style.visibility='hidden'">
   <div><div class="nm">${esc(a.name)} <span class="tag">${esc(a.id)}</span>${a.id===def?'<span class="tag" style="color:var(--ok)">默认</span>':''}</div>
   <div class="meta">${esc(a.role||'')}${a.model?' · 模型 '+esc(a.model):''}${a.memoryCount!=null?' · 记忆 '+a.memoryCount+' 条':''}</div>
   ${can.includes('intro')?`<textarea class="in">${esc(a.intro||'')}</textarea>`:`<div class="meta" style="color:var(--text)">${esc(a.intro||a.description||'')}</div>`}
   <div class="ctl">${can.includes('voice')?`发音人 <select class="vo"><option value="">（不指定）</option>${(d.speakers||[]).map((s)=>`<option value="${esc(s.id)}" ${s.id===a.voice?'selected':''}>${esc(s.label)}</option>`).join('')}</select>`:(a.voice?'<span class="meta">发音人 '+esc(a.voice)+'</span>':'')}
-  ${d.signedIn?`<button class="primary sv">保存</button><button class="df">设为默认</button>`:''}<span class="okmsg"></span></div>
+  ${d.signedIn?`<button class="primary sv">保存</button><a class="df-link" href="/workbench/?lounge=1" style="color:var(--accent);font-size:12px">去选助手 →</a>`:''}<span class="okmsg"></span></div>
   ${a.system_prompt?`<details><summary>system_prompt（只读）</summary><pre>${esc(a.system_prompt)}</pre></details>`:''}</div></div>`).join('');
  document.querySelectorAll('.asst').forEach((el)=>{const id=el.dataset.id,msg=el.querySelector('.okmsg');
   el.querySelector('.sv')?.addEventListener('click',async()=>{const body={};const t=el.querySelector('.in');if(t)body.intro=t.value;const v=el.querySelector('.vo');if(v&&v.value)body.voice=v.value;
