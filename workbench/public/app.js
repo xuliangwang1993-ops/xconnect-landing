@@ -270,10 +270,34 @@ function applyLayout() {
     document.body.classList.remove('sidebar-collapsed');
   }
 }
+/* Agentic skin: share the resolved chat theme with factory pages (same origin) and other tabs. */
+const SKIN_KEY = 'xc_skin_v1';
+let skinBC = null; try { skinBC = new BroadcastChannel('xc-skin'); } catch {}
+let skinLast = '';
+function syncSkin(theme, model) {
+  const mode = state.settings.theme && state.settings.theme !== 'auto' && state.settings.theme !== 'default' ? state.settings.theme : 'auto';
+  const s = { mode, resolved: theme, model: model?.id || state.settings.model || '' };
+  const j = JSON.stringify(s);
+  if (j === skinLast) return;
+  skinLast = j;
+  try { localStorage.setItem(SKIN_KEY, j); } catch {}
+  try { skinBC && skinBC.postMessage(s); } catch {}
+}
+function onSkinMsg(s) {
+  if (!s || !s.mode) return;
+  const want = s.mode === 'auto' ? 'auto' : s.mode;
+  if ((state.settings.theme || 'auto') === want) return;
+  state.settings.theme = want;
+  skinLast = JSON.stringify(s);
+  applyTheme();
+}
+if (skinBC) skinBC.onmessage = (e) => onSkinMsg(e.data);
+addEventListener('storage', (e) => { if (e.key === SKIN_KEY) { try { onSkinMsg(JSON.parse(e.newValue || 'null')); } catch {} } });
 function applyTheme() {
   const model = activeModel();
   const theme = state.settings.theme && state.settings.theme !== 'auto' ? state.settings.theme : (model?.theme || 'default');
   document.documentElement.dataset.theme = theme;
+  syncSkin(theme, model);
   if (state.settings.customPalette && state.settings.accent) {
     document.documentElement.style.setProperty('--accent', state.settings.accent);
   } else {

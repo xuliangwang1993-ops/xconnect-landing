@@ -24,6 +24,7 @@ details summary{cursor:pointer;color:var(--mute);font-size:12px}pre{white-space:
 <main><h1 data-i18n="set.title">Setting</h1><div class="sub">参数设置与余额查询。数据来自 Workbench 登录会话（/api/bootstrap）与 Supabase 助手表；标「仅本机」的项只存在这台浏览器。</div>
 <section id="sBal"><h2 data-i18n="set.balance">账户与余额</h2><div id="bal" class="k">加载中…</div></section>
 <section id="sModel"><h2 data-i18n="set.model">助手与模型</h2><div id="model" class="k">加载中…</div></section>
+<section id="sSkin"><h2 data-i18n="set.skin">Agentic 皮肤</h2><div id="skin" class="k">加载中…</div></section>
 <section id="sVoice"><h2 data-i18n="set.voice">语音</h2><div id="voice" class="k">加载中…</div></section>
 <section id="sAsst"><h2 data-i18n="set.assistants">小助手设定</h2><div id="asst" class="k">加载中…</div></section>
 <section id="build"><h2 data-i18n="set.build">制作你的小助手</h2><div id="make" class="k">加载中…</div></section>
@@ -50,7 +51,7 @@ async function load(){
   const ms=(boot.models||[]).map((m)=>typeof m==='string'?m:(m.id||m.name));const cur=settings.model||boot.defaultModel||'';
   $('model').innerHTML=row('默认模型',`<select id="selM">${ms.map((m)=>`<option ${m===cur?'selected':''}>${esc(m)}</option>`).join('')}</select> <span class="k" id="mOk"></span>`)
    +row('服务器默认',esc(boot.defaultModel||'—'))+`<div class="k" style="font-size:12px">存于云端（PUT /api/settings · model）。默认助手在下方「小助手设定」里选。</div>`;
-  $('selM')&&($('selM').onchange=(e)=>putSettings({model:e.target.value},$('mOk')));}
+  $('selM')&&($('selM').onchange=(e)=>{putSettings({model:e.target.value},$('mOk'));window.XC_SKIN&&window.XC_SKIN.set({model:e.target.value});});}
  const spk=(boot&&boot.voice&&boot.voice.speakers)||[];const curS=localStorage.getItem('xcw_voice_speaker')||'';
  $('voice').innerHTML=row('实时语音',boot?(boot.voice?.available?'<span style="color:var(--ok)">可用</span>':'<span class="na">服务器未配置</span>'):'—')
   +(spk.length?row('发音人 <span class="tag">仅本机</span>',`<select id="selS">${spk.map((s)=>`<option value="${esc(s.id)}" ${s.id===curS?'selected':''}>${esc(s.label)}</option>`).join('')}</select> <span class="k" id="sOk"></span>`):'');
@@ -100,5 +101,16 @@ async function loadKeys(){let k={};try{k=(await (await fetch('/api/voice-keys',{
  <div class="ctl">${p.app?'<input class="app" placeholder="App ID（可选）">':''}<input class="key" type="password" placeholder="API Key" autocomplete="off"><button class="primary sk">保存</button>${c.set?'<button class="dk">删除</button>':''}<span class="okmsg"></span></div></div></div>`;}).join('');
  document.querySelectorAll('#keys .asst').forEach((el)=>{const p=el.dataset.p;const go=async(method,body)=>{const r=await fetch('/api/voice-keys',{method,headers:{'content-type':'application/json'},credentials:'same-origin',body:JSON.stringify({provider:p,...body})});if(r.ok)loadKeys();else el.querySelector('.okmsg').textContent='失败';};
   el.querySelector('.sk').onclick=()=>go('PUT',{key:el.querySelector('.key').value,appId:el.querySelector('.app')?.value||''});el.querySelector('.dk')?.addEventListener('click',()=>go('DELETE',{}));});}
+
+const L=(k,fb)=>window.XC_I18N?window.XC_I18N.t(k):fb;
+function renderSkin(){const X=window.XC_SKIN;if(!X){setTimeout(renderSkin,100);return;}
+ const zh=!window.XC_I18N||window.XC_I18N.lang!=='en';const cur=X.get();const mode=cur.mode||'auto';
+ const opts=[['auto',L('skin.auto','跟随聊天模型（自动）')]].concat(Object.entries(X.SKINS).map(([id,s])=>[id==='default'?'xconnect':id,s.label[zh?'zh':'en']]));
+ const sw=Object.entries(X.SKINS).map(([id,s])=>`<span title="${esc(s.label[zh?'zh':'en'])}" style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${s.accent};border:2px solid ${id===cur.resolved?'#fff':'transparent'};margin-right:4px"></span>`).join('');
+ $('skin').innerHTML=`<div class="k" style="font-size:12px;margin-bottom:6px">${esc(L('skin.hint',''))}</div>`+row(L('set.skin','皮肤'),`<select id="selSkin">${opts.map(([v,l])=>`<option value="${v}" ${v===mode||(mode==='default'&&v==='xconnect')?'selected':''}>${esc(l)}</option>`).join('')}</select> <span class="k" id="skOk"></span>`)
+  +row(L('skin.now','当前'),sw+' <span class="v">'+esc(X.SKINS[cur.resolved].label[zh?'zh':'en'])+'</span>'+(cur.model?' <span class="tag">'+esc(cur.model)+'</span>':''));
+ $('selSkin').onchange=async(e)=>{const v=e.target.value;X.set({mode:v,model:settings.model||cur.model});renderSkin();
+  if(boot)await putSettings({theme:v},$('skOk'));else $('skOk').textContent=zh?'已保存（本机）':'Saved (this browser)';};}
+setTimeout(()=>{renderSkin();window.XC_SKIN&&window.XC_SKIN.onChange(()=>renderSkin());window.XC_I18N&&window.XC_I18N.onChange(()=>renderSkin());},0);
 load();
 </script></body></html>

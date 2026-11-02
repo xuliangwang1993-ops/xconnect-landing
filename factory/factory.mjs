@@ -14,7 +14,7 @@ const REPO = path.resolve(HERE, '..');
 const STAGE_FILES = { 'index.html': 'text/html; charset=utf-8', 'portal.html': 'text/html; charset=utf-8', 'styles.css': 'text/css; charset=utf-8',
   'app.js': 'text/javascript; charset=utf-8', 'factory-home.js': 'text/javascript; charset=utf-8', 'icon.svg': 'image/svg+xml', 'brand-x.png': 'image/png', 'brand-logo.png': 'image/png' };
 const GUIDE_FILES = { 'guide-widget.js': 'text/javascript; charset=utf-8' };
-export const GUIDE_TAG = '<script src="/i18n/xc-i18n.js"></script>\n<script src="/guide/guide-widget.js" defer></script>';
+export const GUIDE_TAG = '<script src="/i18n/xc-i18n.js"></script>\n<script src="/skin/xc-skin.js"></script>\n<script src="/guide/guide-widget.js" defer></script>';
 const GRAPH_FILES = { 'graph-view.js': 'text/javascript; charset=utf-8' };
 const AOI_FILES = { 'index.html': 'text/html; charset=utf-8', 'aoi-snapshot.js': 'text/javascript; charset=utf-8' };
 
@@ -72,7 +72,7 @@ export function createFactory({ env = process.env, fetchImpl = globalThis.fetch,
     if (handleTree(req, res, tree)) return true;
     { const tp = new URL(req.url, 'http://localhost').pathname;
       if ((tp === '/tree' || tp === '/tree/') && (req.method === 'GET' || req.method === 'HEAD'))
-        return send(res, req, 'text/html; charset=utf-8', fs.readFileSync(path.join(HERE, 'tree/index.html'))); }
+        return send(res, req, 'text/html; charset=utf-8', fs.readFileSync(path.join(HERE, 'tree/index.html'), 'utf8').replace('</body>', GUIDE_TAG + '\n</body>')); }
     if (req.method !== 'GET' && req.method !== 'HEAD') return false;
     const p = new URL(req.url, 'http://localhost').pathname;
     if (p === '/guide' || p === '/guide/') return send(res, req, 'text/html; charset=utf-8', fs.readFileSync(path.join(HERE, 'guide/index.html')));
@@ -84,13 +84,14 @@ export function createFactory({ env = process.env, fetchImpl = globalThis.fetch,
         .catch(() => ({ source: 'guide', text: '导览暂时出错了。', links: [] }))
         .then((d) => send(res, req, 'application/json; charset=utf-8', JSON.stringify(d)));
     }
+    if (p === '/skin/xc-skin.js') return send(res, req, 'text/javascript; charset=utf-8', fs.readFileSync(path.join(HERE, 'skin/xc-skin.js')));
     if (p === '/i18n/xc-i18n.js') return send(res, req, 'text/javascript; charset=utf-8', fs.readFileSync(path.join(HERE, 'i18n/xc-i18n.js')));
     if (p.startsWith('/guide/')) {
       const name = p.slice('/guide/'.length);
       if (!Object.hasOwn(GUIDE_FILES, name)) return false;
       return send(res, req, GUIDE_FILES[name], fs.readFileSync(path.join(HERE, 'guide', name)));
     }
-    if (p === '/graph' || p === '/graph/') return send(res, req, 'text/html; charset=utf-8', fs.readFileSync(path.join(HERE, 'graph/index.html')));
+    if (p === '/graph' || p === '/graph/') return send(res, req, 'text/html; charset=utf-8', fs.readFileSync(path.join(HERE, 'graph/index.html'), 'utf8').replace('</body>', GUIDE_TAG + '\n</body>'));
     if (p === '/graph/api/nodes') return loadWorkNodes({ store: tree })
       .then((d) => send(res, req, 'application/json; charset=utf-8', JSON.stringify(d)));
     if (p.startsWith('/graph/')) {
@@ -113,7 +114,7 @@ export function createFactory({ env = process.env, fetchImpl = globalThis.fetch,
       if (name === 'factory-home.js') return send(res, req, STAGE_FILES[name], fs.readFileSync(path.join(REPO, 'factory-home.js')));
       return send(res, req, STAGE_FILES[name], fs.readFileSync(path.join(REPO, name)));
     }
-    if (p === '/aoi' || p === '/aoi/') return send(res, req, AOI_FILES['index.html'], fs.readFileSync(path.join(HERE, 'aoi/index.html')));
+    if (p === '/aoi' || p === '/aoi/') return send(res, req, AOI_FILES['index.html'], fs.readFileSync(path.join(HERE, 'aoi/index.html'), 'utf8').replace('</body>', GUIDE_TAG + '\n</body>'));
     if (p.startsWith('/aoi/')) {
       const name = p.slice('/aoi/'.length);
       if (!Object.hasOwn(AOI_FILES, name)) return false;
