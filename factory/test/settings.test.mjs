@@ -14,7 +14,7 @@ function call(h, url, method = 'GET') {
 test('/settings routes to /account or /assistants; account + assistants pages split', async () => {
   const st = await call(createFactory(), '/settings');
   assert.equal(st.code, 200);
-  assert.match(st.body, /\/assistants/); assert.match(st.body, /\/account/);
+  assert.match(st.body, /href="\/assistants"/); assert.match(st.body, /href="\/account"/); assert.match(st.body, /设置/);
   const acc = await call(createFactory(), '/account');
   assert.equal(acc.code, 200);
   assert.match(acc.body, /余额变动记录/); assert.match(acc.body, /充值/); assert.match(acc.body, /剩余额度/);

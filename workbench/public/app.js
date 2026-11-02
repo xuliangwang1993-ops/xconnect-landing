@@ -383,6 +383,21 @@ async function boot() {
     const data = await api('/api/bootstrap');
     await acceptBootstrap(data);
   } catch {}
+  // 选人页只在用户显式要求时出现（?pick / ?lounge / 门户带 ?next），
+  // 其他入口（根地址、项目链接、进厂回来）直接进工作台；没选过小助手就静默用默认助手。
+  const explicitPick = q.has('pick') || q.has('lounge') || (q.has('next') && !q.has('project'));
+  if (!explicitPick) {
+    if (!pickedAssistant()) rememberAssistant(state.settings?.assistantId || 'brain');
+    const proj = q.get('name') || q.get('project') || '';
+    if (proj) state.filterProject = proj;
+    if (state.user) {
+      showShell();
+      renderAll();
+      registerSW();
+      setView('cards');
+      return;
+    }
+  }
   let picked = false;
   try {
     await openLounge();

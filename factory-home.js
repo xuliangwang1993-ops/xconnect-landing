@@ -89,6 +89,7 @@ function renderProjects() {
         <div><div class="title">${esc(p.title)}</div><div class="meta">${n} issue${n === 1 ? '' : 's'}</div></div>
         ${pill(p.stage)}
         <span class="meta">${esc((p.updated_at || '').slice(0, 10))}</span>
+        <button data-issues="${esc(p.id)}" title="Issues">Issues</button>
       </div>`;
     }).join('')}</div>`;
   }
@@ -161,9 +162,14 @@ dlgForm.addEventListener('submit', async (e) => {
 });
 
 app.addEventListener('click', async (e) => {
-  const t = e.target.closest('[data-act],[data-open],[data-advance]');
+  const t = e.target.closest('[data-act],[data-issues],[data-open],[data-advance]');
   if (!t) return;
-  if (t.dataset.open) { setProject(t.dataset.open); return; }
+  if (t.dataset.issues) { setProject(t.dataset.issues); return; }
+  if (t.dataset.open) { // project → its own Workbench page (no assistant picker)
+    const p = cache.nodes.find((n) => n.id === t.dataset.open);
+    location.href = '/workbench/?project=' + encodeURIComponent(t.dataset.open) + (p ? '&name=' + encodeURIComponent(p.title) : '');
+    return;
+  }
   if (t.dataset.act === 'new-project') { openDialog({ type: 'project' }); return; }
   if (t.dataset.act === 'new-issue') { openDialog({ type: 'issue', parent_id: projectId() }); return; }
   if (t.dataset.act === 'ask-assistant') {

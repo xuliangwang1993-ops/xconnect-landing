@@ -75,8 +75,8 @@ export function createFactory({ env = process.env, fetchImpl = globalThis.fetch,
       }
       // Setting became Account; persona settings moved to /assistants.
       if ((sp === '/settings' || sp === '/settings/') && (req.method === 'GET' || req.method === 'HEAD')) {
-        // Hash never reaches the server, so route in the browser: build/keys anchors -> /assistants, else /account.
-        return send(res, req, 'text/html; charset=utf-8', '<!doctype html><meta charset="utf-8"><title>X-connect</title><script>var h=location.hash;location.replace((/^#(build|sKeys|imgkeys|sAsst|sSkin|sModel|sVoice)/.test(h)?"/assistants":"/account")+h)</script><a href="/account">账户 / Account</a>');
+        // Settings hub (账户 / 小助手 / 偏好); old #anchors are forwarded client-side.
+        return send(res, req, 'text/html; charset=utf-8', fs.readFileSync(path.join(HERE, 'settings/hub.html'), 'utf8').replace('</body>', GUIDE_TAG + '\n</body>'));
       }
       for (const [route, file] of [['/account', 'account/index.html'], ['/assistants', 'assistants/index.html']])
         if ((sp === route || sp === route + '/') && (req.method === 'GET' || req.method === 'HEAD'))
