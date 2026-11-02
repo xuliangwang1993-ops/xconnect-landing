@@ -17,14 +17,16 @@
   function logoFx() {
     if (document.getElementById('xc-logo-fx')) return;
     const st = document.createElement('style'); st.id = 'xc-logo-fx';
-    st.textContent = `.brand{position:relative;display:inline-block;isolation:isolate}
-.brand::after{content:"";position:absolute;inset:0;pointer-events:none;-webkit-mask:url(/stage/brand-logo.png) left center/contain no-repeat;mask:url(/stage/brand-logo.png) left center/contain no-repeat;
+    st.textContent = `.brand{position:relative}
+.brand img{position:relative;z-index:0;opacity:1!important;visibility:visible!important;min-height:22px;animation:xcGlow 5s ease-in-out 2s infinite}
+.brand::after{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--xc-logo-w,140px);z-index:1;pointer-events:none;opacity:.9;mix-blend-mode:screen;-webkit-mask:url(/stage/brand-logo.png) left center/contain no-repeat;mask:url(/stage/brand-logo.png) left center/contain no-repeat;
 background:linear-gradient(105deg,transparent 30%,rgba(255,226,214,.95) 48%,rgba(255,255,255,.9) 50%,transparent 66%) -150% 0/250% 100% no-repeat;animation:xcSweep 1.6s .3s ease-out 1 both}
 .brand:hover::after{animation:xcSweep2 1.1s ease-out 1 both}
-.brand img{animation:xcGlow 5s ease-in-out 2s infinite}
+html[data-xc-light] .brand img{filter:invert(1) brightness(.25)}html[data-xc-light] .brand::after{mix-blend-mode:multiply}
 @keyframes xcSweep{to{background-position:150% 0}}
 @keyframes xcSweep2{from{background-position:-150% 0}to{background-position:150% 0}}
 @keyframes xcGlow{0%,100%{filter:drop-shadow(0 0 0 rgba(232,170,150,0))}50%{filter:drop-shadow(0 0 6px rgba(232,170,150,.45))}}
+html[data-xc-light] .brand img{animation:none}
 ${document.querySelector('.brand-x') ? '.brand::after{display:none}\n' : ''}@media (prefers-reduced-motion:reduce){.brand::after,.brand:hover::after,.brand img{animation:none!important}}`;
     document.head.appendChild(st);
   }
