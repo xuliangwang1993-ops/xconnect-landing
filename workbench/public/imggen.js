@@ -111,7 +111,7 @@ export function mountImageGen(doc = document) {
       card.appendChild(grid);
       input.value = ''; st.image = null; showRef();
     } catch (e) {
-      const keyLink = e.code === 'no_image_provider' || e.code === 'provider_auth' ? ` <a href="/settings#imgkeys">${esc(T('keyHint'))}</a>` : '';
+      const keyLink = e.code === 'no_image_provider' || e.code === 'provider_auth' ? ` <a href="/assistants#imgkeys">${esc(T('keyHint'))}</a>` : '';
       card.querySelector('.ig-status').innerHTML = `<span class="ig-err">${esc(T('fail'))}: ${esc(e.message)}</span>${keyLink}`;
     } finally { st.busy = false; sendBtn.disabled = false; card.scrollIntoView({ block: 'end' }); }
   }

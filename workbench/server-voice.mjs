@@ -203,7 +203,7 @@ function json(res, code, x) {
 
 const wb = createWorkbench({ tasks, broadcast });
 const slack = createSlackHandler({ store: wbStore });
-const factory = createFactory({ getSession: wbGetSession, speakers: WB_SPEAKERS });
+const factory = createFactory({ getSession: wbGetSession, speakers: WB_SPEAKERS, store: wbStore });
 const api = http.createServer(async (req, res) => {
   if (req.url.startsWith('/slack/') && await slack.handle(req, res)) return;
   if (factory.handle(req, res)) return; // 搭台首页 / AoI 看板

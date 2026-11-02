@@ -29,7 +29,7 @@ let canvas, ctx, dpr = 1;
 let resolvePick = null;
 let phase = 'list'; // list | detail | waking
 let customSlots = []; // 「我的小助手」：/api/custom-assistants（与 Settings 同一份存储）
-const BUILD_URL = (typeof window !== 'undefined' && window.__XC_BUILD_URL) || 'https://xconnect-factory.onrender.com/settings#build';
+const BUILD_URL = (typeof window !== 'undefined' && window.__XC_BUILD_URL) || 'https://xconnect-factory.onrender.com/assistants#build';
 
 const reduceMotion = () =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -252,7 +252,7 @@ function renderMine(ul) {
     li.style.cssText = 'opacity:.75;border-style:dashed';
     li.innerHTML = `<a href="${BUILD_URL}" target="_blank" rel="noopener" style="display:flex;width:100%;align-items:center;gap:12px;color:inherit;text-decoration:none">
       <span class="lounge-row-orb" style="display:grid;place-items:center;font-size:22px">+</span>
-      <span class="lounge-row-main"><span class="lounge-row-name">${zh ? '制作你的小助手' : 'Build your own assistant'}</span><span class="lounge-row-desc">${zh ? `槽位 ${i + 1} · 去设置导入素材` : `Slot ${i + 1} · import materials in Setting`}</span></span></a>`;
+      <span class="lounge-row-main"><span class="lounge-row-name">${zh ? '制作你的小助手' : 'Build your own assistant'}</span><span class="lounge-row-desc">${zh ? `槽位 ${i + 1} · 去小助手页导入素材` : `Slot ${i + 1} · import materials on the Assistants page`}</span></span></a>`;
     ul.appendChild(li);
   }
 }

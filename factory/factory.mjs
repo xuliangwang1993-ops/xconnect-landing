@@ -7,6 +7,7 @@ import { fetchAoiSnapshot } from './aoi/aoi-live.mjs';
 import { loadWorkNodes } from './graph/work-nodes.mjs';
 import { createTreeStore, handleTree } from './tree/tree.mjs';
 import { listAssistants, patchAssistant } from './settings/settings-api.mjs';
+import { accountSummary } from './account/account-api.mjs';
 import { answer as guideAnswer, parseGuide } from './guide/guide.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -14,12 +15,12 @@ const REPO = path.resolve(HERE, '..');
 const STAGE_FILES = { 'index.html': 'text/html; charset=utf-8', 'portal.html': 'text/html; charset=utf-8', 'styles.css': 'text/css; charset=utf-8',
   'app.js': 'text/javascript; charset=utf-8', 'factory-home.js': 'text/javascript; charset=utf-8', 'icon.svg': 'image/svg+xml', 'brand-x.png': 'image/png', 'brand-logo.png': 'image/png' };
 const GUIDE_FILES = { 'guide-widget.js': 'text/javascript; charset=utf-8' };
-export const GUIDE_TAG = '<script src="/i18n/xc-i18n.js"></script>\n<script src="/skin/xc-skin.js"></script>\n<script src="/guide/guide-widget.js" defer></script>';
+export const GUIDE_TAG = '<script src="/i18n/xc-i18n.js"></script>\n<script src="/i18n/xc-i18n-account.js"></script>\n<script src="/skin/xc-skin.js"></script>\n<script src="/guide/guide-widget.js" defer></script>';
 const GRAPH_FILES = { 'graph-view.js': 'text/javascript; charset=utf-8' };
 const AOI_FILES = { 'index.html': 'text/html; charset=utf-8', 'aoi-snapshot.js': 'text/javascript; charset=utf-8' };
 
 export const ROUTES = {
-  stage: '/', portal: '/portal', stageAssets: '/stage/', workbench: '/workbench', aoi: '/aoi', manifest: '/factory.json', guide: '/guide', graph: '/graph', settings: '/settings',
+  stage: '/', portal: '/portal', stageAssets: '/stage/', workbench: '/workbench', aoi: '/aoi', manifest: '/factory.json', guide: '/guide', graph: '/graph', settings: '/settings', account: '/account', assistants: '/assistants',
 };
 
 // Stage HTML uses relative asset paths; at "/" those would collide with the
@@ -41,7 +42,7 @@ function send(res, req, type, body) {
   return true;
 }
 
-export function createFactory({ env = process.env, fetchImpl = globalThis.fetch, getSession = () => null, speakers = [] } = {}) {
+export function createFactory({ env = process.env, fetchImpl = globalThis.fetch, getSession = () => null, speakers = [], store = null } = {}) {
   const tree = createTreeStore({ env, fetchImpl });
   const speakerIds = new Set(speakers.map((s) => s.id));
   const sendJson = (res, code, body) => { res.writeHead(code, { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' }); res.end(JSON.stringify(body)); return true; };
@@ -66,8 +67,20 @@ export function createFactory({ env = process.env, fetchImpl = globalThis.fetch,
         });
         return true;
       }
-      if ((sp === '/settings' || sp === '/settings/') && (req.method === 'GET' || req.method === 'HEAD'))
-        return send(res, req, 'text/html; charset=utf-8', fs.readFileSync(path.join(HERE, 'settings/index.html'), 'utf8').replace('</body>', GUIDE_TAG + '\n</body>'));
+      if (sp === '/account/api/summary' && req.method === 'GET') {
+        accountSummary({ session: getSession(req), fetchImpl, env, store })
+          .catch((e) => ({ ok: false, error: String(e && e.message || e) }))
+          .then((d) => sendJson(res, 200, d));
+        return true;
+      }
+      // Setting became Account; persona settings moved to /assistants.
+      if ((sp === '/settings' || sp === '/settings/') && (req.method === 'GET' || req.method === 'HEAD')) {
+        // Hash never reaches the server, so route in the browser: build/keys anchors -> /assistants, else /account.
+        return send(res, req, 'text/html; charset=utf-8', '<!doctype html><meta charset="utf-8"><title>X-connect</title><script>var h=location.hash;location.replace((/^#(build|sKeys|imgkeys|sAsst|sSkin|sModel|sVoice)/.test(h)?"/assistants":"/account")+h)</script><a href="/account">账户 / Account</a>');
+      }
+      for (const [route, file] of [['/account', 'account/index.html'], ['/assistants', 'assistants/index.html']])
+        if ((sp === route || sp === route + '/') && (req.method === 'GET' || req.method === 'HEAD'))
+          return send(res, req, 'text/html; charset=utf-8', fs.readFileSync(path.join(HERE, file), 'utf8').replace('</body>', GUIDE_TAG + '\n</body>'));
     }
     if (handleTree(req, res, tree)) return true;
     { const tp = new URL(req.url, 'http://localhost').pathname;
@@ -86,6 +99,7 @@ export function createFactory({ env = process.env, fetchImpl = globalThis.fetch,
     }
     if (p === '/skin/xc-skin.js') return send(res, req, 'text/javascript; charset=utf-8', fs.readFileSync(path.join(HERE, 'skin/xc-skin.js')));
     if (p === '/i18n/xc-i18n.js') return send(res, req, 'text/javascript; charset=utf-8', fs.readFileSync(path.join(HERE, 'i18n/xc-i18n.js')));
+    if (p === '/i18n/xc-i18n-account.js') return send(res, req, 'text/javascript; charset=utf-8', fs.readFileSync(path.join(HERE, 'i18n/xc-i18n-account.js')));
     if (p.startsWith('/guide/')) {
       const name = p.slice('/guide/'.length);
       if (!Object.hasOwn(GUIDE_FILES, name)) return false;
