@@ -34,7 +34,8 @@ create index if not exists brain_needs_status_conf_idx on public.brain_needs (st
 create table if not exists public.brain_replies (
   id         bigserial primary key,
   session_id text not null,
-  kind       text not null default 'turn' check (kind in ('turn', 'proactive')),
+  -- turn=每轮回复前问总脑；proactive=停顿回看；strong=智库（慢而强）送达的结论
+  kind       text not null default 'turn' check (kind in ('turn', 'proactive', 'strong')),
   reply      text,
   latency_ms integer not null default 0,
   used       text not null check (used in ('brain', 'fallback')),
@@ -57,15 +58,9 @@ alter table public.brain_needs    enable row level security;
 alter table public.brain_replies  enable row level security;
 alter table public.brain_settings enable row level security;
 
-do $$
-begin
-  execute 'create policy brain_needs_read on public.brain_needs for select to anon, authenticated using (true)';
-exception when duplicate_object then null;
-end $$;
+drop policy if exists brain_needs_read on public.brain_needs;
+create policy brain_needs_read on public.brain_needs for select to anon, authenticated using (true);
 
-do $$
-begin
-  execute 'create policy brain_settings_read on public.brain_settings for select to anon, authenticated using (true)';
-exception when duplicate_object then null;
-end $$;
+drop policy if exists brain_settings_read on public.brain_settings;
+create policy brain_settings_read on public.brain_settings for select to anon, authenticated using (true);
 -- brain_turns / brain_replies 默认无 anon 策略 = anon 读不到，只有 service_role 能读写。
