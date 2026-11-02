@@ -395,6 +395,7 @@ async function boot() {
       renderAll();
       registerSW();
       setView('cards');
+      if (q.has('settings')) setTimeout(() => openSettings(q.get('settings') || 'look'), 0);
       return;
     }
   }
