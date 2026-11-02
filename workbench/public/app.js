@@ -1832,6 +1832,15 @@ function playPcm(bytes) {
 }
 
 // 语音进行中换了助理：立刻停旧声音、断旧会话，用新角色的音色重开并打招呼。
+// Top-bar section labels (Project / Tree / Settings) follow the language picker.
+function navLabels() {
+  const zh = /^zh/.test(uiLang());
+  const L = { projects: zh ? '项目' : 'Project', tree: zh ? '项目树' : 'Tree', settings: zh ? '设置' : 'Settings' };
+  document.querySelectorAll('[data-xn]').forEach((n) => { n.textContent = L[n.dataset.xn] || n.textContent; });
+}
+document.addEventListener('xc:lang', navLabels);
+setTimeout(navLabels, 0);
+
 function uiLang() {
   try { return localStorage.getItem('xc_lang_v1') || navigator.language || 'zh-Hans'; } catch { return 'zh-Hans'; }
 }

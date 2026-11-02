@@ -1,4 +1,4 @@
-// xc-nav.js — the one factory nav (6 sections). Injected on every factory page via GUIDE_TAG.
+// xc-nav.js — the one factory nav (5 sections: Project · Tree · AoI · Workbench · Settings; greeting/tour pop over the page). Injected on every factory page via GUIDE_TAG.
 // 开始 /guide · 项目 / · 项目树(Tree/Graph) /aoi?view=tree · AoI /aoi?view=live · 工作台 /workbench/ · 设置 /settings
 // Hidden (routes kept, just not linked): /portal (old Factory OS portal), /graph (old Tree|Graph page), /tree (进树 editor).
 (() => {
@@ -6,12 +6,11 @@
   if (p.startsWith('/workbench')) return; // workbench has its own top bar with the same links
   const zh = () => !window.XC_I18N || /^zh/.test(window.XC_I18N.lang);
   const S = [
-    ['start', '/guide', '开始', 'Start', () => p.startsWith('/guide')],
-    ['projects', '/', '项目', 'Projects', () => p === '/' || p === '/index.html' || p.startsWith('/tree')],
-    ['treegraph', '/aoi?view=tree', '项目树', 'Project Tree', () => (p.startsWith('/aoi') && v !== 'live') || p.startsWith('/graph')],
+    ['projects', '/', '项目', 'Project', () => p === '/' || p === '/index.html' || p.startsWith('/tree') || p.startsWith('/guide')],
+    ['tree', '/aoi?view=tree', '项目树', 'Tree', () => (p.startsWith('/aoi') && v !== 'live') || p.startsWith('/graph')],
     ['aoi', '/aoi?view=live', 'AoI', 'AoI', () => p.startsWith('/aoi') && v === 'live'],
     ['workbench', '/workbench/', '工作台', 'Workbench', () => false],
-    ['settings', '/settings', '⚙ 设置', '⚙ Settings', () => /^\/(settings|account|assistants)/.test(p)],
+    ['settings', '/settings', '设置', 'Settings', () => /^\/(settings|account|assistants)/.test(p)],
   ];
   const html = () => S.map(([id, h, z, e, on]) => `<a href="${h}" data-nav="${id}"${on() ? ' class="on" aria-current="page"' : ''}>${zh() ? z : e}</a>`).join('');
   function mount() {
