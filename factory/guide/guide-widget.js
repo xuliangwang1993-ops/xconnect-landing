@@ -24,7 +24,7 @@
   const onHome = location.pathname.replace(/\/$/, '') === '' || location.pathname === '/';
   const btn = document.createElement('button'); btn.id = 'xcg-btn'; btn.type = 'button'; btn.innerHTML = onHome ? '助手' : '📚 导览员';
   const panel = document.createElement('section'); panel.id = 'xcg-panel'; panel.setAttribute('aria-label', '工厂导览员');
-  panel.innerHTML = `<div id="xcg-head"><span>${onHome ? '<b>助手</b> · 一起搭 Factory OS' : '📚 <b>图书馆管理员</b> · 工厂导览'}</span><span style="display:flex;gap:6px;align-items:center"><button type="button" id="xcg-nav-call" aria-label="呼叫" style="font-size:13px;color:#ececef;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:3px 10px"></button><button type="button" id="xcg-close" aria-label="关闭">×</button></span></div>
+  panel.innerHTML = `<div id="xcg-head"><span>${onHome ? '<b>助手</b> · 一起搭 Factory OS' : '📚 <b>图书馆管理员</b> · 工厂导览'}</span><span style="display:flex;gap:6px;align-items:center"><button type="button" id="xcg-tour-btn" style="font-size:13px;color:#ececef;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:3px 10px">🎓 带我入门</button><button type="button" id="xcg-nav-call" aria-label="呼叫" style="font-size:13px;color:#ececef;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:3px 10px"></button><button type="button" id="xcg-close" aria-label="关闭">×</button></span></div>
 <div id="xcg-log"></div><form id="xcg-form"><input id="xcg-q" placeholder="问我：怎么发起委托？卡片怎么批准？" maxlength="200" autocomplete="off"><button>问</button></form>`;
   const mount = full ? (document.getElementById('guide-root') || document.body) : document.body;
   if (full) panel.classList.add('full', 'open'); else document.body.appendChild(btn);
@@ -110,10 +110,10 @@
     const bub = document.createElement('div'); bub.className = 'xcg-bubble';
     const tt = (k, v, fb) => (window.XC_I18N ? window.XC_I18N.t(k, v) : fb);
     const en = window.XC_I18N && window.XC_I18N.lang === 'en';
-    bub.textContent = tt('call.greet', { name: en ? ({ duck: 'Duck Lee', sparky: 'Sparky', rapper: 'Forty Cents', wutian: 'WuTian', feifei: 'Feifei' }[av]) : name }, `嗨，我是${name}！`) + ' ' + tt('call.hint', {}, '');
-    bub.style.cssText = `position:fixed;right:128px;bottom:140px;max-width:240px;z-index:9999;background:${C.panel || '#16181d'};color:#ececef;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 12px;font:13px/1.4 system-ui,"PingFang SC",sans-serif`;
+    bub.textContent = tt('call.greet', { name: en ? ({ duck: 'Duck Lee', sparky: 'Sparky', rapper: 'Forty Cents', wutian: 'WuTian', feifei: 'Feifei' }[av]) : name }, `嗨，我是${name}！`) + ' ' + (window.XC_TOUR && window.XC_TOUR.introText() ? window.XC_TOUR.introText() : tt('call.hint', {}, ''));
+    bub.style.cssText = `position:fixed;right:128px;bottom:140px;max-width:min(320px,calc(100vw - 150px));z-index:9999;background:${C.panel || '#16181d'};color:#ececef;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 12px;font:13px/1.4 system-ui,"PingFang SC",sans-serif`;
     setTimeout(() => document.body.appendChild(bub), reduce ? 0 : 700);
-    setTimeout(() => bub.remove(), 7000);
+    setTimeout(() => bub.remove(), window.XC_TOUR ? 16000 : 7000);
   }
   { // 呼叫按钮只在导航员窗口内（打开面板后可见），不再有右下角并列入口
     const call = panel.querySelector('#xcg-nav-call');
@@ -121,6 +121,13 @@
     const lab = () => { call.innerHTML = PHONE + ' ' + T('call.label', {}, '呼叫'); call.setAttribute('aria-label', T('call.label', {}, '呼叫')); };
     lab(); window.XC_I18N?.onChange(lab); call.onclick = callPet;
   }
+  // 新手引导（知识库驱动，见 /xc-tour-kb.json）：入口按钮 + 首次打开功能时自动开始
+  const tourBtn = panel.querySelector('#xcg-tour-btn');
+  const tourLab = () => { const en = window.XC_I18N && window.XC_I18N.lang === 'en'; tourBtn.textContent = en ? '🎓 Show me around' : '🎓 带我入门'; };
+  tourLab(); window.XC_I18N?.onChange(tourLab);
+  tourBtn.onclick = () => { if (!full) panel.classList.remove('open'); window.XC_TOUR?.start(); };
+  if (!window.XC_TOUR && !document.querySelector('script[src="/xc-tour.js"]')) { const ts = document.createElement('script'); ts.src = '/xc-tour.js'; ts.defer = true; document.head.appendChild(ts); }
   let first = false; try { first = !localStorage.getItem('xcGuideToured'); } catch {}
-  if (full || first || /[?&]guide=1/.test(location.search)) open();
+  // 首访不再自动弹出导览员面板，由新手引导接管（xc-tour.js 首访自动开始）
+  if (full || /[?&]guide=1/.test(location.search)) open(); else if (first) { try { localStorage.setItem('xcGuideToured', '1'); } catch {} }
 })();

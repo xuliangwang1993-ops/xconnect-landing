@@ -1,0 +1,590 @@
+{
+ "version": 1,
+ "_doc": "Knowledge base for the onboarding tour (xc-tour.js). Add a tour: append to tours[] with id, match (regex on location.pathname), trigger ('first-visit' auto-starts once, 'manual' only from the 带我入门 button), steps[] {selector, title{zh,en}, body{zh,en}, placement?, action?, cap?}. A step whose selector is missing is skipped. Text may use {name} (the picked assistant). cap: real | demo | soon — 'soon' beats are spoken as coming soon.",
+ "capabilities": {
+  "tour": {
+   "status": "real",
+   "note": "This guided tour"
+  },
+  "factory": {
+   "status": "real",
+   "note": "Projects / Issues / Tree / Graph / AoI pages"
+  },
+  "chat": {
+   "status": "real",
+   "note": "Workbench chat with model switcher"
+  },
+  "imagegen": {
+   "status": "real",
+   "note": "🎨 text-to-image / image-to-image in the composer"
+  },
+  "keys": {
+   "status": "real",
+   "note": "BYOK voice + image keys stored encrypted via /settings"
+  },
+  "qa": {
+   "status": "real",
+   "note": "Navigator answers questions from docs"
+  },
+  "organize": {
+   "status": "demo",
+   "note": "Periodic conversation organizing — demo panel; real today: manual 生成卡片 from a chat"
+  },
+  "reports": {
+   "status": "demo",
+   "note": "Daily/weekly reports — demo panel"
+  },
+  "reminders": {
+   "status": "demo",
+   "note": "Reminders — demo panel"
+  },
+  "tasks": {
+   "status": "demo",
+   "note": "Secretary task handling — demo panel; real today: 任务 tab + card approve/execute"
+  }
+ },
+ "personas": {
+  "voice": {
+   "name": {
+    "zh": "李黑鸭",
+    "en": "Duck Lee"
+   },
+   "avatar": "duck",
+   "opener": {
+    "zh": "嘎，我是李黑鸭，废话少说。",
+    "en": "Quack. Duck Lee here — I'll keep it short."
+   }
+  },
+  "scribe": {
+   "name": {
+    "zh": "斯巴达",
+    "en": "Sparky"
+   },
+   "avatar": "sparky",
+   "opener": {
+    "zh": "嗨！我是斯巴达，笔记本已经打开啦～",
+    "en": "Hi! Sparky here, notebook already open~"
+   }
+  },
+  "brain": {
+   "name": {
+    "zh": "四毛",
+    "en": "Forty Cents"
+   },
+   "avatar": "rapper",
+   "opener": {
+    "zh": "Yo，我是四毛，节奏跟上。",
+    "en": "Yo, Forty Cents on the mic — keep up."
+   }
+  },
+  "deep": {
+   "name": {
+    "zh": "武天",
+    "en": "WuTian"
+   },
+   "avatar": "wutian",
+   "opener": {
+    "zh": "在下武天，静心听我道来。",
+    "en": "I am WuTian. Listen calmly."
+   }
+  },
+  "admin": {
+   "name": {
+    "zh": "狒狒",
+    "en": "Feifei"
+   },
+   "avatar": "feifei",
+   "opener": {
+    "zh": "哈喽，我是狒狒，事情交给我稳稳的。",
+    "en": "Hello, Feifei here — leave it to me, nice and steady."
+   }
+  }
+ },
+ "intro": {
+  "title": {
+   "zh": "我是你的导游，也是你的助手",
+   "en": "Your guide, and your assistant"
+  },
+  "beats": [
+   {
+    "cap": "factory",
+    "zh": "我可以带你逛工厂、教你怎么聊天、给你看我们所有的特色功能。",
+    "en": "I can walk you around the factory, teach you how to chat, and show you all our special features."
+   },
+   {
+    "cap": "tour",
+    "zh": "我是你的导游，也是你的助手。",
+    "en": "I'm your tour guide, and your assistant too."
+   },
+   {
+    "cap": "keys",
+    "zh": "我是你的管家，你的钥匙也都可以放在我这儿——API Key 在 Setting 里加密保管。",
+    "en": "I'm your butler — you can keep your keys with me; API keys are stored encrypted in Setting."
+   },
+   {
+    "cap": "organize",
+    "zh": "你只管跟我聊，秘书的活我来做：定期整理你和我的所有对话，",
+    "en": "You just talk to me — I'll do the secretary work: I regularly organize all our conversations,"
+   },
+   {
+    "cap": "reports",
+    "zh": "给你出报告，",
+    "en": "write you reports,"
+   },
+   {
+    "cap": "reminders",
+    "zh": "到点提醒你，",
+    "en": "send you reminders,"
+   },
+   {
+    "cap": "tasks",
+    "zh": "帮你把任务办掉。",
+    "en": "and get your tasks done."
+   },
+   {
+    "cap": "qa",
+    "zh": "有什么不懂的你都可以来问我。",
+    "en": "If anything's unclear, just ask me."
+   }
+  ]
+ },
+ "tours": [
+  {
+   "id": "factory-home",
+   "match": "^/$",
+   "trigger": "first-visit",
+   "intro": true,
+   "title": {
+    "zh": "工厂首页",
+    "en": "Factory home"
+   },
+   "next": {
+    "href": "/workbench/",
+    "label": {
+     "zh": "下一站：Workbench",
+     "en": "Next: Workbench"
+    }
+   },
+   "steps": [
+    {
+     "selector": "a.brand",
+     "title": {
+      "zh": "这是 X-connect 工厂",
+      "en": "This is the X-connect factory"
+     },
+     "body": {
+      "zh": "左上角的 Logo 随时带你回到首页。",
+      "en": "The logo always brings you back home."
+     }
+    },
+    {
+     "selector": "#tabProjects",
+     "title": {
+      "zh": "项目",
+      "en": "Projects"
+     },
+     "body": {
+      "zh": "工厂按 Linear 的结构组织：先有项目，再有 Issue。",
+      "en": "Organized like Linear: projects first, then issues."
+     }
+    },
+    {
+     "selector": "button.primary",
+     "title": {
+      "zh": "新建项目",
+      "en": "New project"
+     },
+     "body": {
+      "zh": "点这里建你的第一个项目，我会帮你拆成 Issue。",
+      "en": "Create your first project here; I'll help split it into issues."
+     }
+    },
+    {
+     "selector": "#list",
+     "title": {
+      "zh": "项目列表",
+      "en": "Project list"
+     },
+     "body": {
+      "zh": "每行都能看 Issues，也能跳到 Graph 看关系。",
+      "en": "Each row opens its Issues or jumps to the Graph."
+     }
+    },
+    {
+     "selector": "a[href*='aoi']",
+     "title": {
+      "zh": "AoI 看板",
+      "en": "AoI board"
+     },
+     "body": {
+      "zh": "AoI 用证据说话：每个节点的进度和验证都在这里。",
+      "en": "AoI is evidence-first: progress and verification for every node."
+     }
+    },
+    {
+     "selector": "a[href*='settings']",
+     "title": {
+      "zh": "Setting",
+      "en": "Setting"
+     },
+     "body": {
+      "zh": "余额、模型、皮肤、语音和你的钥匙都在这里。",
+      "en": "Balance, model, skin, voice and your keys live here."
+     }
+    },
+    {
+     "selector": "#xcg-btn",
+     "title": {
+      "zh": "随时找我",
+      "en": "Find me anytime"
+     },
+     "body": {
+      "zh": "我在这里。点开就能问我，或者再带你走一遍。",
+      "en": "I'm right here — open me to ask, or take this tour again."
+     }
+    },
+    {
+     "selector": null,
+     "action": "open-secretary",
+     "cap": "organize",
+     "title": {
+      "zh": "秘书台",
+      "en": "Secretary desk"
+     },
+     "body": {
+      "zh": "整理、报告、提醒、任务——秘书的活都在这张台子上，点开看看。",
+      "en": "Organizing, reports, reminders, tasks — the secretary desk. Have a look."
+     }
+    }
+   ],
+   "site": "factory"
+  },
+  {
+   "id": "workbench",
+   "match": ".",
+   "trigger": "first-visit",
+   "intro": true,
+   "site": "workbench",
+   "title": {
+    "zh": "Workbench 与聊天",
+    "en": "Workbench & chat"
+   },
+   "steps": [
+    {
+     "selector": ".lounge-row, #assistantCard",
+     "title": {
+      "zh": "选你的小助手",
+      "en": "Pick your assistant"
+     },
+     "body": {
+      "zh": "每位小助手有自己的性格和声音，随时可以「更换」。",
+      "en": "Each assistant has its own personality and voice; switch anytime."
+     }
+    },
+    {
+     "selector": "#modelChip",
+     "title": {
+      "zh": "模型",
+      "en": "Model"
+     },
+     "body": {
+      "zh": "这里换聊天模型，界面皮肤也会跟着变。",
+      "en": "Switch chat models here; the skin follows."
+     }
+    },
+    {
+     "selector": "#newChatBtn2, #newChatBtn",
+     "title": {
+      "zh": "新建会话",
+      "en": "New chat"
+     },
+     "body": {
+      "zh": "开一个新会话，跟我聊就行。",
+      "en": "Start a new chat and just talk to me."
+     }
+    },
+    {
+     "selector": "#composerPill",
+     "action": "open-composer",
+     "title": {
+      "zh": "输入区",
+      "en": "Composer"
+     },
+     "body": {
+      "zh": "写字、粘贴、加附件都在这里，⌘↵ 发送。",
+      "en": "Type, paste or attach here; ⌘↵ to send."
+     }
+    },
+    {
+     "selector": "#imgGenToggle",
+     "cap": "imagegen",
+     "title": {
+      "zh": "🎨 生图",
+      "en": "🎨 Image"
+     },
+     "body": {
+      "zh": "打开生图：输入描述就是文生图，拖一张图进来就是图生图。",
+      "en": "Image mode: type for text-to-image, drop a picture for image-to-image."
+     }
+    },
+    {
+     "selector": "button.nav-item",
+     "title": {
+      "zh": "卡片 / 作品 / 任务",
+      "en": "Cards / Works / Tasks"
+     },
+     "body": {
+      "zh": "聊完可以一键生成卡片，审批后我去执行。",
+      "en": "Turn a chat into a card; once approved, I execute it."
+     }
+    },
+    {
+     "selector": "#settingsBtn",
+     "cap": "keys",
+     "title": {
+      "zh": "设置与钥匙",
+      "en": "Settings & keys"
+     },
+     "body": {
+      "zh": "你的 API Key 交给我保管，加密存放。",
+      "en": "Leave your API keys with me — stored encrypted."
+     }
+    },
+    {
+     "selector": null,
+     "action": "open-secretary",
+     "cap": "organize",
+     "title": {
+      "zh": "秘书台",
+      "en": "Secretary desk"
+     },
+     "body": {
+      "zh": "我会定期整理对话、出报告、提醒你、办任务，都在这里。",
+      "en": "I regularly organize chats, write reports, remind you and handle tasks — all here."
+     }
+    }
+   ]
+  },
+  {
+   "id": "aoi",
+   "match": "^/aoi/?$",
+   "trigger": "first-visit",
+   "title": {
+    "zh": "AoI 看板",
+    "en": "AoI board"
+   },
+   "steps": [
+    {
+     "selector": "#tabs",
+     "title": {
+      "zh": "三种视图",
+      "en": "Three views"
+     },
+     "body": {
+      "zh": "Tree 大树、Graph 气泡、实时快照，同一份数据三种看法。",
+      "en": "Tree, Graph bubbles and live snapshot — one dataset, three views."
+     }
+    },
+    {
+     "selector": "#out",
+     "title": {
+      "zh": "证据",
+      "en": "Evidence"
+     },
+     "body": {
+      "zh": "节点要有证据才算 verified，点开能看来源。",
+      "en": "A node is verified only with evidence; open it to see sources."
+     }
+    }
+   ],
+   "site": "factory"
+  },
+  {
+   "id": "graph",
+   "match": "^/graph/?$",
+   "trigger": "first-visit",
+   "title": {
+    "zh": "Graph / Tree",
+    "en": "Graph / Tree"
+   },
+   "steps": [
+    {
+     "selector": "#btnTree",
+     "title": {
+      "zh": "Tree",
+      "en": "Tree"
+     },
+     "body": {
+      "zh": "按层级看工作节点。",
+      "en": "See work nodes as a hierarchy."
+     }
+    },
+    {
+     "selector": "#btnGraph",
+     "title": {
+      "zh": "Graph",
+      "en": "Graph"
+     },
+     "body": {
+      "zh": "按关系看，谁依赖谁一目了然。",
+      "en": "See relationships and dependencies at a glance."
+     }
+    }
+   ],
+   "site": "factory"
+  },
+  {
+   "id": "tree",
+   "match": "^/tree/?$",
+   "trigger": "first-visit",
+   "title": {
+    "zh": "进树",
+    "en": "Tree intake"
+   },
+   "steps": [
+    {
+     "selector": "#f",
+     "title": {
+      "zh": "进树表单",
+      "en": "Intake form"
+     },
+     "body": {
+      "zh": "选类型和父节点，把工作挂进大树。",
+      "en": "Pick a type and parent to add work to the tree."
+     }
+    },
+    {
+     "selector": "#demo",
+     "title": {
+      "zh": "一键 Demo",
+      "en": "One-click demo"
+     },
+     "body": {
+      "zh": "不知道填什么？先跑个 Demo 看看。",
+      "en": "Not sure what to enter? Run the demo first."
+     }
+    }
+   ],
+   "site": "factory"
+  },
+  {
+   "id": "settings",
+   "match": "^/settings/?$",
+   "trigger": "first-visit",
+   "title": {
+    "zh": "Setting",
+    "en": "Setting"
+   },
+   "steps": [
+    {
+     "selector": "#sBal, #bal",
+     "title": {
+      "zh": "余额",
+      "en": "Balance"
+     },
+     "body": {
+      "zh": "账户和余额一眼看清。",
+      "en": "Account and balance at a glance."
+     }
+    },
+    {
+     "selector": "#sSkin",
+     "title": {
+      "zh": "Agentic 皮肤",
+      "en": "Agentic skin"
+     },
+     "body": {
+      "zh": "界面配色跟着聊天模型走。",
+      "en": "The palette follows your chat model."
+     }
+    },
+    {
+     "selector": "#sKeys, #imgkeys",
+     "cap": "keys",
+     "title": {
+      "zh": "你的钥匙",
+      "en": "Your keys"
+     },
+     "body": {
+      "zh": "语音和生图的 API Key 放我这儿，加密保管；费用你直接付给服务商。",
+      "en": "Voice and image API keys live with me, encrypted; you pay providers directly."
+     }
+    }
+   ],
+   "site": "factory"
+  }
+ ],
+ "secretary": {
+  "organize": [
+   {
+    "when": {
+     "zh": "今天 09:00",
+     "en": "Today 09:00"
+    },
+    "zh": "整理了 3 段对话 → 生成卡片「工厂首页改版」",
+    "en": "Organized 3 chats → card “Factory home redesign”"
+   },
+   {
+    "when": {
+     "zh": "昨天 21:00",
+     "en": "Yesterday 21:00"
+    },
+    "zh": "归档 5 段闲聊，提炼 2 条待办",
+    "en": "Archived 5 small talks, extracted 2 todos"
+   }
+  ],
+  "reports": [
+   {
+    "title": {
+     "zh": "日报 · 今天",
+     "en": "Daily · today"
+    },
+    "zh": "完成：生图上线、滚动修复。进行中：新手引导。风险：无。",
+    "en": "Done: image gen, scroll fix. In progress: onboarding. Risks: none."
+   },
+   {
+    "title": {
+     "zh": "周报 · 本周",
+     "en": "Weekly · this week"
+    },
+    "zh": "上线 6 项功能，2 个 Bug 修复，余额消耗 $4.8。",
+    "en": "6 features shipped, 2 bugs fixed, $4.80 spent."
+   }
+  ],
+  "reminders": [
+   {
+    "at": {
+     "zh": "今天 15:00",
+     "en": "Today 15:00"
+    },
+    "zh": "看一下 AoI 新证据",
+    "en": "Review new AoI evidence"
+   },
+   {
+    "at": {
+     "zh": "明天 10:00",
+     "en": "Tomorrow 10:00"
+    },
+    "zh": "续费 Ark API Key 额度",
+    "en": "Top up Ark API key credit"
+   }
+  ],
+  "tasks": [
+   {
+    "zh": "把今天的对话整理成卡片",
+    "en": "Turn today's chats into cards",
+    "done": true
+   },
+   {
+    "zh": "生成 3 张产品图",
+    "en": "Generate 3 product images",
+    "done": false
+   },
+   {
+    "zh": "给项目 A 写周报",
+    "en": "Write weekly report for project A",
+    "done": false
+   }
+  ]
+ }
+}
