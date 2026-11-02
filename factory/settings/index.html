@@ -63,7 +63,7 @@ async function loadAsst(){let d;try{d=await (await fetch('/settings/api/assistan
  if(!d.ok){$('asst').innerHTML=`<div class="na">助手表暂不可用（${esc(d.error)}）</div>`;return;}
  const can=d.editable||[];const def=settings.assistantId||'';
  $('asst').innerHTML=(d.signedIn?'':'<div class="na" style="margin-bottom:8px">未登录：只读。登录 Workbench 后可改简介、发音人和默认助手。</div>')+d.assistants.map((a)=>`<div class="asst" data-id="${esc(a.id)}">
-  <img src="${esc(a.avatar&&!/^https?:/.test(a.avatar)?'/workbench/'+a.avatar.replace(/^\//,''):a.avatar||'')}" alt="" onerror="this.style.visibility='hidden'">
+  <img src="${esc(/^https?:/.test(a.avatar||'')?a.avatar:'/characters/'+(a.avatar||'')+'/thumb.webp')}" alt="" onerror="this.style.visibility='hidden'">
   <div><div class="nm">${esc(a.name)} <span class="tag">${esc(a.id)}</span>${a.id===def?'<span class="tag" style="color:var(--ok)">默认</span>':''}</div>
   <div class="meta">${esc(a.role||'')}${a.model?' · 模型 '+esc(a.model):''}${a.memoryCount!=null?' · 记忆 '+a.memoryCount+' 条':''}</div>
   ${can.includes('intro')?`<textarea class="in">${esc(a.intro||'')}</textarea>`:`<div class="meta" style="color:var(--text)">${esc(a.intro||a.description||'')}</div>`}
