@@ -1124,7 +1124,9 @@ export function createWorkbench({ tasks, broadcast }) {
     if (pathname === '/api/chat' && req.method === 'POST') {
       if (!limiter.hit('chat:' + session.user.id, 40, 60_000)) return fail(res, 429, 'rate_limited', '发送太快，稍后再试');
       const body = await readJson(req, 800_000);
-      const model = clampText(body.model || '', 120);
+      let model = clampText(body.model || '', 120);
+      // Unreachable model for this key/tier would 403: fall back to the tier's assist model.
+      try { const ids = new Set((await getModels(session)).map((m) => m.id)); if (ids.size && (!model || !ids.has(model))) model = (await assistModelFor(session)) || model; } catch {}
       if (!model) return fail(res, 400, 'model_required', '先选择模型');
       const raw = Array.isArray(body.messages) ? body.messages : [];
       const messages = raw
