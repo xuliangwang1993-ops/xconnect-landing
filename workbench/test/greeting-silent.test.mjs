@@ -1,19 +1,24 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import { greetingText } from '../greet-tts.mjs';
 const kb = JSON.parse(fs.readFileSync(new URL('../public/xc-tour-kb.json', import.meta.url), 'utf8'));
-test('greeting script beats + yes/no routing words', () => {
+test('proactive greeting script + branch words', () => {
   const g = kb.greeting;
-  for (const s of ['嗨，我来了。', '我是你的助手，我是{name}。', '我是你的管家，也是你的导游', '要不要我现在带你看看？']) assert.ok(g.text.zh.includes(s), s);
-  assert.ok(g.text.en.includes("Hi, I'm here.") && g.text.en.includes("I'm your butler and your tour guide"));
+  for (const s of ['嗨，我来了。', '我是你的助手，我是{name}。', '我是你的管家，也是你的导游', '你是第一次来，还是都已经熟了？想让我给你介绍哪个功能吗？']) assert.ok(g.text.zh.includes(s), s);
   assert.equal(g.decline.zh, '没问题，以后有什么不懂的随时问我。');
-  assert.equal(g.decline.en, "No problem. If anything's unclear later, just ask me.");
-  const Y = new RegExp(g.yesWords, 'i'), N = new RegExp(g.noWords, 'i');
-  for (const t of ['好呀', '要', 'yes please', 'sure']) assert.ok(Y.test(t) && !N.test(t), t);
-  for (const t of ['不用了', '不需要', 'no thanks', 'not now']) assert.ok(N.test(t), t);
+  assert.ok(new RegExp(g.firstWords).test('我是第一次来'));
+  assert.ok(new RegExp(g.knowWords).test('都已经熟了'));
+  assert.ok(new RegExp(g.noWords, 'i').test('不用了'));
+  const aoi = kb.tours.find((t) => t.keywords && new RegExp(t.keywords, 'i').test('给我讲讲 AoI'));
+  assert.equal(aoi.id, 'aoi');
 });
-test('voice server never sends SayHello at session start', () => {
-  const p = [new URL('../server-voice.mjs', import.meta.url)];
-  const s = fs.readFileSync(p[0], 'utf8');
-  assert.ok(!/control\(300, sid, \{ content: client\.voiceGreet/.test(s));
+test('spoken greeting uses persona name per language', () => {
+  assert.match(greetingText('greeting', 'brain', 'zh'), /我是四毛。/);
+  assert.match(greetingText('greeting', 'scribe', 'en'), /I'm Sparky\./);
+  assert.match(greetingText('decline', 'deep', 'zh'), /没问题/);
+});
+test('voice server sends the KB greeting (SayHello) at session start', () => {
+  const s = fs.readFileSync(new URL('../server-voice.mjs', import.meta.url), 'utf8');
+  assert.match(s, /greetingText\('greeting'/); assert.match(s, /control\(300, sid, \{ content \}\)/);
 });

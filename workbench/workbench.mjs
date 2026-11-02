@@ -17,6 +17,7 @@ import { fileURLToPath } from 'node:url';
 import { VOICE_LIST } from './persona-voices.mjs';
 import { handleImageRoutes } from './image-gen.mjs';
 import { promoAppendix } from './promo.mjs';
+import { handleTts } from './greet-tts.mjs';
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.join(ROOT, 'public');
 const BUILD = process.env.BUILD_ID || (process.env.RENDER_GIT_COMMIT || '').slice(0, 10) || 'dev';
@@ -1736,6 +1737,7 @@ export function createWorkbench({ tasks, broadcast }) {
           }
           return fail(res, 405, 'method_not_allowed', '只读镜像不接受这个方法');
         }
+        if (await handleTts(req, res, pathname, { json, fail, readJson })) return true;
         await handleSession(req, res, pathname);
         return true;
       }

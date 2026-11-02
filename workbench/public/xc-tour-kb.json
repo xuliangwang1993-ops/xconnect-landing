@@ -340,7 +340,9 @@
      }
     }
    ],
-   "site": "factory"
+   "site": "factory",
+   "path": "/",
+   "keywords": "首页|主页|项目|project|home"
   },
   {
    "id": "workbench",
@@ -446,7 +448,9 @@
       "en": "I regularly organize chats, write reports, remind you and handle tasks — all here."
      }
     }
-   ]
+   ],
+   "path": "/workbench/",
+   "keywords": "工作台|workbench|聊天|chat|生图|图像|image|对话|卡片|card"
   },
   {
    "id": "aoi",
@@ -492,7 +496,9 @@
      }
     }
    ],
-   "site": "factory"
+   "site": "factory",
+   "path": "/aoi",
+   "keywords": "aoi|证据|evidence|看板"
   },
   {
    "id": "graph",
@@ -526,7 +532,9 @@
      }
     }
    ],
-   "site": "factory"
+   "site": "factory",
+   "path": "/graph",
+   "keywords": "graph|关系|气泡|图谱"
   },
   {
    "id": "tree",
@@ -560,7 +568,9 @@
      }
     }
    ],
-   "site": "factory"
+   "site": "factory",
+   "path": "/tree",
+   "keywords": "进树|大树|tree"
   },
   {
    "id": "settings",
@@ -606,7 +616,9 @@
       "en": "Voice and image API keys live with me, encrypted; you pay providers directly."
      }
     }
-   ]
+   ],
+   "path": "/settings",
+   "keywords": "设置|setting|钥匙|key|密钥"
   },
   {
    "id": "account",
@@ -640,7 +652,9 @@
       "en": "Top up here when credit runs low."
      }
     }
-   ]
+   ],
+   "path": "/account",
+   "keywords": "账户|余额|充值|account|balance"
   },
   {
    "id": "assistants",
@@ -686,7 +700,9 @@
       "en": "Voice and image API keys live with me, encrypted; you pay providers directly."
      }
     }
-   ]
+   ],
+   "path": "/assistants",
+   "keywords": "小助手设置|声音|语音|voice|persona|制作"
   }
  ],
  "secretary": {
@@ -763,14 +779,10 @@
   ]
  },
  "greeting": {
-  "_doc": "Silent text greeting bubble shown when the assistant appears (first visit or 呼叫). No audio. Yes → start tour; No → decline line, stay idle.",
+  "_doc": "Proactive spoken greeting when the assistant pops up (first visit, 呼叫, voice session start, assistant switch). Spoken via persona Doubao voice (/api/tts or the live voice session), text bubble always. Branches: first time → full tour; already know → feature chips → that tour; named feature → matching tour; decline → decline line.",
   "text": {
-   "zh": "嗨，我来了。我是你的助手，我是{name}。我是你的管家，也是你的导游，我来给你介绍这里的东西。要不要我现在带你看看？",
-   "en": "Hi, I'm here. I'm your assistant, I'm {name}. I'm your butler and your tour guide, here to introduce things to you. Want me to walk you through them now?"
-  },
-  "yes": {
-   "zh": "好呀，带我看看",
-   "en": "Yes, show me"
+   "zh": "嗨，我来了。我是你的助手，我是{name}。我是你的管家，也是你的导游，我来给你介绍这里的东西。你是第一次来，还是都已经熟了？想让我给你介绍哪个功能吗？",
+   "en": "Hi, I'm here. I'm your assistant, I'm {name}. I'm your butler and your tour guide, here to introduce things to you. Is this your first time, or do you already know your way around? Want me to introduce a particular feature?"
   },
   "no": {
    "zh": "不用了",
@@ -780,8 +792,21 @@
    "zh": "没问题，以后有什么不懂的随时问我。",
    "en": "No problem. If anything's unclear later, just ask me."
   },
-  "yesWords": "^\\s*(要|好|好的|好呀|好啊|可以|行|嗯|带我|看看|现在|yes|yeah|yep|sure|ok|okay|please|let'?s go)",
-  "noWords": "(不用|不要|不需要|算了|下次|以后再|^\\s*no\\b|nope|not now|no thanks|later)"
+  "noWords": "(不用|不要|不需要|算了|下次|以后再|^\\s*no\\b|nope|not now|no thanks|later)",
+  "first": {
+   "zh": "第一次来",
+   "en": "First time"
+  },
+  "know": {
+   "zh": "已经熟了",
+   "en": "I know my way"
+  },
+  "pick": {
+   "zh": "想看哪个功能？",
+   "en": "Which feature?"
+  },
+  "firstWords": "(第一次|头一次|新来|刚来|没来过|不熟|first|new here|never been)",
+  "knowWords": "(熟了|很熟|来过|知道|用过|老用户|know|familiar|been here|regular)"
  },
  "aoi": {
   "_doc": "AoI culture. Always written A-o-I. Looks like 合 (NOT 盒/box); means 和 (harmony).",
@@ -809,5 +834,6 @@
  "promoRules": {
   "zh": "自我推荐规则：大约每 3–4 轮用户发言最多一次，必须和当前话题相关，绝不每条都推、不连续两轮推；先把用户的问题答完再推；用户拒绝或表示不感兴趣后，本次会话不再推荐；只推下面列出的功能，标「演示」的功能照常介绍；语音里推荐要更短。",
   "en": "Self-promotion rules: at most once every 3–4 user turns, always tied to the current topic, never every reply and never two turns in a row; answer the user first, then nudge; after the user declines or shows no interest, stop for the rest of the conversation; only promote the features listed below; demo features may be presented normally; keep voice nudges shorter."
- }
+ },
+ "factoryOrigin": "https://xconnect-factory.onrender.com"
 }

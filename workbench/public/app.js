@@ -1841,7 +1841,7 @@ document.addEventListener('xc:lang', async () => {
   const v = state.voice;
   if (!v || !v.active || v.switching) return;
   v.switching = true;
-  try { flushVoiceAudio(); stopVoice(false); await startVoice(); /* silent reconnect: no SayHello until the user speaks */ } finally { v.switching = false; }
+  try { flushVoiceAudio(); stopVoice(false); await startVoice({ greet: true }); /* spoken greeting in the new voice; handoff box follows */ } finally { v.switching = false; }
 });
 
 /* 换助手：写账号设置（跨设备/跨标签生效），有旧助手时问一句交接。
@@ -1886,7 +1886,7 @@ async function switchVoiceAssistant(id) {
   try {
     flushVoiceAudio();
     stopVoice(false);
-    await startVoice(); /* silent reconnect: no SayHello until the user speaks */
+    await startVoice({ greet: true }); /* spoken greeting in the new voice; handoff box follows */
   } finally { v.switching = false; }
 }
 
@@ -1981,7 +1981,7 @@ async function startVoice(opts = {}) {
     guideRoamToInput();
     const tok = await api('/api/voice-token', { method: 'POST', body: { assistantId } });
     const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const url = `${proto}//${location.host}${tok.wsPath}?token=${encodeURIComponent(tok.token)}&assistant=${encodeURIComponent(assistantId)}&lang=${encodeURIComponent(uiLang())}${opts.greet ? '&greet=' + encodeURIComponent((/^zh/.test(uiLang()) ? '我是' + (nameFor(assistantId) || '') + '，换我来了。' : 'Hi, ' + (nameFor(assistantId) || 'I') + ' here.')) : ''}`;
+    const url = `${proto}//${location.host}${tok.wsPath}?token=${encodeURIComponent(tok.token)}&assistant=${encodeURIComponent(assistantId)}&lang=${encodeURIComponent(uiLang())}${opts.greet === false ? '' : '&greet=1'}`;
     const stream = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     await ctx.resume().catch(() => {});
@@ -2479,8 +2479,9 @@ boot();
     const avatar = avatarFor(id);
     if (avatar) { try { mountRoam(avatar, name); } catch {} }
     const zh = /^zh/.test(localStorage.getItem('xc_lang_v1') || navigator.language || '');
-    // Silent appear: text greeting bubble with Yes/No (xc-tour), no audio.
-    if (window.XC_TOUR && window.XC_TOUR.greet()) dropIn(''); else dropIn(zh ? `嗨，我来了。我是你的助手，我是${name}。要不要我现在带你看看？` : `Hi, I'm here. I'm your assistant, I'm ${name}. Want me to walk you through things now?`);
+    const voiceWill = !!(state.voiceInfo?.available && !state.voice?.active);
+    // Proactive greeting: bubble always; spoken by the live voice session if it starts, else via /api/tts.
+    if (window.XC_TOUR && window.XC_TOUR.greet({ speak: !voiceWill })) dropIn(''); else dropIn(zh ? `嗨，我来了。我是你的助手，我是${name}。你是第一次来，还是都已经熟了？想让我给你介绍哪个功能吗？` : `Hi, I'm here. I'm your assistant, I'm ${name}. First time here, or do you know your way around? Want me to introduce a feature?`);
     if (state.voiceInfo?.available && !state.voice?.active) {
       try { toggleVoicePanel(true); await startVoice(); } catch (err) { toast((err && err.message) || '语音启动失败，先用文字聊', true); }
     }

@@ -164,33 +164,78 @@
     b.style.cssText = 'position:fixed;right:20px;bottom:150px;z-index:2147483150;width:min(320px,calc(100vw - 40px));background:#12151c;color:#ececef;border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:12px 14px;font:13.5px/1.6 -apple-system,"PingFang SC",sans-serif;box-shadow:0 16px 40px rgba(0,0,0,.45)';
     b.innerHTML = html; document.body.appendChild(b); greetEl = b; return b;
   }
-  // Text-only greeting bubble. Never plays audio; never posts into chat.
-  function greet() {
+  // Spoken greeting: persona Doubao voice via /api/tts. If autoplay is blocked, speak on first gesture.
+  let audio = null, deferred = null;
+  function assistantId() { return persona().id; }
+  function speak(kind) {
+    try { audio?.pause(); } catch {}
+    const req = fetch('/api/tts', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ kind, assistantId: assistantId(), lang: lang() }) })
+      .then((r) => (r.ok ? r.blob() : null)).catch(() => null);
+    req.then((blob) => {
+      if (!blob) return;
+      const a = new Audio(URL.createObjectURL(blob)); audio = a; window.__xcGreetAudio = a;
+      const go = () => a.play().then(() => true).catch(() => false);
+      go().then((ok) => {
+        if (ok) return;
+        deferred = () => { deferred = null; go(); };
+        const once = (e) => { if (e.target && e.target.closest && e.target.closest('#xct-greet [data-k]')) return; window.removeEventListener('pointerdown', once, true); window.removeEventListener('keydown', once, true); deferred && deferred(); };
+        window.addEventListener('pointerdown', once, true); window.addEventListener('keydown', once, true);
+      });
+    });
+    return req;
+  }
+  function greetHtml(p, body, btns) {
+    return `<div style="display:flex;gap:10px;align-items:flex-start"><img alt="" src="/characters/${esc(p.avatar)}/still.webp" style="width:36px;height:36px;border-radius:50%;object-fit:cover;background:#222"><div style="flex:1"><div style="font-size:11px;color:#9aa0aa">${esc(p.nameText)}</div><div data-g>${esc(body)}</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${btns}</div></div></div>`;
+  }
+  // Proactive greeting: text bubble always; spoken unless opts.speak === false (e.g. a live voice session speaks it).
+  function greet(opts = {}) {
     if (!KB || !KB.greeting) return false;
     const p = persona(); const G = KB.greeting;
-    const b = bubble(`<div style="display:flex;gap:10px;align-items:flex-start"><img alt="" src="/characters/${esc(p.avatar)}/still.webp" style="width:36px;height:36px;border-radius:50%;object-fit:cover;background:#222"><div style="flex:1"><div style="font-size:11px;color:#9aa0aa">${esc(p.nameText)}</div><div data-g>${esc(greetText())}</div>
-<div style="display:flex;gap:6px;margin-top:8px"><button class="xct-btn pri" data-y>${esc(L(G.yes))}</button><button class="xct-btn" data-n>${esc(L(G.no))}</button></div></div></div>`);
-    b.querySelector('[data-y]').onclick = () => answer('yes');
-    b.querySelector('[data-n]').onclick = () => answer('no');
+    const b = bubble(greetHtml(p, greetText(), `<button class="xct-btn pri" data-k="first">${esc(L(G.first))}</button><button class="xct-btn" data-k="know">${esc(L(G.know))}</button><button class="xct-btn" data-k="no">${esc(L(G.no))}</button>`));
+    b.querySelectorAll('[data-k]').forEach((x) => (x.onclick = () => answer(x.dataset.k)));
     pending = true; const s = load(); s.greeted = Date.now(); save(s);
+    if (opts.speak !== false) speak('greeting');
     return true;
+  }
+  function tourHref(t) {
+    if ((t.site || 'factory') === site() && (site() === 'workbench' || new RegExp(t.match).test(t.path || '/'))) return null; // same site: start in place if page matches
+    const base = site() === 'workbench' && (t.site || 'factory') === 'factory' ? (KB.factoryOrigin || '') : '';
+    return base + (t.path || '/') + '?tour=' + encodeURIComponent(t.id);
+  }
+  function runTour(t) {
+    pending = false; greetEl?.remove(); greetEl = null;
+    if (!t) return start();
+    if (t === pick()) return start(t.id);
+    const href = tourHref(t);
+    if (href) location.href = href; else start(t.id);
+  }
+  function chips() {
+    const p = persona(); const s = site();
+    const list = KB.tours.filter((t) => s === 'factory' || t.site === 'workbench' || true);
+    const b = bubble(greetHtml(p, L(KB.greeting.pick), list.map((t) => `<button class="xct-btn" data-t="${esc(t.id)}">${esc(L(t.title))}</button>`).join('') + `<button class="xct-btn" data-k="no">${esc(L(KB.greeting.no))}</button>`));
+    b.querySelectorAll('[data-t]').forEach((x) => (x.onclick = () => runTour(KB.tours.find((t) => t.id === x.dataset.t))));
+    b.querySelector('[data-k="no"]').onclick = () => answer('no');
+    pending = true;
   }
   function decline() {
     pending = false;
     const t = pick(); const s = load(); s.done = s.done || {}; if (t) s.done[t.id] = Date.now(); s.declined = Date.now(); save(s);
     const b = bubble(`<div>${esc(L(KB.greeting.decline))}</div>`);
+    speak('decline');
     setTimeout(() => { if (greetEl === b) { b.remove(); greetEl = null; } }, 6000);
   }
+  function findTour(text) { return KB.tours.find((t) => t.keywords && new RegExp(t.keywords, 'i').test(text)); }
   // User reply (button, typed text, or voice transcript). Returns true if consumed.
   function answer(text) {
     if (!pending || !KB) return false;
     const G = KB.greeting; const t = String(text || '');
-    const yes = t === 'yes' || new RegExp(G.yesWords, 'i').test(t);
-    const no = t === 'no' || new RegExp(G.noWords, 'i').test(t);
-    if (no) { decline(); return true; }
-    if (yes) { pending = false; greetEl?.remove(); greetEl = null; start(); return true; }
-    pending = false; greetEl?.remove(); greetEl = null; return false; // anything else: hand back to normal chat
+    if (t === 'no' || new RegExp(G.noWords, 'i').test(t)) { decline(); return true; }
+    if (t === 'first' || new RegExp(G.firstWords, 'i').test(t)) { runTour(pick() || KB.tours[0]); return true; }
+    const named = t.length > 1 && findTour(t);
+    if (named) { runTour(named); return true; }
+    if (t === 'know' || new RegExp(G.knowWords, 'i').test(t)) { chips(); return true; }
+    pending = false; greetEl?.remove(); greetEl = null; return false; // anything else: normal chat
   }
-  window.XC_TOUR = { greet, answer, greetText: () => (KB ? greetText() : ''), get pending() { return pending; }, start, stop, openDesk, introText: () => (KB ? introText() : ''), get kb() { return KB; }, get active() { return cur && { id: cur.tour.id, i: cur.i }; }, reset: () => save({}) };
+  window.XC_TOUR = { greet, answer, speak, chips, greetText: () => (KB ? greetText() : ''), get pending() { return pending; }, start, stop, openDesk, introText: () => (KB ? introText() : ''), get kb() { return KB; }, get active() { return cur && { id: cur.tour.id, i: cur.i }; }, reset: () => save({}) };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

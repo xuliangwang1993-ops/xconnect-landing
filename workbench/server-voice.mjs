@@ -1,4 +1,5 @@
 import http from 'node:http';
+import { greetingText } from './greet-tts.mjs';
 import { promoAppendix } from './promo.mjs';
 import { randomUUID, createPublicKey, verify as verifySignature } from 'node:crypto';
 import { gzipSync, gunzipSync } from 'node:zlib';
@@ -318,7 +319,12 @@ wss.on('connection', (client) => {
   up.on('message', (data) => {
     const p = parsePacket(data);
     if (!p) return;
-    // Silent on appear: no SayHello at session start; the assistant speaks only after the user does.
+    if (p.event === 150 && client.voiceGreet && !client.voiceGreeted) {
+      // Proactive spoken greeting at session start / assistant switch / language switch (persona voice, KB script).
+      client.voiceGreeted = true;
+      let content = ''; try { content = greetingText('greeting', client.voiceAssistant || 'brain', client.voiceLang); } catch {}
+      if (content) send(control(300, sid, { content }));
+    }
     if (p.type === 15) {
       sendClient(client, { type: 'error', code: p.code, message: p.payload.toString() });
       return;
