@@ -1,0 +1,48 @@
+# Slack app manifest for X-Connect Workbench.
+# Create at https://api.slack.com/apps -> "Create New App" -> "From an app manifest".
+# Socket Mode: to switch, set settings.socket_mode_enabled: true, remove every
+# request_url / url below, and create an app-level token (connections:write) ->
+# SLACK_APP_TOKEN. This server currently only implements HTTP request URLs.
+display_information:
+  name: X-Connect
+  description: 把 Slack 里的一句话变成 X-Connect Workbench 卡片
+features:
+  bot_user:
+    display_name: X-Connect
+    always_online: true
+  app_home:
+    messages_tab_enabled: true
+    messages_tab_read_only_enabled: false
+  slash_commands:
+    - command: /xc
+      url: https://xconnect-workbench-preview.onrender.com/slack/commands
+      description: 建一张 X-Connect 卡片
+      usage_hint: 一句成片 [idea]
+      should_escape: false
+  shortcuts:
+    - name: File to X-Connect
+      type: message
+      callback_id: xc_file_task
+      description: 把这条消息转成 X-Connect 卡片
+oauth_config:
+  redirect_urls:
+    - https://xconnect-workbench-preview.onrender.com/slack/oauth/callback
+  scopes:
+    bot:
+      - chat:write
+      - app_mentions:read
+      - commands
+      - im:history
+      - im:write
+settings:
+  event_subscriptions:
+    request_url: https://xconnect-workbench-preview.onrender.com/slack/events
+    bot_events:
+      - app_mention
+      - message.im
+  interactivity:
+    is_enabled: true
+    request_url: https://xconnect-workbench-preview.onrender.com/slack/interactive
+  org_deploy_enabled: false
+  socket_mode_enabled: false
+  token_rotation_enabled: false

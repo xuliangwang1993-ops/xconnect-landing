@@ -1,0 +1,41 @@
+<!doctype html><html lang="zh-Hans"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>X-connect · 总脑自检</title>
+<style>
+:root{--bg:#0b0d12;--panel:#12151c;--line:rgba(255,255,255,.09);--text:#e8ecf3;--muted:#8b93a3;--accent:#5b8cff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.7 -apple-system,"PingFang SC","Noto Sans CJK SC",system-ui,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 18px 60px}
+h1{font-size:20px;margin:0 0 6px}.sub{color:var(--muted);margin:0 0 22px;font-size:12.5px}
+.grid{display:grid;gap:14px;grid-template-columns:1fr 1fr}@media(max-width:820px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.card h2{font-size:13px;letter-spacing:.06em;color:var(--muted);margin:0 0 10px;font-weight:600;text-transform:uppercase}
+.msg{display:grid;gap:4px;padding:9px 12px;border-radius:12px;border:1px solid var(--line);margin:8px 0;max-width:92%}
+.msg.user{margin-left:auto;background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.msg .who{font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.big{font-size:15px;line-height:1.75}
+.row{border-top:1px solid var(--line);padding:10px 0}.row:first-of-type{border-top:0}
+.title{font-weight:600}.meta{color:var(--muted);font-size:12px}
+.pill{display:inline-block;font-size:11px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.bar{display:inline-block;width:64px;height:5px;border-radius:3px;background:rgba(255,255,255,.12);vertical-align:middle;margin-left:6px}
+.bar i{display:block;height:100%;border-radius:3px;background:var(--accent)}
+.kv{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:12.5px}
+.kv b{color:var(--text);font-weight:600}
+.ok{color:#5ad19b}.warn{color:#ffcc66}
+</style></head><body><div class="wrap">
+<h1>总脑自检 · claude-haiku-4-5-20251001</h1>
+<p class="sub">生成于 2026-11-02T12:19:31.353Z · 走的是生产同一份 factory/brain · 延时预算 3000ms · 端点为真实模型（密钥不在页面里）</p>
+<div class="kv"><span>模型调用 <b>2</b></span><span>超时 <b>1</b></span><span>失败 <b>0</b></span><span>退回小助手 <b>1</b></span><span>需求 <b>5</b></span><span>work_nodes <b>1</b></span></div>
+
+<div class="grid">
+<div>
+<section class="card "><h2>对话（真实感样例）</h2><div class="msg user"><span class="who">客户</span>你好，我们下周想赶在墨尔本客户会前做 3 条短视频，能开票吗</div><div class="msg assistant"><span class="who">小助手</span>可以开。您有 ABN 吗？我先帮您把抬头记下来。</div><div class="msg user"><span class="who">客户</span>有，53 004 085 616，抬头写 Rolex Pty Ltd。我们更想先看样片再付尾款</div><div class="msg assistant"><span class="who">小助手</span>明白，尾款等样片确认后再付。</div><div class="msg user"><span class="who">客户</span>另外我们这次预算压得比较紧，最好别超过一万块</div></section>
+<section class="card "><h2>总脑 · 建议回复</h2><div class="big">收到，我把 ABN 53 004 085 616、抬头 Rolex Pty Ltd 记下来了。关于样片，3 条短视频您是想先看成片还是粗剪版本？另外，下周具体哪天前需要交付？</div><p class="meta">稳态命中：0ms（缓存，0 费用） · 拿到总脑回复 3 次 / 共 4 次询问（其余按设计在 3 秒内退回小助手，原文照常出现）</p></section>
+</div>
+<div>
+<section class="card "><h2>任务（可直接派进 work_nodes）</h2><p class="meta">本轮无</p></section>
+<section class="card "><h2>主动追问（停顿回看 / 本轮结论）</h2><div class="big">那我帮您确认一下：3条短视频、下周交付、样片后付尾款、预算控制在1万以内，这样理解对吗？</div><p class="meta">依据：客户说&#39;下周想赶在墨尔本客户会前做3条短视频&#39;、&#39;更想先看样片再付尾款&#39;、&#39;预算压得比较紧，最好别超过一万块&#39;</p><p class="meta">再来一次：too_soon</p></section>
+<section class="card "><h2>需求（brain_needs 表，Factory 面板读的就是这张表）</h2><p class="meta">共解析出 3 条，合并为 5 条落库（同一件事说两遍不会刷屏）</p><div class="row"><div class="title">确保项目在下周墨尔本客户会前完成交付 <span class="pill">converted</span></div><div class="meta">依据：下周想赶在墨尔本客户会前做3条短视频</div><div class="meta">置信度 95% <span class="bar"><i style="width:95%"></i></span> · 指纹 确保项目在下周墨尔本客户会前完成交付</div></div><div class="row"><div class="title">先看样片再支付尾款 <span class="pill">open</span></div><div class="meta">依据：我们更想先看样片再付尾款</div><div class="meta">置信度 95% <span class="bar"><i style="width:95%"></i></span> · 指纹 先看样片再支付尾款</div></div><div class="row"><div class="title">控制项目预算在1万以内 <span class="pill">open</span></div><div class="meta">依据：预算压得比较紧，最好别超过一万块</div><div class="meta">置信度 95% <span class="bar"><i style="width:95%"></i></span> · 指纹 控制项目预算在1万以内</div></div><div class="row"><div class="title">3 条短视频制作与交付 <span class="pill">open</span></div><div class="meta">依据：我们下周想赶在墨尔本客户会前做 3 条短视频</div><div class="meta">置信度 50% <span class="bar"><i style="width:50%"></i></span> · 指纹 3条短视频制作与交付</div></div><div class="row"><div class="title">3 条短视频制作与交付 <span class="pill">open</span></div><div class="meta">依据：我们下周想赶在墨尔本客户会前做 3 条短视频</div><div class="meta">置信度 50% <span class="bar"><i style="width:50%"></i></span> · 指纹 3条短视频制作与交付</div></div></section>
+<section class="card "><h2>派发进 work_nodes</h2><div class="row"><div class="title">确保项目在下周墨尔本客户会前完成交付</div><div class="meta">ticket · stage=idea · status=waiting</div></div></section>
+</div></div>
+<section class="card "><h2>每轮计时（先问总脑再说话）</h2><table style="width:100%;border-collapse:collapse"><tr><td class="meta" style="padding:4px 0">第 3 轮 · 冷启动（3 秒预算）</td><td class="meta"><span class="warn">退回（timeout）3001ms</span></td></tr><tr><td class="meta" style="padding:4px 0">第 3 轮 · 后台完成（宽预算）</td><td class="meta"><span class="ok">总脑 1428ms</span></td></tr><tr><td class="meta" style="padding:4px 0">第 3 轮 · 稳态命中（3 秒预算）</td><td class="meta"><span class="ok">总脑 1ms</span></td></tr><tr><td class="meta" style="padding:4px 0">第 5 轮（整段）</td><td class="meta"><span class="ok">总脑 0ms</span></td></tr></table></section>
+</div></body></html>

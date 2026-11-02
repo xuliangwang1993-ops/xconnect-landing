@@ -1,0 +1,10 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>工厂 树 | 图</title>
+<style>body{font-family:system-ui;background:#111;color:#eee;margin:0;padding:16px}
+.seg button{background:#222;color:#eee;border:1px solid #555;padding:6px 14px;cursor:pointer}.seg button[aria-pressed=true]{background:#f5a623;color:#111}
+ul{list-style:none;padding-left:18px}li span{cursor:pointer;padding:2px 6px;border-radius:4px}.sel{background:#f5a623;color:#111}
+svg text{fill:#eee;font-size:12px;cursor:pointer}svg circle{fill:#333;stroke:#f5a623}svg circle.sel{fill:#f5a623}svg line{stroke:#666}</style></head>
+<body><p><a href="/" id="backHome" style="color:#9fe870;border:1px solid #555;border-radius:8px;padding:4px 10px;text-decoration:none">← 返回主菜单</a> <a href="/aoi?view=tree" style="color:#9fe870;margin-left:8px">在 AoI 中查看（节点详情 / 工作台）→</a> <a href="/workbench/" style="color:#9fe870;margin-left:8px">Workbench →</a></p><h1>工厂结构</h1>
+<div class="seg" role="group"><button id="btnTree" data-view="tree">Tree</button><button id="btnGraph" data-view="graph">Graph</button></div>
+<p id="meta"></p><div id="tree"></div><svg id="graph" width="720" height="420" hidden></svg>
+<script src="/graph/graph-view.js"></script></body></html>

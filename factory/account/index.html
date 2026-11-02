@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>账户 · X-connect</title><link rel="icon" href="/stage/icon.svg" type="image/svg+xml">
+<style>
+:root{--bg:#0a0a0b;--panel:#101012;--line:rgba(255,255,255,.08);--text:#ececef;--mute:#8a8f98;--accent:#5e6ad2;--ok:#3dd68c;--bad:#ff7b72}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif}
+a{color:inherit;text-decoration:none}
+header.app{display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);z-index:5}
+.brand img{height:32px;display:block}nav.tabs{display:flex;gap:4px;margin-left:8px}
+nav.tabs a{padding:6px 10px;border-radius:6px;color:var(--mute);font-size:13px}nav.tabs a.on,nav.tabs a:hover{background:rgba(255,255,255,.05);color:var(--text)}
+main{max-width:860px;margin:0 auto;padding:28px 18px 80px}h1{font-size:20px;margin:0 0 4px;letter-spacing:-.02em}.sub{color:var(--mute);font-size:13px;margin-bottom:24px}
+section{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:16px 18px;margin-bottom:16px}
+section h2{font-size:14px;margin:0 0 12px;font-weight:600}.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:0}.k{color:var(--mute);font-size:13px}.v{font-weight:560}.tag{font-size:11px;color:var(--mute);border:1px solid var(--line);border-radius:5px;padding:1px 6px;margin-left:6px}
+select,textarea,input{background:#0c0c0e;border:1px solid var(--line);color:var(--text);border-radius:7px;padding:7px 9px;font:inherit}
+textarea{width:100%;min-height:60px;resize:vertical}button{border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text);border-radius:7px;padding:6px 11px;font:inherit;cursor:pointer}
+button.primary{background:var(--accent);border-color:transparent;color:#fff}.na{color:var(--bad);font-size:13px}.okmsg{color:var(--ok);font-size:12px}
+.asst{border-top:1px solid var(--line);padding:12px 0;display:grid;grid-template-columns:44px 1fr;gap:12px}.asst img{width:44px;height:44px;border-radius:50%;object-fit:cover;background:#222}
+.asst .nm{font-weight:600}.asst .meta{color:var(--mute);font-size:12px}.asst .ctl{display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap}
+details summary{cursor:pointer;color:var(--mute);font-size:12px}pre{white-space:pre-wrap;font-size:12px;color:var(--mute);max-height:200px;overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:6px 8px;border-top:1px solid var(--line)}th{color:var(--mute);font-weight:500}td.n{text-align:right;font-variant-numeric:tabular-nums}.pos{color:var(--ok)}.neg{color:var(--bad)}.big{font-size:28px;font-weight:650;letter-spacing:-.02em}.empty{color:var(--mute);font-size:13px;padding:10px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}.card{border:1px solid var(--line);border-radius:8px;padding:10px 12px}.card .k{font-size:12px}
+</style></head><body>
+<header class="app"><a class="brand" href="/" aria-label="X-connect 首页"><img src="/stage/brand-logo.png" alt="X-connect"></a>
+<nav class="tabs"><a href="/" data-nav="projects">项目</a><a href="/aoi?view=tree" data-nav="tree">项目树</a><a href="/aoi?view=live" data-nav="aoi">AoI</a><a href="/workbench/" data-nav="workbench">工作台</a><a href="/settings" data-nav="settings">设置</a></nav></header>
+<nav class="subtabs" style="display:flex;gap:6px;max-width:860px;margin:14px auto 0;padding:0 18px;font-size:13px"><a href="/settings" style="color:var(--mute)">设置 ›</a><a href="/account" style="padding:4px 10px;border-radius:6px;background:rgba(255,255,255,.08);color:var(--text)" data-i18n="acc.title">账户</a><a href="/assistants" style="padding:4px 10px;border-radius:6px;color:var(--mute)" data-i18n="asst.title">小助手</a><a href="/account#sPrefs" style="padding:4px 10px;border-radius:6px;color:var(--mute)" data-i18n="acc.prefs">偏好设置</a></nav>
+<main><h1 data-i18n="acc.title">账户</h1><div class="sub">账户信息、余额、用量与充值。所有数字来自 SubRouter / X-connect 网关计费接口和我们自己的余额快照；没有的数据显示为空，不做估算。费用由你直接付给服务商，我们只提供充值链接。</div>
+<section id="sInfo"><h2 data-i18n="acc.info">账户信息</h2><div id="info" class="k">加载中…</div></section>
+<section id="sBal"><h2 data-i18n="acc.balance">余额</h2><div id="bal" class="k">加载中…</div></section>
+<section id="sQuota"><h2 data-i18n="acc.quota">剩余额度（按类别）</h2><div id="quota" class="k">加载中…</div></section>
+<section id="sLedger"><h2 data-i18n="acc.ledger">余额变动记录（记账）</h2><div id="ledger" class="k">加载中…</div></section>
+<section id="sUsage"><h2 data-i18n="acc.usage">用量</h2><div id="usage" class="k">加载中…</div></section>
+<section id="topup"><h2 data-i18n="acc.topup">充值</h2><div id="top" class="k">加载中…</div></section>
+<section id="sPrefs"><h2 data-i18n="acc.prefs">偏好设置</h2><div id="prefs" class="k"><div class="row"><span class="k">语言</span><span class="v" data-xc-lang-slot></span></div>
+<div class="row"><span class="k">Agentic 皮肤 · 默认模型 · 语音 · 小助手设定 · 制作你的小助手 · 自带密钥（BYOK）</span><span class="v"><a href="/assistants" style="color:var(--accent)">去小助手页 →</a></span></div></div></section>
+</main>
+<script>
+const $=(id)=>document.getElementById(id);const esc=(s)=>String(s??'').replace(/[&<>"]/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const row=(k,v)=>`<div class="row"><span class="k">${k}</span><span class="v">${v}</span></div>`;
+const zh=()=>!window.XC_I18N||window.XC_I18N.lang!=='en';
+const money=(v,u)=>v==null?'—':(u==='usd'?'US$ '+Number(v).toFixed(2):Number(v).toLocaleString()+' 点');
+const when=(t)=>{try{return new Date(t).toLocaleString('zh-CN',{hour12:false})}catch{return t}};
+async function j(u){try{const r=await fetch(u,{credentials:'same-origin'});return {status:r.status,data:r.ok?await r.json():null};}catch{return {status:0,data:null};}}
+async function load(){
+ const [acc,boot,vk,ik]=await Promise.all([j('/account/api/summary'),j('/api/bootstrap'),j('/api/voice-keys'),j('/api/image/providers')]);
+ const a=acc.data;
+ if(!a||!a.signedIn){const m='<div class="na">未登录工作台，账户数据不可用。<a href="/workbench" style="color:var(--accent)">去登录 →</a></div>';
+  ['info','bal','quota','ledger','usage'].forEach((id)=>$(id).innerHTML=m);
+  $('top').innerHTML=row('SubRouter',`<a class="tbtn" href="https://subrouter.ai/console/topup" target="_blank" rel="noopener"><button class="primary">去 SubRouter 充值 ↗</button></a>`);return;}
+ if(a.guest){const g='<div class="k">访客模式：无需登录即可使用聊天、语音、生图和制作小助手（访客有频率限制）。平台额度不对访客展示；想用自己的额度和记账，请在工作台用自己的 SubRouter / 网关密钥登录。</div>';
+  $('info').innerHTML=row('账号','访客 Guest <span class="tag">'+esc(a.tier||'')+' 档</span>')+row('访客 ID','<code>'+esc(a.user.id)+'</code>')+g;
+  ['bal','quota','ledger','usage'].forEach((id)=>$(id).innerHTML='<div class="empty">访客模式不显示余额与账单。</div>');
+  $('top').innerHTML=row('SubRouter',`<a href="${esc(a.topup.url)}" target="_blank" rel="noopener"><button class="primary">去 SubRouter 充值 ↗</button></a>`);return;}
+ const u=a.unit;
+ $('info').innerHTML=row('账号',esc(a.user.email||a.user.name||'—'))+row('用户 ID','<code>'+esc(a.user.id??'—')+'</code>')+row('通道',esc(a.provider==='subrouter'?'SubRouter':'X-connect 网关')+(a.tier?' <span class="tag">'+esc(a.tier)+' 档</span>':''))
+  +(a.token?row('API 令牌',esc(a.token.name||'—')+(a.token.expiresAt?' · 到期 '+when(a.token.expiresAt*1000):' · 不过期')):'')
+  +(boot.data?row('云端存储',esc(boot.data.storage||'—')):'');
+ $('bal').innerHTML=(a.balance==null?'<div class="na">余额暂不可用（服务商接口没有返回数据）</div>':`<div class="big">${money(a.balance,u)}</div>`)
+  +row('总额度（充值累计 / 上限）',a.limit==null?'<span class="k">无数据</span>':money(a.limit,u))+row('累计已用',money(a.totalUsage,u))
+  +row('数据来源',esc(a.sources.join(' · ')||'—'))+row('',`<button id="rf">刷新</button>`);$('rf').onclick=load;
+ // Quota by category
+ const cards=[];for(const c of a.categories)cards.push(`<div class="card"><div class="k">${esc(zh()?c.zh:c.en)} <span class="tag">平台计费</span></div><div class="v">剩余 ${money(c.remaining,c.unit)}</div><div class="k">已用 ${money(c.used,c.unit)}${a.token&&a.token.unlimited?' · 令牌不限额，受账户余额约束':''}</div>${c.models.length?`<details><summary>可用模型 ${c.models.length} 个</summary><div class="k">${c.models.map(esc).join(' · ')}</div></details>`:''}</div>`);
+ const bv=boot.data&&boot.data.voice;
+ cards.push(`<div class="card"><div class="k">实时语音（豆包）<span class="tag">平台</span></div><div class="v">${bv?(bv.available?'可用':'未配置'):'—'}</div><div class="k">平台语音暂无按用户计量，无剩余额度数据</div></div>`);
+ const keys=(vk.data&&vk.data.keys)||{};for(const [id,name] of [['doubao','语音克隆 · 豆包'],['elevenlabs','语音 · ElevenLabs']]){const k=keys[id]||{};
+  cards.push(`<div class="card"><div class="k">${name} <span class="tag">BYOK</span></div><div class="v">${k.set?'已接密钥 '+esc(k.masked||''):'未接'}</div><div class="k">自带密钥：余额在服务商后台查看</div></div>`);}
+ const ips=(ik.data&&ik.data.providers)||[];
+ if(ips.length)for(const p of ips)cards.push(`<div class="card"><div class="k">图像生成 · ${esc(p.name)} <span class="tag">${p.user?'BYOK':p.server?'平台':'未接'}</span></div><div class="v">${p.user?'已接自带密钥':p.server?'平台密钥':'未接'}</div><div class="k">${p.links&&p.links[0]?`<a href="${esc(p.links[0][1])}" target="_blank" rel="noopener" style="color:var(--accent)">服务商余额 ↗</a>`:'暂无额度数据'}</div></div>`);
+ else cards.push(`<div class="card"><div class="k">图像生成 <span class="tag">BYOK</span></div><div class="v">—</div><div class="k">${ik.status===404?'图像生成接口尚未上线':'暂无数据'}</div></div>`);
+ $('quota').innerHTML=`<div class="grid">${cards.join('')}</div>`;
+ // Ledger
+ const L=a.ledger||[];
+ $('ledger').innerHTML=(L.length?`<table><tr><th>时间</th><th>类型</th><th style="text-align:right">金额</th><th style="text-align:right">变动后余额</th></tr>${L.map((e)=>`<tr><td>${when(e.at)}</td><td>${e.kind==='topup'?'充值 / 额度增加':'扣费（用量）'}</td><td class="n ${e.amount>0?'pos':'neg'}">${e.amount>0?'+':''}${money(Math.abs(e.amount),u).replace(/^/,e.amount<0?'−':'')}</td><td class="n">${money(e.balanceAfter,u)}</td></tr>`).join('')}</table>`
+   :`<div class="empty">还没有余额变动记录。${a.snapshots?'已从 '+when(a.firstSnapshot)+' 开始记录余额快照（共 '+a.snapshots+' 次），之后的充值和扣费会出现在这里。':(a.notes.includes('ledger_store_unconfigured')?'服务器未配置存储，无法记账。':'')}</div>`)
+  +`<div class="k" style="font-size:12px;margin-top:8px">记账方式：每次打开账户页时记录一次 SubRouter/网关返回的额度与已用；额度上升记为充值，已用上升记为扣费。服务商的逐笔请求日志需要账户级访问令牌，当前未接通，所以没有按请求的明细。${a.provider==='subrouter'?' 注意：SubRouter 档位密钥是共享的，用量含同档位其他会话。':''}</div>`;
+ // Usage
+ const ded=L.filter((e)=>e.kind==='deduction');const sum=(arr)=>arr.reduce((s,e)=>s+Math.abs(e.amount),0);
+ const d7=ded.filter((e)=>Date.now()-new Date(e.at)<7*864e5),d30=ded.filter((e)=>Date.now()-new Date(e.at)<30*864e5);
+ $('usage').innerHTML=row('累计已用（服务商）',money(a.totalUsage,u))+row('近 7 天（我们记录到的扣费）',ded.length?money(sum(d7),u):'<span class="k">无记录</span>')+row('近 30 天（我们记录到的扣费）',ded.length?money(sum(d30),u):'<span class="k">无记录</span>')
+  +row('按模型 / 按天明细','<span class="k">服务商未开放（需账户级令牌）</span>');
+ // Top-up
+ const t=a.topup;$('top').innerHTML=`<div class="k" style="font-size:12px;margin-bottom:8px">充值在服务商页面完成，费用直接付给 ${esc(t.name)}；充值后回到这里点「刷新」，新额度会记成一条充值记录。</div>`
+  +row(esc(t.name),`<a href="${esc(t.url)}" target="_blank" rel="noopener"><button class="primary">去 ${esc(t.name)} 充值 ↗</button></a> <a href="${esc(t.console)}" target="_blank" rel="noopener" style="color:var(--accent);margin-left:8px">服务商账单 ↗</a>`)
+  +(ips.length||Object.keys(keys).length?row('自带密钥服务商','<a href="/assistants#sKeys" style="color:var(--accent)">各服务商充值链接在小助手页 →</a>'):'');
+}
+load();
+</script></body></html>
