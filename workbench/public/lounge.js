@@ -29,7 +29,7 @@ let canvas, ctx, dpr = 1;
 let resolvePick = null;
 let phase = 'list'; // list | detail | waking
 let customSlots = []; // 「我的小助手」：/api/custom-assistants（与 Settings 同一份存储）
-const BUILD_URL = (typeof window !== 'undefined' && window.__XC_BUILD_URL) || 'https://xconnect-factory.onrender.com/assistants#build';
+const BUILD_URL = (typeof window !== 'undefined' && window.__XC_BUILD_URL) || '/assistants#build';
 
 const reduceMotion = () =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;

@@ -15,7 +15,7 @@ const REPO = path.resolve(HERE, '..');
 const STAGE_FILES = { 'index.html': 'text/html; charset=utf-8', 'portal.html': 'text/html; charset=utf-8', 'styles.css': 'text/css; charset=utf-8',
   'app.js': 'text/javascript; charset=utf-8', 'factory-home.js': 'text/javascript; charset=utf-8', 'icon.svg': 'image/svg+xml', 'brand-x.png': 'image/png', 'brand-logo.png': 'image/png' };
 const GUIDE_FILES = { 'guide-widget.js': 'text/javascript; charset=utf-8' };
-export const GUIDE_TAG = '<script src="/i18n/xc-i18n.js"></script>\n<script src="/i18n/xc-i18n-account.js"></script>\n<script src="/skin/xc-skin.js"></script>\n<script src="/guide/guide-widget.js" defer></script>';
+export const GUIDE_TAG = '<script src="/i18n/xc-i18n.js"></script>\n<script src="/i18n/xc-i18n-account.js"></script>\n<script src="/i18n/xc-nav.js"></script>\n<script src="/skin/xc-skin.js"></script>\n<script src="/guide/guide-widget.js" defer></script>';
 const GRAPH_FILES = { 'graph-view.js': 'text/javascript; charset=utf-8' };
 const AOI_FILES = { 'index.html': 'text/html; charset=utf-8', 'aoi-snapshot.js': 'text/javascript; charset=utf-8' };
 
@@ -99,6 +99,7 @@ export function createFactory({ env = process.env, fetchImpl = globalThis.fetch,
     }
     if (p === '/skin/xc-skin.js') return send(res, req, 'text/javascript; charset=utf-8', fs.readFileSync(path.join(HERE, 'skin/xc-skin.js')));
     if (p === '/i18n/xc-i18n.js') return send(res, req, 'text/javascript; charset=utf-8', fs.readFileSync(path.join(HERE, 'i18n/xc-i18n.js')));
+    if (p === '/i18n/xc-nav.js') return send(res, req, 'text/javascript; charset=utf-8', fs.readFileSync(path.join(HERE, 'i18n/xc-nav.js')));
     if (p === '/i18n/xc-i18n-account.js') return send(res, req, 'text/javascript; charset=utf-8', fs.readFileSync(path.join(HERE, 'i18n/xc-i18n-account.js')));
     if (p.startsWith('/guide/')) {
       const name = p.slice('/guide/'.length);

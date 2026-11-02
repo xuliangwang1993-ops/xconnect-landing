@@ -20,6 +20,20 @@ const sessions = new Set();
 
 const SPEAKER_IDS = new Set(Object.values(PERSONA_VOICES));
 
+// 五个角色各自的音色。语音只认这张表 + 环境变量，不接受客户端任意指定。
+const PERSONAS = {
+  voice:  { name: '小豆', role: '语音助手', voice: PERSONA_VOICES.voice },
+  scribe: { name: '小记', role: '速记助手', voice: PERSONA_VOICES.scribe },
+  brain:  { name: '小谋', role: '主脑助手', voice: PERSONA_VOICES.brain },
+  deep:   { name: '小深', role: '深度助手', voice: PERSONA_VOICES.deep },
+  admin:  { name: '小办', role: '行政助手', voice: PERSONA_VOICES.admin },
+};
+function withVoice(p, v) { return p && isPersonaVoice(v) ? { ...p, voice: v } : (p || (isPersonaVoice(v) ? { name: '', voice: v } : null)); }
+function personaFor(id) {
+  const p = PERSONAS[String(id || '')];
+  return p && SPEAKER_IDS.has(p.voice) ? p : null;
+}
+
 const u32 = (n) => Buffer.from([(n >>> 24) & 255, (n >>> 16) & 255, (n >>> 8) & 255, n & 255]);
 const header = (t, f, s = 1, c = 1) => Buffer.from([17, (t << 4) | f, (s << 4) | c, 0]);
 const gzip = (x) => gzipSync(Buffer.from(x));
@@ -63,20 +77,24 @@ function parsePacket(input) {
   return { type, serial, event, sid, payload };
 }
 
-function voicePromo(id, lang) { try { return promoAppendix(id, lang, { voice: true }); } catch { return ''; } }
-
-function sessionConfig(speaker, resolved, lang = '', assistantId = '') {
-  // 角色音色优先（Supabase/真相表），其次客户端传的白名单音色，再其次 env，最后四毛默认。
-  const chosen = (isPersonaVoice(resolved) && resolved)
+function sessionConfig(speaker, persona, history, lang = '') {
+  // 每个角色固定音色；客户端传什么都不作数。
+  const chosen = (persona && SPEAKER_IDS.has(persona.voice) && persona.voice)
     || (SPEAKER_IDS.has(speaker) && speaker)
     || (isPersonaVoice(process.env.DOUBAO_SPEAKER) && process.env.DOUBAO_SPEAKER)
     || PERSONA_VOICES.brain;
+  const baseRole = process.env.DOUBAO_SYSTEM_ROLE || '你是一个简洁、友好的中文语音助手。用户明确要求查数据、跑分析、检查项目或查看状态时派给后台电脑。改代码、写文件、删除、付款、发消息、生产部署等操作必须先确认。';
+  // 之前的对话摘要接在人格后面：这是"同一个助理记得你"的实现方式。
+  const ll = langLine(lang);
+  const role0 = history ? baseRole + '\n\n【你和这位用户之前的对话，供参考，不要复述】\n' + history : baseRole;
+  let promo = ''; try { promo = promoAppendix((persona && (persona.id || Object.keys(PERSONAS).find((k) => PERSONAS[k] === persona))) || '', lang, { voice: true }); } catch {}
+  const role = [role0, ll, promo].filter(Boolean).join('\n\n');
   return {
     user: { uid: randomUUID() },
     audio: { format: 'pcm', sample_rate: 16000, channels: 1, codec: 'raw' },
     dialog: {
-      bot_name: process.env.DOUBAO_BOT_NAME || '助手',
-      system_role: [process.env.DOUBAO_SYSTEM_ROLE || '你是一个简洁、友好的中文语音助手。用户明确要求查数据、跑分析、检查项目或查看状态时派给后台电脑。改代码、写文件、删除、付款、发消息、生产部署等操作必须先确认。', langLine(lang), voicePromo(assistantId, lang)].filter(Boolean).join('\n\n'),
+      bot_name: (persona && persona.name) || process.env.DOUBAO_BOT_NAME || '助手',
+      system_role: role,
       speaking_style: '自然简洁',
       extra: {},
     },
@@ -100,6 +118,7 @@ function summary(t) {
     source: t.source || null,
     cardId: t.cardId || null,
     executor: t.executor || null,
+    lane: t.lane || 'default',
   };
 }
 
@@ -218,9 +237,13 @@ const api = http.createServer(async (req, res) => {
     return json(res, 200, { ok: true, voice: true, bridge: true, asrFinal: true, workbench: true, build: wb.BUILD });
   }
 
-  if (req.url === BRIDGE_ROOT + '/claim' && req.method === 'POST') {
+  const reqPath = String(req.url || '').split('?')[0];
+  if (reqPath === BRIDGE_ROOT + '/claim' && req.method === 'POST') {
     if (!auth(req, res)) return;
-    const t = tasks.find((x) => x.status === 'pending');
+    // Lanes keep workers apart: a claim without ?lane= (RunPod pipeline) only
+    // sees default-lane tasks; the PC OpenCode worker claims ?lane=code.
+    const want = new URL(req.url, 'http://x').searchParams.get('lane') || 'default';
+    const t = tasks.find((x) => x.status === 'pending' && (x.lane || 'default') === want);
     if (!t) return json(res, 200, { task: null });
     t.status = 'running';
     t.startedAt = new Date().toISOString();
@@ -282,8 +305,8 @@ api.on('upgrade', (req, sock, head) => {
   if (a.claims) console.log('voice auth ok sub=' + a.claims.sub + ' sid=' + a.claims.sid + ' msl=' + a.claims.msl);
   wss.handleUpgrade(req, sock, head, (c) => {
     c.voiceClaims = a.claims;
-    c.voiceSpeaker = u.searchParams.get('speaker') || '';
-    c.voiceAssistant = u.searchParams.get('assistant') || '';
+    c.voiceSpeaker = '';
+    try { c.voiceAssistant = new URL(req.url, 'http://x').searchParams.get('assistant') || ''; } catch { c.voiceAssistant = ''; }
     // 先用真相表里该角色的音色兜底：Supabase 查询是异步的，豆包会话可能先开，
     // 以前这里是 '' → 落到 DOUBAO_SPEAKER/四毛，换人后第一句还是旧声音。
     c.voiceResolved = personaVoice(c.voiceAssistant);
@@ -314,6 +337,8 @@ wss.on('connection', (client) => {
   const sid = randomUUID();
   s.sid = sid;
   let started = false;
+  let pendingContext = null; // 客户端在音频之前发来的历史摘要
+  let startSession = null;   // 拿到历史再开会话，避免错过上下文
   const send = (x) => { if (up.readyState === WebSocket.OPEN) up.send(x); };
   up.on('open', () => send(control(1, '', '{}')));
   up.on('message', (data) => {
@@ -330,8 +355,16 @@ wss.on('connection', (client) => {
       return;
     }
     if (!started && p.event === 50) {
-      send(control(100, sid, sessionConfig(client.voiceSpeaker, client.voiceResolved, client.voiceLang, client.voiceAssistant)));
       started = true;
+      const open = () => {
+        send(control(100, sid, sessionConfig(client.voiceSpeaker, withVoice(personaFor(client.voiceAssistant), client.voiceResolved), pendingContext, client.voiceLang)));
+      };
+      // 给客户端 400ms 把历史摘要送来；等不到就直接开，不能因为前端慢就卡住会话
+      if (pendingContext !== null) open();
+      else {
+        startSession = open;
+        setTimeout(() => { if (startSession) { const f = startSession; startSession = null; f(); } }, 400);
+      }
       return;
     }
     if (p.payload?.length && p.serial === 0) {
@@ -363,7 +396,18 @@ wss.on('connection', (client) => {
   up.on('error', (e) => sendClient(client, { type: 'error', message: e.message }));
   up.on('close', () => client.close());
   client.on('message', (data) => {
-    if (typeof data !== 'string') send(audioPacket(sid, Buffer.from(data)));
+    if (typeof data === 'string') {
+      // 文本帧 = 控制消息（目前只有 context：本次会话要带上的历史摘要）
+      try {
+        const m = JSON.parse(data);
+        if (m && m.type === 'context') {
+          pendingContext = String(m.history || '').slice(0, 4000) || null;
+          if (startSession) { const f = startSession; startSession = null; f(); }
+        }
+      } catch {}
+      return;
+    }
+    send(audioPacket(sid, Buffer.from(data)));
   });
   client.on('close', () => {
     sessions.delete(s);

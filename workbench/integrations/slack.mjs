@@ -52,7 +52,7 @@ export function cardBlocks(card, note = '') {
 
 export function createSlackHandler({ store, env = process.env, fetchImpl = globalThis.fetch, defer = (fn) => setImmediate(() => fn().catch((e) => console.log('slack async failed', e?.message || e))) } = {}) {
   const secret = env.SLACK_SIGNING_SECRET || '';
-  const base = (env.PUBLIC_BASE_URL || 'https://xconnect-workbench-preview.onrender.com').replace(/\/+$/, '');
+  const base = (env.PUBLIC_BASE_URL || 'https://xconnect-factory.onrender.com/workbench').replace(/\/+$/, '');
   const installId = (team) => `slack_install_${String(team).replace(/[^A-Za-z0-9]/g, '')}`;
   const sysSession = { key: '', user: { id: 'system', email: '' }, ns: 'system' };
 

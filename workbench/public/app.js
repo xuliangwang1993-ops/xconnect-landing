@@ -2310,11 +2310,7 @@ function bindEvents() {
   const followOtherTab = (id) => { if (!id || id === state.settings.assistantId) return; state.settings.assistantId = id; try { renderAll(); } catch {} switchVoiceAssistant(id); };
   window.addEventListener('storage', (e) => { if (e.key === 'xcw_assistant' && e.newValue) followOtherTab(e.newValue); });
   try { new BroadcastChannel('xc-assistant').onmessage = (e) => followOtherTab(e.data && e.data.assistantId); } catch {}
-  // 跨站链接（工厂 ↔ 预览，onrender 不共享 cookie）带上当前助手。
-  document.addEventListener('click', (e) => {
-    const link = e.target.closest && e.target.closest('a[href]'); if (!link) return;
-    try { const u = new URL(link.href, location.href); if (u.host !== location.host && /(onrender\.com|x-connect\.ai)$/.test(u.hostname) && pickedAssistant() && !u.searchParams.has('assistant')) { u.searchParams.set('assistant', pickedAssistant()); link.href = u.toString(); } } catch {}
-  }, true);
+  // (Cross-site ?assistant= link decoration removed: preview retired, everything is same-origin on the factory.)
   window.addEventListener('xc:lounge-start-voice', async (e) => {
     const id = e.detail && e.detail.assistantId;
     if (id) rememberAssistant(id);
@@ -2472,7 +2468,7 @@ boot();
   const b = document.createElement('button');
   b.id = 'xcCallBtn'; b.type = 'button'; b.title = '呼叫'; b.setAttribute('aria-label', '呼叫');
   b.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>呼叫</span>';
-  b.style.cssText = 'position:fixed;right:18px;bottom:18px;z-index:9998;display:flex;gap:6px;align-items:center;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:#16181d;color:#ececef;font:13px system-ui,"PingFang SC",sans-serif;cursor:pointer';
+  b.style.cssText = 'margin-top:8px;width:100%;display:flex;gap:6px;align-items:center;justify-content:center;padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:transparent;color:inherit;font:13px system-ui,"PingFang SC",sans-serif;cursor:pointer';
   b.addEventListener('click', async () => {
     const id = pickedAssistant() || 'brain';
     const name = nameFor(id) || '小助手';
@@ -2486,5 +2482,10 @@ boot();
       try { toggleVoicePanel(true); await startVoice(); } catch (err) { toast((err && err.message) || '语音启动失败，先用文字聊', true); }
     }
   });
-  document.body.appendChild(b);
+  // 只放在导航员（侧边栏助手区）里面：打开侧栏才看得到，不再有右下角并列入口
+  const zhL = () => /^zh/.test(localStorage.getItem('xc_lang_v1') || navigator.language || '');
+  const lab = () => { const t = zhL() ? '呼叫' : 'Call'; b.title = t; b.setAttribute('aria-label', t); const s = b.querySelector('.xc-call-lab'); if (s) s.textContent = t; else b.insertAdjacentHTML('beforeend', `<span class="xc-call-lab">${t}</span>`); };
+  lab(); window.addEventListener('storage', lab); document.addEventListener('xc:lang', lab);
+  const host = document.getElementById('assistantCard')?.parentElement || document.getElementById('sidebar');
+  (host || document.body).appendChild(b);
 })();

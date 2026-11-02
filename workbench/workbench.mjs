@@ -454,6 +454,15 @@ async function assistantPersona(id, session) {
   } catch { return null; }
 }
 
+async function assistantMemories(ns, limit = 8) {
+  try {
+    const sel = 'assistant_id,kind,content,weight';
+    const q = `assistant_memory?select=${sel}&or=(user_id.eq.owner,user_id.eq.${encodeURIComponent(ns)})&order=weight.desc,created_at.desc&limit=${limit}`;
+    const rows = await supaRequest('GET', q);
+    return Array.isArray(rows) ? rows : [];
+  } catch { return []; }
+}
+
 function rowData(row, kind) {
   const sources = Array.isArray(row?.sources) ? row.sources : [];
   const hit = sources.find((s) => s && s.kind === kind);
@@ -675,6 +684,7 @@ function publicTask(t) {
     source: t.source || 'workbench',
     cardId: t.cardId || null,
     executor: t.executor || null,
+    lane: t.lane || 'default',
   };
 }
 
@@ -745,8 +755,17 @@ async function runBuiltinTask(task, session, ctx) {
   }
 }
 
+// Cards with a line starting with #code / [code] / 【代码】 or mentions @opencode
+// go to the PC OpenCode worker instead of the RunPod pipeline.
+export function laneFor(text) {
+  const s = String(text || '');
+  return /^\s*(#code\b|\[code\]|【代码】)|@opencode\b/im.test(s) ? 'code' : 'default';
+}
+
 function queueTask(card, session, ctx) {
+  const lane = laneFor((card.title || '') + '\n' + (card.working || ''));
   const t = {
+    lane,
     id: 'wb-' + crypto.randomUUID(),
     description: clampText(card.working || card.title || '未命名任务', 2000),
     status: 'pending',
@@ -1171,7 +1190,9 @@ export function createWorkbench({ tasks, broadcast }) {
         .map((m) => ({ role: m.role, content: clampText(m.content, 12000) }));
       if (!messages.some((m) => m.role === 'user')) return fail(res, 400, 'message_required', '没有要发送的内容');
       let promo = ''; try { promo = promoAppendix((persona && persona.id) || String(body.assistantId || ''), body.lang); } catch {}
-      const system = [persona && persona.system_prompt, clampText(body.system || '', 6000), clampText(body.handoff || '', 4000), langLine(body.lang), promo].filter(Boolean).join('\n\n');
+      const mem = assistantId ? await assistantMemories(session.ns || 'owner', 8) : [];
+      const memLine = mem.length ? '已确认的记忆（优先遵守）：\n' + mem.map((m) => `- [${m.kind}] ${m.content}`).join('\n') : '';
+      const system = [persona && persona.system_prompt, memLine, clampText(body.system || '', 6000), clampText(body.handoff || '', 4000), langLine(body.lang), promo].filter(Boolean).join('\n\n');
       const temporary = Boolean(body.temporary);
       const convId = clampText(body.conversationId || '', 40);
       const upstreamMessages = [
@@ -1421,9 +1442,17 @@ export function createWorkbench({ tasks, broadcast }) {
     if (pathname === '/api/tasks' && req.method === 'GET') {
       let persisted = [];
       try { persisted = await listTasks(session); } catch {}
+      // An external executor (Minis / PC bridge) claims and completes rows in
+      // Supabase, so the in-memory copy can be older than what was persisted.
+      // Keep whichever copy is further along instead of letting memory win.
+      const RANK = { pending: 0, running: 1, failed: 2, done: 2 };
       const merged = new Map();
       for (const t of persisted) if (t && t.id) merged.set(t.id, t);
-      for (const t of tasks) if (t && t.id) merged.set(t.id, t);
+      for (const t of tasks) {
+        if (!t || !t.id) continue;
+        const prev = merged.get(t.id);
+        if (!prev || (RANK[t.status] ?? 0) > (RANK[prev.status] ?? 0)) merged.set(t.id, t);
+      }
       const mine = [...merged.values()]
         .filter((t) => t.userId === session.user.id)
         .sort((a, b) => String(a.createdAt || '').localeCompare(String(b.createdAt || '')))
@@ -1488,6 +1517,40 @@ export function createWorkbench({ tasks, broadcast }) {
       for (const k of allowed) if (body[k] !== undefined) patch[k] = body[k];
       try { return json(res, 200, { settings: await saveSettings(session, patch) }); }
       catch { return fail(res, 502, 'storage_unavailable', '设置未保存'); }
+    }
+
+    // 语音速记：按助理分开存，跟着账号走，不跟设备走。
+    // 走 HTTP 会话（浏览器自带登录态），不走语音 WebSocket，省掉身份映射。
+    if (pathname === '/api/voice-history' && req.method === 'GET') {
+      const aid = String(new URL(req.url, 'http://x').searchParams.get('assistant') || 'brain').slice(0, 40);
+      try {
+        const row = await loadRow(session, '__voice__' + aid);
+        const data = rowData(row, 'voice') || {};
+        return json(res, 200, { assistant: aid, turns: Array.isArray(data.turns) ? data.turns : [] });
+      } catch { return fail(res, 502, 'storage_unavailable', '速记暂不可用'); }
+    }
+    if (pathname === '/api/voice-history' && req.method === 'PUT') {
+      const body = await readJson(req, 400_000);
+      const aid = String(body.assistant || 'brain').slice(0, 40);
+      const turns = (Array.isArray(body.turns) ? body.turns : [])
+        .slice(-120)
+        .map((t) => ({
+          role: t && t.role === 'assistant' ? 'assistant' : 'user',
+          text: String((t && t.text) || '').slice(0, 2000),
+          at: String((t && t.at) || ''),
+        }))
+        .filter((t) => t.text);
+      try {
+        await saveRow(session, '__voice__' + aid, {
+          goal: 'voice-history',
+          progress: '',
+          constraints: '',
+          decisions: '',
+          todos: [],
+          sources: [{ kind: 'voice', data: { turns } }],
+        });
+        return json(res, 200, { assistant: aid, turns });
+      } catch { return fail(res, 502, 'storage_unavailable', '速记未保存'); }
     }
 
     if (pathname === '/api/personas' && req.method === 'GET') {
@@ -1567,13 +1630,19 @@ export function createWorkbench({ tasks, broadcast }) {
 
     if (pathname === '/api/voice-token' && req.method === 'POST') {
       if (!VOICE_TOKEN_SECRET) return fail(res, 501, 'voice_not_configured', '语音令牌未配置');
+      const body = await readJson(req, 8000).catch(() => ({}));
+      const assistantId = clampText(body.assistantId || 'brain', 40);
+      const persona = await assistantPersona(assistantId, session);
       const token = signVoiceToken(session);
       return json(res, 200, {
         token,
+        assistantId,
+        assistant: persona ? { id: persona.id, name: persona.name, role: persona.role, voice: persona.voice, intro: persona.intro } : null,
+        speaker: persona?.voice || '',
         expiresIn: 120,
         wsPath: '/voice',
         speakers: SPEAKERS,
-        note: '语音连接复用现有 /voice 桥；收起面板不会挂断。',
+        note: '语音连接复用现有 /voice 桥；音色由助手决定，客户端不能改。',
       });
     }
 
@@ -1674,11 +1743,17 @@ export function createWorkbench({ tasks, broadcast }) {
       return res.end(JSON.stringify(mf));
     }
     const safe = path.normalize(rel).replace(/^(\.\.[/\\])+/, '');
-    const full = path.join(PUBLIC_DIR, safe);
+    let full = path.join(PUBLIC_DIR, safe);
     if (!full.startsWith(PUBLIC_DIR)) return false;
     let stat;
     try { stat = fs.statSync(full); } catch { return false; }
-    if (stat.isDirectory()) return false;
+    // 目录取 index.html：让 /select/ 这类子页能直接访问
+    if (stat.isDirectory()) {
+      full = path.join(full, 'index.html');
+      if (!full.startsWith(PUBLIC_DIR)) return false;
+      try { stat = fs.statSync(full); } catch { return false; }
+    }
+    if (!stat.isFile()) return false;
     const ext = path.extname(full).toLowerCase();
     const type = MIME[ext] || 'application/octet-stream';
     const noCache = ['.html', '.css', '.js', '.webmanifest'].includes(ext);

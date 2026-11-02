@@ -22,7 +22,7 @@ details.tn{margin-left:16px}details.tn>summary{cursor:pointer;padding:3px 0;list
 </style>
 </head>
 <body>
-<header><strong>AoI 能力看板</strong><a href="/" id="backHome" style="border:1px solid #2a2f36;border-radius:8px;padding:4px 10px">← 返回主菜单</a><a href="/aoi?view=tree">Tree</a><a href="/aoi?view=graph">Graph</a><a href="/workbench">工作台 →</a><a href="https://xconnect-workbench-preview.onrender.com/" id="toPreview">Workbench 预览 ↗</a>
+<header><strong>AoI 能力看板</strong>
 <span class="muted" id="meta"></span></header>
 <div id="banner" class="banner fixture">加载中…</div>
 <nav id="tabs" style="display:flex;gap:8px;padding:10px 20px 0"><button data-t="tree">Tree 大树</button><button data-t="graph">Graph 气泡</button><button data-t="live">实时快照</button></nav>
@@ -71,7 +71,6 @@ const st = { view: Q.get('view'), node: Q.get('node') };
 const byId = () => new Map(TREE.nodes.map((n) => [n.id, n]));
 const kidsOf = (id) => TREE.nodes.filter((n) => (n.parent_id || null) === id);
 function project(n) { const m = byId(); let c = n, g = 0; while (c && g++ < 20) { if (c.kind === 'project') return c; c = m.get(c.parent_id); } return null; }
-const PREVIEW = 'https://xconnect-workbench-preview.onrender.com';
 function wbQs(n) { const p = project(n); return p ? '?project=' + encodeURIComponent(p.id) + '&name=' + encodeURIComponent(p.title || p.id) : null; }
 function wbUrl(n) { const q = wbQs(n); return q ? '/workbench/' + q : null; }
 function sync() { const u = new URL(location.href); u.searchParams.set('view', st.view); st.node ? u.searchParams.set('node', st.node) : u.searchParams.delete('node'); history.replaceState(null, '', u); }
@@ -82,7 +81,7 @@ function nodePanel(n) {
   p.className = 'open';
   p.innerHTML = `<button id="evx">关闭</button><h3>${esc(n.title || n.id)}</h3><p class="muted">id: ${esc(n.id)} · ${esc(n.kind || '')} · ${esc(n.status || '')}</p>
    <p><span class="st unverified">✖ 未验证 — 结构节点无 AoI 证据链</span></p>
-   <div class="acts"><a id="jump" href="/aoi?view=${other}&node=${encodeURIComponent(n.id)}">在 ${other === 'graph' ? 'Graph' : 'Tree'} 中查看</a>${wb ? `<a id="towb" href="${esc(wb)}">打开 Workbench（${esc(project(n).title)}）</a>` : '<span class="muted">无对应 Workbench 项目</span>'}${project(n) ? `<a id="toproj" href="/?project=${encodeURIComponent(project(n).id)}">项目页</a><a id="toprev" href="${PREVIEW}/${wbQs(n)}">Workbench 预览 ↗</a>` : ''}</div>
+   <div class="acts"><a id="jump" href="/aoi?view=${other}&node=${encodeURIComponent(n.id)}">在 ${other === 'graph' ? 'Graph' : 'Tree'} 中查看</a>${wb ? `<a id="towb" href="${esc(wb)}">打开 Workbench（${esc(project(n).title)}）</a>` : '<span class="muted">无对应 Workbench 项目</span>'}${project(n) ? `<a id="toproj" href="/?project=${encodeURIComponent(project(n).id)}">项目页</a>` : ''}</div>
    <h4>子节点 (${kidsOf(n.id).length})</h4>${kidsOf(n.id).map((c) => `<div class="leaf" data-id="${esc(c.id)}">${esc(c.title)}</div>`).join('') || '<p class="muted">无</p>'}`;
   document.getElementById('evx').onclick = () => { st.node = null; sync(); show(st.view); };
   document.getElementById('jump').onclick = (e) => { e.preventDefault(); show(other); };
