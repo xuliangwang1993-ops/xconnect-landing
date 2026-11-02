@@ -8,6 +8,8 @@ import { createVoiceAuthorizer } from './voice-auth.mjs';
 import { createWorkbench, wbStore, wbGetSession, WB_SPEAKERS, wbGuestMiddleware, langLine } from './workbench.mjs';
 import { createSlackHandler } from './integrations/slack.mjs';
 import { createFactory } from '../factory/factory.mjs';
+import { createTreeStore } from '../factory/tree/tree.mjs';
+import { mountBrain } from '../factory/brain/index.mjs';
 
 const PORT = process.env.PORT || 8789;
 const UPSTREAM = process.env.DOUBAO_WS_URL || 'wss://openspeech.bytedance.com/api/v3/realtime/dialogue';
@@ -227,9 +229,18 @@ function json(res, code, x) {
 const wb = createWorkbench({ tasks, broadcast });
 const slack = createSlackHandler({ store: wbStore });
 const factory = createFactory({ getSession: wbGetSession, speakers: WB_SPEAKERS, store: wbStore });
+// 总脑：挂得上就挂；挂不上只记一行，绝不影响工作台本身。
+let brain = null;
+try {
+  brain = mountBrain({ getSession: wbGetSession, tree: createTreeStore() });
+  console.log('brain mounted:', JSON.stringify({ configured: brain.brain.configured, model: brain.brain.model, store: brain.store.mode, tree: brain.brain && createTreeStore().mode }));
+} catch (e) {
+  console.log('brain disabled:', String(e && e.message || e).slice(0, 120));
+}
 const api = http.createServer(async (req, res) => {
   if (wbGuestMiddleware(req, res)) return; // guest session + guest rate limits
   if (req.url.startsWith('/slack/') && await slack.handle(req, res)) return;
+  if (brain && (await brain.handle(req, res))) return; // 总脑 /api/brain/*
   if (factory.handle(req, res)) return; // 搭台首页 / AoI 看板
   if (await wb.handle(req, res)) return;
 
