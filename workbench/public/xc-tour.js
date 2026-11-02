@@ -49,7 +49,7 @@
   }
   function find(sel) {
     if (!sel) return null;
-    for (const s of sel.split(',')) { const el = [...document.querySelectorAll(s.trim())].find((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0; }); if (el) return el; }
+    for (const s of sel.split(',')) { const el = [...document.querySelectorAll(s.trim())].find((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && r.right > 0 && r.left < innerWidth; }); if (el) return el; }
     return null;
   }
   function stop(done) {

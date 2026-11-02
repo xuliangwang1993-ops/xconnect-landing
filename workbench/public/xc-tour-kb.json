@@ -471,13 +471,60 @@
    "id": "settings",
    "match": "^/settings/?$",
    "trigger": "first-visit",
+   "site": "factory",
    "title": {
     "zh": "Setting",
     "en": "Setting"
    },
    "steps": [
     {
-     "selector": "#sBal, #bal",
+     "selector": "a[href='/account']",
+     "title": {
+      "zh": "账户",
+      "en": "Account"
+     },
+     "body": {
+      "zh": "账户信息、余额、额度、用量和充值。",
+      "en": "Account info, balance, quota, usage and top-up."
+     }
+    },
+    {
+     "selector": "a[href='/assistants']",
+     "title": {
+      "zh": "小助手",
+      "en": "Assistants"
+     },
+     "body": {
+      "zh": "小助手设定、模型、语音，还能制作你自己的小助手。",
+      "en": "Assistant personas, model, voice — and build your own."
+     }
+    },
+    {
+     "selector": "a[href='/assistants#imgkeys'], a[href='/assistants#sKeys']",
+     "cap": "keys",
+     "title": {
+      "zh": "你的钥匙",
+      "en": "Your keys"
+     },
+     "body": {
+      "zh": "语音和生图的 API Key 放我这儿，加密保管；费用你直接付给服务商。",
+      "en": "Voice and image API keys live with me, encrypted; you pay providers directly."
+     }
+    }
+   ]
+  },
+  {
+   "id": "account",
+   "match": "^/account/?$",
+   "trigger": "first-visit",
+   "site": "factory",
+   "title": {
+    "zh": "账户",
+    "en": "Account"
+   },
+   "steps": [
+    {
+     "selector": "#sBal, #sInfo",
      "title": {
       "zh": "余额",
       "en": "Balance"
@@ -488,14 +535,48 @@
      }
     },
     {
-     "selector": "#sSkin",
+     "selector": "#topup",
      "title": {
-      "zh": "Agentic 皮肤",
-      "en": "Agentic skin"
+      "zh": "充值",
+      "en": "Top up"
      },
      "body": {
-      "zh": "界面配色跟着聊天模型走。",
-      "en": "The palette follows your chat model."
+      "zh": "额度不够了在这里充值。",
+      "en": "Top up here when credit runs low."
+     }
+    }
+   ]
+  },
+  {
+   "id": "assistants",
+   "match": "^/assistants/?$",
+   "trigger": "first-visit",
+   "site": "factory",
+   "title": {
+    "zh": "小助手设置",
+    "en": "Assistant settings"
+   },
+   "steps": [
+    {
+     "selector": "#sAsst",
+     "title": {
+      "zh": "小助手设定",
+      "en": "Assistant personas"
+     },
+     "body": {
+      "zh": "每位小助手的开场白和声音都能改。",
+      "en": "Edit each assistant’s opening line and voice."
+     }
+    },
+    {
+     "selector": "#build",
+     "title": {
+      "zh": "制作你的小助手",
+      "en": "Build your own"
+     },
+     "body": {
+      "zh": "导入素材，造一个你专属的小助手。",
+      "en": "Import materials and build your own assistant."
      }
     },
     {
@@ -510,8 +591,7 @@
       "en": "Voice and image API keys live with me, encrypted; you pay providers directly."
      }
     }
-   ],
-   "site": "factory"
+   ]
   }
  ],
  "secretary": {
