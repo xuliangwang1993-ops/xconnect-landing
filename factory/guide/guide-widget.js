@@ -86,6 +86,39 @@
   btn.onclick = () => (panel.classList.contains('open') && !full ? panel.classList.remove('open') : open());
   panel.querySelector('#xcg-head button').onclick = () => { if (full) location.href = '/'; else panel.classList.remove('open'); try { localStorage.setItem('xcGuideToured', '1'); } catch {} };
   panel.querySelector('#xcg-form').onsubmit = (e) => { e.preventDefault(); const i = panel.querySelector('#xcg-q'); const q = i.value.trim(); if (q) { i.value = ''; ask(q); } };
+
+  // 呼叫：小助手从顶部落下，停在右下角并主动问候（工厂页无语音会话 → 只用文字；不跳页）
+  const AV = { voice: ['duck', '李黑鸭'], scribe: ['sparky', '斯巴达'], brain: ['rapper', '四毛'], deep: ['wutian', '武天'], admin: ['feifei', '狒狒'] };
+  const PHONE = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>';
+  function picked() {
+    let id = ''; try { id = localStorage.getItem('xcw_assistant') || ''; } catch {}
+    if (!id) { const m = document.cookie.match(/(?:^|;\s*)xc_assistant=([^;]*)/); id = m ? decodeURIComponent(m[1]) : ''; }
+    return AV[id] ? id : 'brain';
+  }
+  function callPet() {
+    document.querySelectorAll('.xcg-pet,.xcg-bubble').forEach((n) => n.remove());
+    const [av, name] = AV[picked()];
+    const img = document.createElement('img'); img.className = 'xcg-pet'; img.alt = name; img.src = `/characters/${av}/idle.webp`;
+    img.style.cssText = 'position:fixed;right:24px;bottom:72px;width:96px;height:96px;object-fit:contain;z-index:9998;cursor:pointer';
+    img.onclick = () => { img.remove(); bub.remove(); };
+    document.body.appendChild(img);
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce && img.animate) img.animate([
+      { transform: `translateY(${-innerHeight}px)`, offset: 0 }, { transform: 'translateY(0)', offset: 0.6, easing: 'ease-out' },
+      { transform: 'translateY(-28px)', offset: 0.75, easing: 'ease-in' }, { transform: 'translateY(0)', offset: 0.88, easing: 'ease-out' },
+      { transform: 'translateY(-8px)', offset: 0.94 }, { transform: 'translateY(0)', offset: 1 }], { duration: 900 });
+    const bub = document.createElement('div'); bub.className = 'xcg-bubble';
+    bub.textContent = `嗨，我是${name}！找我有什么事？点「${onHome ? '助手' : '导览员'}」跟我聊，或去 Workbench 开语音。`;
+    bub.style.cssText = `position:fixed;right:128px;bottom:140px;max-width:240px;z-index:9999;background:${C.panel || '#16181d'};color:#ececef;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 12px;font:13px/1.4 system-ui,"PingFang SC",sans-serif`;
+    setTimeout(() => document.body.appendChild(bub), reduce ? 0 : 700);
+    setTimeout(() => bub.remove(), 7000);
+  }
+  if (!full) {
+    const call = document.createElement('button'); call.id = 'xcg-call'; call.type = 'button'; call.setAttribute('aria-label', '呼叫');
+    call.innerHTML = PHONE + ' 呼叫'; call.onclick = callPet;
+    call.style.cssText = 'position:fixed;right:18px;bottom:66px;z-index:9998;padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:#16181d;color:#ececef;font:13px system-ui,"PingFang SC",sans-serif;cursor:pointer';
+    document.body.appendChild(call);
+  }
   let first = false; try { first = !localStorage.getItem('xcGuideToured'); } catch {}
   if (full || first || /[?&]guide=1/.test(location.search)) open();
 })();

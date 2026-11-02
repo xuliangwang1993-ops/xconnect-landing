@@ -1,5 +1,5 @@
 import { openLounge, pickedAssistant, rememberAssistant, avatarFor, nameFor, cookieAssistant } from './lounge.js';
-import { mountRoam, setRoamMood, unmountRoam, guideTo, parkDefault, setRoamClickHandler } from './roam.js';
+import { mountRoam, setRoamMood, unmountRoam, guideTo, parkDefault, setRoamClickHandler, dropIn } from './roam.js';
 
 // 助手英文名对照（和 lounge.js FALLBACK 一致）
 const FALLBACK_NAME_EN = {
@@ -2309,3 +2309,23 @@ function closeDrawers() {
 
 // Start
 boot();
+
+/* 呼叫：右下角电话按钮 → 小助手从顶部落下并主动问候；配置了语音就就地开语音（不跳页）。 */
+(function mountCallButton() {
+  if (typeof document === 'undefined' || document.getElementById('xcCallBtn')) return;
+  const b = document.createElement('button');
+  b.id = 'xcCallBtn'; b.type = 'button'; b.title = '呼叫'; b.setAttribute('aria-label', '呼叫');
+  b.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>呼叫</span>';
+  b.style.cssText = 'position:fixed;right:18px;bottom:18px;z-index:9998;display:flex;gap:6px;align-items:center;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:#16181d;color:#ececef;font:13px system-ui,"PingFang SC",sans-serif;cursor:pointer';
+  b.addEventListener('click', async () => {
+    const id = pickedAssistant() || 'brain';
+    const name = nameFor(id) || '小助手';
+    const avatar = avatarFor(id);
+    if (avatar) { try { mountRoam(avatar, name); } catch {} }
+    dropIn(`嗨，我是${name}！找我有什么事？`);
+    if (state.voiceInfo?.available && !state.voice?.active) {
+      try { toggleVoicePanel(true); await startVoice(); } catch (err) { toast((err && err.message) || '语音启动失败，先用文字聊', true); }
+    }
+  });
+  document.body.appendChild(b);
+})();

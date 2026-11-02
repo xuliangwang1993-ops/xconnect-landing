@@ -1381,6 +1381,21 @@ export function createWorkbench({ tasks, broadcast }) {
       catch { return fail(res, 502, 'storage_unavailable', '设置未保存'); }
     }
 
+    if (pathname === '/api/personas' && req.method === 'GET') {
+      const rows = await supaRequest('GET', 'assistant_persona?select=id,name,role,model,voice,description,intro,avatar,sort&order=sort').catch(() => []);
+      return json(res, 200, { personas: Array.isArray(rows) ? rows : [] });
+    }
+
+    if (pathname === '/api/memories' && req.method === 'GET') {
+      const u = new URL(req.url, 'http://x');
+      const aid = clampText(u.searchParams.get('assistantId') || '', 40);
+      const rows = await supaRequest('GET',
+        `assistant_memory?select=id,assistant_id,kind,content,created_at&or=(user_id.eq.owner,user_id.eq.${encodeURIComponent(session.ns)})&order=created_at.desc&limit=200${aid ? `&assistant_id=eq.${encodeURIComponent(aid)}` : ''}`
+      ).catch(() => []);
+      const mems = Array.isArray(rows) ? rows : [];
+      return json(res, 200, { mems, total: mems.length });
+    }
+
     // 制作你的小助手: user-owned slots + BYOK voice keys, per-user rows in work_checkpoints.
     if (pathname === '/api/custom-assistants') {
       const load = async () => rowData(await loadRow(session, '__custom_assistants__'), 'custom-assistants') || { slots: [] };

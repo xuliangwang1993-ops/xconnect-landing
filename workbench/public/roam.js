@@ -211,3 +211,36 @@ export function unmountRoam() {
   guided = false;
   cur = { avatar: '', name: '' };
 }
+
+/** 呼叫：从屏幕顶部落下（ease-out 弹跳），停在右下角，冒一个问候气泡。 */
+export function dropIn(greeting, { ms = 4200 } = {}) {
+  if (!el) return false;
+  const s = size();
+  const x = Math.max(12, window.innerWidth - s - 24);
+  const y = Math.max(12, window.innerHeight - s - 96);
+  parked = { x, y };
+  el.style.transition = 'none';
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  el.style.transform = '';
+  if (!reduced() && el.animate) {
+    el.animate([
+      { transform: `translateY(${-y - s}px)`, offset: 0 },
+      { transform: 'translateY(0)', offset: 0.6, easing: 'ease-out' },
+      { transform: 'translateY(-28px)', offset: 0.75, easing: 'ease-in' },
+      { transform: 'translateY(0)', offset: 0.88, easing: 'ease-out' },
+      { transform: 'translateY(-8px)', offset: 0.94 },
+      { transform: 'translateY(0)', offset: 1 },
+    ], { duration: 900, easing: 'ease-out' });
+  }
+  if (greeting) {
+    const b = document.createElement('div');
+    b.className = 'roam-bubble';
+    b.textContent = greeting;
+    b.style.cssText = `position:fixed;z-index:9999;right:${Math.max(12, window.innerWidth - x - s / 2)}px;bottom:${window.innerHeight - y + 6}px;max-width:240px;background:#16181d;color:#ececef;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 12px;font:13px/1.4 system-ui,"PingFang SC",sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.4)`;
+    setTimeout(() => document.body.appendChild(b), reduced() ? 0 : 700);
+    setTimeout(() => b.remove(), ms + 700);
+    setRoamMood('talk');
+  }
+  return true;
+}
