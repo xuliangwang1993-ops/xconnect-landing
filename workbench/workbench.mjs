@@ -61,6 +61,8 @@ const SPEAKERS = [
   { id: 'zh_male_yunzhou_jupiter_bigtts', label: '云舟 · 男声', note: '沉稳' },
   { id: 'zh_male_xiaotian_jupiter_bigtts', label: '小天 · 男声', note: '轻快' },
 ];
+const CUSTOM_SLOTS = 3;
+const VOICE_PROVIDERS = ['doubao', 'elevenlabs'];
 const SPEAKER_IDS = new Set(SPEAKERS.map((s) => s.id));
 
 const MIME = {
@@ -817,6 +819,7 @@ function readIngestToken(token) {
 // Router
 
 // Shared storage surface for integrations (Slack now, Linear later).
+export { getSession as wbGetSession, SPEAKERS as WB_SPEAKERS };
 export const wbStore = { nsFor, saveCard, loadRow, cardFromRow, saveRow, seal, unseal, nowIso, supaConfigured: () => Boolean(SUPA_URL) };
 
 export function createWorkbench({ tasks, broadcast }) {
@@ -1371,11 +1374,58 @@ export function createWorkbench({ tasks, broadcast }) {
     }
     if (pathname === '/api/settings' && req.method === 'PUT') {
       const body = await readJson(req, 200_000);
-      const allowed = ['layout', 'theme', 'model', 'quickbar', 'reducedMotion', 'customPalette', 'accent', 'sidebarCollapsed'];
+      const allowed = ['layout', 'theme', 'model', 'assistantId', 'quickbar', 'reducedMotion', 'customPalette', 'accent', 'sidebarCollapsed'];
       const patch = {};
       for (const k of allowed) if (body[k] !== undefined) patch[k] = body[k];
       try { return json(res, 200, { settings: await saveSettings(session, patch) }); }
       catch { return fail(res, 502, 'storage_unavailable', '设置未保存'); }
+    }
+
+    // 制作你的小助手: user-owned slots + BYOK voice keys, per-user rows in work_checkpoints.
+    if (pathname === '/api/custom-assistants') {
+      const load = async () => rowData(await loadRow(session, '__custom_assistants__'), 'custom-assistants') || { slots: [] };
+      if (req.method === 'GET') {
+        try { return json(res, 200, await load()); } catch { return fail(res, 502, 'storage_unavailable', '自定义助手暂不可用'); }
+      }
+      if (req.method === 'PUT') {
+        const body = await readJson(req, 400_000);
+        const str = (v, n) => String(v ?? '').slice(0, n);
+        const slots = (Array.isArray(body.slots) ? body.slots : []).slice(0, CUSTOM_SLOTS).map((x, i) => ({
+          id: 'custom' + (i + 1), name: str(x.name, 40), intro: str(x.intro, 600), persona: str(x.persona, 4000),
+          voice: SPEAKER_IDS.has(x.voice) ? x.voice : '',
+          materials: (Array.isArray(x.materials) ? x.materials : []).slice(0, 20).map((m) => ({
+            name: str(m.name, 120), type: str(m.type, 60), size: Number(m.size) || 0, text: str(m.text, 20_000), at: str(m.at, 40) })),
+        }));
+        const data = { slots, updatedAt: nowIso() };
+        try {
+          await saveRow(session, '__custom_assistants__', { goal: 'custom-assistants', progress: '', constraints: '', decisions: '', todos: [], sources: [{ kind: 'custom-assistants', data }] });
+          return json(res, 200, data);
+        } catch { return fail(res, 502, 'storage_unavailable', '自定义助手未保存'); }
+      }
+    }
+    if (pathname === '/api/voice-keys') {
+      const load = async () => rowData(await loadRow(session, '__voice_keys__'), 'voice-keys') || {};
+      const masked = (d) => Object.fromEntries(VOICE_PROVIDERS.map((p) => [p, d[p] ? { set: true, masked: d[p].masked, updatedAt: d[p].updatedAt } : { set: false }]));
+      if (req.method === 'GET') {
+        try { return json(res, 200, { keys: masked(await load()) }); } catch { return fail(res, 502, 'storage_unavailable', '密钥暂不可读'); }
+      }
+      if (req.method === 'PUT' || req.method === 'DELETE') {
+        const body = await readJson(req, 20_000);
+        const provider = String(body.provider || '');
+        if (!VOICE_PROVIDERS.includes(provider)) return fail(res, 400, 'bad_provider', '不支持的服务商');
+        try {
+          const d = await load();
+          if (req.method === 'DELETE') delete d[provider];
+          else {
+            const key = String(body.key || '').trim();
+            if (key.length < 8 || key.length > 400) return fail(res, 400, 'bad_key', '密钥格式不对');
+            const extra = String(body.appId || '').trim().slice(0, 80);
+            d[provider] = { sealed: seal({ key, appId: extra }), masked: key.slice(0, 3) + '…' + key.slice(-4), updatedAt: nowIso() };
+          }
+          await saveRow(session, '__voice_keys__', { goal: 'voice-keys', progress: '', constraints: '', decisions: '', todos: [], sources: [{ kind: 'voice-keys', data: d }] });
+          return json(res, 200, { keys: masked(d) });
+        } catch { return fail(res, 502, 'storage_unavailable', '密钥未保存'); }
+      }
     }
 
     if (pathname === '/api/ingest-token' && req.method === 'POST') {

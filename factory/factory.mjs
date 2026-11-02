@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { fetchAoiSnapshot } from './aoi/aoi-live.mjs';
 import { loadWorkNodes } from './graph/work-nodes.mjs';
 import { createTreeStore, handleTree } from './tree/tree.mjs';
+import { listAssistants, patchAssistant } from './settings/settings-api.mjs';
 import { answer as guideAnswer, parseGuide } from './guide/guide.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -18,7 +19,7 @@ const GRAPH_FILES = { 'graph-view.js': 'text/javascript; charset=utf-8' };
 const AOI_FILES = { 'index.html': 'text/html; charset=utf-8', 'aoi-snapshot.js': 'text/javascript; charset=utf-8' };
 
 export const ROUTES = {
-  stage: '/', portal: '/portal', stageAssets: '/stage/', workbench: '/workbench', aoi: '/aoi', manifest: '/factory.json', guide: '/guide', graph: '/graph',
+  stage: '/', portal: '/portal', stageAssets: '/stage/', workbench: '/workbench', aoi: '/aoi', manifest: '/factory.json', guide: '/guide', graph: '/graph', settings: '/settings',
 };
 
 // Stage HTML uses relative asset paths; at "/" those would collide with the
@@ -40,9 +41,34 @@ function send(res, req, type, body) {
   return true;
 }
 
-export function createFactory({ env = process.env, fetchImpl = globalThis.fetch } = {}) {
+export function createFactory({ env = process.env, fetchImpl = globalThis.fetch, getSession = () => null, speakers = [] } = {}) {
   const tree = createTreeStore({ env, fetchImpl });
+  const speakerIds = new Set(speakers.map((s) => s.id));
+  const sendJson = (res, code, body) => { res.writeHead(code, { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' }); res.end(JSON.stringify(body)); return true; };
   function handle(req, res) {
+    { const sp = new URL(req.url, 'http://localhost').pathname;
+      if (sp === '/settings/api/assistants' && req.method === 'GET') {
+        listAssistants({ env, fetchImpl, session: getSession(req) })
+          .catch((e) => ({ ok: false, error: String(e && e.message || e) }))
+          .then((d) => sendJson(res, 200, { ...d, speakers }));
+        return true;
+      }
+      const m = sp.match(/^\/settings\/api\/assistants\/([^/]+)$/);
+      if (m && req.method === 'PUT') {
+        if (!getSession(req)) return sendJson(res, 401, { ok: false, error: 'login_required' });
+        let raw = '';
+        req.on('data', (c) => { raw += c; if (raw.length > 20_000) req.destroy(); });
+        req.on('end', () => {
+          let body = {}; try { body = JSON.parse(raw || '{}'); } catch {}
+          patchAssistant({ env, fetchImpl, id: decodeURIComponent(m[1]), body, speakerIds: speakerIds.size ? speakerIds : null })
+            .catch((e) => ({ ok: false, error: String(e && e.message || e) }))
+            .then((d) => sendJson(res, d.ok ? 200 : 400, d));
+        });
+        return true;
+      }
+      if ((sp === '/settings' || sp === '/settings/') && (req.method === 'GET' || req.method === 'HEAD'))
+        return send(res, req, 'text/html; charset=utf-8', fs.readFileSync(path.join(HERE, 'settings/index.html'), 'utf8').replace('</body>', GUIDE_TAG + '\n</body>'));
+    }
     if (handleTree(req, res, tree)) return true;
     { const tp = new URL(req.url, 'http://localhost').pathname;
       if ((tp === '/tree' || tp === '/tree/') && (req.method === 'GET' || req.method === 'HEAD'))

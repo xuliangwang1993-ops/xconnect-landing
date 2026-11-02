@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Setting · X-connect</title><link rel="icon" href="/stage/icon.svg" type="image/svg+xml">
+<style>
+:root{--bg:#0a0a0b;--panel:#101012;--line:rgba(255,255,255,.08);--text:#ececef;--mute:#8a8f98;--accent:#5e6ad2;--ok:#3dd68c;--bad:#ff7b72}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif}
+a{color:inherit;text-decoration:none}
+header.app{display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);z-index:5}
+.brand img{height:32px;display:block}nav.tabs{display:flex;gap:4px;margin-left:8px}
+nav.tabs a{padding:6px 10px;border-radius:6px;color:var(--mute);font-size:13px}nav.tabs a.on,nav.tabs a:hover{background:rgba(255,255,255,.05);color:var(--text)}
+main{max-width:860px;margin:0 auto;padding:28px 18px 80px}h1{font-size:20px;margin:0 0 4px;letter-spacing:-.02em}.sub{color:var(--mute);font-size:13px;margin-bottom:24px}
+section{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:16px 18px;margin-bottom:16px}
+section h2{font-size:14px;margin:0 0 12px;font-weight:600}.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:0}.k{color:var(--mute);font-size:13px}.v{font-weight:560}.tag{font-size:11px;color:var(--mute);border:1px solid var(--line);border-radius:5px;padding:1px 6px;margin-left:6px}
+select,textarea,input{background:#0c0c0e;border:1px solid var(--line);color:var(--text);border-radius:7px;padding:7px 9px;font:inherit}
+textarea{width:100%;min-height:60px;resize:vertical}button{border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text);border-radius:7px;padding:6px 11px;font:inherit;cursor:pointer}
+button.primary{background:var(--accent);border-color:transparent;color:#fff}.na{color:var(--bad);font-size:13px}.okmsg{color:var(--ok);font-size:12px}
+.asst{border-top:1px solid var(--line);padding:12px 0;display:grid;grid-template-columns:44px 1fr;gap:12px}.asst img{width:44px;height:44px;border-radius:50%;object-fit:cover;background:#222}
+.asst .nm{font-weight:600}.asst .meta{color:var(--mute);font-size:12px}.asst .ctl{display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap}
+details summary{cursor:pointer;color:var(--mute);font-size:12px}pre{white-space:pre-wrap;font-size:12px;color:var(--mute);max-height:200px;overflow:auto}
+</style></head><body>
+<header class="app"><a class="brand" href="/" aria-label="X-connect 首页"><img src="/stage/brand-logo.png" alt="X-connect"></a>
+<nav class="tabs"><a href="/">Projects</a><a href="/graph">Graph</a><a href="/aoi">AoI</a><a href="/workbench">Workbench</a><a href="/settings" class="on">Setting</a></nav></header>
+<main><h1>Setting</h1><div class="sub">参数设置与余额查询。数据来自 Workbench 登录会话（/api/bootstrap）与 Supabase 助手表；标「仅本机」的项只存在这台浏览器。</div>
+<section id="sBal"><h2>账户与余额</h2><div id="bal" class="k">加载中…</div></section>
+<section id="sModel"><h2>助手与模型</h2><div id="model" class="k">加载中…</div></section>
+<section id="sVoice"><h2>语音</h2><div id="voice" class="k">加载中…</div></section>
+<section id="sAsst"><h2>小助手设定</h2><div id="asst" class="k">加载中…</div></section>
+<section id="build"><h2>制作你的小助手</h2><div id="make" class="k">加载中…</div></section>
+<section id="sKeys"><h2>语音克隆 · 流式语音 API Key（自带密钥）</h2>
+<div class="k" style="font-size:12px;margin-bottom:8px">费用由你直接付给服务商；密钥只存服务器（AES-GCM 加密），页面只显示掩码。克隆/流式调用尚未接通：填好密钥后显示「待接入」。</div>
+<div id="keys" class="k">加载中…</div></section>
+<section id="sOther"><h2>其他参数</h2><div id="other" class="k">加载中…</div></section>
+</main>
+<script>
+const $=(id)=>document.getElementById(id);const esc=(s)=>String(s??'').replace(/[&<>"]/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const row=(k,v)=>`<div class="row"><span class="k">${k}</span><span class="v">${v}</span></div>`;
+let boot=null,settings={};
+async function putSettings(patch,el){try{const r=await fetch('/api/settings',{method:'PUT',headers:{'content-type':'application/json'},credentials:'same-origin',body:JSON.stringify(patch)});
+ if(!r.ok)throw 0;settings=(await r.json()).settings||settings;el&&(el.textContent='已保存');}catch{el&&(el.textContent='保存失败');}}
+async function load(){
+ try{const r=await fetch('/api/bootstrap',{credentials:'same-origin'});if(r.status===401)throw 'login';if(!r.ok)throw 'http_'+r.status;boot=await r.json();}catch(e){boot=null;
+  const msg=e==='login'?'未登录 Workbench，余额与云端设置不可用。<a href="/workbench" style="color:var(--accent)">去登录 →</a>':'余额接口暂不可用（'+esc(e)+'）';
+  $('bal').innerHTML=`<div class="na">${msg}</div>`;$('model').innerHTML=`<div class="na">需要登录 Workbench 后才能读取模型列表。</div>`;}
+ if(boot){settings=boot.settings||{};const b=boot.balance||{};
+  $('bal').innerHTML=row('账户',esc(boot.user?.email||boot.user?.name||boot.user?.id||'—'))+row('通道',esc(boot.provider)+(boot.tier?' · '+esc(boot.tier):''))
+   +(b.error||b.balance==null?row('余额','<span class="na">暂不可用（'+esc(b.error||'无数据')+'）</span>'):row('余额',esc(b.balance)+' '+esc(b.label||b.unit||'')))
+   +(b.totalUsage!=null?row('累计用量',esc(b.totalUsage)):'')+(b.used!=null?row('已用',esc(b.used)):'')+row('',`<button id="rf">刷新</button>`);
+  $('rf').onclick=load;
+  const ms=(boot.models||[]).map((m)=>typeof m==='string'?m:(m.id||m.name));const cur=settings.model||boot.defaultModel||'';
+  $('model').innerHTML=row('默认模型',`<select id="selM">${ms.map((m)=>`<option ${m===cur?'selected':''}>${esc(m)}</option>`).join('')}</select> <span class="k" id="mOk"></span>`)
+   +row('服务器默认',esc(boot.defaultModel||'—'))+`<div class="k" style="font-size:12px">存于云端（PUT /api/settings · model）。默认助手在下方「小助手设定」里选。</div>`;
+  $('selM')&&($('selM').onchange=(e)=>putSettings({model:e.target.value},$('mOk')));}
+ const spk=(boot&&boot.voice&&boot.voice.speakers)||[];const curS=localStorage.getItem('xcw_voice_speaker')||'';
+ $('voice').innerHTML=row('实时语音',boot?(boot.voice?.available?'<span style="color:var(--ok)">可用</span>':'<span class="na">服务器未配置</span>'):'—')
+  +(spk.length?row('发音人 <span class="tag">仅本机</span>',`<select id="selS">${spk.map((s)=>`<option value="${esc(s.id)}" ${s.id===curS?'selected':''}>${esc(s.label)}</option>`).join('')}</select> <span class="k" id="sOk"></span>`):'');
+ $('selS')&&($('selS').onchange=(e)=>{localStorage.setItem('xcw_voice_speaker',e.target.value);$('sOk').textContent='已保存（本机）';});
+ $('other').innerHTML=boot?row('主题',esc(settings.theme||'默认'))+row('布局',esc(settings.layout||'默认'))+row('减少动效',`<input type="checkbox" id="rm" ${settings.reducedMotion?'checked':''}> <span class="k" id="rmOk"></span>`)
+  +row('云端存储',esc(boot.storage))+row('版本',esc(boot.build||'—'))+row('小助理（roam pet）','<span class="k">始终显示，暂无开关 <span class="tag">只读</span></span>'):'<div class="na">登录后可见。</div>';
+ $('rm')&&($('rm').onchange=(e)=>putSettings({reducedMotion:e.target.checked},$('rmOk')));
+ loadAsst();loadMake();}
+async function loadAsst(){let d;try{d=await (await fetch('/settings/api/assistants',{credentials:'same-origin'})).json();}catch{d={ok:false,error:'network'};}
+ if(!d.ok){$('asst').innerHTML=`<div class="na">助手表暂不可用（${esc(d.error)}）</div>`;return;}
+ const can=d.editable||[];const def=settings.assistantId||'';
+ $('asst').innerHTML=(d.signedIn?'':'<div class="na" style="margin-bottom:8px">未登录：只读。登录 Workbench 后可改简介、发音人和默认助手。</div>')+d.assistants.map((a)=>`<div class="asst" data-id="${esc(a.id)}">
+  <img src="${esc(a.avatar&&!/^https?:/.test(a.avatar)?'/workbench/'+a.avatar.replace(/^\//,''):a.avatar||'')}" alt="" onerror="this.style.visibility='hidden'">
+  <div><div class="nm">${esc(a.name)} <span class="tag">${esc(a.id)}</span>${a.id===def?'<span class="tag" style="color:var(--ok)">默认</span>':''}</div>
+  <div class="meta">${esc(a.role||'')}${a.model?' · 模型 '+esc(a.model):''}${a.memoryCount!=null?' · 记忆 '+a.memoryCount+' 条':''}</div>
+  ${can.includes('intro')?`<textarea class="in">${esc(a.intro||'')}</textarea>`:`<div class="meta" style="color:var(--text)">${esc(a.intro||a.description||'')}</div>`}
+  <div class="ctl">${can.includes('voice')?`发音人 <select class="vo"><option value="">（不指定）</option>${(d.speakers||[]).map((s)=>`<option value="${esc(s.id)}" ${s.id===a.voice?'selected':''}>${esc(s.label)}</option>`).join('')}</select>`:(a.voice?'<span class="meta">发音人 '+esc(a.voice)+'</span>':'')}
+  ${d.signedIn?`<button class="primary sv">保存</button><button class="df">设为默认</button>`:''}<span class="okmsg"></span></div>
+  ${a.system_prompt?`<details><summary>system_prompt（只读）</summary><pre>${esc(a.system_prompt)}</pre></details>`:''}</div></div>`).join('');
+ document.querySelectorAll('.asst').forEach((el)=>{const id=el.dataset.id,msg=el.querySelector('.okmsg');
+  el.querySelector('.sv')?.addEventListener('click',async()=>{const body={};const t=el.querySelector('.in');if(t)body.intro=t.value;const v=el.querySelector('.vo');if(v&&v.value)body.voice=v.value;
+   const r=await fetch('/settings/api/assistants/'+encodeURIComponent(id),{method:'PUT',headers:{'content-type':'application/json'},credentials:'same-origin',body:JSON.stringify(body)}).then((r)=>r.json()).catch(()=>({ok:false}));
+   msg.textContent=r.ok?'已保存':'保存失败'+(r.error?'（'+r.error+'）':'');});
+  el.querySelector('.df')?.addEventListener('click',async()=>{await putSettings({assistantId:id},msg);loadAsst();});});}
+
+const PROV=[{id:'doubao',name:'豆包 / 火山引擎 语音',links:[['控制台 · 创建应用拿 Key','https://console.volcengine.com/speech/app'],['声音复刻产品页','https://www.volcengine.com/product/voicecloning'],['声音复刻 API 文档','https://www.volcengine.com/docs/6561/1305191']],app:true},
+ {id:'elevenlabs',name:'ElevenLabs',links:[['注册','https://elevenlabs.io/app/sign-up'],['Voice Lab（克隆）','https://elevenlabs.io/app/voice-lab'],['API Keys','https://elevenlabs.io/app/settings/api-keys']]}];
+let slots=[];
+async function loadMake(){if(!boot){$('make').innerHTML='<div class="na">登录 Workbench 后可制作自己的小助手（最多 3 个槽位，和 5 个内置助手并列）。</div>';$('keys').innerHTML='<div class="na">登录后可添加密钥。</div>';return;}
+ try{slots=(await (await fetch('/api/custom-assistants',{credentials:'same-origin'})).json()).slots||[];}catch{slots=[];}
+ while(slots.length<3)slots.push({name:'',intro:'',persona:'',voice:'',materials:[]});
+ const spk=(boot.voice&&boot.voice.speakers)||[];
+ $('make').innerHTML='<div class="k" style="font-size:12px">导入素材（图片/视频/文字）后工厂据此合成助手。<b>目前</b>：文字素材内容会保存；图片/视频只记录文件名与大小，自动合成尚未上线（占位）。</div>'+slots.map((s,i)=>`<div class="asst" data-i="${i}"><div class="tag" style="height:fit-content">槽 ${i+1}</div><div>
+ <input class="nm2" placeholder="助手名字" value="${esc(s.name)}" style="width:40%"> 发音人 <select class="vo2"><option value="">默认</option>${spk.map((x)=>`<option value="${esc(x.id)}" ${x.id===s.voice?'selected':''}>${esc(x.label)}</option>`).join('')}</select>
+ <textarea class="in2" placeholder="一句话简介">${esc(s.intro)}</textarea><textarea class="pe2" placeholder="人设 / 说话风格（system prompt）">${esc(s.persona)}</textarea>
+ <div class="ctl"><input type="file" class="up" multiple accept="image/*,video/*,text/*,.md,.txt"><span class="meta">素材 ${s.materials.length} 个${s.materials.length?'：'+s.materials.map((m)=>esc(m.name)).join('、'):''}</span></div>
+ <div class="ctl"><button class="primary sv2">保存槽位</button><span class="okmsg"></span></div></div></div>`).join('');
+ document.querySelectorAll('#make .asst').forEach((el)=>{const i=+el.dataset.i;
+  el.querySelector('.up').onchange=async(e)=>{for(const f of e.target.files){const m={name:f.name,type:f.type,size:f.size,at:new Date().toISOString(),text:''};if(/^text\/|\.(md|txt)$/.test(f.type||f.name))m.text=(await f.text()).slice(0,20000);slots[i].materials.push(m);}el.querySelector('.okmsg').textContent='已添加，点保存';};
+  el.querySelector('.sv2').onclick=async()=>{Object.assign(slots[i],{name:el.querySelector('.nm2').value,intro:el.querySelector('.in2').value,persona:el.querySelector('.pe2').value,voice:el.querySelector('.vo2').value});
+   const r=await fetch('/api/custom-assistants',{method:'PUT',headers:{'content-type':'application/json'},credentials:'same-origin',body:JSON.stringify({slots})});el.querySelector('.okmsg').textContent=r.ok?'已保存':'保存失败';};});
+ loadKeys();}
+async function loadKeys(){let k={};try{k=(await (await fetch('/api/voice-keys',{credentials:'same-origin'})).json()).keys||{};}catch{}
+ $('keys').innerHTML=PROV.map((p)=>{const c=k[p.id]||{};return `<div class="asst" data-p="${p.id}"><div class="tag" style="height:fit-content">${c.set?'已存':'未接'}</div><div><div class="nm">${p.name}</div>
+ <div class="meta">${p.links.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener" style="color:var(--accent)">${t} ↗</a>`).join(' · ')}</div>
+ <div class="meta">${c.set?'当前密钥 '+esc(c.masked)+' · 克隆/流式：待接入':'连接你的密钥以启用克隆和流式语音'}</div>
+ <div class="ctl">${p.app?'<input class="app" placeholder="App ID（可选）">':''}<input class="key" type="password" placeholder="API Key" autocomplete="off"><button class="primary sk">保存</button>${c.set?'<button class="dk">删除</button>':''}<span class="okmsg"></span></div></div></div>`;}).join('');
+ document.querySelectorAll('#keys .asst').forEach((el)=>{const p=el.dataset.p;const go=async(method,body)=>{const r=await fetch('/api/voice-keys',{method,headers:{'content-type':'application/json'},credentials:'same-origin',body:JSON.stringify({provider:p,...body})});if(r.ok)loadKeys();else el.querySelector('.okmsg').textContent='失败';};
+  el.querySelector('.sk').onclick=()=>go('PUT',{key:el.querySelector('.key').value,appId:el.querySelector('.app')?.value||''});el.querySelector('.dk')?.addEventListener('click',()=>go('DELETE',{}));});}
+load();
+</script></body></html>
