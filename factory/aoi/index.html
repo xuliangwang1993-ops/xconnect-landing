@@ -18,7 +18,7 @@ header a{color:#9fe870;text-decoration:none}main{padding:20px;display:grid;gap:1
 </style>
 </head>
 <body>
-<header><strong>AoI 能力看板</strong><a href="/">← 搭台首页</a><a href="/workbench">工作台 →</a><a href="/graph?view=tree">Tree</a><a href="/graph?view=graph">Graph</a>
+<header><strong>AoI 能力看板</strong><a href="/">← 搭台首页</a><a href="/workbench">工作台 →</a>
 <span class="muted" id="meta"></span></header>
 <div id="banner" class="banner fixture">加载中…</div>
 <nav id="tabs" style="display:flex;gap:8px;padding:10px 20px 0"><button data-t="struct">结构</button><button data-t="live">实时快照</button></nav>
@@ -67,7 +67,7 @@ function renderTree(t) {
   for (const n of t.nodes) { const k = n.parent_id && ids.has(n.parent_id) ? n.parent_id : ''; if (!kids.has(k)) kids.set(k, []); kids.get(k).push(n); }
   const li = (n, d) => `<div class="fn" style="padding-left:${d * 18}px;cursor:default"><span>${d ? '└ ' : ''}${esc(n.title || n.id)} <span class="muted">${esc(n.kind || '')}</span></span><span class="st">${esc(n.status || 'idea')}</span></div>` + (d < 8 ? (kids.get(n.id) || []).map((c) => li(c, d + 1)).join('') : '');
   document.getElementById('meta').textContent = `结构 · work_nodes (${esc(t.source || '')}) · ${t.nodes.length} 节点`;
-  out.innerHTML = '<section class="goal"><h3>工厂结构树 <a href="/graph?view=tree" style="font-size:12px">Tree →</a> <a href="/graph?view=graph" style="font-size:12px">Graph →</a></h3>' + (kids.get('') || []).map((n) => li(n, 0)).join('') + '</section>';
+  out.innerHTML = '<section class="goal"><h3>工厂结构树 <a href="/graph" style="font-size:12px">Graph 视图 →</a></h3>' + (kids.get('') || []).map((n) => li(n, 0)).join('') + '</section>';
 }
 function show(t) {
   document.querySelectorAll('#tabs button').forEach((b) => b.classList.toggle('on', b.dataset.t === t));
