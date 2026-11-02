@@ -198,7 +198,7 @@
     return true;
   }
   function tourHref(t) {
-    if ((t.site || 'factory') === site() && (site() === 'workbench' || new RegExp(t.match).test(t.path || '/'))) return null; // same site: start in place if page matches
+    if ((t.site || 'factory') === site() && new RegExp(t.match).test(location.pathname)) return null; // same site: start in place if page matches
     const base = site() === 'workbench' && (t.site || 'factory') === 'factory' ? (KB.factoryOrigin || '') : '';
     return base + (t.path || '/') + '?tour=' + encodeURIComponent(t.id);
   }
