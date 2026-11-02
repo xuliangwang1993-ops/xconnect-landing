@@ -13,6 +13,7 @@ header a{color:#9fe870;text-decoration:none}main{padding:20px;display:grid;gap:1
 .muted{color:#8a9099}pre{white-space:pre-wrap;background:#111;padding:12px;border-radius:8px;max-height:300px;overflow:auto}
 .banner{padding:10px 20px;font-weight:600}.banner.live{background:#12331a;color:#9fe870}.banner.fixture{background:#4a2a00;color:#ffcf70}
 .fn{cursor:pointer}.fn:hover,.fn.sel{background:#161b22}.st.verified{background:#12331a;color:#9fe870}
+#tabs button{background:#161b22;color:#e8eaed;border:1px solid #2a2f36;border-radius:8px;padding:6px 14px;cursor:pointer}#tabs button.on{border-color:#9fe870;color:#9fe870}
 #ev{position:fixed;right:0;top:0;bottom:0;width:min(420px,90vw);background:#111418;border-left:1px solid #333;padding:16px;overflow:auto;display:none}#ev.open{display:block}
 </style>
 </head>
@@ -20,8 +21,9 @@ header a{color:#9fe870;text-decoration:none}main{padding:20px;display:grid;gap:1
 <header><strong>AoI 能力看板</strong><a href="/">← 搭台首页</a><a href="/workbench">工作台 →</a>
 <span class="muted" id="meta"></span></header>
 <div id="banner" class="banner fixture">加载中…</div>
+<nav id="tabs" style="display:flex;gap:8px;padding:10px 20px 0"><button data-t="struct">结构</button><button data-t="live">实时快照</button></nav>
 <aside id="ev"></aside>
-<main id="out"><p class="muted">加载中…（需要先在工作台登录）</p></main>
+<main id="out"><p class="muted">加载中…</p></main>
 <script type="module">
 import { cardsToSnapshot, linearRef } from '/aoi/aoi-snapshot.js';
 const out = document.getElementById('out');
@@ -59,17 +61,23 @@ function render(snap, label) {
       fns.map((f) => `<div class="fn" data-id="${esc(f.id)}"><span>${esc(f.label)}</span><span class="st ${esc(f.state)}">${esc(f.state)} · ${esc(f.wb_status ?? '')}</span></div>`).join('') + '</section>';
   }).join('') + `<details><summary>CapabilitySnapshot JSON</summary><pre>${esc(JSON.stringify(snap, null, 1))}</pre></details>`;
 }
+let LIVE = null, STRUCT = null, WHY = '';
+function show(t) {
+  document.querySelectorAll('#tabs button').forEach((b) => b.classList.toggle('on', b.dataset.t === t));
+  if (t === 'live') {
+    if (LIVE) { banner(true); render(LIVE.snapshot, 'AoI 实时 ' + (LIVE.endpoint || '')); if (!LIVE.snapshot.edges.length) out.insertAdjacentHTML('afterbegin', '<p class="muted">实时快照暂无能力/边数据（AoI staging 当前只有 ' + LIVE.snapshot.nodes.length + ' 个节点）。切到「结构」看工作台结构。</p>'); }
+    else { banner(false, WHY); out.innerHTML = '<p class="muted">AoI 实时快照不可用：' + esc(WHY) + '</p>'; }
+  } else {
+    const b = document.getElementById('banner'); b.className = 'banner fixture'; b.textContent = '结构展示：工作台项目 → 任务（未经 AoI 证据验证，全部为 unverified/potential）';
+    if (STRUCT && STRUCT.nodes.length) render(STRUCT, '结构'); else out.innerHTML = '<p class="muted">暂无结构数据：工作台里还没有卡片。去 <a href="/workbench">工作台</a> 新建卡片，或看 <a href="/graph">Graph</a>。</p>';
+  }
+}
+document.getElementById('tabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) show(b.dataset.t); });
 try {
-  let live = null;
-  try { live = await (await fetch('/aoi/api/snapshot', { credentials: 'same-origin' })).json(); } catch {}
-  if (live && live.source === 'aoi' && live.snapshot) { banner(true); render(live.snapshot, 'AoI 实时 ' + (live.endpoint || '')); throw 0; }
-  const why = (live && live.reason) ? live.reason : 'AoI 代理不可用';
-  banner(false, why);
-  const r = await fetch('/api/cards', { credentials: 'same-origin' });
-  if (r.status === 401) { out.innerHTML = '<p>未登录。请先打开 <a href="/workbench">工作台</a> 登录。</p><p class="muted">fixture：' + esc(why) + '</p>'; throw 0; }
-  const d = await r.json();
-  render(cardsToSnapshot(d.cards || []), 'fixture（' + why + '）');
-} catch (e) { if (e !== 0) out.innerHTML = '<p>加载失败：' + esc(e.message || e) + '</p>'; }
+  try { const l = await (await fetch('/aoi/api/snapshot', { credentials: 'same-origin' })).json(); if (l && l.source === 'aoi' && l.snapshot) LIVE = l; else WHY = (l && l.reason) || 'AoI 代理不可用'; } catch { WHY = 'AoI 代理不可用'; }
+  try { const r = await fetch('/api/cards', { credentials: 'same-origin' }); if (r.ok) STRUCT = cardsToSnapshot((await r.json()).cards || []); } catch {}
+  show(LIVE && LIVE.snapshot.edges.length ? 'live' : 'struct');
+} catch (e) { out.innerHTML = '<p>加载失败：' + esc(e.message || e) + '</p>'; }
 </script>
 </body>
 </html>
