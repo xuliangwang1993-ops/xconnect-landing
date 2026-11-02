@@ -21,7 +21,7 @@
       backdrop-filter: blur(10px); z-index: 5;
     }
     .brand { display: flex; align-items: center; gap: 8px; font-weight: 600; letter-spacing: -.02em; }
-    .brand img { width: 18px; height: 18px; }
+    .brand img.brand-logo { height: 32px; width: auto; display: block; }
     .brand span { color: var(--mute); font-weight: 500; font-size: 12px; }
     nav.tabs { display: flex; gap: 4px; margin-left: 8px; }
     nav.tabs a { padding: 6px 10px; border-radius: 6px; color: var(--mute); font-size: 13px; }
@@ -86,7 +86,7 @@
 </head>
 <body>
   <header class="app">
-    <a class="brand" href="/"><img src="icon.svg" alt=""><b>X-connect</b><span>Factory OS</span></a>
+    <a class="brand" href="/" aria-label="X-connect 首页"><img class="brand-logo" src="brand-logo.png" alt="X-connect"><span>Factory OS</span></a>
     <nav class="tabs" aria-label="Views">
       <a href="/" class="on" id="tabProjects">Projects</a>
       <a href="/graph">Graph</a>
