@@ -31,6 +31,8 @@ details summary{cursor:pointer;color:var(--mute);font-size:12px}pre{white-space:
 <section id="sKeys"><h2 data-i18n="set.keys">语音克隆 · 流式语音 API Key（自带密钥）</h2>
 <div class="k" style="font-size:12px;margin-bottom:8px">费用由你直接付给服务商；密钥只存服务器（AES-GCM 加密），页面只显示掩码。克隆/流式调用尚未接通：填好密钥后显示「待接入」。</div>
 <div id="keys" class="k">加载中…</div></section>
+<section id="imgkeys"><h2 data-i18n="set.imgkeys">图像生成 API Key（文生图 / 图生图，自带密钥）</h2><div class="k" style="font-size:12px;margin-bottom:6px" data-i18n="img.hint">小助手输入区点 🎨 生图：输入描述即文生图，拖入/上传图片即图生图。费用由你直接付给服务商，我们只提供链接；密钥加密存于服务端。</div>
+<div id="imgk" class="k">加载中…</div></section>
 <section id="sOther"><h2 data-i18n="set.other">其他参数</h2><div id="other" class="k">加载中…</div></section>
 </main>
 <script>
@@ -93,7 +95,14 @@ async function loadMake(){if(!boot){$('make').innerHTML='<div class="na">登录 
   el.querySelector('.up').onchange=async(e)=>{for(const f of e.target.files){const m={name:f.name,type:f.type,size:f.size,at:new Date().toISOString(),text:''};if(/^text\/|\.(md|txt)$/.test(f.type||f.name))m.text=(await f.text()).slice(0,20000);slots[i].materials.push(m);}el.querySelector('.okmsg').textContent='已添加，点保存';};
   el.querySelector('.sv2').onclick=async()=>{Object.assign(slots[i],{name:el.querySelector('.nm2').value,intro:el.querySelector('.in2').value,persona:el.querySelector('.pe2').value,voice:el.querySelector('.vo2').value});
    const r=await fetch('/api/custom-assistants',{method:'PUT',headers:{'content-type':'application/json'},credentials:'same-origin',body:JSON.stringify({slots})});el.querySelector('.okmsg').textContent=r.ok?'已保存':'保存失败';};});
- loadKeys();}
+ loadKeys();loadImgKeys();}
+async function loadImgKeys(){let d={};try{d=await (await fetch('/api/image/providers',{credentials:'same-origin'})).json();}catch{}
+ const ps=d.providers||[];if(!ps.length){$('imgk').textContent='登录 Workbench 后可管理图像密钥';return;}
+ $('imgk').innerHTML=ps.map((p)=>`<div class="asst" data-p="${p.id}"><div class="tag" style="height:fit-content">${p.user?'已存':p.server?'服务器':'未接'}</div><div><div class="nm">${esc(p.name)} ${p.i2i?'· 文生图+图生图':'· 仅文生图'}</div>
+ <div class="meta">${p.links.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener" style="color:var(--accent)">${esc(t)} ↗</a>`).join(' · ')}</div>
+ <div class="ctl"><input class="key" type="password" placeholder="API Key" autocomplete="off"><button class="primary sk">保存</button>${p.user?'<button class="dk">删除</button>':''}<span class="okmsg"></span></div></div></div>`).join('');
+ document.querySelectorAll('#imgk .asst').forEach((el)=>{const p=el.dataset.p;const go=async(method,body)=>{const r=await fetch('/api/image-keys',{method,headers:{'content-type':'application/json'},credentials:'same-origin',body:JSON.stringify({provider:p,...body})});if(r.ok)loadImgKeys();else el.querySelector('.okmsg').textContent='失败';};
+  el.querySelector('.sk').onclick=()=>go('PUT',{key:el.querySelector('.key').value});el.querySelector('.dk')?.addEventListener('click',()=>go('DELETE',{}));});}
 async function loadKeys(){let k={};try{k=(await (await fetch('/api/voice-keys',{credentials:'same-origin'})).json()).keys||{};}catch{}
  $('keys').innerHTML=PROV.map((p)=>{const c=k[p.id]||{};return `<div class="asst" data-p="${p.id}"><div class="tag" style="height:fit-content">${c.set?'已存':'未接'}</div><div><div class="nm">${p.name}</div>
  <div class="meta">${p.links.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener" style="color:var(--accent)">${t} ↗</a>`).join(' · ')}</div>

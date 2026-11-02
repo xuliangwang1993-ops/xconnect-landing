@@ -8,6 +8,7 @@ const PRECACHE = [
   '/workbench/',
   '/styles.css',
   '/app.js',
+  '/imggen.js',
   '/project-delivery-view.js',
   '/manifest.webmanifest',
   '/icons/crystal-x-192.png',

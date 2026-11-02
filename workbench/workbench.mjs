@@ -15,6 +15,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { VOICE_LIST } from './persona-voices.mjs';
+import { handleImageRoutes } from './image-gen.mjs';
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.join(ROOT, 'public');
 const BUILD = process.env.BUILD_ID || (process.env.RENDER_GIT_COMMIT || '').slice(0, 10) || 'dev';
@@ -1414,6 +1415,8 @@ export function createWorkbench({ tasks, broadcast }) {
         } catch { return fail(res, 502, 'storage_unavailable', '自定义助手未保存'); }
       }
     }
+    // 图像生成：文生图 / 图生图 + BYOK image keys (image-gen.mjs)
+    if (await handleImageRoutes(req, res, pathname, session, { json, fail, readJson, loadRow, saveRow, rowData, seal, unseal, nowIso, env: process.env })) return true;
     if (pathname === '/api/voice-keys') {
       const load = async () => rowData(await loadRow(session, '__voice_keys__'), 'voice-keys') || {};
       const masked = (d) => Object.fromEntries(VOICE_PROVIDERS.map((p) => [p, d[p] ? { set: true, masked: d[p].masked, updatedAt: d[p].updatedAt } : { set: false }]));
