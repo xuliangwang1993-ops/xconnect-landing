@@ -61,21 +61,29 @@ function render(snap, label) {
       fns.map((f) => `<div class="fn" data-id="${esc(f.id)}"><span>${esc(f.label)}</span><span class="st ${esc(f.state)}">${esc(f.state)} · ${esc(f.wb_status ?? '')}</span></div>`).join('') + '</section>';
   }).join('') + `<details><summary>CapabilitySnapshot JSON</summary><pre>${esc(JSON.stringify(snap, null, 1))}</pre></details>`;
 }
-let LIVE = null, STRUCT = null, WHY = '';
+let LIVE = null, STRUCT = null, TREE = null, WHY = '';
+function renderTree(t) {
+  const kids = new Map(); const ids = new Set(t.nodes.map((n) => n.id));
+  for (const n of t.nodes) { const k = n.parent_id && ids.has(n.parent_id) ? n.parent_id : ''; if (!kids.has(k)) kids.set(k, []); kids.get(k).push(n); }
+  const li = (n, d) => `<div class="fn" style="padding-left:${d * 18}px;cursor:default"><span>${d ? '└ ' : ''}${esc(n.title || n.id)} <span class="muted">${esc(n.kind || '')}</span></span><span class="st">${esc(n.status || 'idea')}</span></div>` + (d < 8 ? (kids.get(n.id) || []).map((c) => li(c, d + 1)).join('') : '');
+  document.getElementById('meta').textContent = `结构 · work_nodes (${esc(t.source || '')}) · ${t.nodes.length} 节点`;
+  out.innerHTML = '<section class="goal"><h3>工厂结构树 <a href="/graph" style="font-size:12px">Graph 视图 →</a></h3>' + (kids.get('') || []).map((n) => li(n, 0)).join('') + '</section>';
+}
 function show(t) {
   document.querySelectorAll('#tabs button').forEach((b) => b.classList.toggle('on', b.dataset.t === t));
   if (t === 'live') {
     if (LIVE) { banner(true); render(LIVE.snapshot, 'AoI 实时 ' + (LIVE.endpoint || '')); if (!LIVE.snapshot.edges.length) out.insertAdjacentHTML('afterbegin', '<p class="muted">实时快照暂无能力/边数据（AoI staging 当前只有 ' + LIVE.snapshot.nodes.length + ' 个节点）。切到「结构」看工作台结构。</p>'); }
     else { banner(false, WHY); out.innerHTML = '<p class="muted">AoI 实时快照不可用：' + esc(WHY) + '</p>'; }
   } else {
-    const b = document.getElementById('banner'); b.className = 'banner fixture'; b.textContent = '结构展示：工作台项目 → 任务（未经 AoI 证据验证，全部为 unverified/potential）';
-    if (STRUCT && STRUCT.nodes.length) render(STRUCT, '结构'); else out.innerHTML = '<p class="muted">暂无结构数据：工作台里还没有卡片。去 <a href="/workbench">工作台</a> 新建卡片，或看 <a href="/graph">Graph</a>。</p>';
+    const b = document.getElementById('banner'); b.className = 'banner fixture'; b.textContent = '结构展示（未经 AoI 证据验证，全部为 unverified/potential）';
+    if (STRUCT && STRUCT.nodes.length) render(STRUCT, '结构'); else if (TREE && TREE.nodes && TREE.nodes.length) renderTree(TREE); else out.innerHTML = '<p class="muted">暂无结构数据：工作台里还没有卡片。去 <a href="/workbench">工作台</a> 新建卡片，或看 <a href="/graph">Graph</a>。</p>';
   }
 }
 document.getElementById('tabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) show(b.dataset.t); });
 try {
   try { const l = await (await fetch('/aoi/api/snapshot', { credentials: 'same-origin' })).json(); if (l && l.source === 'aoi' && l.snapshot) LIVE = l; else WHY = (l && l.reason) || 'AoI 代理不可用'; } catch { WHY = 'AoI 代理不可用'; }
   try { const r = await fetch('/api/cards', { credentials: 'same-origin' }); if (r.ok) STRUCT = cardsToSnapshot((await r.json()).cards || []); } catch {}
+  if (!STRUCT || !STRUCT.nodes.length) { try { TREE = await (await fetch('/graph/api/nodes')).json(); } catch {} }
   show(LIVE && LIVE.snapshot.edges.length ? 'live' : 'struct');
 } catch (e) { out.innerHTML = '<p>加载失败：' + esc(e.message || e) + '</p>'; }
 </script>
