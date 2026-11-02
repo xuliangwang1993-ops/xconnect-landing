@@ -421,6 +421,8 @@ export function setLang(code) {
   const sel = document.getElementById('lang');
   if (sel && sel.value !== current) sel.value = current;
   listeners.forEach((fn) => { try { fn(current); } catch {} });
+  // Let the rest of the app (labels, chat, live voice) switch immediately.
+  try { document.dispatchEvent(new CustomEvent('xc:lang', { detail: current })); } catch {}
 }
 
 export function onLangChange(fn) {

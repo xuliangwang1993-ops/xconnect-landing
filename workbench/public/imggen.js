@@ -118,6 +118,7 @@ export function mountImageGen(doc = document) {
   sendBtn.addEventListener('click', (e) => { if (!st.on) return; e.preventDefault(); e.stopImmediatePropagation(); run(); }, true);
   input.addEventListener('keydown', (e) => { if (st.on && e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); e.stopImmediatePropagation(); run(); } }, true);
   window.addEventListener('storage', (e) => { if (e.key === 'xc_lang_v1') label(); });
+  document.addEventListener('xc:lang', () => label());
   return { setOn, run, state: st };
 }
 if (typeof document !== 'undefined') {

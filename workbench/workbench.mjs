@@ -849,6 +849,14 @@ const GUEST_PATHS = [
   [/^\/api\/(voice-token|ingest-token)$/, ['voice']],
 ];
 // Returns true when it already answered (429). Call before any other handler.
+const LANG_NAMES = { en: 'English', 'zh-Hans': '简体中文', es: 'Español', fr: 'Français', pt: 'Português', ru: 'Русский', ar: 'العربية', hi: 'हिन्दी', ja: '日本語' };
+// UI language → instruction for the model, so replies switch with the language picker at once.
+export function langLine(code) {
+  const c = String(code || '').trim();
+  if (!c || /^zh/i.test(c)) return '';
+  const name = LANG_NAMES[c] || LANG_NAMES[c.split('-')[0]] || c;
+  return `The user's interface language is ${name}. Always reply in ${name}, even if earlier messages or your persona are in Chinese.`;
+}
 export function wbGuestMiddleware(req, res) {
   if (!GUEST_ON || !String(req.url || '').startsWith('/')) return false;
   let session = getSession(req);
@@ -1134,7 +1142,7 @@ export function createWorkbench({ tasks, broadcast }) {
         .slice(-40)
         .map((m) => ({ role: m.role, content: clampText(m.content, 12000) }));
       if (!messages.some((m) => m.role === 'user')) return fail(res, 400, 'message_required', '没有要发送的内容');
-      const system = clampText(body.system || '', 6000);
+      const system = [clampText(body.system || '', 6000), langLine(body.lang)].filter(Boolean).join('\n\n');
       const temporary = Boolean(body.temporary);
       const convId = clampText(body.conversationId || '', 40);
       const upstreamMessages = [

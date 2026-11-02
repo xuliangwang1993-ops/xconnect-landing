@@ -1359,7 +1359,7 @@ async function streamChat(payload, onDelta) {
     method: 'POST',
     credentials: 'same-origin',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({ ...payload, lang: uiLang() }),
   });
   if (!res.ok) {
     let data = null;
@@ -1820,6 +1820,18 @@ function playPcm(bytes) {
 }
 
 // 语音进行中换了助理：立刻停旧声音、断旧会话，用新角色的音色重开并打招呼。
+function uiLang() {
+  try { return localStorage.getItem('xc_lang_v1') || navigator.language || 'zh-Hans'; } catch { return 'zh-Hans'; }
+}
+// Language switch: drop queued audio and reopen the live voice session in the new
+// language right away (same path as switching assistant), instead of on next call.
+document.addEventListener('xc:lang', async () => {
+  const v = state.voice;
+  if (!v || !v.active || v.switching) return;
+  v.switching = true;
+  try { flushVoiceAudio(); stopVoice(false); await startVoice({ greet: true }); } finally { v.switching = false; }
+});
+
 async function switchVoiceAssistant(id) {
   const v = state.voice;
   if (!id || !v.active || v.assistantId === id || v.switching) return;
@@ -1922,7 +1934,7 @@ async function startVoice(opts = {}) {
     guideRoamToInput();
     const tok = await api('/api/voice-token', { method: 'POST', body: { assistantId } });
     const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const url = `${proto}//${location.host}${tok.wsPath}?token=${encodeURIComponent(tok.token)}&assistant=${encodeURIComponent(assistantId)}${opts.greet ? '&greet=' + encodeURIComponent((/^zh/.test(navigator.language || 'zh') ? '我是' + (nameFor(assistantId) || '') + '，换我来了。' : 'Hi, ' + (nameFor(assistantId) || 'I') + ' here.')) : ''}`;
+    const url = `${proto}//${location.host}${tok.wsPath}?token=${encodeURIComponent(tok.token)}&assistant=${encodeURIComponent(assistantId)}&lang=${encodeURIComponent(uiLang())}${opts.greet ? '&greet=' + encodeURIComponent((/^zh/.test(uiLang()) ? '我是' + (nameFor(assistantId) || '') + '，换我来了。' : 'Hi, ' + (nameFor(assistantId) || 'I') + ' here.')) : ''}`;
     const stream = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     await ctx.resume().catch(() => {});

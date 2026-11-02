@@ -3,7 +3,7 @@ import { randomUUID, createPublicKey, verify as verifySignature } from 'node:cry
 import { gzipSync, gunzipSync } from 'node:zlib';
 import WebSocket, { WebSocketServer } from 'ws';
 import { createVoiceAuthorizer } from './voice-auth.mjs';
-import { createWorkbench, wbStore, wbGetSession, WB_SPEAKERS, wbGuestMiddleware } from './workbench.mjs';
+import { createWorkbench, wbStore, wbGetSession, WB_SPEAKERS, wbGuestMiddleware, langLine } from './workbench.mjs';
 import { createSlackHandler } from './integrations/slack.mjs';
 import { createFactory } from '../factory/factory.mjs';
 
@@ -61,7 +61,7 @@ function parsePacket(input) {
   return { type, serial, event, sid, payload };
 }
 
-function sessionConfig(speaker, resolved) {
+function sessionConfig(speaker, resolved, lang = '') {
   // 角色音色优先（Supabase/真相表），其次客户端传的白名单音色，再其次 env，最后四毛默认。
   const chosen = (isPersonaVoice(resolved) && resolved)
     || (SPEAKER_IDS.has(speaker) && speaker)
@@ -72,7 +72,7 @@ function sessionConfig(speaker, resolved) {
     audio: { format: 'pcm', sample_rate: 16000, channels: 1, codec: 'raw' },
     dialog: {
       bot_name: process.env.DOUBAO_BOT_NAME || '助手',
-      system_role: process.env.DOUBAO_SYSTEM_ROLE || '你是一个简洁、友好的中文语音助手。用户明确要求查数据、跑分析、检查项目或查看状态时派给后台电脑。改代码、写文件、删除、付款、发消息、生产部署等操作必须先确认。',
+      system_role: [process.env.DOUBAO_SYSTEM_ROLE || '你是一个简洁、友好的中文语音助手。用户明确要求查数据、跑分析、检查项目或查看状态时派给后台电脑。改代码、写文件、删除、付款、发消息、生产部署等操作必须先确认。', langLine(lang)].filter(Boolean).join('\n\n'),
       speaking_style: '自然简洁',
       extra: {},
     },
@@ -283,7 +283,7 @@ api.on('upgrade', (req, sock, head) => {
     // 先用真相表里该角色的音色兜底：Supabase 查询是异步的，豆包会话可能先开，
     // 以前这里是 '' → 落到 DOUBAO_SPEAKER/四毛，换人后第一句还是旧声音。
     c.voiceResolved = personaVoice(c.voiceAssistant);
-    try { const q = new URL(req.url, 'http://x').searchParams; c.voiceGreet = String(q.get('greet') || '').slice(0, 80); } catch { c.voiceGreet = ''; }
+    try { const q = new URL(req.url, 'http://x').searchParams; c.voiceGreet = String(q.get('greet') || '').slice(0, 80); c.voiceLang = String(q.get('lang') || '').slice(0, 12); } catch { c.voiceGreet = ''; c.voiceLang = ''; }
     resolveVoice(c.voiceAssistant).then((v) => { c.voiceResolved = v; }).catch(() => {});
     wss.emit('connection', c);
   });
@@ -325,7 +325,7 @@ wss.on('connection', (client) => {
       return;
     }
     if (!started && p.event === 50) {
-      send(control(100, sid, sessionConfig(client.voiceSpeaker, client.voiceResolved)));
+      send(control(100, sid, sessionConfig(client.voiceSpeaker, client.voiceResolved, client.voiceLang)));
       started = true;
       return;
     }
