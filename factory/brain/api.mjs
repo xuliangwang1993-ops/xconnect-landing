@@ -47,7 +47,15 @@ export function createBrainApi({ brain, store, tree, getSession = () => null }) 
       const u = new URL(req.url, 'http://localhost');
       const p = u.pathname;
       if (p !== '/api/brain' && !p.startsWith('/api/brain/')) return false;
-      if (!getSession(req)) return json(res, 401, { error: 'login_required' });
+      // 只放行「真实登录」：工厂前面那层会给匿名请求发游客会话（guest: true），
+      // 那不算登录 —— 否则总脑就成了公开接口，谁都能刷模型。
+      const sess = getSession(req);
+      const authed = !!sess && sess.guest !== true && sess.user?.guest !== true && String(sess.user?.status || '') !== 'guest';
+      // health 给监控用：匿名也答，但只回最小信息（不说模型名、存储、预算）。
+      if (p === '/api/brain/health' && req.method === 'GET' && !authed) {
+        return json(res, 200, { ok: true, configured: brain.configured, authed: false });
+      }
+      if (!authed) return json(res, 401, { error: 'login_required' });
 
       try {
         // ---- 第 1 步：接收每一轮对话 ----
@@ -149,6 +157,7 @@ export function createBrainApi({ brain, store, tree, getSession = () => null }) 
         if (p === '/api/brain/health' && req.method === 'GET') {
           return json(res, 200, {
             ok: true,
+            authed: true,
             configured: brain.configured,
             store: store.mode,
             tree: tree.mode,
