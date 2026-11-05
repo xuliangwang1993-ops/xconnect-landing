@@ -201,6 +201,18 @@ function sameOrigin(req) {
   // present so a misconfigured client cannot turn this into a CSRF surface.
   const origin = req.headers.origin;
   if (!origin) return true;
+  if (
+    origin === 'https://xconnect-web.onrender.com' ||
+    origin === 'https://app.x-connect.ai' ||
+    origin === 'https://x-connect.ai' ||
+    origin === 'https://www.x-connect.ai' ||
+    origin === 'https://workbench.x-connect.ai' ||
+    origin === 'https://factory.x-connect.ai' ||
+    origin === 'https://xconnect-factory-paid.onrender.com' ||
+    /^https:\/\/[a-z0-9-]+\.xconnect-app-web\.pages\.dev$/.test(origin)
+  ) {
+    return true;
+  }
   try {
     const o = new URL(origin);
     const host = req.headers['x-forwarded-host'] || req.headers.host;

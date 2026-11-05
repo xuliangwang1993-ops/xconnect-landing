@@ -237,7 +237,41 @@ try {
 } catch (e) {
   console.log('brain disabled:', String(e && e.message || e).slice(0, 120));
 }
+const CORS_ALLOWED_ORIGINS = new Set([
+  'https://xconnect-web.onrender.com',
+  'https://app.x-connect.ai',
+  'https://x-connect.ai',
+  'https://www.x-connect.ai',
+  'https://workbench.x-connect.ai',
+  'https://factory.x-connect.ai',
+  'https://xconnect-factory-paid.onrender.com',
+  'https://xconnect-app-web.pages.dev',
+]);
+
+function applyCors(req, res) {
+  const origin = String(req.headers?.origin || '');
+  if (!origin) return false;
+  const ok = CORS_ALLOWED_ORIGINS.has(origin) || /^https:\/\/[a-z0-9-]+\.xconnect-app-web\.pages\.dev$/.test(origin);
+  if (!ok) return false;
+  res.setHeader('access-control-allow-origin', origin);
+  res.setHeader('access-control-allow-credentials', 'true');
+  res.setHeader('access-control-allow-methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  res.setHeader('access-control-allow-headers', 'content-type, authorization, x-requested-with');
+  res.setHeader('access-control-max-age', '86400');
+  res.setHeader('vary', 'origin');
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204);
+    res.end();
+    return true;
+  }
+  return false;
+}
+
 const api = http.createServer(async (req, res) => {
+  if (applyCors(req, res)) return;
+  if (req.url && req.url.startsWith('/workbench/api/')) {
+    req.url = req.url.slice('/workbench'.length);
+  }
   if (wbGuestMiddleware(req, res)) return; // guest session + guest rate limits
   if (req.url.startsWith('/slack/') && await slack.handle(req, res)) return;
   if (brain && (await brain.handle(req, res))) return; // 总脑 /api/brain/*
