@@ -1,5 +1,5 @@
-// roam.js — 定点引导的小助理（不再满屏乱飘）
-// - 默认停在角落或上次停靠点；需要引导注意力时 moveTo / guideTo 目标旁并停住
+// roam.js — 小助理：空闲时在屏幕上慢慢走动；需要引导注意力时 guideTo 目标旁并停住
+// - 拖拽后停在用户放的位置；parkDefault() 恢复走动
 // - 说话时切 talk 帧；prefers-reduced-motion 时只换图不位移
 // - 点击：若语音会话中由宿主打开对话 mini map；否则打开选助手页
 
@@ -12,6 +12,7 @@ let onResize = null;
 let dragState = null;
 let parked = null; // { x, y }
 let guided = false;
+let wanderTimer = null; // 空闲时慢慢走动；被引导/拖拽/说话时停住
 let clickHandler = null; // () => boolean|void ; return true = handled
 
 const reduced = () =>
@@ -39,6 +40,9 @@ function applyPark(x, y, { animate = true } = {}) {
   parked = p;
   if (!animate || reduced()) el.style.transition = 'none';
   else el.style.transition = 'transform 3.4s cubic-bezier(.4, 0, .2, 1), opacity .5s ease';
+  // dropIn() 用 left/top 定位；这里统一回到 transform 定位，避免两者叠加跑出屏幕
+  el.style.left = '0px';
+  el.style.top = '0px';
   el.style.transform = `translate(${p.x.toFixed(0)}px, ${p.y.toFixed(0)}px)`;
 }
 
@@ -137,6 +141,19 @@ function onPointerUp() {
   import('./lounge.js').then((m) => m.openLounge()).catch(() => {});
 }
 
+function wanderStep() {
+  if (!el) return;
+  const busy = guided || dragState || el.dataset.talking || reduced() ||
+    (typeof document !== 'undefined' && document.visibilityState === 'hidden');
+  if (!busy) {
+    const s = size();
+    const x = 12 + Math.random() * Math.max(0, window.innerWidth - s - 24);
+    const y = 72 + Math.random() * Math.max(0, window.innerHeight - s - 72 - 24);
+    applyPark(x, y, { animate: true });
+  }
+  wanderTimer = setTimeout(wanderStep, 6000 + Math.random() * 6000);
+}
+
 export function mountRoam(avatar, name) {
   unmountRoam();
   if (!avatar) return;
@@ -170,6 +187,8 @@ export function mountRoam(avatar, name) {
     else placeDefault(false);
   };
   window.addEventListener('resize', onResize, { passive: true });
+  clearTimeout(wanderTimer);
+  wanderTimer = setTimeout(wanderStep, 2500);
 }
 
 export function setRoamMood(mood) {
@@ -195,6 +214,8 @@ export function setRoamMood(mood) {
 export function unmountRoam() {
   clearTimeout(talkTimer);
   talkTimer = null;
+  clearTimeout(wanderTimer);
+  wanderTimer = null;
   if (onResize) { window.removeEventListener('resize', onResize); onResize = null; }
   if (el) {
     el.removeEventListener('pointerdown', onPointerDown);

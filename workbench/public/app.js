@@ -396,6 +396,7 @@ async function boot() {
     if (proj) state.filterProject = proj;
     if (state.user) {
       showShell();
+      mountPickedRoam();
       renderAll();
       registerSW();
       setView('cards');
@@ -411,6 +412,18 @@ async function boot() {
     console.warn('[lounge] open failed, staying in place', err);
   }
   if (picked) returnToApp();
+}
+
+// 选好的小助手进工作台就出现并在屏幕上走动（桌面/手机同一逻辑）。
+// 以前在 boot 里挂载；改成"选完跳回 app"那次（bot 仓库 0ba50d3）把这行删了，之后只有点「呼叫」才会出现。
+function mountPickedRoam() {
+  try {
+    const id = pickedAssistant() || state.settings?.assistantId || 'brain';
+    const avatar = avatarFor(id);
+    if (avatar) mountRoam(avatar, nameFor(id) || '小助手');
+  } catch (err) {
+    console.warn('[roam] mount failed', err);
+  }
 }
 
 async function acceptBootstrap(data) {
@@ -921,6 +934,7 @@ async function doLogin(key, demo = false, tier = '', access = '') {
     const boot = await api('/api/bootstrap');
     await acceptBootstrap(boot);
     showShell();
+    mountPickedRoam();
     showIntro();
     renderAll();
     registerSW();
