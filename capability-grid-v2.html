@@ -25,8 +25,8 @@
 <div class="hint">悬停粒子查看自发光响应 · 滚轮缩放</div>
 <canvas id="grid"></canvas>
 <script>
-const cv = document.getElementById('grid);
-const ctx = cv.getContext('2d);
+const cv = document.getElementById('grid');
+const ctx = cv.getContext('2d');
 let W, H, dpr;
 function resize(){ dpr = Math.min(devicePixelRatio||1, 2); W = innerWidth; H = innerHeight; cv.width = W*dpr; cv.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
 addEventListener('resize', resize); resize();
@@ -58,7 +58,7 @@ function drawNode(n, t){
   ctx.beginPath(); ctx.arc(n.x, n.y, n.r*4.5, 0, 7); ctx.fillStyle = g; ctx.fill();
   const sx = n.x - n.r*.5, sy = n.y - n.r*.6;
   const sg = ctx.createRadialGradient(sx, sy, 0, sx, sy, n.r*1.8);
-  sg.addColorStop(0, `rgba(255,255,255,${.55*glow})`); sg.addColorStop(1, 'transparent);
+  sg.addColorStop(0, `rgba(255,255,255,${.55*glow})`); sg.addColorStop(1, 'transparent');
   ctx.beginPath(); ctx.arc(sx, sy, n.r*1.8, 0, 7); ctx.fillStyle = sg; ctx.fill();
   ctx.beginPath(); ctx.arc(n.x, n.y, n.r*.55, 0, 7);
   ctx.fillStyle = n.hue ? `rgba(255,210,120,${.9*glow})` : `rgba(255,255,255,${.85*glow})`; ctx.fill();
@@ -76,7 +76,7 @@ function drawEdge(a, b, t){
   ctx.strokeStyle = lg; ctx.lineWidth = 1.1; ctx.stroke(); ctx.restore();
   if ((a.mat>.8 || b.mat>.8) && Math.random()>.7){ const steps = 4; for (let s=1;s<steps;s++){ const u = s/steps; const px = a.x + dx*u + nx*(Math.random()-.5)*3; const py = a.y + dy*u + ny*(Math.random()-.5)*3; ctx.beginPath(); ctx.arc(px,py,.4,0,7); ctx.fillStyle = `rgba(120,120,130,${alpha*.4})`; ctx.fill(); } }
   const pulsePos = ((t*.0015 + a.pulse*.1) % 1); const px = a.x + dx*pulsePos, py = a.y + dy*pulsePos;
-  const pg = ctx.createRadialGradient(px,py,0,px,py,5); pg.addColorStop(0, 'rgba(251,191,106,.8)'); pg.addColorStop(1, 'transparent);
+  const pg = ctx.createRadialGradient(px,py,0,px,py,5); pg.addColorStop(0, 'rgba(251,191,106,.8)'); pg.addColorStop(1, 'transparent');
   ctx.beginPath(); ctx.arc(px,py,5,0,7); ctx.fillStyle = pg; ctx.fill();
 }
 let t0 = performance.now();
