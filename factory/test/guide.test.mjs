@@ -52,6 +52,6 @@ test('factory routes: /guide page, widget, ask API, launcher injected, read-only
   assert.match(a.sections[0], /工作台/);
   assert.ok(JSON.parse((await call(f, '/guide/api/sections')).body).sections.length >= 10);
   assert.match(stageHtml(), /\/guide\/guide-widget\.js/);
-  assert.match(fs.readFileSync(new URL('../../workbench/public/index.html', import.meta.url), 'utf8'), /\/guide\/guide-widget\.js/);
+  assert.match(fs.readFileSync(new URL('../../workbench/public/index.html', import.meta.url), 'utf8'), /\/xc-tour\.js/);
   assert.equal(f.handle({ url: '/guide/api/ask', method: 'POST' }, {}), false);
 });

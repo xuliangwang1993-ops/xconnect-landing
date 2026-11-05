@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>X-Connect Factory · 产线与 Pod 派单</title>
+<link rel="icon" href="assets/crystal-x.jpg">
+<link rel="stylesheet" href="factory.css?v=3edff60a">
+<script src="i18n.js?v=6670446f"></script>
+<script src="i18n/en-common.js?v=d2cd0df9"></script>
+<script src="i18n/en-factory.js?v=95eeaabe"></script>
+<script src="i18n/en-aoi.js?v=3ed761ce"></script>
+<script>window.__ERR=[];addEventListener('error',function(e){window.__ERR.push((e.message||'?')+' @'+e.lineno);document.documentElement.setAttribute('data-err',window.__ERR.join(' | '));});</script>
+</head>
+<body data-auth="loading">
+<header class="bar">
+  <a class="brand" href="https://www.x-connect.ai/">
+    <span class="jewel"></span><span>-connect</span><span class="pipe"></span><span class="fac">FACTORY</span>
+  </a>
+  <nav class="crumbs">
+    <span>Code</span><i>›</i><span>产线</span><i>›</i><b id="crumbRun">—</b>
+  </nav>
+  <div class="right">
+    <details class="mobileMore">
+      <summary class="pill ghost" aria-label="更多导航">更多</summary>
+      <div class="mobileMoreMenu">
+        <a href="registry/">工具登记簿</a>
+        <a href="aoi-tree.html">AoI 能力树</a>
+        <a href="https://workbench.x-connect.ai/workbench/">工作台（预览）</a>
+        <a href="https://www.x-connect.ai/">回右门</a>
+        <a href="#runtime" id="mobileRunLink" hidden>运行详情 · <span id="mobileRunStat">—</span></a>
+        <span class="mobileAccount" id="mobileWho" hidden></span>
+        <button class="mobileAccountAction" id="mobileSignOutBtn" type="button" hidden>退出登录</button>
+      </div>
+    </details>
+    <span class="pill live" id="podPill">POD · —</span>
+    <span class="pill" id="runPill">RUN · —</span>
+    <a class="pill ghost" href="registry/" title="96 个入库工具、行业需求与部署验收登记">工具登记簿</a>
+    <a class="pill ghost" id="aoiViewLink" href="aoi-tree.html" title="AoI 能力树视图（公开静态页，不含个人数据）">AoI 视图</a>
+    <a class="pill ghost" id="workbenchLink" href="https://workbench.x-connect.ai/workbench/" target="_blank" rel="noopener noreferrer" title="工作台（独立服务，含设置）。需用自己的网关 key 登录；与本页账号无关">工作台（预览）</a>
+    <a class="pill ghost" href="https://www.x-connect.ai/">回右门</a>
+    <span class="pill who" id="whoPill" hidden></span>
+    <button class="pill ghost" id="signOutBtn" type="button" hidden>退出登录</button>
+  </div>
+</header>
+
+<section class="gate" id="authGate" hidden>
+  <div class="gateCard">
+    <h1>登录后查看你的产线</h1>
+    <p class="note">订单、Pod 与运行记录只属于你自己的账号。请用 X-connect 账号登录（与首页是同一套账号）。</p>
+    <div class="gateTabs" role="tablist">
+      <button type="button" class="gTab on" data-g="pw" role="tab" aria-selected="true">邮箱 + 密码</button>
+      <button type="button" class="gTab" data-g="otp" role="tab" aria-selected="false">邮件验证码</button>
+    </div>
+    <form class="gForm on" data-g="pw" id="formPw" autocomplete="on">
+      <label>邮箱<input type="email" id="pwEmail" name="email" autocomplete="username" required></label>
+      <label>密码<input type="password" id="pwPass" name="password" autocomplete="current-password" required></label>
+      <button class="btn" type="submit" id="pwBtn">登录</button>
+    </form>
+    <form class="gForm" data-g="otp" id="formOtp" autocomplete="off">
+      <label>邮箱<input type="email" id="otpEmail" name="email" autocomplete="email" required></label>
+      <button class="btn" type="submit" id="otpSend">发送验证码 / 登录链接</button>
+      <label id="otpCodeRow" hidden>邮件里的验证码<input type="text" id="otpCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10"></label>
+      <button class="btn" type="button" id="otpVerify" hidden>验证并登录</button>
+    </form>
+    <p class="gMsg" id="gateMsg" role="status" aria-live="polite"></p>
+    <p class="note">还没有账号？先到 <a href="https://www.x-connect.ai/">x-connect.ai</a> 注册，再回到这里登录。</p>
+  </div>
+</section>
+
+<section class="order-flow" id="orderFlow" aria-labelledby="orderTitle">
+  <header class="orderHero">
+    <span class="eyebrow">DUCK LEE · 小助手接单</span>
+    <h1 id="orderTitle">说清要做什么，再看怎么做。</h1>
+    <p>先看方案和节点，再授权生产。工位、Pod 和账本留在运行详情，不挡在第一屏。</p>
+  </header>
+  <ol class="orderSteps" aria-label="下单进度">
+    <li class="on" data-order-step="brief"><span>1</span>需求</li>
+    <li data-order-step="quote"><span>2</span>方案</li>
+    <li data-order-step="authorize"><span>3</span>授权</li>
+    <li data-order-step="produce"><span>4</span>生产</li>
+    <li data-order-step="deliver"><span>5</span>成品</li>
+  </ol>
+  <div class="orderWorkspace">
+    <div class="orderBrief">
+      <label for="orderAsk">您想做什么？</label>
+      <textarea id="orderAsk" rows="3" placeholder="例如：把40分钟访谈做成3条60秒中英竖屏"></textarea>
+      <div class="orderExamples" aria-label="需求示例">
+        <button type="button" data-order-example="把40分钟访谈做成3条60秒中英竖屏">访谈变短片</button>
+        <button type="button" data-order-example="门店菜单板 A3 打印，价目要能改">菜单板</button>
+        <button type="button" data-order-example="把扫描的合同 PDF 做成可搜索文档">扫描合同</button>
+      </div>
+      <fieldset class="taskKinds">
+        <legend>选择生产方式</legend>
+        <label><input type="radio" name="taskKind" value="simple" checked><span><b>简单任务 · 先出样</b><small>先看代表样品，满意后再付完整交付。</small></span></label>
+        <label><input type="radio" name="taskKind" value="long"><span><b>长线程 · 按节点预定</b><small>先看节点快照，确认预算再生产下一批。</small></span></label>
+      </fieldset>
+      <button class="btn orderPrimary" id="planOrderBtn" type="button">生成制作方案</button>
+    </div>
+    <section class="orderPlan" id="orderPlan" aria-live="polite">
+      <div class="planEmpty"><span>01</span><h2>先出方案，不先开机。</h2><p>需求与生产方式确认后，这里会展示配方、节点、报价和授权范围。</p></div>
+    </section>
+  </div>
+  <p class="orderTruth">流程预览：当前页面不会自动扣款或启动 Pod。真实生产与付款需要服务端确认，未接通的能力会明确标注。</p>
+  <details class="assistantMcp">
+    <summary>小助手执行链 · Grok Build CLI + MCP</summary>
+    <p class="note">Duck Lee 接单 → Grok Build CLI 编排 → 任务范围内的 MCP 工具 → 节点证据与成品。当前仅只读探针经过握手；工厂算力未启动，未执行真实生产订单。</p>
+    <div id="assistantTools"></div>
+  </details>
+</section>
+
+<main class="layout" id="runtime">
+  <!-- 运行详情：登录后可查看，不再放在客户下单之前 -->
+  <aside class="rail">
+    <section>
+      <h2>产线 · 8 工位</h2>
+      <ul id="stationList" class="stList"></ul>
+      <p class="foot" id="toolCount"></p>
+    </section>
+    <section>
+      <h2>配方</h2>
+      <select id="recipeSelect" class="sel"></select>
+      <p class="note" id="recipeNote"></p>
+    </section>
+    <section id="aoiSection">
+      <h2>AoI 能力 · M00–M11</h2>
+      <ul id="aoiList" class="aoiList"></ul>
+      <p class="note">12 个施工模块；亮起的是当前所选工位用到的模块。公开架构信息，不含个人数据。</p>
+      <a class="btn sm aoiOpen" href="aoi-tree.html">打开 AoI 能力树 →</a>
+    </section>
+  </aside>
+
+  <!-- 中栏 -->
+  <section class="center">
+    <div class="tabs" role="tablist">
+      <button class="tabBtn on" data-tab="flow" role="tab" aria-selected="true">产线 FLOW</button>
+      <button class="tabBtn" data-tab="pod" role="tab" aria-selected="false">Pod 派单</button>
+      <button class="tabBtn" data-tab="ledger" role="tab" aria-selected="false">交接账本</button>
+    </div>
+
+    <div class="tab on" data-tab="flow">
+      <div class="runStrip">
+        <span class="mono">RUN</span>
+        <b class="mono" id="runSentence"></b>
+        <span class="mono" id="runStat"></span>
+      </div>
+      <div class="flowScroll"><div class="flow" id="flow"></div></div>
+      <div class="detail">
+        <header><h3 id="detailName"></h3></header>
+        <div id="detailBody"></div>
+      </div>
+    </div>
+
+    <div class="tab" data-tab="pod">
+      <div class="podGrid">
+        <article class="card">
+          <h3>Pod 实况 <span class="mono muted" id="podMeta"></span></h3>
+          <div class="chips" id="podStatus"></div>
+          <div id="podRows"></div>
+          <div class="act">
+            <button class="btn danger" id="closeBtn" disabled>交付后关 pod</button>
+            <span class="hint" id="closeHint"></span>
+          </div>
+        </article>
+        <article class="card">
+          <h3>订单 · 发起人负责关单</h3>
+          <div id="orderRows"></div>
+          <p class="note">订单是「工厂发起 → 派到 pod → 交付 → 发起人关 pod」这一段的凭证。关单条件写在 <code>close_policy</code>，账单以算力供应商官方 billing 为准，我们自己只挂一个按 $/hr 估算的参考值。</p>
+        </article>
+      </div>
+      <div class="card chain-card">
+        <h3>这段链怎么走</h3>
+        <ol class="chain">
+          <li><b>建单</b><span>小助手把配方 + 一句话写成 <code>build/private/orders.json</code></span></li>
+          <li><b>派单</b><span><code>build/06_pod.py</code> 用只读环境变量（不落盘）拉工厂算力实况，与订单对账</span></li>
+          <li><b>干活</b><span>03/05 两站的重活走 <code>ffmpeg + GPU</code>；iSH 这边只保留 06 验收</span></li>
+          <li><b>交付</b><span>成片落 <code>runs/&lt;id&gt;/05_export/</code>，QA 全过才写 <code>delivered</code></span></li>
+          <li><b>关单</b><span>按 <code>close_policy</code> 由发起人关 pod；<code>POST /pods/{id}/stop</code> 是只读 key 拒的那一步，界面上标成 pending，不假装已经关了</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tab" data-tab="ledger">
+      <div class="card">
+        <h3>交接账本 <span class="mono muted" id="ledgerSummary"></span></h3>
+        <table class="ledger">
+          <thead><tr><th>#</th><th>站</th><th>产物 → 上游</th><th>闭合</th><th>缺</th></tr></thead>
+          <tbody id="ledgerBody"></tbody>
+        </table>
+        <p class="note" id="ledgerNote">闭合 = 上一站 outputs 里的 sha256 与本站 inputs 记的一致。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 右栏 -->
+  <aside class="side">
+    <div class="tabs" role="tablist">
+      <button class="tabBtn" data-tab="assist" role="tab" aria-selected="false">配方诊断</button>
+      <button class="tabBtn" data-tab="skin" role="tab" aria-selected="false">皮肤</button>
+      <button class="tabBtn" data-tab="run" role="tab" aria-selected="false">运行</button>
+    </div>
+
+    <div class="tab" data-tab="assist">
+      <p class="note" style="margin-top:0">运行详情 · 本地配方匹配，不调模型。新客户请先用上方任务下单。</p>
+      <textarea id="askInput" rows="3"></textarea>
+      <div class="chips" style="display:flex;flex-wrap:wrap;gap:5px;margin:7px 0">
+        <button class="btn sm" data-q="30 秒宣传短视频，配中英字幕和三个社媒尺寸">三尺寸短视频</button>
+        <button class="btn sm" data-q="门店菜单板 A3 打印，价目要能改">菜单板</button>
+        <button class="btn sm" data-q="把扫描的合同 PDF 做成可搜索文档">扫描合同</button>
+      </div>
+      <button class="btn" id="matchBtn">匹配配方</button>
+      <div id="matchResult"></div>
+      <h3 style="margin-top:18px">派单预览</h3>
+      <p class="note">匹配到已实测配方后，小助手把话写成订单，交给 <code>06_pod.py</code> 去对账。</p>
+      <pre class="mini" id="orderPreview"></pre>
+    </div>
+
+    <div class="tab" data-tab="skin">
+      <h3>Authentic skin</h3>
+      <p class="note">皮肤不是调色盘，是可溯源的表皮。有 <code>sha256</code> 才发 <strong>AUTHENTIC</strong>，从设计规范抄的只能标 <strong>SPEC</strong>，浏览器现取的是 <strong>LOCAL</strong>。</p>
+      <div id="skinList"></div>
+      <label class="drop" for="skinFile">从一张自己的图取色 → 生成本地皮肤<input type="file" id="skinFile" accept="image/*" hidden></label>
+      <div class="row"><span>材质颗粒</span><button class="sw" id="grainBtn" aria-pressed="false" aria-label="切换材质颗粒"></button></div>
+      <div class="row"><span>当前皮肤令牌</span><button class="btn sm" id="copyTokens">复制 CSS 变量</button></div>
+      <pre class="mini" id="skinProv"></pre>
+    </div>
+
+    <div class="tab" data-tab="run">
+      <h3>运行</h3>
+      <div id="runList"></div>
+    </div>
+  </aside>
+</main>
+
+<footer class="foot-bar">
+  <span>数据源：craft-skills runs/ · build/refs · 工厂算力接口</span>
+  <span class="mono" id="genAt"></span>
+</footer>
+
+<script src="data/stations-def.js?v=1726cc77"></script>
+<script src="vendor/supabase.js?v=9ccb70b9"></script>
+<script src="sso.js?v=1"></script>
+<script src="auth.js?v=8230d6db"></script>
+<script src="data/tools.js?v=c6ab7292"></script>
+<script src="data/recipes.js?v=c9a8aa5f"></script>
+<script src="data/assistant-tools.js"></script>
+<script src="data/skins.js?v=7db744e6"></script>
+<script src="data/aoi-modules.js?v=d300336e"></script>
+<script src="data/guide.js?v=5de524c1"></script>
+<script src="factory.js?v=c9b04f10"></script>
+<script src="guide.js?v=605cd383"></script>
+</body>
+</html>

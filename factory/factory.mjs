@@ -19,9 +19,29 @@ const GUIDE_FILES = { 'guide-widget.js': 'text/javascript; charset=utf-8' };
 export const GUIDE_TAG = '<script src="/i18n/xc-i18n.js"></script>\n<script src="/i18n/xc-i18n-account.js"></script>\n<script src="/i18n/xc-nav.js" defer></script>\n<script src="/skin/xc-skin.js"></script>\n<script src="/guide/guide-widget.js" defer></script>\n<script src="/wb-i18n.js" defer></script>';
 const GRAPH_FILES = { 'graph-view.js': 'text/javascript; charset=utf-8' };
 const AOI_FILES = { 'index.html': 'text/html; charset=utf-8', 'aoi-snapshot.js': 'text/javascript; charset=utf-8' };
+const SITE_ROOT = path.join(REPO, 'site');
+const SITE_MIME = {
+  '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
+  '.json': 'application/json; charset=utf-8', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png',
+  '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.webp': 'image/webp', '.woff2': 'font/woff2', '.woff': 'font/woff',
+};
+
+function serveSiteFile(res, req, relPath) {
+  try {
+    const clean = path.normalize(decodeURIComponent(relPath || '')).replace(/^(\.\.[/\\])+/, '');
+    let file = path.join(SITE_ROOT, clean);
+    if (!file.startsWith(SITE_ROOT)) return false;
+    if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
+    if (!fs.existsSync(file) || !fs.statSync(file).isFile()) return false;
+    const ext = path.extname(file).toLowerCase();
+    return send(res, req, SITE_MIME[ext] || 'application/octet-stream', fs.readFileSync(file));
+  } catch {
+    return false;
+  }
+}
 
 export const ROUTES = {
-  stage: '/', portal: '/portal', stageAssets: '/stage/', workbench: '/workbench', aoi: '/aoi', manifest: '/factory.json', guide: '/guide', graph: '/graph', settings: '/settings', account: '/account', assistants: '/assistants',
+  stage: '/', portal: '/portal', stageAssets: '/stage/', workbench: '/workbench', aoi: '/aoi', manifest: '/factory.json', guide: '/guide', graph: '/graph', settings: '/settings', account: '/account', assistants: '/assistants', site: '/site',
 };
 
 // Stage HTML uses relative asset paths; at "/" those would collide with the
@@ -40,7 +60,7 @@ export function portalHtml() {
 function send(res, req, type, body) {
   // Weak ETag + no-cache: browsers revalidate and get 304 instead of re-downloading unchanged pages/scripts.
   const tag = 'W/"' + crypto.createHash('sha1').update(body || '').digest('base64url').slice(0, 16) + '"';
-  if (req.headers['if-none-match'] === tag) { res.writeHead(304, { etag: tag, 'cache-control': 'no-cache' }); res.end(); return true; }
+  if (req.headers?.['if-none-match'] === tag) { res.writeHead(304, { etag: tag, 'cache-control': 'no-cache' }); res.end(); return true; }
   res.writeHead(200, { 'content-type': type, 'cache-control': 'no-cache', etag: tag, 'x-content-type-options': 'nosniff' });
   res.end(req.method === 'HEAD' ? undefined : body);
   return true;
@@ -92,6 +112,14 @@ export function createFactory({ env = process.env, fetchImpl = globalThis.fetch,
         return send(res, req, 'text/html; charset=utf-8', fs.readFileSync(path.join(HERE, 'tree/index.html'), 'utf8') + '\n' + GUIDE_TAG); }
     if (req.method !== 'GET' && req.method !== 'HEAD') return false;
     const p = new URL(req.url, 'http://localhost').pathname;
+    const hostHdr = String(req.headers?.['x-forwarded-host'] || req.headers?.host || '').split(':')[0].toLowerCase();
+    if (hostHdr === 'factory.x-connect.ai' && serveSiteFile(res, req, p === '/' ? 'index.html' : p.replace(/^\/+/, ''))) {
+      return true;
+    }
+    if (p === '/site') { res.writeHead(301, { location: '/site/' }); res.end(); return true; }
+    if (p.startsWith('/site/') && serveSiteFile(res, req, p.slice('/site/'.length) || 'index.html')) {
+      return true;
+    }
     if (p === '/guide' || p === '/guide/') return send(res, req, 'text/html; charset=utf-8', fs.readFileSync(path.join(HERE, 'guide/index.html')));
     if (p === '/guide/api/sections') return send(res, req, 'application/json; charset=utf-8',
       JSON.stringify({ sections: parseGuide().map(({ id, title, links }) => ({ id, title, links })) }));

@@ -8,6 +8,7 @@ import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import http from 'node:http';
 import { spawn } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
 import { verifyVoiceToken } from '../voice-auth.mjs';
 
@@ -63,7 +64,7 @@ before(async () => {
   mockPort = await listen(mock);
 
   port = 20000 + Math.floor(Math.random() * 20000);
-  child = spawn(process.execPath, [new URL('../server-voice.mjs', import.meta.url).pathname], {
+  child = spawn(process.execPath, [fileURLToPath(new URL('../server-voice.mjs', import.meta.url))], {
     env: {
       ...process.env,
       PORT: String(port),
@@ -121,7 +122,7 @@ async function call(path, { method = 'GET', body, headers = {} } = {}) {
 test('static shell, manifest and service worker are served', async () => {
   const home = await call('/workbench') // 工厂：/ 是搭台首页，工作台在 /workbench;
   assert.equal(home.status, 200);
-  assert.match(home.data, /X-Connect Workbench/);
+  assert.match(home.data, /X-[Cc]onnect Workbench/);
   assert.match(home.data, /manifest\.webmanifest/);
   const mf = await call('/manifest.webmanifest');
   assert.equal(mf.status, 200);

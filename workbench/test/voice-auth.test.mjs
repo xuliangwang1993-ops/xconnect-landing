@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { createHmac, randomUUID } from 'node:crypto';
 import WebSocket from 'ws';
 import { verifyVoiceToken, createJtiCache, createVoiceAuthorizer, extractToken } from '../voice-auth.mjs';
@@ -49,7 +50,7 @@ test('jti single-use; token extraction from query / bearer / subprotocol; staged
 test('server: /voice upgrade without token → 401 (upstream never opened); valid token passes auth', async () => {
   const port = 20000 + Math.floor(Math.random() * 20000);
   const env = { ...process.env, PORT: String(port), VOICE_TOKEN_SECRET: SECRET, DOUBAO_API_KEY: '' };
-  const srv = spawn(process.execPath, [new URL('../server-voice.mjs', import.meta.url).pathname], { env, stdio: ['ignore', 'pipe', 'pipe'] });
+  const srv = spawn(process.execPath, [fileURLToPath(new URL('../server-voice.mjs', import.meta.url))], { env, stdio: ['ignore', 'pipe', 'pipe'] });
   try {
     await new Promise((res, rej) => {
       srv.stdout.on('data', (d) => String(d).includes('listening') && res());

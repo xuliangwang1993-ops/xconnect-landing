@@ -1,0 +1,180 @@
+{
+  "skins": [
+    {
+      "id": "xconnect",
+      "name": "X-Connect Default",
+      "zh": "紫金",
+      "provenance": "declared",
+      "badge": "SPEC",
+      "source": {
+        "kind": "design-tokens",
+        "ref": "app.x-connect.ai · lib/theme/smart_skin_palettes.dart",
+        "note": "应用默认皮肤：primary 7C3AED / secondary FBBF24 / surface 1E293B"
+      },
+      "tokens": {
+        "bg": "#05070D",
+        "bg2": "#0A0F1A",
+        "surface": "#0F172A",
+        "surface2": "#1E293B",
+        "surface3": "#263143",
+        "accent": "#7C3AED",
+        "accent2": "#FBBF24",
+        "text": "#F8FAFC",
+        "muted": "#94A3B8",
+        "dim": "#64748B",
+        "ok": "#81C784",
+        "warn": "#FFB74D",
+        "bad": "#FF5A6E",
+        "fn": "#38F4FF"
+      },
+      "grain": false,
+      "contrast": {
+        "text_on_bg": 19.25,
+        "text_on_surface": 17.06,
+        "accent_on_bg": 3.53,
+        "accent2_on_surface": 10.69,
+        "muted_on_bg": 7.86
+      },
+      "aa": true,
+      "authentic": false
+    },
+    {
+      "id": "crystal",
+      "name": "Crystal X",
+      "zh": "水晶蓝",
+      "provenance": "sampled",
+      "badge": "AUTHENTIC",
+      "source": {
+        "kind": "image",
+        "ref": "site/assets/crystal-x.jpg",
+        "sha256": "6774f45259a91b195b42012256e141c89d697a0eae33de363f12d27275e96554",
+        "size": "1408x1408",
+        "tool": "imagemagick -colors 8",
+        "note": "从门户 crystal-x.jpg 实抽 8 色；grain 取自同一张图"
+      },
+      "tokens": {
+        "bg": "#010918",
+        "bg2": "#010E26",
+        "surface": "#021436",
+        "surface2": "#0D2E56",
+        "surface3": "#14406A",
+        "accent": "#3FA5E5",
+        "accent2": "#A4DCF3",
+        "text": "#F2F8FF",
+        "muted": "#9DB4CC",
+        "dim": "#6E839C",
+        "ok": "#7BE0C3",
+        "warn": "#FFC45C",
+        "bad": "#FF6B7F",
+        "fn": "#8FE3FF"
+      },
+      "grain": true,
+      "measured": [
+        "#3FA5E5",
+        "#02255B",
+        "#021436",
+        "#1055A4",
+        "#0C5FB9",
+        "#A4DCF3"
+      ],
+      "contrast": {
+        "text_on_bg": 18.65,
+        "text_on_surface": 17.0,
+        "accent_on_bg": 7.33,
+        "accent2_on_surface": 12.21,
+        "muted_on_bg": 9.33
+      },
+      "aa": true,
+      "authentic": true
+    },
+    {
+      "id": "aoi-film",
+      "name": "AoI Film",
+      "zh": "黑金胶片",
+      "provenance": "sampled",
+      "badge": "AUTHENTIC",
+      "source": {
+        "kind": "css",
+        "ref": "aoi-m11-preview.onrender.com/assets/index-DW341bVH.css",
+        "sha256": "5b1aaf620455b14c69c86b872749e453ca9dd3e5c93325d5bf0190a403926329",
+        "note": "直接读 --aoi-* 令牌，未手抄"
+      },
+      "tokens": {
+        "bg": "#000000",
+        "bg2": "#06090F",
+        "surface": "#0B0D12",
+        "surface2": "#12151C",
+        "surface3": "#191D26",
+        "accent": "#a45cff",
+        "accent2": "#ffd27a",
+        "text": "#F2F5FA",
+        "muted": "#8F9BB0",
+        "dim": "#5B6576",
+        "ok": "#7BE0C3",
+        "warn": "#ffd27a",
+        "bad": "#FF5A6E",
+        "fn": "#38f4ff"
+      },
+      "grain": false,
+      "measured": [
+        "#ffd27a",
+        "#38f4ff",
+        "#a45cff"
+      ],
+      "contrast": {
+        "text_on_bg": 19.22,
+        "text_on_surface": 17.78,
+        "accent_on_bg": 5.55,
+        "accent2_on_surface": 13.65,
+        "muted_on_bg": 7.48
+      },
+      "aa": true,
+      "authentic": true
+    },
+    {
+      "id": "workbench",
+      "name": "Workbench Amber",
+      "zh": "工位琥珀",
+      "provenance": "sampled",
+      "badge": "AUTHENTIC",
+      "source": {
+        "kind": "css",
+        "ref": "xconnect-factory.onrender.com/workbench → /styles.css",
+        "sha256": "ae308f62ace6b2bd8d65004d2cb636832ca3c3a843b5341327e2dd387c8bc1f3",
+        "note": "直接读 --bg / --surface / --accent 令牌"
+      },
+      "tokens": {
+        "bg": "#0d0f12",
+        "bg2": "#0d0f12",
+        "surface": "#13161b",
+        "surface2": "#191d24",
+        "surface3": "#20252d",
+        "accent": "#f59e0b",
+        "accent2": "#fbbf6a",
+        "text": "#f3f0e8",
+        "muted": "#9ca3af",
+        "dim": "#6b7280",
+        "ok": "#10b981",
+        "warn": "#fbbf24",
+        "bad": "#fb7185",
+        "fn": "#38f4ff"
+      },
+      "grain": false,
+      "measured": [
+        "#f59e0b",
+        "#fbbf6a"
+      ],
+      "contrast": {
+        "text_on_bg": 16.85,
+        "text_on_surface": 15.92,
+        "accent_on_bg": 8.94,
+        "accent2_on_surface": 11.02,
+        "muted_on_bg": 7.56
+      },
+      "aa": true,
+      "authentic": true
+    }
+  ],
+  "generated_from": "build/out/palette.json + refs/*.css",
+  "rule": "authentic 只发给有出处（sha256）的皮肤；没有实测源的一律 SPEC"
+}

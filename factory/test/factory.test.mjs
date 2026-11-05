@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import { createFactory, stageHtml } from '../factory.mjs';
 import { cardsToSnapshot } from '../aoi/aoi-snapshot.js';
 
-function call(h, url, method = 'GET') {
+function call(h, url, method = 'GET', headers = {}) {
   const res = { code: 0, headers: {}, body: '', writeHead(c, hd) { this.code = c; this.headers = hd; }, end(b) { this.body = b ? String(b) : ''; } };
-  const handled = h.handle({ url, method }, res);
+  const handled = h.handle({ url, method, headers }, res);
   return { handled, ...res };
 }
 
@@ -13,10 +13,10 @@ test('stage served at / with assets rewritten to /stage/', () => {
   const f = createFactory();
   const r = call(f, '/');
   assert.equal(r.handled, true);
-  assert.match(r.body, /我搭台，你唱戏/);
-  assert.match(r.body, /href="\/stage\/styles\.css"/);
-  assert.doesNotMatch(r.body, /href="styles\.css"/);
-  assert.match(stageHtml(), /src="\/stage\/app\.js/);
+  assert.match(r.body, /X-connect · Projects/);
+  assert.match(r.body, /src="\/stage\/factory-home\.js"/);
+  assert.doesNotMatch(r.body, /src="factory-home\.js"/);
+  assert.match(call(f, '/portal').body, /我搭台，你唱戏/);
 });
 
 test('stage assets whitelisted; others fall through to workbench', () => {
@@ -48,3 +48,17 @@ test('snapshot never emits verified and groups by project', () => {
   assert.ok(s.nodes.every((n) => n.state !== 'verified'));
   assert.equal(s.nodes.find((n) => n.id === 'wb:c_1').state, 'unverified');
 });
+
+test('consolidated factory-ui site served under /site/ and Host factory.x-connect.ai', () => {
+  const f = createFactory();
+  const s1 = call(f, '/site/');
+  assert.equal(s1.handled, true);
+  assert.match(s1.body, /X-Connect Factory/);
+  const s2 = call(f, '/', 'GET', { 'x-forwarded-host': 'factory.x-connect.ai' });
+  assert.equal(s2.handled, true);
+  assert.match(s2.body, /X-Connect Factory/);
+  const s3 = call(f, '/factory.css', 'GET', { 'x-forwarded-host': 'factory.x-connect.ai' });
+  assert.equal(s3.handled, true);
+  assert.equal(call(f, '/site/../package.json').handled, false);
+});
+
