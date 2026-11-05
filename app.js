@@ -36,6 +36,7 @@ class CapabilityGrid {
   // Scroll-zoom: Ctrl/Meta + wheel only — never hijacks normal page scroll.
   // Pointer tracking uses window events because the canvas stays pointer-events:none
   // under the page content (see .capability-grid in styles.css).
+  // Hover maps client → canvas CSS → inverse zoom into node space (fixes post-zoom offset).
   constructor(canvasId) {
     this.canvas = document.getElementById(canvasId);
     if (!this.canvas) return;
@@ -48,6 +49,8 @@ class CapabilityGrid {
     this.mode = 'pbr';
     this.mx = -999;
     this.my = -999;
+    this.pointerCssX = null; // canvas-relative CSS px; null = no pointer
+    this.pointerCssY = null;
     this.scale = 1;
     this.tx = 0;
     this.ty = 0;
@@ -82,10 +85,15 @@ class CapabilityGrid {
     window.addEventListener('resize', this._onResize);
 
     this._onPointerMove = (e) => {
-      this.mx = e.clientX;
-      this.my = e.clientY;
+      if (!this.canvas) return;
+      const rect = this.canvas.getBoundingClientRect();
+      // CSS px relative to canvas — same space as this.width/this.height after setTransform(dpr).
+      this.pointerCssX = e.clientX - rect.left;
+      this.pointerCssY = e.clientY - rect.top;
     };
     this._onPointerLeave = () => {
+      this.pointerCssX = null;
+      this.pointerCssY = null;
       this.mx = -999;
       this.my = -999;
     };
@@ -139,6 +147,40 @@ class CapabilityGrid {
     const dx = a.x - b.x;
     const dy = a.y - b.y;
     return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  // Inverse of drawFrame zoom: translate(cx,cy) → scale(s) → translate(-cx+tx,-cy+ty).
+  // Screen/CSS (sx,sy) → node space. Hit radius stays in node space (no /s needed).
+  pointerToNode(cssX, cssY) {
+    const s = this.scale || 1;
+    const cx = this.width / 2;
+    const cy = this.height / 2;
+    return {
+      x: (cssX - cx) / s + cx - this.tx,
+      y: (cssY - cy) / s + cy - this.ty
+    };
+  }
+
+  // Forward map used by tests / symmetry with draw transform.
+  nodeToScreen(nx, ny) {
+    const s = this.scale || 1;
+    const cx = this.width / 2;
+    const cy = this.height / 2;
+    return {
+      x: s * (nx - cx + this.tx) + cx,
+      y: s * (ny - cy + this.ty) + cy
+    };
+  }
+
+  syncHoverFromPointer() {
+    if (this.pointerCssX == null || this.pointerCssY == null) {
+      this.mx = -999;
+      this.my = -999;
+      return;
+    }
+    const p = this.pointerToNode(this.pointerCssX, this.pointerCssY);
+    this.mx = p.x;
+    this.my = p.y;
   }
 
   drawNode(n, t) {
@@ -281,6 +323,9 @@ class CapabilityGrid {
     const ctx = this.ctx;
     const W = this.width;
     const H = this.height;
+
+    // Map cursor into node space with the current zoom before hit-testing.
+    this.syncHoverFromPointer();
 
     // Transparent clear — canvas is a translucent overlay over the page bg.
     ctx.clearRect(0, 0, W, H);
