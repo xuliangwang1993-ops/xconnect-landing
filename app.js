@@ -32,88 +32,305 @@ class LanguageManager {
 }
 
 class CapabilityGrid {
+  // v2 PBR grid ported from capability-grid-v2.html (774f3b1 quote fixes kept).
+  // Scroll-zoom: Ctrl/Meta + wheel only — never hijacks normal page scroll.
+  // Pointer tracking uses window events because the canvas stays pointer-events:none
+  // under the page content (see .capability-grid in styles.css).
   constructor(canvasId) {
     this.canvas = document.getElementById(canvasId);
     if (!this.canvas) return;
-    
+
     this.ctx = this.canvas.getContext('2d');
     this.nodes = [];
-    this.connections = [];
+    this.width = 0;
+    this.height = 0;
+    this.dpr = 1;
+    this.mode = 'pbr';
+    this.mx = -999;
+    this.my = -999;
+    this.scale = 1;
+    this.tx = 0;
+    this.ty = 0;
+    this.CONNECT = 150;
+    this.NODE_COUNT = 64;
+    this.t0 = performance.now();
+    this.raf = null;
+    this.reducedMotion = false;
+
+    try {
+      this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    } catch (_) {
+      this.reducedMotion = false;
+    }
+
     this.resize();
     this.initNodes();
-    this.animate();
-    
-    window.addEventListener('resize', () => this.resize());
+    this.bindEvents();
+
+    if (this.reducedMotion) {
+      this.drawFrame(0);
+    } else {
+      this.raf = requestAnimationFrame((now) => this.frame(now));
+    }
+  }
+
+  bindEvents() {
+    this._onResize = () => {
+      this.resize();
+      if (this.reducedMotion) this.drawFrame(0);
+    };
+    window.addEventListener('resize', this._onResize);
+
+    this._onPointerMove = (e) => {
+      this.mx = e.clientX;
+      this.my = e.clientY;
+    };
+    this._onPointerLeave = () => {
+      this.mx = -999;
+      this.my = -999;
+    };
+    window.addEventListener('pointermove', this._onPointerMove);
+    document.addEventListener('pointerleave', this._onPointerLeave);
+
+    // Zoom only with Ctrl/Meta+wheel so normal scrolling is never blocked.
+    this._onWheel = (e) => {
+      if (!(e.ctrlKey || e.metaKey)) return;
+      e.preventDefault();
+      const delta = e.deltaY < 0 ? 0.08 : -0.08;
+      this.scale = Math.max(0.7, Math.min(1.8, this.scale + delta));
+      if (this.reducedMotion) this.drawFrame(0);
+    };
+    window.addEventListener('wheel', this._onWheel, { passive: false });
   }
 
   resize() {
-    const dpr = window.devicePixelRatio || 1;
+    if (!this.canvas) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const rect = this.canvas.getBoundingClientRect();
-    this.canvas.width = rect.width * dpr;
-    this.canvas.height = rect.height * dpr;
-    this.ctx.scale(dpr, dpr);
-    this.width = rect.width;
-    this.height = rect.height;
+    const w = Math.max(1, Math.floor(rect.width));
+    const h = Math.max(1, Math.floor(rect.height));
+    this.dpr = dpr;
+    this.width = w;
+    this.height = h;
+    this.canvas.width = w * dpr;
+    this.canvas.height = h * dpr;
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
   initNodes() {
-    const nodeCount = Math.floor((this.width * this.height) / 15000);
+    const W = this.width;
+    const H = this.height;
     this.nodes = [];
-    
-    for (let i = 0; i < nodeCount; i++) {
+    for (let i = 0; i < this.NODE_COUNT; i++) {
       this.nodes.push({
-        x: Math.random() * this.width,
-        y: Math.random() * this.height,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        radius: Math.random() * 1.5 + 0.5
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        r: 1.5 + Math.random() * 2.5,
+        hue: Math.random() > 0.82 ? 38 : 0,
+        pulse: Math.random() * Math.PI * 2,
+        mat: Math.random()
       });
     }
   }
 
-  animate() {
-    this.ctx.clearRect(0, 0, this.width, this.height);
-    
-    // 更新节点位置
-    this.nodes.forEach(node => {
-      node.x += node.vx;
-      node.y += node.vy;
-      
-      if (node.x < 0 || node.x > this.width) node.vx *= -1;
-      if (node.y < 0 || node.y > this.height) node.vy *= -1;
-    });
-    
-    // 绘制连线
-    this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
-    this.ctx.lineWidth = 0.5;
-    
-    for (let i = 0; i < this.nodes.length; i++) {
-      for (let j = i + 1; j < this.nodes.length; j++) {
-        const dx = this.nodes[i].x - this.nodes[j].x;
-        const dy = this.nodes[i].y - this.nodes[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        
-        if (dist < 150) {
-          this.ctx.beginPath();
-          this.ctx.moveTo(this.nodes[i].x, this.nodes[i].y);
-          this.ctx.lineTo(this.nodes[j].x, this.nodes[j].y);
-          this.ctx.globalAlpha = 1 - dist / 150;
-          this.ctx.stroke();
-        }
+  dist(a, b) {
+    const dx = a.x - b.x;
+    const dy = a.y - b.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  drawNode(n, t) {
+    const ctx = this.ctx;
+    const pulse = 0.6 + 0.4 * Math.sin(t * 0.002 + n.pulse);
+    const dx = n.x - this.mx;
+    const dy = n.y - this.my;
+    const near = Math.max(0, 1 - Math.sqrt(dx * dx + dy * dy) / 180);
+    const glow = pulse * (1 + near * 1.8);
+
+    if (this.mode === 'flat') {
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fillStyle = n.hue
+        ? `rgba(251,191,106,${0.5 * glow})`
+        : `rgba(255,255,255,${0.45 * glow})`;
+      ctx.fill();
+      if (near > 0.3) {
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r * 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${near * 0.08})`;
+        ctx.fill();
+      }
+      return;
+    }
+
+    const g = ctx.createRadialGradient(
+      n.x - n.r * 0.4, n.y - n.r * 0.4, n.r * 0.2,
+      n.x, n.y, n.r * 4.5
+    );
+    if (n.mat < 0.45) {
+      g.addColorStop(0, `rgba(255,245,230,${0.95 * glow})`);
+      g.addColorStop(0.35, `rgba(251,191,106,${0.35 * glow})`);
+      g.addColorStop(1, 'transparent');
+    } else if (n.mat < 0.8) {
+      g.addColorStop(0, `rgba(230,240,255,${0.8 * glow})`);
+      g.addColorStop(0.4, `rgba(160,190,255,${0.2 * glow})`);
+      g.addColorStop(1, 'transparent');
+    } else {
+      g.addColorStop(0, `rgba(40,40,48,${0.9 * glow})`);
+      g.addColorStop(0.5, `rgba(90,90,100,${0.25 * glow})`);
+      g.addColorStop(1, 'transparent');
+    }
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.r * 4.5, 0, Math.PI * 2);
+    ctx.fillStyle = g;
+    ctx.fill();
+
+    const sx = n.x - n.r * 0.5;
+    const sy = n.y - n.r * 0.6;
+    const sg = ctx.createRadialGradient(sx, sy, 0, sx, sy, n.r * 1.8);
+    sg.addColorStop(0, `rgba(255,255,255,${0.55 * glow})`);
+    sg.addColorStop(1, 'transparent');
+    ctx.beginPath();
+    ctx.arc(sx, sy, n.r * 1.8, 0, Math.PI * 2);
+    ctx.fillStyle = sg;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.r * 0.55, 0, Math.PI * 2);
+    ctx.fillStyle = n.hue
+      ? `rgba(255,210,120,${0.9 * glow})`
+      : `rgba(255,255,255,${0.85 * glow})`;
+    ctx.fill();
+
+    if (near > 0.25) {
+      const bg = ctx.createRadialGradient(n.x, n.y, n.r, n.x, n.y, n.r * 7);
+      bg.addColorStop(0, `rgba(245,158,11,${near * 0.18})`);
+      bg.addColorStop(1, 'transparent');
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r * 7, 0, Math.PI * 2);
+      ctx.fillStyle = bg;
+      ctx.fill();
+    }
+  }
+
+  drawEdge(a, b, t) {
+    const ctx = this.ctx;
+    const d = this.dist(a, b);
+    if (d > this.CONNECT) return;
+    const alpha = (1 - d / this.CONNECT) * 0.55;
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
+    const len = Math.sqrt(dx * dx + dy * dy) || 1;
+    const nx = -dy / len;
+    const ny = dx / len;
+
+    if (this.mode === 'flat') {
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      ctx.lineTo(b.x, b.y);
+      ctx.strokeStyle = `rgba(255,255,255,${alpha * 0.5})`;
+      ctx.lineWidth = 0.6;
+      ctx.stroke();
+      return;
+    }
+
+    ctx.save();
+    ctx.shadowColor = 'rgba(245,158,11,.35)';
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+    const lg = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
+    lg.addColorStop(0, `rgba(251,191,106,${alpha * 0.15})`);
+    lg.addColorStop(0.5, `rgba(255,255,255,${alpha * 0.9})`);
+    lg.addColorStop(1, `rgba(251,191,106,${alpha * 0.15})`);
+    ctx.strokeStyle = lg;
+    ctx.lineWidth = 1.1;
+    ctx.stroke();
+    ctx.restore();
+
+    if ((a.mat > 0.8 || b.mat > 0.8) && Math.random() > 0.7) {
+      const steps = 4;
+      for (let s = 1; s < steps; s++) {
+        const u = s / steps;
+        const px = a.x + dx * u + nx * (Math.random() - 0.5) * 3;
+        const py = a.y + dy * u + ny * (Math.random() - 0.5) * 3;
+        ctx.beginPath();
+        ctx.arc(px, py, 0.4, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(120,120,130,${alpha * 0.4})`;
+        ctx.fill();
       }
     }
-    
-    // 绘制节点
-    this.ctx.globalAlpha = 0.6;
-    this.ctx.fillStyle = '#ffffff';
-    this.nodes.forEach(node => {
-      this.ctx.beginPath();
-      this.ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-      this.ctx.fill();
-    });
-    
-    this.ctx.globalAlpha = 1;
-    requestAnimationFrame(() => this.animate());
+
+    const pulsePos = ((t * 0.0015 + a.pulse * 0.1) % 1);
+    const px = a.x + dx * pulsePos;
+    const py = a.y + dy * pulsePos;
+    const pg = ctx.createRadialGradient(px, py, 0, px, py, 5);
+    pg.addColorStop(0, 'rgba(251,191,106,.8)');
+    pg.addColorStop(1, 'transparent');
+    ctx.beginPath();
+    ctx.arc(px, py, 5, 0, Math.PI * 2);
+    ctx.fillStyle = pg;
+    ctx.fill();
+  }
+
+  drawFrame(t) {
+    if (!this.canvas || !this.ctx) return;
+    const ctx = this.ctx;
+    const W = this.width;
+    const H = this.height;
+
+    // Transparent clear — canvas is a translucent overlay over the page bg.
+    ctx.clearRect(0, 0, W, H);
+
+    // Soft vignette + amber sweep (low alpha so homepage content stays readable).
+    const vg = ctx.createRadialGradient(W / 2, H / 2, W * 0.3, W / 2, H / 2, W * 0.85);
+    vg.addColorStop(0, 'transparent');
+    vg.addColorStop(1, 'rgba(0,0,0,.35)');
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, W, H);
+
+    const sweep = ctx.createRadialGradient(
+      W * 0.15 + Math.sin(t * 0.0004) * W * 0.1, H * 0.1, 0,
+      W * 0.15, H * 0.1, W * 0.6
+    );
+    sweep.addColorStop(0, 'rgba(245,158,11,.06)');
+    sweep.addColorStop(1, 'transparent');
+    ctx.fillStyle = sweep;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.save();
+    ctx.translate(W / 2, H / 2);
+    ctx.scale(this.scale, this.scale);
+    ctx.translate(-W / 2 + this.tx, -H / 2 + this.ty);
+
+    for (let i = 0; i < this.nodes.length; i++) {
+      for (let j = i + 1; j < this.nodes.length; j++) {
+        this.drawEdge(this.nodes[i], this.nodes[j], t);
+      }
+    }
+    for (const n of this.nodes) {
+      this.drawNode(n, t);
+    }
+    ctx.restore();
+  }
+
+  frame(now) {
+    const t = now - this.t0;
+    const W = this.width;
+    const H = this.height;
+
+    for (const n of this.nodes) {
+      n.x += n.vx;
+      n.y += n.vy;
+      if (n.x < 0 || n.x > W) n.vx *= -1;
+      if (n.y < 0 || n.y > H) n.vy *= -1;
+    }
+
+    this.drawFrame(t);
+    this.raf = requestAnimationFrame((ts) => this.frame(ts));
   }
 }
 
